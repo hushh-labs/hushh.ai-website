@@ -71,7 +71,7 @@ const MotionCard = motion(Card);
 
 // API configuration - Using the same API configuration as UserRegistration
 const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJwbXp5a294cW5ib3pnZG9xYnBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5Mjc5NzEsImV4cCI6MjAxNzUwMzk3MX0.3GwG8YQKwZSWfGgTBEEA47YZAZ-Nr4HiirYPWiZtpZ0";
-const API_BASE_URL = "https://rpmzykoxqnbozgdoqbpc.supabase.co/rest/v1";
+const API_BASE_URL = "https://hushh-api-53407187172.us-central1.run.app";
 const API_HEADERS = {
   'apikey': API_KEY,
   'Authorization': `Bearer ${API_KEY}`,
@@ -144,7 +144,7 @@ const UserProfile = () => {
       console.log('Fetching user profile:', email);
       
       const response = await fetch(
-        `${API_BASE_URL}/users?or=(email.ilike.*${email}*)`,
+        `https://hushh-api-53407187172.us-central1.run.app/api/check-user?email=${email}`,
         { headers: API_HEADERS }
       );
       
@@ -414,14 +414,14 @@ const UserProfile = () => {
               <HStack spacing={3}>
                 {!isEditing ? (
                   <>
-                    <Button
+                    {/* <Button
                       onClick={() => setIsEditing(true)}
                       colorScheme="blue"
                       leftIcon={<FiEdit3 />}
                       size="lg"
                     >
                       Edit Profile
-                    </Button>
+                    </Button> */}
                     <Button
                       onClick={() => router.push('/')}
                       variant="outline"

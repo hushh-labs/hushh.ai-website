@@ -49,12 +49,9 @@ const MotionCard = motion(Card);
 // Force this page to be dynamic to handle OAuth parameters
 export const dynamic = 'force-dynamic';
 
-// API configuration - Move these to environment variables
-const API_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJwbXp5a294cW5ib3pnZG9xYnBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5Mjc5NzEsImV4cCI6MjAxNzUwMzk3MX0.3GwG8YQKwZSWfGgTBEEA47YZAZ-Nr4HiirYPWiZtpZ0";
-const API_BASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://rpmzykoxqnbozgdoqbpc.supabase.co/rest/v1";
+// API configuration - Updated to use new Hushh API
+const API_BASE_URL = "https://hushh-api-53407187172.us-central1.run.app/api";
 const API_HEADERS = {
-  'apikey': API_KEY,
-  'Authorization': `Bearer ${API_KEY}`,
   'Content-Type': 'application/json'
 };
 
@@ -69,13 +66,16 @@ const UserRegistrationContent = () => {
   const [isProcessingAuth, setIsProcessingAuth] = useState(false);
   const [error, setError] = useState(null);
   const [userEmail, setUserEmail] = useState("");
+  // const [initialEmail, setInitialEmail] = useState(""); // Store the initial email for comparison - COMMENTED OUT FOR UPDATE MODE
+  // const [isUpdateMode, setIsUpdateMode] = useState(false); // COMMENTED OUT FOR UPDATE MODE
+  // const [userId, setUserId] = useState(null); // COMMENTED OUT FOR UPDATE MODE
   const [mounted, setMounted] = useState(false);
   
   // Form fields - Only the ones that can be updated
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [userCoins, setUserCoins] = useState(0);
+  // const [userCoins, setUserCoins] = useState(0); // COMMENTED OUT FOR UPDATE MODE
   const [investorType, setInvestorType] = useState("");
   
   // Form fields - Read-only for display purposes in update mode
@@ -201,6 +201,7 @@ const UserRegistrationContent = () => {
 
     if (user?.email) {
       setUserEmail(user.email);
+      // setInitialEmail(user.email); // Store the initial email - COMMENTED OUT FOR UPDATE MODE
       checkExistingUser(user.email);
     }
   }, [user, authLoading, isProcessingAuth, router, mounted]);
@@ -209,20 +210,25 @@ const UserRegistrationContent = () => {
     try {
       console.log('Checking if user exists:', email);
       setIsCheckingUser(true);
+      
+      // Use the new Hushh API endpoint to check if user already exists
       const response = await fetch(
-        `${API_BASE_URL}/users?or=(email.ilike.*${email}*)`,
-        { headers: API_HEADERS }
+        `https://hushh-api-53407187172.us-central1.run.app/api/check-user?email=${email}`,
+        { 
+          method: 'GET',
+          headers: API_HEADERS 
+        }
       );
       
       if (response.ok) {
         const data = await response.json();
         console.log('API Response:', data);
         
-        if (data && data.length > 0) {
-          const userData = data[0];
-          console.log('User found, redirecting to profile page:', userData);
+        // Check if user exists based on the API response structure
+        if (data && data.exists) {
+          // User already exists, redirect to profile page instead of update mode
+          console.log('User found, redirecting to profile page:', data);
           
-          // User already exists, redirect to profile page
           toast({
             title: "Welcome back!",
             description: "Your profile already exists. Redirecting to your profile page.",
@@ -234,22 +240,38 @@ const UserRegistrationContent = () => {
           setTimeout(() => {
             router.push('/user-profile');
           }, 1500);
+          
+          /* COMMENTED OUT UPDATE MODE LOGIC
+          setIsUpdateMode(true);
+          setUserId(userData.hushh_id);
+          
+          // Populate form fields with existing data - Only updatable fields
+          setFirstName(userData.first_name || "");
+          setLastName(userData.last_name || "");
+          setPhoneNumber(userData.phone_number || "");
+          setUserCoins(userData.user_coins || 0);
+          setInvestorType(userData.investor_type || "");
+          
+          // Store read-only fields for display purposes
+          setGender(userData.gender || "");
+          setCountry(userData.country || "");
+          setCity(userData.city || "");
+          setDateOfBirth(userData.dob || "");
+          setReasonForUsingHushh(userData.reason_for_using || "");
+          
+          console.log('User found, switched to update mode:', userData);
+          */
         } else {
           console.log('User not found, staying in registration mode');
         }
       } else {
         console.error('API request failed:', response.status, response.statusText);
+        const errorData = await response.json().catch(() => null);
+        console.error('Error details:', errorData);
       }
     } catch (error) {
       console.error("Error checking existing user:", error);
-      // Show a toast notification for debugging
-      // toast({
-      //   title: "API Check Error",
-      //   description: `Failed to check user existence: ${error.message}`,
-      //   status: "warning",
-      //   duration: 3000,
-      //   isClosable: true,
-      // });
+      // Continue with registration form even if API check fails
     } finally {
       setIsCheckingUser(false);
     }
@@ -262,11 +284,24 @@ const UserRegistrationContent = () => {
     if (!lastName.trim()) newErrors.lastName = "Last name is required";
     if (!phoneNumber.trim()) newErrors.phoneNumber = "Phone number is required";
     if (!investorType) newErrors.investorType = "Investor type is required";
+    
+    // Validate all fields for registration mode only
     if (!gender) newErrors.gender = "Gender is required";
     if (!country.trim()) newErrors.country = "Country is required";
     if (!city.trim()) newErrors.city = "City is required";
     if (!dateOfBirth) newErrors.dateOfBirth = "Date of birth is required";
     if (!reasonForUsingHushh.trim()) newErrors.reasonForUsingHushh = "Reason for using Hushh is required";
+    
+    /* COMMENTED OUT UPDATE MODE VALIDATION
+    // Only validate these fields if NOT in update mode
+    if (!isUpdateMode) {
+      if (!gender) newErrors.gender = "Gender is required";
+      if (!country.trim()) newErrors.country = "Country is required";
+      if (!city.trim()) newErrors.city = "City is required";
+      if (!dateOfBirth) newErrors.dateOfBirth = "Date of birth is required";
+      if (!reasonForUsingHushh.trim()) newErrors.reasonForUsingHushh = "Reason for using Hushh is required";
+    }
+    */
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -290,29 +325,96 @@ const UserRegistrationContent = () => {
     setError(null);
 
     try {
+      // Create user data object for registration only
       const userData = {
         first_name: firstName,
         last_name: lastName,
         email: userEmail,
         phone_number: phoneNumber,
+        investor_type: investorType,
         gender: gender,
         country: country,
         city: city,
         dob: dateOfBirth,
         reason_for_using: reasonForUsingHushh,
+      };
+
+      /* COMMENTED OUT UPDATE MODE LOGIC
+      // Create user data object with only updatable fields - exact same as tech version
+      const userData = {
+        first_name: firstName,
+        last_name: lastName,
+        email: userEmail,
+        phone_number: phoneNumber,
         investor_type: investorType,
       };
 
-      const response = await fetch(
-        `${API_BASE_URL}/users`,
-        {
-          method: 'POST',
-          headers: API_HEADERS,
-          body: JSON.stringify(userData)
-        }
-      );
+      // If updating, include user_coins
+      if (isUpdateMode) {
+        userData.user_coins = userCoins;
+      } else {
+        // For new users, include all required fields
+        userData.gender = gender;
+        userData.country = country;
+        userData.city = city;
+        userData.dob = dateOfBirth;
+        userData.reason_for_using = reasonForUsingHushh;
+      }
+
+      let response;
       
-      if (response.ok) {
+      if (isUpdateMode && userId) {
+        // Update existing user with PATCH request - only updatable fields
+        response = await fetch(
+          `https://rpmzykoxqnbozgdoqbpc.supabase.co/rest/v1/users?hushh_id=eq.${userId}`,
+          {
+            method: 'PATCH',
+            headers: API_HEADERS,
+            body: JSON.stringify(userData)
+          }
+        );
+        
+        // If email has been changed, update the Supabase auth email as well
+        if (userEmail !== initialEmail && config.supabaseClient) {
+          try {
+            await config.supabaseClient.auth.updateUser({ email: userEmail });
+            toast({
+              title: "Email Update",
+              description: "Your email has been updated. Please check your new email for a confirmation link.",
+              status: "info",
+              duration: 5000,
+              isClosable: true,
+            });
+          } catch (emailError) {
+            console.error("Error updating email in auth:", emailError);
+            toast({
+              title: "Warning",
+              description: "Your profile was updated, but there was an issue updating your email. Please try again later.",
+              status: "warning",
+              duration: 5000,
+              isClosable: true,
+            });
+          }
+        } else {
+          toast({
+            title: "🎉 Profile Updated",
+            description: "Your profile has been updated successfully!",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+      } else {
+        // Create new user with POST request
+        response = await fetch(
+          "https://rpmzykoxqnbozgdoqbpc.supabase.co/rest/v1/users",
+          {
+            method: 'POST',
+            headers: API_HEADERS,
+            body: JSON.stringify(userData)
+          }
+        );
+        
         toast({
           title: "🎉 Registration Complete",
           description: "Your profile has been created successfully! Welcome to Hushh.",
@@ -321,19 +423,43 @@ const UserRegistrationContent = () => {
           isClosable: true,
         });
       }
+      */
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      // Registration mode only - POST request using new API
+      const response = await fetch(
+        `https://hushh-api-53407187172.us-central1.run.app/api/hushhtech-wrapper`,
+        {
+          method: 'POST',
+          headers: API_HEADERS,
+          body: JSON.stringify(userData)
+        }
+      );
+      
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log('Registration successful:', responseData);
+        
+        toast({
+          title: "🎉 Registration Complete",
+          description: "Your profile has been created successfully! Welcome to Hushh.",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        
+        // Redirect to home page after successful registration
+        setTimeout(() => {
+          router.push("/");
+        }, 2000);
+      } else {
+        const errorData = await response.json().catch(() => null);
+        console.error('Registration failed:', response.status, errorData);
+        throw new Error(`Registration failed: ${response.status}`);
       }
       
-      // Redirect to home page after successful registration/update
-      setTimeout(() => {
-        router.push("/");
-      }, 2000);
-      
     } catch (err) {
-      console.error("Registration/Update error:", err);
-      setError(`An unexpected error occurred. Please try again later.`);
+      console.error("Registration error:", err);
+      setError(`An unexpected error occurred. Please try again later. Registration failed.`);
       toast({
         title: "Registration Error",
         description: "There was an error saving your profile. Please try again.",
@@ -465,8 +591,8 @@ const UserRegistrationContent = () => {
                       _hover={{ borderColor: "gray.300" }}
                       _focus={{ borderColor: "blue.500", boxShadow: "0 0 0 1px #3182CE" }}
                     >
-                      <option value="individual">Individual Investor</option>
-                      <option value="institutional">Institutional / Corporate Investor</option>
+                      <option value="Individual Investor">Individual Investor</option>
+                      <option value="Institutional / Corporate Investor">Institutional / Corporate Investor</option>
                     </Select>
                     <FormErrorMessage>{errors.investorType}</FormErrorMessage>
                   </FormControl>
@@ -583,7 +709,7 @@ const UserRegistrationContent = () => {
                           <option value="male">Male</option>
                           <option value="female">Female</option>
                           <option value="other">Other</option>
-                          <option value="prefer-not-to-say">Prefer not to say</option>
+                          <option value="prefer_not_to_say">Prefer not to say</option>
                         </Select>
                         <FormErrorMessage>{errors.gender}</FormErrorMessage>
                       </FormControl>
