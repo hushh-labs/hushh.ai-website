@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   Avatar,
   Menu,
@@ -24,6 +24,7 @@ const UserAvatar = () => {
   const { user, signOut } = useAuth();
   const toast = useToast();
   const router = useRouter();
+  const [userExists, setUserExists] = useState(null); // null = loading, true = exists, false = doesn't exist
 
   // Apple-inspired color values
   const menuBg = useColorModeValue('rgba(255, 255, 255, 0.95)', 'rgba(30, 30, 30, 0.95)');
@@ -32,6 +33,38 @@ const UserAvatar = () => {
   const textSecondary = useColorModeValue('#6E6E73', '#86868B');
   const itemHoverBg = useColorModeValue('rgba(0, 0, 0, 0.04)', 'rgba(255, 255, 255, 0.08)');
   const avatarBg = useColorModeValue('linear-gradient(135deg, #007AFF, #5E5CE6)', 'linear-gradient(135deg, #007AFF, #5E5CE6)');
+
+  // Check if user exists in the system
+  const checkUserExists = async (email) => {
+    try {
+      const response = await fetch(`https://hushh-api-53407187172.us-central1.run.app/api/check-user?email=${email}`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        // Check if user exists based on the API response message
+        return data.message === "User exists";
+      }
+      return false;
+      
+      if (response.ok) {
+        const data = await response.json();
+        return data.exists || data.user_exists || false;
+      }
+      return false;
+    } catch (error) {
+      console.error('Error checking user existence:', error);
+      return false;
+    }
+  };
+
+  // Check user existence when component mounts or user changes
+  useEffect(() => {
+    if (user?.email) {
+      checkUserExists(user.email).then(exists => {
+        setUserExists(exists);
+      });
+    }
+  }, [user?.email]);
 
   const handleSignOut = async () => {
     try {
@@ -60,7 +93,13 @@ const UserAvatar = () => {
   };
 
   const handleProfileClick = () => {
-    router.push('/user-profile');
+    if (userExists) {
+      // User exists - go to view profile
+      router.push('/user-profile');
+    } else {
+      // User doesn't exist - go to setup profile
+      router.push('/user-registration'); // or whatever the setup profile route is
+    }
   };
 
   if (!user) return null;
@@ -157,7 +196,6 @@ const UserAvatar = () => {
         {/* Menu Items */}
         <Box py={1}>
           <MenuItem 
-            // icon={<FiUser size="16px" />}
             bg="transparent"
             color={textPrimary}
             _hover={{
@@ -175,16 +213,23 @@ const UserAvatar = () => {
             transition="all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)"
             fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
             justifyContent="space-between"
+            isDisabled={userExists === null} // Disable while loading
           >
             <HStack spacing={3}>
               <Icon as={FiUser} size="16px" />
-              <Text>View Profile</Text>
+              <Text>
+                {userExists === null 
+                  ? "Loading..." 
+                  : userExists 
+                    ? "View Profile" 
+                    : "Setup Your Profile"
+                }
+              </Text>
             </HStack>
             <Icon as={FiChevronRight} size="14px" color={textSecondary} />
           </MenuItem>
           
           <MenuItem 
-            // icon={<FiSettings size="16px" />}
             bg="transparent"
             color={textPrimary}
             _hover={{
@@ -213,7 +258,6 @@ const UserAvatar = () => {
           <MenuDivider borderColor={menuBorder} opacity={0.6} my={1} />
           
           <MenuItem
-            // icon={<FiLogOut size="16px" />}
             bg="transparent"
             color="#FF3B30"
             _hover={{
