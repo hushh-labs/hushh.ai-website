@@ -35,20 +35,14 @@ const UserAvatar = () => {
   const avatarBg = useColorModeValue('linear-gradient(135deg, #007AFF, #5E5CE6)', 'linear-gradient(135deg, #007AFF, #5E5CE6)');
 
   // Check if user exists in the system
-  const checkUserExists = async (email) => {
+  const checkUserExists = async () => {
     try {
-      const response = await fetch(`https://hushh-api-53407187172.us-central1.run.app/api/check-user?email=${email}`);
+      const response = await fetch(`https://hushh-api-53407187172.us-central1.run.app/api/check-user?email=${user.email}`);
       
       if (response.ok) {
         const data = await response.json();
         // Check if user exists based on the API response message
         return data.message === "User exists";
-      }
-      return false;
-      
-      if (response.ok) {
-        const data = await response.json();
-        return data.exists || data.user_exists || false;
       }
       return false;
     } catch (error) {
@@ -60,7 +54,7 @@ const UserAvatar = () => {
   // Check user existence when component mounts or user changes
   useEffect(() => {
     if (user?.email) {
-      checkUserExists(user.email).then(exists => {
+      checkUserExists().then(exists => {
         setUserExists(exists);
       });
     }
@@ -68,16 +62,26 @@ const UserAvatar = () => {
 
   const handleSignOut = async () => {
     try {
+      // Reset user existence state immediately
+      setUserExists(null);
+      
+      // Sign out and redirect immediately
       await signOut();
+      
+      // Navigate to home page immediately
       router.push('/');
-      toast({
-        title: "✅ Signed out successfully",
-        description: "You have been signed out of your account.",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-        position: "top",
-      });
+      
+      // Show success toast after navigation
+      setTimeout(() => {
+        toast({
+          title: "✅ Signed out successfully",
+          description: "You have been signed out of your account.",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+          position: "top",
+        });
+      }, 100);
       
     } catch (error) {
       console.error('Error signing out:', error);

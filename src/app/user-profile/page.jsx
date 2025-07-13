@@ -73,7 +73,7 @@ const MotionCard = motion(Card);
 const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJwbXp5a294cW5ib3pnZG9xYnBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5Mjc5NzEsImV4cCI6MjAxNzUwMzk3MX0.3GwG8YQKwZSWfGgTBEEA47YZAZ-Nr4HiirYPWiZtpZ0";
 const API_BASE_URL = "https://hushh-api-53407187172.us-central1.run.app";
 const API_HEADERS = {
-  'apikey': API_KEY,
+  'api_key': API_KEY,
   'Authorization': `Bearer ${API_KEY}`,
   'Content-Type': 'application/json'
 };
