@@ -1460,10 +1460,7 @@ Enforces zero-trust access to every byte.
       <Box
         bg="#f5f5f7"
         position="relative"
-        minH="100vh"
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
+        py={{ base: "60px", md: "80px", lg: "120px" }}
       >
         {/* White Background for Right Half */}
         <Box
@@ -1472,7 +1469,7 @@ Enforces zero-trust access to every byte.
           right={0}
           w={{ base: "0%", lg: "50%" }}
           h="full"
-          bg="white"
+          bg="#ffffff"
           zIndex={1}
         />
         
@@ -1480,53 +1477,52 @@ Enforces zero-trust access to every byte.
           <Grid
             templateColumns={{ base: "1fr", lg: "1fr 1fr" }}
             gap={0}
-            minH="100vh"
-            alignItems="center"
+            alignItems="start"
           >
             {/* Left Column - Developer Ready */}
-            <GridItem px={{ base: 4, md: 6, lg: 8 }} py={{ base: 16, md: 20, lg: 24 }}>
+            <GridItem px={{ base: "32px", md: "48px", lg: "120px" }} py={{ base: "40px", md: "60px", lg: "80px" }}>
               <MotionBox
                 initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
               >
-                <VStack spacing={{ base: 6, md: 8, lg: 10 }} align="start" maxW="lg">
+                <VStack spacing={{ base: "32px", md: "40px", lg: "48px" }} align="start" w="full">
                   {/* Title */}
                   <Heading
                     as="h2"
-                    fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
+                    fontSize={{ base: "28px", md: "36px", lg: "42px" }}
                     fontWeight="bold"
-                    color="gray.700"
-                    letterSpacing="tight"
+                    color="#333333"
                     fontFamily="Inter, sans-serif"
-                    lineHeight="shorter"
+                    lineHeight="1.2"
+                    mb={{ base: "24px", md: "32px", lg: "40px" }}
                   >
                     Developer Ready
                   </Heading>
 
                   {/* Feature List */}
-                  <VStack spacing={{ base: 4, md: 5, lg: 6 }} align="start" w="full">
+                  <VStack spacing={{ base: "20px", md: "24px", lg: "28px" }} align="start" w="full">
                     {/* Feature 1 */}
                     <MotionBox
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
                     >
-                      <Flex align="start" gap={3}>
+                      <Flex align="start" gap={{ base: "12px", md: "14px", lg: "16px" }}>
                         <Box
-                          w={2}
-                          h={2}
-                          bg="gray.700"
+                          w={{ base: "5px", md: "6px", lg: "7px" }}
+                          h={{ base: "5px", md: "6px", lg: "7px" }}
+                          bg="#333333"
                           borderRadius="full"
-                          mt={2}
+                          mt={{ base: "7px", md: "8px", lg: "9px" }}
                           flexShrink={0}
                         />
                         <Text
-                          fontSize={{ base: "md", md: "lg", lg: "xl" }}
-                          fontWeight="medium"
-                          color="gray.700"
+                          fontSize={{ base: "14px", md: "16px", lg: "18px" }}
+                          fontWeight="400"
+                          color="#333333"
                           fontFamily="Inter, sans-serif"
-                          lineHeight="tall"
+                          lineHeight="1.5"
                         >
                           REST API + SDK integration with iOS, Firebase, Node.js
                         </Text>
@@ -1539,21 +1535,21 @@ Enforces zero-trust access to every byte.
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
                     >
-                      <Flex align="start" gap={3}>
+                      <Flex align="start" gap={{ base: "12px", md: "14px", lg: "16px" }}>
                         <Box
-                          w={2}
-                          h={2}
-                          bg="gray.700"
+                          w={{ base: "5px", md: "6px", lg: "7px" }}
+                          h={{ base: "5px", md: "6px", lg: "7px" }}
+                          bg="#333333"
                           borderRadius="full"
-                          mt={2}
+                          mt={{ base: "7px", md: "8px", lg: "9px" }}
                           flexShrink={0}
                         />
                         <Text
-                          fontSize={{ base: "md", md: "lg", lg: "xl" }}
-                          fontWeight="medium"
-                          color="gray.700"
+                          fontSize={{ base: "14px", md: "16px", lg: "18px" }}
+                          fontWeight="400"
+                          color="#333333"
                           fontFamily="Inter, sans-serif"
-                          lineHeight="tall"
+                          lineHeight="1.5"
                         >
                           Built-in JSON schema validation for your operons
                         </Text>
@@ -1566,78 +1562,143 @@ Enforces zero-trust access to every byte.
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
                     >
-                      <Flex align="start" gap={3}>
+                      <Flex align="start" gap={{ base: "12px", md: "14px", lg: "16px" }}>
                         <Box
-                          w={2}
-                          h={2}
-                          bg="gray.700"
+                          w={{ base: "5px", md: "6px", lg: "7px" }}
+                          h={{ base: "5px", md: "6px", lg: "7px" }}
+                          bg="#333333"
                           borderRadius="full"
-                          mt={2}
+                          mt={{ base: "7px", md: "8px", lg: "9px" }}
                           flexShrink={0}
                         />
                         <Text
-                          fontSize={{ base: "md", md: "lg", lg: "xl" }}
-                          fontWeight="medium"
-                          color="gray.700"
+                          fontSize={{ base: "14px", md: "16px", lg: "18px" }}
+                          fontWeight="400"
+                          color="#333333"
                           fontFamily="Inter, sans-serif"
-                          lineHeight="tall"
+                          lineHeight="1.5"
                         >
                           Data lifespan rules (TTL, purpose limitation) supported by design
                         </Text>
                       </Flex>
                     </MotionBox>
                   </VStack>
+
+                  {/* Buttons Section */}
+                  <HStack 
+                    spacing={{ base: "12px", md: "16px", lg: "20px" }}
+                    flexDir={{ base: "column", sm: "row" }}
+                    w="full"
+                    align="start"
+                    mt={{ base: "32px", md: "40px", lg: "48px" }}
+                  >
+                    <MotionButton
+                      size="lg"
+                      bg="#0071E3"
+                      color="white"
+                      px={{ base: "24px", md: "28px", lg: "32px" }}
+                      py={{ base: "12px", md: "14px", lg: "16px" }}
+                      borderRadius="full"
+                      fontSize={{ base: "14px", md: "16px", lg: "16px" }}
+                      fontWeight="500"
+                      fontFamily="Inter, sans-serif"
+                      h={{ base: "44px", md: "48px", lg: "52px" }}
+                      minW={{ base: "180px", md: "200px", lg: "220px" }}
+                      _hover={{
+                        bg: "#0056B3",
+                        transform: "translateY(-1px)",
+                        boxShadow: "0 4px 12px rgba(0, 113, 227, 0.3)"
+                      }}
+                      _active={{
+                        transform: "translateY(0)"
+                      }}
+                      transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      Use Link in your Agent
+                    </MotionButton>
+
+                    <MotionButton
+                      size="lg"
+                      bg="transparent"
+                      color="#0071E3"
+                      px={{ base: "24px", md: "28px", lg: "32px" }}
+                      py={{ base: "12px", md: "14px", lg: "16px" }}
+                      borderRadius="full"
+                      fontSize={{ base: "14px", md: "16px", lg: "16px" }}
+                      fontWeight="500"
+                      fontFamily="Inter, sans-serif"
+                      h={{ base: "44px", md: "48px", lg: "52px" }}
+                      minW={{ base: "180px", md: "200px", lg: "220px" }}
+                      border="2px solid #0071E3"
+                      _hover={{
+                        bg: "#0071E3",
+                        color: "white",
+                        transform: "translateY(-1px)",
+                        boxShadow: "0 4px 12px rgba(0, 113, 227, 0.3)"
+                      }}
+                      _active={{
+                        transform: "translateY(0)"
+                      }}
+                      transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      Audit Sample Logs
+                    </MotionButton>
+                  </HStack>
                 </VStack>
               </MotionBox>
             </GridItem>
 
             {/* Right Column - Future Vault+ Capabilities */}
-            <GridItem px={{ base: 4, md: 6, lg: 8 }} py={{ base: 16, md: 20, lg: 24 }}>
+            <GridItem px={{ base: "32px", md: "48px", lg: "120px" }} py={{ base: "40px", md: "60px", lg: "80px" }}>
               <MotionBox
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
               >
-                <VStack spacing={{ base: 6, md: 8, lg: 10 }} align="start" maxW="lg">
+                <VStack spacing={{ base: "32px", md: "40px", lg: "48px" }} align="start" w="full">
                   {/* Title */}
                   <Heading
                     as="h2"
-                    fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
+                    fontSize={{ base: "28px", md: "36px", lg: "42px" }}
                     fontWeight="bold"
-                    color="gray.700"
-                    letterSpacing="tight"
+                    color="#333333"
                     fontFamily="Inter, sans-serif"
-                    lineHeight="shorter"
+                    lineHeight="1.2"
+                    mb={{ base: "24px", md: "32px", lg: "40px" }}
                   >
                     Future Vault+ Capabilities{" "}
-                    <Text as="span" display="block" mt={1}>
+                    <Text as="span" display="block">
                       (Premium Layer)
                     </Text>
                   </Heading>
 
                   {/* Feature List */}
-                  <VStack spacing={{ base: 4, md: 5, lg: 6 }} align="start" w="full">
+                  <VStack spacing={{ base: "20px", md: "24px", lg: "28px" }} align="start" w="full">
                     {/* Feature 1 */}
                     <MotionBox
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
                     >
-                      <Flex align="start" gap={3}>
+                      <Flex align="start" gap={{ base: "12px", md: "14px", lg: "16px" }}>
                         <Box
-                          w={2}
-                          h={2}
-                          bg="gray.700"
+                          w={{ base: "5px", md: "6px", lg: "7px" }}
+                          h={{ base: "5px", md: "6px", lg: "7px" }}
+                          bg="#333333"
                           borderRadius="full"
-                          mt={2}
+                          mt={{ base: "7px", md: "8px", lg: "9px" }}
                           flexShrink={0}
                         />
                         <Text
-                          fontSize={{ base: "md", md: "lg", lg: "xl" }}
-                          fontWeight="medium"
-                          color="gray.700"
+                          fontSize={{ base: "14px", md: "16px", lg: "18px" }}
+                          fontWeight="400"
+                          color="#333333"
                           fontFamily="Inter, sans-serif"
-                          lineHeight="tall"
+                          lineHeight="1.5"
                         >
                           Privacy-preserving federated learning
                         </Text>
@@ -1650,21 +1711,21 @@ Enforces zero-trust access to every byte.
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
                     >
-                      <Flex align="start" gap={3}>
+                      <Flex align="start" gap={{ base: "12px", md: "14px", lg: "16px" }}>
                         <Box
-                          w={2}
-                          h={2}
-                          bg="gray.700"
+                          w={{ base: "5px", md: "6px", lg: "7px" }}
+                          h={{ base: "5px", md: "6px", lg: "7px" }}
+                          bg="#333333"
                           borderRadius="full"
-                          mt={2}
+                          mt={{ base: "7px", md: "8px", lg: "9px" }}
                           flexShrink={0}
                         />
                         <Text
-                          fontSize={{ base: "md", md: "lg", lg: "xl" }}
-                          fontWeight="medium"
-                          color="gray.700"
+                          fontSize={{ base: "14px", md: "16px", lg: "18px" }}
+                          fontWeight="400"
+                          color="#333333"
                           fontFamily="Inter, sans-serif"
-                          lineHeight="tall"
+                          lineHeight="1.5"
                         >
                           Personalized AI model cache & fine-tuning
                         </Text>
@@ -1677,21 +1738,21 @@ Enforces zero-trust access to every byte.
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
                     >
-                      <Flex align="start" gap={3}>
+                      <Flex align="start" gap={{ base: "12px", md: "14px", lg: "16px" }}>
                         <Box
-                          w={2}
-                          h={2}
-                          bg="gray.700"
+                          w={{ base: "5px", md: "6px", lg: "7px" }}
+                          h={{ base: "5px", md: "6px", lg: "7px" }}
+                          bg="#333333"
                           borderRadius="full"
-                          mt={2}
+                          mt={{ base: "7px", md: "8px", lg: "9px" }}
                           flexShrink={0}
                         />
                         <Text
-                          fontSize={{ base: "md", md: "lg", lg: "xl" }}
-                          fontWeight="medium"
-                          color="gray.700"
+                          fontSize={{ base: "14px", md: "16px", lg: "18px" }}
+                          fontWeight="400"
+                          color="#333333"
                           fontFamily="Inter, sans-serif"
-                          lineHeight="tall"
+                          lineHeight="1.5"
                         >
                           Voting ledger + signal sharing marketplace
                         </Text>
@@ -1702,30 +1763,6 @@ Enforces zero-trust access to every byte.
               </MotionBox>
             </GridItem>
           </Grid>
-
-          {/* Explore the Stack Footer */}
-          {/* <MotionBox
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
-            position="absolute"
-            bottom={{ base: 8, md: 12, lg: 16 }}
-            left="50%"
-            transform="translateX(-50%)"
-            textAlign="center"
-          >
-            <Text
-              fontSize={{ base: "sm", md: "md", lg: "lg" }}
-              fontWeight="bold"
-              color="gray.600"
-              fontFamily="Inter, sans-serif"
-              letterSpacing="wider"
-              textTransform="uppercase"
-              lineHeight="normal"
-            >
-              Explore the Stack
-            </Text>
-          </MotionBox> */}
         </Container>
       </Box>
     </>
@@ -1733,3 +1770,5 @@ Enforces zero-trust access to every byte.
 };
 
 export default HushhVault;
+
+// https://www.hushhtech.com/
