@@ -1,5 +1,5 @@
 import React from 'react'
-import HushhLink from '../clientside/HushhLink'
+import HushhLink from '../clientside/hushhLink'
 const page = () => {
   return (
    <HushhLink/>         
