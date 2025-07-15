@@ -24,13 +24,19 @@ import {
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { FaApple, FaFolder, FaLink, FaShieldAlt } from 'react-icons/fa';
+import HushhVaultMobile from '../_components/svg/hushhVaultMobile.svg'
+// import ExportDelete from '../../../public/exportordelete.svg'
 
+import Image from 'next/image';
 const MotionBox = motion(Box);
 const MotionHeading = motion(Heading);
 const MotionText = motion(Text);
 const MotionButton = motion(Button);
 
 const HushhVault = () => {
+  // State for managing highlighted security feature (default is line 2)
+  const [highlightedFeature, setHighlightedFeature] = React.useState(2);
+
   // Animation variants for fade-in effects
   const fadeInUp = {
     initial: { opacity: 0, y: 30 },
@@ -259,7 +265,7 @@ const HushhVault = () => {
                 <Text
                   fontSize={{ base: "24px", md: "32px", lg: "32px" }}
                   fontWeight="bold"
-                  bgGradient="linear(90deg, #0071E3 35.39%, #BB62FC 8.0679%, #F34556 54.309%, #F44F22 90.422%)"
+                  bgGradient="linear(90deg, hsla(210, 100%, 45%, 1) 0%, hsla(275, 96%, 69%, 1) 25%, hsla(354, 88%, 61%, 1) 50%, hsla(13, 91%, 55%, 1) 100%)"
                   bgClip="text"
                   letterSpacing="-0.02em"
                   fontFamily="Inter, sans-serif"
@@ -396,9 +402,9 @@ const HushhVault = () => {
       >
         <Container maxW="7xl" px={{ base: 4, md: 6, lg: 8 }}>
           <Grid
-            templateColumns={{ base: "1fr", lg: "1.2fr 0.8fr" }}
-            gap={{ base: 12, lg: 16 }}
-            alignItems="start"
+            templateColumns={{ base: "1fr", lg: "1.2fr 1fr",md: "1.2fr 1fr" }}
+            gap={{ base: 12, lg: 16 ,md: 12}}
+            alignItems="center"
           >
             {/* Left Column - Main Content */}
             <GridItem>
@@ -419,132 +425,164 @@ const HushhVault = () => {
 
                   {/* Subtitle */}
                   <Text
-                    fontSize={{ base: "18px", md: "20px", lg: "24px" }}
+                    fontSize={{ base: "16px", md: "18px", lg: "20px" }}
                     color="#000000"
-                    fontWeight="500"
+                    fontWeight="400"
                     fontFamily="Inter, sans-serif"
                     lineHeight="1.6"
-                    maxW="600px"
+                    maxW="500px"
                   >
                     A consent-native storage layer that lives inside every Personal Data Agent.
                   </Text>
 
-                  {/* Feature List */}
-                  <VStack spacing={6} align="start" w="full">
-                    <Flex align="start" gap={4}>
+                  {/* Feature Cards */}
+                  <VStack spacing={4} align="start" w="full">
+                    {/* iOS Card */}
+                    <Box
+                      bg="rgba(59, 130, 246, 0.1)"
+                      borderRadius="12px"
+                      p={4}
+                      w="full"
+                      // maxW="400px"
+                      display="flex"
+                      alignItems="center"
+                      gap={3}
+                    >
                       <Box
-                        bg="#000000"
+                        bg="hsla(210, 100%, 45%, 1)"
                         borderRadius="8px"
-                        p={3}
-                        minW="50px"
-                        h="50px"
+                        p={2}
+                        minW="40px"
+                        h="40px"
                         display="flex"
                         alignItems="center"
                         justifyContent="center"
                       >
-                        <Icon as={FaApple} color="white" boxSize={6} />
+                        <Icon as={FaApple} color="white" boxSize={5} />
                       </Box>
-                      <Box>
-                        <Text
-                          fontSize={{ base: "18px", md: "20px", lg: "24px" }}
-                          color="#000000"
-                          fontWeight="500"
-                          fontFamily="Inter, sans-serif"
-                          lineHeight="1.6"
-                        >
-                          Built for iOS-verified humans.
-                        </Text>
-                      </Box>
-                    </Flex>
+                      <Text
+                        fontSize={{ base: "14px", md: "16px" }}
+                        color="hsla(0, 0%, 0%, 1)"
+                        fontWeight="500"
+                        fontFamily="Inter, sans-serif"
+                        lineHeight="1.4"
+                      >
+                        Built for iOS-verified humans.
+                      </Text>
+                    </Box>
 
-                    <Flex align="start" gap={4}>
+                    {/* Storage Card */}
+                    <Box
+                      bg="rgba(59, 130, 246, 0.1)"
+                      borderRadius="12px"
+                      p={4}
+                      w="full"
+                      // maxW="400px"
+                      display="flex"
+                      alignItems="center"
+                      gap={3}
+                    >
                       <Box
-                        bg="#000000"
+                        bg="hsla(210, 100%, 45%, 1)"
                         borderRadius="8px"
-                        p={3}
-                        minW="50px"
-                        h="50px"
+                        p={2}
+                        minW="40px"
+                        h="40px"
                         display="flex"
                         alignItems="center"
                         justifyContent="center"
                       >
-                        <Icon as={FaFolder} color="white" boxSize={6} />
+                        <Icon as={FaFolder} color="white" boxSize={5} />
                       </Box>
-                      <Box>
-                        <Text
-                          fontSize={{ base: "18px", md: "20px", lg: "24px" }}
-                          color="#000000"
-                          fontWeight="500"
-                          fontFamily="Inter, sans-serif"
-                          lineHeight="1.6"
-                        >
-                          Stores your preferences, identity keys, agent memories, and data maps.
-                        </Text>
-                      </Box>
-                    </Flex>
+                      <Text
+                        fontSize={{ base: "14px", md: "16px" }}
+                        color="hsla(0, 0%, 0%, 1)"
+                        fontWeight="500"
+                        fontFamily="Inter, sans-serif"
+                        lineHeight="1.4"
+                      >
+                        Stores your preferences, identity keys, agent memories, and data maps.
+                      </Text>
+                    </Box>
 
-                    <Flex align="start" gap={4}>
+                    {/* Integration Card */}
+                    <Box
+                      bg="rgba(59, 130, 246, 0.1)"
+                      borderRadius="12px"
+                      p={4}
+                      w="full"
+                      // maxW="400px"
+                      display="flex"
+                      alignItems="center"
+                      gap={3}
+                    >
                       <Box
-                        bg="#000000"
+                        bg="#3B82F6"
                         borderRadius="8px"
-                        p={3}
-                        minW="50px"
-                        h="50px"
+                        p={2}
+                        minW="40px"
+                        h="40px"
                         display="flex"
                         alignItems="center"
                         justifyContent="center"
                       >
-                        <Icon as={FaLink} color="white" boxSize={6} />
+                        <Icon as={FaLink} color="white" boxSize={5} />
                       </Box>
-                      <Box>
-                        <Text
-                          fontSize={{ base: "18px", md: "20px", lg: "24px" }}
-                          color="#000000"
-                          fontWeight="500"
-                          fontFamily="Inter, sans-serif"
-                          lineHeight="1.6"
-                        >
-                          Integrates with iCloud, Gmail, Drive, Notion, Stripe,
-                        </Text>
-                      </Box>
-                    </Flex>
+                      <Text
+                        fontSize={{ base: "14px", md: "16px" }}
+                        color="hsla(0, 0%, 0%, 1)"
+                        fontWeight="500"
+                        fontFamily="Inter, sans-serif"
+                        lineHeight="1.4"
+                      >
+                        Integrates with iCloud, Gmail, Drive, Notion, Stripe
+                      </Text>
+                    </Box>
 
-                    <Flex align="start" gap={4}>
+                    {/* Security Card */}
+                    <Box
+                      bg="rgba(59, 130, 246, 0.1)"
+                      borderRadius="12px"
+                      p={4}
+                      w="full"
+                      // maxW="400px"
+                      display="flex"
+                      alignItems="center"
+                      gap={3}
+                    >
                       <Box
-                        bg="#000000"
+                        bg="#3B82F6"
                         borderRadius="8px"
-                        p={3}
-                        minW="50px"
-                        h="50px"
+                        p={2}
+                        minW="40px"
+                        h="40px"
                         display="flex"
                         alignItems="center"
                         justifyContent="center"
                       >
-                        <Icon as={FaShieldAlt} color="white" boxSize={6} />
+                        <Icon as={FaShieldAlt} color="white" boxSize={5} />
                       </Box>
-                      <Box>
-                        <Text
-                          fontSize={{ base: "18px", md: "20px", lg: "24px" }}
-                          color="#000000"
-                          fontWeight="500"
-                          fontFamily="Inter, sans-serif"
-                          lineHeight="1.6"
-                        >
-                          Enforces zero-trust access to every byte.
-                        </Text>
-                      </Box>
-                    </Flex>
+                      <Text
+                        fontSize={{ base: "14px", md: "16px" }}
+                        color="hsla(0, 0%, 0%, 1)"
+                        fontWeight="500"
+                        fontFamily="Inter, sans-serif"
+                        lineHeight="1.4"
+                      >
+Enforces zero-trust access to every byte.                       
+</Text>
+                    </Box>
                   </VStack>
 
                   {/* Bottom Description */}
                   <Text
-                    fontSize={{ base: "18px", md: "20px", lg: "24px" }}
+                    fontSize={{ base: "16px", md: "18px", lg: "20px" }}
                     color="#000000"
-                    fontWeight="500"
+                    fontWeight="400"
                     fontFamily="Inter, sans-serif"
                     lineHeight="1.6"
-                    maxW="600px"
-                    mt={8}
+                    maxW="500px"
+                    mt={6}
                   >
                     Think of it as a personal hard drive for your AI — encrypted, inspectable, and fully under your control.
                   </Text>
@@ -552,30 +590,19 @@ const HushhVault = () => {
               </MotionBox>
             </GridItem>
 
-            {/* Right Column - Blue Accent Text */}
+            {/* Right Column - Mobile Mockup */}
             <GridItem>
               <MotionBox {...fadeInRight}>
-                <VStack spacing={8} align="start" pt={{ base: 0, lg: 16 }}>
-                  <Text
-                    fontSize={{ base: "24px", md: "28px", lg: "32px" }}
-                    fontWeight="600"
-                    color="#4A90E2"
-                    fontFamily="Inter, sans-serif"
-                    lineHeight="1.4"
-                  >
-                    Your Hushh Vault is your nucleus. Your digital bodyguard. Your trusted data foundation.
-                  </Text>
-                  
-                  <Text
-                    fontSize={{ base: "24px", md: "28px", lg: "32px" }}
-                    fontWeight="600"
-                    color="#4A90E2"
-                    fontFamily="Inter, sans-serif"
-                    lineHeight="1.4"
-                  >
-                    It's not just where your data lives. It's where your values live
-                  </Text>
-                </VStack>
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  h="full"
+                  position="relative"
+                >
+                  {/* Mobile Phone Container */}
+                 <Image src={HushhVaultMobile} alt="Hushh Vault Mobile" />
+                </Box>
               </MotionBox>
             </GridItem>
           </Grid>
@@ -740,25 +767,25 @@ const HushhVault = () => {
             <SimpleGrid columns={1} spacing={5}>
               <CapabilityCard
                 title="Export or delete data at will (one-tap data liberation)"
-                backgroundImage="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80"
+                backgroundImage={'/exportordelete.svg'}
                 delay={0.1}
                 fontSize="2xl"
               />
               <CapabilityCard
                 title="Store structured + unstructured data"
-                backgroundImage="https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80"
+                backgroundImage={'/storestructured.svg'}
                 delay={0.2}
                 fontSize="2xl"
               />
               <CapabilityCard
                 title="Track decisions, preferences, and revocation logs"
-                backgroundImage="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80"
+                backgroundImage={'/trackdecisions.svg'}
                 delay={0.3}
                 fontSize="2xl"
               />
               <CapabilityCard
                 title="Link identity (Apple ID, OAuth, hushhID)"
-                backgroundImage="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80"
+                backgroundImage={'/linkIdentity.svg'}
                 delay={0.4}
                 fontSize="2xl"
               />
@@ -782,7 +809,7 @@ const HushhVault = () => {
                 >
                   <CapabilityCard
                     title="Export or delete data at will (one-tap data liberation)"
-                    backgroundImage="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80"
+                    backgroundImage={'/exportordelete.svg'}
                     delay={0.1}
                     fontSize="6xl"
                     height="609px"
@@ -799,7 +826,7 @@ const HushhVault = () => {
                 >
                   <CapabilityCard
                     title="Store structured + unstructured data"
-                    backgroundImage="https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80"
+                    backgroundImage="/storestructured.svg"
                     delay={0.2}
                     fontSize="4xl"
                     height="300px"
@@ -816,8 +843,8 @@ const HushhVault = () => {
                 >
                   <CapabilityCard
                     title="Link identity (Apple ID, OAuth, hushhID)"
-                    backgroundImage="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80"
-                    delay={0.3}
+                    backgroundImage="/linkIdentity.svg"
+                    delay={0.3} 
                     fontSize="5xl"
                     height="609px"
                   />
@@ -833,7 +860,7 @@ const HushhVault = () => {
                 >
                   <CapabilityCard
                     title="Track decisions, preferences, and revocation logs"
-                    backgroundImage="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80"
+                    backgroundImage="/trackdecisions.svg"
                     delay={0.4}
                     fontSize="4xl"
                     height="300px"
@@ -1092,7 +1119,7 @@ const HushhVault = () => {
           {/* Three Equal Height Cards */}
           <Grid
             templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
-            gap={{ base: 6, md: 5, lg: 6 }}
+            gap={{ base: 6, md: 12, lg: 6 }}
             mb={{ base: 16, md: 20, lg: 24 }}
             maxW="1600px"
             mx="auto"
@@ -1106,12 +1133,13 @@ const HushhVault = () => {
                 position="relative"
                 borderRadius="29px"
                 overflow="hidden"
+                w={{base:'100%',md:'100%',lg:'100%'}} 
                 h={{ base: "400px", md: "500px", lg: "636px" }}
-                boxShadow="0px 4px 6.8px 0px rgba(0,0,0,0.25)"
+                boxShadow="0px 2px 4px 0px rgba(0,0,0,0.15)"
                 border="1px solid #000000"
                 _hover={{
                   transform: "translateY(-5px)",
-                  boxShadow: "0px 8px 25px 0px rgba(0,0,0,0.3)"
+                  boxShadow:"0px 2px 4px 0px rgba(0,0,0,0)"
                 }}
               >
                 {/* Background Image */}
@@ -1121,7 +1149,7 @@ const HushhVault = () => {
                   left={0}
                   right={0}
                   bottom={0}
-                  backgroundImage="url('https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80')"
+                  backgroundImage="/samplecase1.svg"
                   backgroundSize="cover"
                   backgroundPosition="center"
                   backgroundRepeat="no-repeat"
@@ -1134,7 +1162,7 @@ const HushhVault = () => {
                   left={0}
                   right={0}
                   bottom={0}
-                  bg="rgba(0, 0, 0, 0.4)"
+                  bg="rgba(0, 0, 0, 0.1)"
                 />
 
                 {/* Text Content */}
@@ -1183,7 +1211,7 @@ const HushhVault = () => {
                   left={0}
                   right={0}
                   bottom={0}
-                  backgroundImage="url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80')"
+                  backgroundImage="/samplecase2.svg"
                   backgroundSize="cover"
                   backgroundPosition="center"
                   backgroundRepeat="no-repeat"
@@ -1196,7 +1224,7 @@ const HushhVault = () => {
                   left={0}
                   right={0}
                   bottom={0}
-                  bg="rgba(0, 0, 0, 0.4)"
+                  bg="rgba(0, 0, 0, 0.1)"
                 />
 
                 {/* Text Content */}
@@ -1245,7 +1273,7 @@ const HushhVault = () => {
                   left={0}
                   right={0}
                   bottom={0}
-                  backgroundImage="url('https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80')"
+                  backgroundImage="/samplecase3.svg"
                   backgroundSize="cover"
                   backgroundPosition="center"
                   backgroundRepeat="no-repeat"
@@ -1258,7 +1286,7 @@ const HushhVault = () => {
                   left={0}
                   right={0}
                   bottom={0}
-                  bg="rgba(0, 0, 0, 0.4)"
+                  bg="rgba(0, 0, 0, 0.1)"
                 />
 
                 {/* Text Content */}
@@ -1285,25 +1313,7 @@ const HushhVault = () => {
             </GridItem>
           </Grid>
 
-          {/* Explore the Stack Footer */}
-          <MotionBox
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
-            textAlign="center"
-          >
-            <Text
-              fontSize="20px"
-              fontWeight="bold"
-              color="#344054"
-              fontFamily="Inter, sans-serif"
-              letterSpacing="4px"
-              textTransform="uppercase"
-              lineHeight="normal"
-            >
-              Explore the Stack
-            </Text>
-          </MotionBox>
+        
         </Container>
       </Box>
 
@@ -1341,9 +1351,9 @@ const HushhVault = () => {
 
             {/* Security Features List */}
             <VStack 
-              spacing={{ base: 6, md: 8, lg: 10 }} 
+              spacing={{ base: "60px", md: "60px", lg: "60px" }} 
               align="center" 
-              maxW="900px"
+              maxW="1400px"
               mx="auto"
             >
               {/* Feature 1 */}
@@ -1353,48 +1363,42 @@ const HushhVault = () => {
                 transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
               >
                 <Text
-                  fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
-                  fontWeight="medium"
-                  color="gray.500"
-                  fontFamily="Inter, sans-serif"
-                  lineHeight="tall"
+                  fontSize={{ base: "24px", md: "36px", lg: "48px" }}
+                  fontWeight="bold"
+                  color={highlightedFeature === 1 ? "#000000" : "hsla(0, 0%, 67%, 1)"}
+                  fontFamily="'Plus Jakarta Sans', sans-serif"
+                  lineHeight="27px"
+                  letterSpacing="-0.96px"
                   textAlign="center"
                   cursor="pointer"
-                  _hover={{
-                    color: "gray.700",
-                    transform: "translateY(-0.5)"
-                  }}
+                  transform={highlightedFeature === 1 ? "translateY(-2px)" : "translateY(0)"}
                   transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
-                  onMouseEnter={(e) => {
-                    e.target.style.color = "var(--chakra-colors-gray-700)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.color = "var(--chakra-colors-gray-500)";
-                  }}
+                  onMouseEnter={() => setHighlightedFeature(1)}
+                  onMouseLeave={() => setHighlightedFeature(2)}
                 >
                   Vault lives locally by default, offloaded with full encryption
                 </Text>
               </MotionBox>
 
-              {/* Feature 2 - Initially Black */}
+              {/* Feature 2 - Default Highlighted */}
               <MotionBox
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
               >
                 <Text
-                  fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
-                  fontWeight="medium"
-                  color="gray.700"
-                  fontFamily="Inter, sans-serif"
-                  lineHeight="tall"
+                  fontSize={{ base: "24px", md: "36px", lg: "48px" }}
+                  fontWeight="bold"
+                  color={highlightedFeature === 2 ? "#000000" : "hsla(0, 0%, 67%, 1)"}
+                  fontFamily="'Plus Jakarta Sans', sans-serif"
+                  lineHeight="27px"
+                  letterSpacing="-0.96px"
                   textAlign="center"
                   cursor="pointer"
-                  _hover={{
-                    color: "gray.700",
-                    transform: "translateY(-0.5)"
-                  }}
+                  transform={highlightedFeature === 2 ? "translateY(-2px)" : "translateY(0)"}
                   transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+                  onMouseEnter={() => setHighlightedFeature(2)}
+                  onMouseLeave={() => setHighlightedFeature(2)}
                 >
                   Consent key signature required for any external access
                 </Text>
@@ -1407,24 +1411,18 @@ const HushhVault = () => {
                 transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
               >
                 <Text
-                  fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
-                  fontWeight="medium"
-                  color="gray.500"
-                  fontFamily="Inter, sans-serif"
-                  lineHeight="tall"
+                  fontSize={{ base: "24px", md: "36px", lg: "48px" }}
+                  fontWeight="bold"
+                  color={highlightedFeature === 3 ? "#000000" : "hsla(0, 0%, 67%, 1)"}
+                  fontFamily="'Plus Jakarta Sans', sans-serif"
+                  lineHeight="27px"
+                  letterSpacing="-0.96px"
                   textAlign="center"
                   cursor="pointer"
-                  _hover={{
-                    color: "gray.700",
-                    transform: "translateY(-0.5)"
-                  }}
+                  transform={highlightedFeature === 3 ? "translateY(-2px)" : "translateY(0)"}
                   transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
-                  onMouseEnter={(e) => {
-                    e.target.style.color = "var(--chakra-colors-gray-700)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.color = "var(--chakra-colors-gray-500)";
-                  }}
+                  onMouseEnter={() => setHighlightedFeature(3)}
+                  onMouseLeave={() => setHighlightedFeature(2)}
                 >
                   Immutable audit trails built-in
                 </Text>
@@ -1437,24 +1435,18 @@ const HushhVault = () => {
                 transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
               >
                 <Text
-                  fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
-                  fontWeight="medium"
-                  color="gray.500"
-                  fontFamily="Inter, sans-serif"
-                  lineHeight="tall"
+                  fontSize={{ base: "24px", md: "36px", lg: "48px" }}
+                  fontWeight="bold"
+                  color={highlightedFeature === 4 ? "#000000" : "hsla(0, 0%, 67%, 1)"}
+                  fontFamily="'Plus Jakarta Sans', sans-serif"
+                  lineHeight="27px"
+                  letterSpacing="-0.96px"
                   textAlign="center"
                   cursor="pointer"
-                  _hover={{
-                    color: "gray.700",
-                    transform: "translateY(-0.5)"
-                  }}
+                  transform={highlightedFeature === 4 ? "translateY(-2px)" : "translateY(0)"}
                   transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
-                  onMouseEnter={(e) => {
-                    e.target.style.color = "var(--chakra-colors-gray-700)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.color = "var(--chakra-colors-gray-500)";
-                  }}
+                  onMouseEnter={() => setHighlightedFeature(4)}
+                  onMouseLeave={() => setHighlightedFeature(2)}
                 >
                   Ready for SOC2 and HIPAA-level compliance extensions
                 </Text>

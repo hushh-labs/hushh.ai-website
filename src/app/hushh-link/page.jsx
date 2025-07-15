@@ -1,8 +1,8 @@
 import React from 'react'
-
+import HushhLink from '../clientside/HushhLink'
 const page = () => {
   return (
-    <div>page</div>
+   <HushhLink/>         
   )
 }
 
