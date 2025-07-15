@@ -228,6 +228,7 @@ const HushhVault = () => {
         alignItems="center"
         position="relative"
         overflow="hidden"
+        pt={{ base: "90px", md: "90px" }} // Add padding top to account for fixed header
       >
         {/* Background subtle pattern */}
         <Box
@@ -292,8 +293,8 @@ const HushhVault = () => {
                 fontSize={{ base: "18px", md: "20px", lg: "24px" }}
                 color="#666666"
                 fontWeight="400"
-                maxW="800px"
-                mx="auto"
+                // maxW="800px"
+                // mx="auto"
                 lineHeight="1.6"
               >
                 Introducing the Hushh Vault — a personal, programmable data store built to protect what matters most: your digital self.
@@ -311,15 +312,15 @@ const HushhVault = () => {
                     size="lg"
                     bg="#0071E3"
                     color="white"
-                    px={{ base: 8, md: 12 }}
-                    py={{ base: 6, md: 8 }}
+                    px={{ base: 8, md: 10 }}
+                    py={{ base: 6, md: 6 }}
                     borderRadius="60px"
                     fontSize={{ base: "18px", md: "20px", lg: "32px" }}
                     fontWeight="500"
                     fontFamily="Inter, sans-serif"
                     letterSpacing="-0.02em"
-                    minW={{ base: "280px", md: "343px" }}
-                    h={{ base: "60px", md: "81px" }}
+                    minW={{ base: "250px", md: "300px" }}
+                    h={{ base: "50px", md: "70px" }}
                     _hover={{
                       bg: "#0056B3",
                       transform: "translateY(-2px)",
@@ -346,8 +347,8 @@ const HushhVault = () => {
                     fontWeight="500"
                     fontFamily="Inter, sans-serif"
                     letterSpacing="-0.02em"
-                    minW={{ base: "280px", md: "377px" }}
-                    h={{ base: "60px", md: "81px" }}
+                    minW={{ base: "250px", md: "300px" }}
+                    h={{ base: "50px", md: "70px" }}
                     border="3px solid #0071E3"
                     _hover={{
                       bg: "#0071E3",
