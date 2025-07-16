@@ -10,9 +10,10 @@ const HeaderComponent = () => {
   const isConsentAIPage = pathname === '/consent-ai-protocol';
   const isHushhLinkPage = pathname === '/hushh-link';
   const isHushhVaultPage = pathname === '/hushh-vault';
+  const isHushhFlowPage = pathname === '/products/hushh-flow';
 
   // For home page and consent-ai-protocol page, use light background to match Figma design
-  const headerProps = (isHomePage || isConsentAIPage || isHushhLinkPage || isHushhVaultPage) ? {
+  const headerProps = (isHomePage || isConsentAIPage || isHushhLinkPage || isHushhVaultPage || isHushhFlowPage) ? {
     backgroundColor: "rgba(248, 249, 250, 0.95)", // Light background with slight transparency
     textColor: "#1A1A1A", // Dark text for light background
     borderBottom: "1px solid rgba(0, 0, 0, 0.1)" // Subtle border
