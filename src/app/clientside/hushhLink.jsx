@@ -243,25 +243,25 @@ const HushhLink = () => {
       <Box
         bg="#ffffff"
         position="relative"
-        py={{ base: "60px", md: "80px", lg: "100px", xl: "120px", "2xl": "140px" }}
+        py={{ base: "80px", md: "100px", lg: "120px", xl: "140px", "2xl": "160px" }}
         overflow="hidden"
-    minH={'100vh'}
+        minH={'100vh'}
       >
                  <Container maxW="100%" minW={'100%'} px={{ base: 4, md: 6, lg: 12, xl: 16 }} position="relative" zIndex={2}>
           <Grid
             templateColumns={{ base: "1fr", md: "7fr 3fr", lg: "7fr 3fr", xl: "7fr 3fr" }}
-            gap={{ base: 8, md: 10, lg: 14, xl: 18 }}
+            gap={{ base: 12, md: 16, lg: 20, xl: 24 }}
             alignItems="center"
             // minH={{ lg: "600px", xl: "700px" }}
           >
             {/* Left Column - Content */}
             <GridItem>
               <VStack 
-                spacing={{ base: 4, md: 6, lg: 8, xl: 10 }} 
+                spacing={{ base: 6, md: 8, lg: 10, xl: 12 }} 
                 align="start" 
                 w="full"
                 // maxW={{ lg: "800px", xl: "900px" }}
-                pr={{ lg: 4, xl: 6 }}
+                pr={{ lg: 6, xl: 8 }}
               >
                 {/* Main Heading */}
                 <MotionBox
@@ -320,14 +320,14 @@ const HushhLink = () => {
                     lineHeight={{ base: "24px", md: "28px", lg: "30px", xl: "33px", "2xl": "36px" }}
                     fontFamily="Inter, sans-serif"
                     // maxW={{ base: "100%", md: "800px", lg: "900px", xl: "967px" }}
-                    mb={{ base: 6, md: 8, lg: 10, xl: 12 }}
+                    mb={{ base: 8, md: 10, lg: 12, xl: 14 }}
                   >
                     Hushh Link is a consent validation and logging framework that acts as the trust layer between your data and any agent, brand, or system requesting it.
                   </Text>
                 </MotionBox>
 
                 {/* Feature Boxes */}
-                <VStack spacing={{ base: 3, md: 4, lg: 5, xl: 6 }} align="start" w="full">
+                <VStack spacing={{ base: 4, md: 5, lg: 6, xl: 7 }} align="start" w="full">
                   {/* Feature 1 */}
                   <MotionBox
                     initial={{ opacity: 0, y: 20 }}
