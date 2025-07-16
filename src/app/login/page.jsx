@@ -18,6 +18,7 @@ import { useAuth } from '../context/AuthContext';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowBackIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import AppleSignInButton from './components/AppleSignInButton.jsx';
 
 // Advanced Keyframe Animations 
 const float = keyframes`
@@ -684,6 +685,62 @@ const LoginPageContent = () => {
                 >
                   Continue with Google
                 </Button>
+
+                {/* Premium Apple Sign In Button */}
+                <AppleSignInButton 
+                  isDisabled={isSigningIn}
+                  onSuccess={(data) => {
+                    console.log('Apple Sign-In Success:', data);
+                    toast({
+                      title: "🍎 Apple Sign-In Successful!",
+                      description: "Welcome to Hushh! Redirecting you now...",
+                      status: "success",
+                      duration: 3000,
+                      isClosable: true,
+                      position: "top",
+                    });
+                  }}
+                  onError={(error) => {
+                    console.error('Apple Sign-In Error:', error);
+                    toast({
+                      title: "Apple Sign-In Failed",
+                      description: error.message || "Failed to sign in with Apple. Please try again.",
+                      status: "error",
+                      duration: 5000,
+                      isClosable: true,
+                      position: "top",
+                    });
+                  }}
+                />
+
+                {/* Divider */}
+                <Box position="relative" w="full">
+                  <Box
+                    position="absolute"
+                    top="50%"
+                    left="0"
+                    right="0"
+                    h="1px"
+                    bg="rgba(255, 255, 255, 0.1)"
+                    transform="translateY(-50%)"
+                  />
+                  <Text
+                    bg="rgba(255, 255, 255, 0.05)"
+                    px={4}
+                    py={2}
+                    fontSize="sm"
+                    color="rgba(255, 255, 255, 0.6)"
+                    textAlign="center"
+                    borderRadius="full"
+                    border="1px solid rgba(255, 255, 255, 0.1)"
+                    backdropFilter="blur(10px)"
+                    position="relative"
+                    w="fit-content"
+                    mx="auto"
+                  >
+                    or continue with email
+                  </Text>
+                </Box>
 
                 {/* Security Badges */}
                 {/* <VStack spacing={3} w="full">
