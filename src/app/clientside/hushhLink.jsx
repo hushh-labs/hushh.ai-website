@@ -26,6 +26,7 @@ import { motion } from 'framer-motion';
 import { FaApple, FaFolder, FaLink, FaShieldAlt } from 'react-icons/fa';
 import HushhLinkBox from '../_components/svg/hushhLink/hushhLinkBox.svg'
 import Image from 'next/image';
+import HushhTrail from '../_components/svg/hushhLink/audit-trail.svg'
 
 const MotionBox = motion(Box);
 const MotionHeading = motion(Heading);
@@ -537,6 +538,1102 @@ const HushhLink = () => {
                   width={500}
                   height={500}
                 />
+              </MotionBox>
+            </GridItem>
+          </Grid>
+        </Container>
+      </Box>
+      {/* Link works section */}
+      
+      {/* How the Link Works Section */}
+      <Box
+        bg="#ffffff"
+        position="relative"
+        py={{ base: 16, md: 20, lg: 24, xl: 28 }}
+        overflow="hidden"
+        minH={{ base: "auto", lg: "100vh",md: "100vh" }}
+      >
+        <Container 
+          maxW="7xl" 
+          px={{ base: 4, md: 6, lg: 8, xl: 12 }}
+          position="relative" 
+          zIndex={2}
+        >
+          {/* Section Title */}
+          <MotionBox
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            textAlign="center"
+            mb={{ base: 12, md: 16, lg: 20, xl: 24 }}
+          >
+            <Heading
+              as="h2"
+              fontSize={{ base: "2xl", sm: "3xl", md: "4xl", lg: "5xl", xl: "6xl" }}
+              fontWeight="bold"
+              color="#333333"
+              letterSpacing="tight"
+              lineHeight="shorter"
+              fontFamily="Inter, sans-serif"
+              maxW="6xl"
+              mx="auto"
+            >
+              How the Link Works
+            </Heading>
+          </MotionBox>
+
+          {/* Table Container */}
+          <MotionBox
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            maxW="6xl"
+            mx="auto"
+          >
+            <Grid
+              templateColumns={{ base: "1fr", md: "1fr 2fr", lg: "1fr 2fr" }}
+              gap={{ base: 6, md: 8, lg: 12 }}
+              bg="white"
+              borderRadius="lg"
+              overflow="hidden"
+              boxShadow="0 1px 3px rgba(0, 0, 0, 0.1)"
+            >
+              {/* Left Column - Component */}
+              <GridItem>
+                <VStack spacing={0} align="stretch" h="full">
+                  {/* Column Header */}
+                  <Box
+                    p={{ base: 4, md: 6, lg: 8 }}
+                    borderBottom="1px solid rgba(224, 224, 224, 0.2)"
+                  >
+                    <HStack spacing={3} align="center">
+                      <Text
+                        fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
+                        fontWeight="medium"
+                        color="#76767C"
+                        fontFamily="Lato, sans-serif"
+                      >
+                        Component
+                      </Text>
+                      <Box w={6} h={6} flexShrink={0}>
+                        <img 
+                          src="http://localhost:3845/assets/24851c881cb24fe5d457d0492df2e2c122f12961.svg"
+                          alt=""
+                          style={{ 
+                            width: '100%', 
+                            height: '100%',
+                            display: 'block'
+                          }} 
+                        />
+                      </Box>
+                    </HStack>
+                  </Box>
+
+                  {/* Component Functions */}
+                  {[
+                    'requestConsent()',
+                    'logDecision()',
+                    'revokeConsent()',
+                    'verifyConsent()',
+                    'getAuditTrail()'
+                  ].map((item, index) => (
+                    <MotionBox
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5, delay: 0.3 + (index * 0.1), ease: "easeOut" }}
+                    >
+                      <Box
+                        p={{ base: 4, md: 6, lg: 8 }}
+                        borderBottom={index < 4 ? "1px solid rgba(224, 224, 224, 0.2)" : "none"}
+                        _hover={{ bg: "rgba(0, 113, 227, 0.02)" }}
+                        transition="background-color 0.2s ease"
+                      >
+                        <Code
+                          fontSize={{ base: "sm", md: "md", lg: "lg", xl: "xl" }}
+                          fontWeight="regular"
+                          color="#333333"
+                          fontFamily="Lato, sans-serif"
+                          bg="transparent"
+                          p={0}
+                          whiteSpace="nowrap"
+                          overflow="hidden"
+                          textOverflow="ellipsis"
+                        >
+                          {item}
+                        </Code>
+                      </Box>
+                    </MotionBox>
+                  ))}
+                </VStack>
+              </GridItem>
+
+              {/* Right Column - Functionality */}
+              <GridItem>
+                <VStack spacing={0} align="stretch" h="full">
+                  {/* Column Header */}
+                  <Box
+                    p={{ base: 4, md: 6, lg: 8 }}
+                    borderBottom="1px solid rgba(224, 224, 224, 0.2)"
+                  >
+                    <HStack spacing={3} align="center">
+                      <Text
+                        fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
+                        fontWeight="medium"
+                        color="rgba(118, 118, 124, 0.97)"
+                        fontFamily="Lato, sans-serif"
+                      >
+                        Functionality
+                      </Text>
+                      <Box w={6} h={6} flexShrink={0}>
+                        <img 
+                          src="http://localhost:3845/assets/3b9d3c70711011644903a5d41d88c9a9207588b2.svg"
+                          alt=""
+                          style={{ 
+                            width: '100%', 
+                            height: '100%',
+                            display: 'block'
+                          }} 
+                        />
+                      </Box>
+                    </HStack>
+                  </Box>
+
+                  {/* Functionality Descriptions */}
+                  {[
+                    'Shows user reason, data scope, expiration, and granularity options',
+                    'Logs the consent hash + signature to your Vault',
+                    'Revokes access for that session/token immediately',
+                    'All agent calls must pass this gate before data access',
+                    'Shows every call, timestamp, scope, and revocation history'
+                  ].map((item, index) => (
+                    <MotionBox
+                      key={index}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5, delay: 0.3 + (index * 0.1), ease: "easeOut" }}
+                    >
+                      <Box
+                        p={{ base: 4, md: 6, lg: 8 }}
+                        borderBottom={index < 4 ? "1px solid rgba(224, 224, 224, 0.2)" : "none"}
+                        _hover={{ bg: "rgba(0, 113, 227, 0.02)" }}
+                        transition="background-color 0.2s ease"
+                        minH={{ base: "auto", md: 20, lg: 24 }}
+                        display="flex"
+                        alignItems="center"
+                      >
+                        <Text
+                          fontSize={{ base: "sm", md: "md", lg: "lg", xl: "xl" }}
+                          fontWeight="regular"
+                          color="#333333"
+                          fontFamily="Lato, sans-serif"
+                          lineHeight="relaxed"
+                          wordBreak="break-word"
+                        >
+                          {item}
+                        </Text>
+                      </Box>
+                    </MotionBox>
+                  ))}
+                </VStack>
+              </GridItem>
+            </Grid>
+          </MotionBox>
+
+          {/* Mobile Table Alternative */}
+          <Box display={{ base: "block", md: "none" }} mt={8}>
+            <VStack spacing={6} align="stretch">
+              {[
+                {
+                  component: 'requestConsent()',
+                  functionality: 'Shows user reason, data scope, expiration, and granularity options'
+                },
+                {
+                  component: 'logDecision()',
+                  functionality: 'Logs the consent hash + signature to your Vault'
+                },
+                {
+                  component: 'revokeConsent()',
+                  functionality: 'Revokes access for that session/token immediately'
+                },
+                {
+                  component: 'verifyConsent()',
+                  functionality: 'All agent calls must pass this gate before data access'
+                },
+                {
+                  component: 'getAuditTrail()',
+                  functionality: 'Shows every call, timestamp, scope, and revocation history'
+                }
+              ].map((item, index) => (
+                <MotionBox
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 + (index * 0.1), ease: "easeOut" }}
+                >
+                  <Box
+                    bg="white"
+                    borderRadius="lg"
+                    p={6}
+                    boxShadow="0 1px 3px rgba(0, 0, 0, 0.1)"
+                    border="1px solid rgba(224, 224, 224, 0.2)"
+                  >
+                    <VStack spacing={4} align="start">
+                      <Box>
+                        <Text
+                          fontSize="sm"
+                          fontWeight="medium"
+                          color="#76767C"
+                          fontFamily="Lato, sans-serif"
+                          mb={2}
+                        >
+                          Component
+                        </Text>
+                        <Code
+                          fontSize="md"
+                          fontWeight="regular"
+                          color="#333333"
+                          fontFamily="Lato, sans-serif"
+                          bg="rgba(0, 113, 227, 0.05)"
+                          p={2}
+                          borderRadius="md"
+                        >
+                          {item.component}
+                        </Code>
+                      </Box>
+                      <Box>
+                        <Text
+                          fontSize="sm"
+                          fontWeight="medium"
+                          color="rgba(118, 118, 124, 0.97)"
+                          fontFamily="Lato, sans-serif"
+                          mb={2}
+                        >
+                          Functionality
+                        </Text>
+                        <Text
+                          fontSize="md"
+                          fontWeight="regular"
+                          color="#333333"
+                          fontFamily="Lato, sans-serif"
+                          lineHeight="relaxed"
+                        >
+                          {item.functionality}
+                        </Text>
+                      </Box>
+                    </VStack>
+                  </Box>
+                </MotionBox>
+              ))}
+            </VStack>
+          </Box>
+        </Container>
+      </Box>
+      
+      {/* Consent Token Anatomy & Philosophy Section */}
+      <Box
+        position="relative"
+        minH={{ base: "auto", md: "100vh" }}
+        overflow="hidden"
+      >
+        <Grid
+          templateColumns={{ base: "1fr", lg: "1fr 1fr" }}
+          minH={{ base: "auto", lg: "100vh" }}
+        >
+          {/* Left Side - Consent Token Anatomy */}
+          <GridItem
+            bg="#ffffff"
+            position="relative"
+            display="flex"
+            alignItems="flex-start"
+            justifyContent="center"
+            py={{ base: 16, md: 20, lg: 24 }}
+            px={{ base: 6, md: 8, lg: 12 }}
+          >
+            <MotionBox
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              maxW="lg"
+              w="full"
+              pt={{ base: 0, lg: 8 }}
+            >
+              <VStack spacing={{ base: 8, md: 10, lg: 12 }} align="start">
+                {/* Title */}
+                <Heading
+                  as="h2"
+                  fontSize={{ base: "3xl", md: "4xl", lg: "5xl", xl: "6xl" }}
+                  fontWeight="bold"
+                  color="#333333"
+                  lineHeight="shorter"
+                  letterSpacing="tight"
+                  fontFamily="Inter, sans-serif"
+                >
+                  Consent Token
+                  <br />
+                  Anatomy
+                </Heading>
+
+                {/* JSON Code Block */}
+                <MotionBox
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+                  w="full"
+                >
+                  <Box
+                    bg="#f8f9fa"
+                    borderRadius="lg"
+                    p={{ base: 4, md: 6 }}
+                    border="1px solid #e9ecef"
+                    fontFamily="'Fira Code', 'Monaco', 'Consolas', monospace"
+                    fontSize={{ base: "sm", md: "md", lg: "lg" }}
+                    lineHeight="relaxed"
+                    overflow="auto"
+                  >
+                    <Text color="#666">{'{'}</Text>
+                    <Text color="#22c55e" ml={4}>
+                      "user": "hushhID_8321",
+                    </Text>
+                    <Text color="#22c55e" ml={4}>
+                      "scope": ["calendar.read",
+                    </Text>
+                    <Text color="#22c55e" ml={8}>
+                      "location.once"],
+                    </Text>
+                    <Text color="#22c55e" ml={4}>
+                      "issued_at": "2025-08-12T12:00:00Z",
+                    </Text>
+                    <Text color="#22c55e" ml={4}>
+                      "expires_at":
+                    </Text>
+                    <Text color="#22c55e" ml={8}>
+                      "2025-08-19T12:00:00Z",
+                    </Text>
+                    <Text color="#22c55e" ml={4}>
+                      "signature": "0xA345...def"
+                    </Text>
+                    <Text color="#666">{'}'}</Text>
+                  </Box>
+                </MotionBox>
+
+                {/* Description */}
+                <MotionBox
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
+                >
+                  <Text
+                    fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
+                    fontWeight="bold"
+                    color="#333333"
+                    lineHeight="shorter"
+                    fontFamily="Inter, sans-serif"
+                  >
+                    Signed, verifiable, readable
+                    <br />
+                    by humans and agents.
+                  </Text>
+                </MotionBox>
+              </VStack>
+            </MotionBox>
+          </GridItem>
+
+          {/* Right Side - Philosophy */}
+          <GridItem
+            bg="#000000"
+            position="relative"
+            display="flex"
+            alignItems="flex-start"
+            justifyContent="center"
+            py={{ base: 16, md: 20, lg: 24 }}
+            px={{ base: 6, md: 8, lg: 12 }}
+          >
+            <MotionBox
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+              maxW="lg"
+              w="full"
+              pt={{ base: 0, lg: 8 }}
+            >
+              <VStack spacing={{ base: 8, md: 10, lg: 12 }} align="start">
+                {/* Title */}
+                <Heading
+                  as="h2"
+                  fontSize={{ base: "3xl", md: "4xl", lg: "5xl", xl: "6xl" }}
+                  fontWeight="bold"
+                  color="#22c55e"
+                  lineHeight="shorter"
+                  letterSpacing="tight"
+                  fontFamily="Inter, sans-serif"
+                >
+                  Consent as Code
+                  <br />
+                  Philosophy
+                </Heading>
+
+                {/* Philosophy Points */}
+                <VStack spacing={{ base: 6, md: 8 }} align="start" w="full">
+                  <MotionBox
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+                  >
+                    <Text
+                      fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
+                      fontWeight="medium"
+                      color="white"
+                      lineHeight="relaxed"
+                      fontFamily="Inter, sans-serif"
+                    >
+                      Consent isn't a UI toggle — it's a machine-readable contract
+                    </Text>
+                  </MotionBox>
+
+                  <MotionBox
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
+                  >
+                    <Text
+                      fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
+                      fontWeight="medium"
+                      color="white"
+                      lineHeight="relaxed"
+                      fontFamily="Inter, sans-serif"
+                    >
+                      Enables agent-to-agent (A2A) and agent-to-knowledge (A2K) data exchanges
+                    </Text>
+                  </MotionBox>
+
+                  <MotionBox
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.8, ease: "easeOut" }}
+                  >
+                    <Text
+                      fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
+                      fontWeight="medium"
+                      color="white"
+                      lineHeight="relaxed"
+                      fontFamily="Inter, sans-serif"
+                    >
+                      Works as the handshake between Hushh PDA and external services
+                    </Text>
+                  </MotionBox>
+                </VStack>
+              </VStack>
+            </MotionBox>
+          </GridItem>
+        </Grid>
+
+      </Box>
+
+      {/* Sample Usecase Section */}
+      <Box
+        bg="#f5f5f7"
+        position="relative"
+        py={{ base: 16, md: 20, lg: 24, xl: 28 }}
+        overflow="hidden"
+        minH={{ base: "auto", lg: "100vh" }}
+      >
+        <Container 
+          maxW="8xl" 
+          px={{ base: 4, md: 3, lg: 6, xl: 12 }}
+          position="relative" 
+          zIndex={2}
+        >
+          {/* Section Title */}
+          <MotionBox
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            textAlign="center"
+            mb={{ base: 12, md: 16, lg: 20, xl: 24 }}
+          >
+            <Heading
+              as="h2"
+              fontSize={{ base: "4xl", sm: "5xl", md: "6xl", lg: "7xl", xl: "8xl" }}
+              fontWeight="bold"
+              color="#333333"
+              letterSpacing="tight"
+              lineHeight={{ base: "shorter", md: "none" }}
+              fontFamily="Inter, sans-serif"
+              maxW="6xl"
+              mx="auto"
+            >
+              Sample Usecase
+            </Heading>
+          </MotionBox>
+
+          {/* Use Case Cards */}
+          <Flex
+            direction={{ base: "column", lg: "row" }}
+            justify="center"
+            align="center"
+            gap={{ base: 6, md: 8, lg: 6 }}
+            maxW="7xl"
+            mx="auto"
+          >
+            {/* Card 1 - Notion */}
+            <MotionBox
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+              flex="1"
+              maxW={{ base: "sm", lg: "sm" }}
+            >
+              <Box
+                position="relative"
+                w="full"
+                h={{ base: "xs", md: "md", lg: "md" }}
+                borderRadius={{ base: "lg", md: "xl", lg: "2xl" }}
+                overflow="hidden"
+                // boxShadow="0 4px 6.8px rgba(0, 0, 0, 0.25)"
+                backgroundImage={'/usecasebg1.svg'}   
+                backgroundSize="cover"
+                backgroundPosition="center"
+                backgroundRepeat="no-repeat"
+                cursor="pointer"
+                _hover={{
+                  transform: "translateY(-4px)",
+                //   boxShadow: "0 8px 25px rgba(0, 0, 0, 0.3)"
+                }}
+                transition="all 0.3s ease"
+              >
+                {/* Text Overlay */}
+                <Box
+                  position="absolute"
+                  top={{ base: 4, md: 5, lg: 6 }}
+                  left={{ base: 4, md: 5, lg: 6 }}
+                  right={{ base: 4, md: 5, lg: 6 }}
+                  zIndex={1}
+                >
+                  <Text
+                    fontSize={{ base: "sm", md: "2xl", lg: "3xl" }}
+                    fontWeight="semibold"
+                    color="#000000"
+                    lineHeight="shorter"
+                    letterSpacing="tight"
+                    fontFamily="Inter, sans-serif"
+                  >
+                    Authorize Notion sync for 48 hours with read-only access
+                  </Text>
+                </Box>
+              </Box>
+            </MotionBox>
+
+            {/* Card 2 - Amazon */}
+            <MotionBox
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+              flex="1"
+              maxW={{ base: "sm", lg: "sm" }}
+            >
+              <Box
+                position="relative"
+                w="full"
+                h={{ base: "xs", md: "md", lg: "md" }}
+                borderRadius={{ base: "lg", md: "xl", lg: "2xl" }}
+                overflow="hidden"
+                // boxShadow="0 4px 4px rgba(0, 0, 0, 0.25)"
+                backgroundImage={'/usecasebg2.svg'} 
+                backgroundSize="cover"
+                backgroundPosition="center"
+                backgroundRepeat="no-repeat"
+                cursor="pointer"
+                _hover={{
+                  transform: "translateY(-4px)",
+                //   boxShadow: "0 8px 25px rgba(0, 0, 0, 0.3)"
+                }}
+                transition="all 0.3s ease"
+              >
+                {/* Text Overlay */}
+                <Box
+                  position="absolute"
+                  top={{ base: 4, md: 5, lg: 6 }}
+                  left={{ base: 4, md: 5, lg: 6 }}
+                  right={{ base: 4, md: 5, lg: 6 }}
+                  zIndex={1}
+                >
+                  <Text
+                    fontSize={{ base: "sm", md: "2xl", lg: "3xl" }}
+                    fontWeight="semibold"
+                    color="#000000"
+                    lineHeight="shorter"
+                    letterSpacing="tight"
+                    fontFamily="Inter, sans-serif"
+                  >
+                    Approve Amazon to personalize shopping for this week only
+                  </Text>
+                </Box>
+              </Box>
+            </MotionBox>
+
+            {/* Card 3 - Gmail */}
+            <MotionBox
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+              flex="1"
+              maxW={{ base: "sm", lg: "sm" }}
+            >
+              <Box
+                position="relative"
+                w="full"
+                h={{ base: "xs", md: "md", lg: "md" }}
+                borderRadius={{ base: "lg", md: "xl", lg: "2xl" }}
+                overflow="hidden"
+                // boxShadow="0 4px 4px rgba(0, 0, 0, 0.25)"
+                backgroundImage={'/usecasebg3.svg'}
+                backgroundSize="cover"
+                backgroundPosition="center"
+                backgroundRepeat="no-repeat"
+                cursor="pointer"
+                _hover={{
+                  transform: "translateY(-4px)",
+                //   boxShadow: "0 8px 25px rgba(0, 0, 0, 0.3)"
+                }}
+                transition="all 0.3s ease"
+              >
+                {/* Text Overlay */}
+                <Box
+                  position="absolute"
+                  top={{ base: 4, md: 5, lg: 6 }}
+                  left={{ base: 4, md: 5, lg: 6 }}
+                  right={{ base: 4, md: 5, lg: 6 }}
+                  zIndex={1}
+                >
+                  <Text
+                    fontSize={{ base: "sm", md: "2xl", lg: "3xl" }}
+                    fontWeight="semibold"
+                    color="#000000"
+                    lineHeight="shorter"
+                    letterSpacing="tight"
+                    fontFamily="Inter, sans-serif"
+                  >
+                    Revoke all prior access to Gmail with one tap
+                  </Text>
+                </Box>
+              </Box>
+            </MotionBox>
+          </Flex>
+
+          {/* Explore the Stack Button */}
+          <Box
+            textAlign="center"
+            mt={{ base: 16, md: 20, lg: 24 }}
+          >
+            <MotionBox
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.0, ease: "easeOut" }}
+            >
+              <Text
+                fontSize={{ base: "sm", md: "md", lg: "lg", xl: "xl" }}
+                fontWeight="bold"
+                color="#344054"
+                textAlign="center"
+                letterSpacing="widest"
+                textTransform="uppercase"
+                fontFamily="Inter, sans-serif"
+                bg="rgba(255, 255, 255, 0.8)"
+                px={{ base: 6, md: 8, lg: 10 }}
+                py={{ base: 3, md: 4, lg: 5 }}
+                borderRadius="full"
+                display="inline-block"
+                backdropFilter="blur(10px)"
+                border="1px solid rgba(255, 255, 255, 0.3)"
+                cursor="pointer"
+                _hover={{
+                  bg: "rgba(255, 255, 255, 0.95)",
+                  transform: "translateY(-2px)",
+                  boxShadow: "0 8px 25px rgba(52, 64, 84, 0.15)"
+                }}
+                transition="all 0.3s ease"
+              >
+                Explore the Stack
+              </Text>
+            </MotionBox>
+          </Box>
+        </Container>
+      </Box>
+
+      {/* Audit Trail Section */}
+      <Box
+        minH="100vh"
+        bg="black"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        position="relative"
+        overflow="hidden"
+        py={{ base: 8, md: 12, lg: 16 }}
+      >
+        <Container 
+          maxW="8xl" 
+          px={{ base: 4, md: 6, lg: 8 }}
+          h="100%"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Box
+            position="relative"
+            w="100%"
+            h="100%"
+            minH={{ base: "70vh", md: "80vh", lg: "85vh" }}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Image 
+              src={HushhTrail} 
+              alt="Hushh Trail" 
+              style={{
+                width: '100%',
+                height: 'auto',
+                maxHeight: '85vh',
+                objectFit: 'contain'
+              }}
+              priority
+            />
+          </Box>
+        </Container>
+      </Box>
+      
+       {/* Developer Ready Section */}
+       <Box
+        bg="#f5f5f7"
+        position="relative"
+        py={{ base: "60px", md: "80px", lg: "120px" }}
+      >
+        {/* White Background for Right Half */}
+        <Box
+          position="absolute"
+          top={0}
+          right={0}
+          w={{ base: "0%", lg: "50%" }}
+          h="full"
+          bg="#ffffff"
+          zIndex={1}
+        />
+        
+        <Container maxW="8xl" px={0} position="relative" zIndex={2}>
+          <Grid
+            templateColumns={{ base: "1fr", lg: "1fr 1fr" }}
+            gap={0}
+            alignItems="start"
+          >
+            {/* Left Column - Developer Ready */}
+            <GridItem px={{ base: "32px", md: "48px", lg: "120px" }} py={{ base: "40px", md: "60px", lg: "80px" }}>
+              <MotionBox
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+              >
+                <VStack spacing={{ base: "32px", md: "40px", lg: "48px" }} align="start" w="full">
+                  {/* Title */}
+                  <Heading
+                    as="h2"
+                    fontSize={{ base: "28px", md: "36px", lg: "42px" }}
+                    fontWeight="bold"
+                    color="#333333"
+                    fontFamily="Inter, sans-serif"
+                    lineHeight="1.2"
+                    mb={{ base: "24px", md: "32px", lg: "40px" }}
+                  >
+                    Developer Ready
+                  </Heading>
+
+                  {/* Feature List */}
+                  <VStack spacing={{ base: "20px", md: "24px", lg: "28px" }} align="start" w="full">
+                    {/* Feature 1 */}
+                    <MotionBox
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+                    >
+                      <Flex align="start" gap={{ base: "12px", md: "14px", lg: "16px" }}>
+                        <Box
+                          w={{ base: "5px", md: "6px", lg: "7px" }}
+                          h={{ base: "5px", md: "6px", lg: "7px" }}
+                          bg="#333333"
+                          borderRadius="full"
+                          mt={{ base: "7px", md: "8px", lg: "9px" }}
+                          flexShrink={0}
+                        />
+                        <Text
+                          fontSize={{ base: "16px", md: "1.25rem", lg: "1.5rem" }}
+                          fontWeight="400"
+                          color="#333333"
+                          fontFamily="Inter, sans-serif"
+                          lineHeight="1.5"
+                        >
+                          API-first consent management
+                        </Text>
+                      </Flex>
+                    </MotionBox>
+
+                    {/* Feature 2 */}
+                    <MotionBox
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+                    >
+                      <Flex align="start" gap={{ base: "12px", md: "14px", lg: "16px" }}>
+                        <Box
+                          w={{ base: "5px", md: "6px", lg: "7px" }}
+                          h={{ base: "5px", md: "6px", lg: "7px" }}
+                          bg="#333333"
+                          borderRadius="full"
+                          mt={{ base: "7px", md: "8px", lg: "9px" }}
+                          flexShrink={0}
+                        />
+                        <Text
+                          fontSize={{ base: "16px", md: "1.25rem", lg: "1.5rem" }}
+                          fontWeight="400"
+                          color="#333333"
+                          fontFamily="Inter, sans-serif"
+                          lineHeight="1.5"
+                        >
+                          GitHub operon: operon.verifyConsent.ts
+                        </Text>
+                      </Flex>
+                    </MotionBox>
+
+                    {/* Feature 3 */}
+                    <MotionBox
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+                    >
+                      <Flex align="start" gap={{ base: "12px", md: "14px", lg: "16px" }}>
+                        <Box
+                          w={{ base: "5px", md: "6px", lg: "7px" }}
+                          h={{ base: "5px", md: "6px", lg: "7px" }}
+                          bg="#333333"
+                          borderRadius="full"
+                          mt={{ base: "7px", md: "8px", lg: "9px" }}
+                          flexShrink={0}
+                        />
+                        <Text
+                          fontSize={{ base: "16px", md: "1.25rem", lg: "1.5rem" }}
+                          fontWeight="400"
+                          color="#333333"
+                          fontFamily="Inter, sans-serif"
+                          lineHeight="1.5"
+                        >
+                          Native support for OpenAI, Firebase, Apple ID
+                        </Text>
+                      </Flex>
+                    </MotionBox>
+
+                    <MotionBox
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+                    >
+                      <Flex align="start" gap={{ base: "12px", md: "14px", lg: "16px" }}>
+                        <Box
+                          w={{ base: "5px", md: "6px", lg: "7px" }}
+                          h={{ base: "5px", md: "6px", lg: "7px" }}
+                          bg="#333333"
+                          borderRadius="full"
+                          mt={{ base: "7px", md: "8px", lg: "9px" }}
+                          flexShrink={0}
+                        />
+                        <Text
+                          fontSize={{ base: "16px", md: "1.25rem", lg: "1.5rem" }}
+                          fontWeight="400"
+                          color="#333333"
+                          fontFamily="Inter, sans-serif"
+                          lineHeight="1.5"
+                        >
+                          Plug into brand systems using REST or GraphQL
+                        </Text>
+                      </Flex>
+                    </MotionBox>
+                  </VStack>
+
+                  {/* Buttons Section */}
+                  <HStack 
+                    spacing={{ base: "12px", md: "16px", lg: "20px" }}
+                    flexDir={{ base: "column", sm: "row" }}
+                    w="full"
+                    align="start"
+                    mt={{ base: "32px", md: "40px", lg: "48px" }}
+                  >
+                    <MotionButton
+                      size="lg"
+                      bg="#0071E3"
+                      color="white"
+                      px={{ base: "24px", md: "28px", lg: "32px" }}
+                      py={{ base: "12px", md: "14px", lg: "16px" }}
+                      borderRadius="full"
+                      fontSize={{ base: "14px", md: "16px", lg: "16px" }}
+                      fontWeight="500"
+                      fontFamily="Inter, sans-serif"
+                      h={{ base: "44px", md: "48px", lg: "52px" }}
+                      minW={{ base: "180px", md: "200px", lg: "220px" }}
+                      _hover={{
+                        bg: "#0056B3",
+                        transform: "translateY(-1px)",
+                        boxShadow: "0 4px 12px rgba(0, 113, 227, 0.3)"
+                      }}
+                      _active={{
+                        transform: "translateY(0)"
+                      }}
+                      transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      Use Link in your Agent
+                    </MotionButton>
+
+                    <MotionButton
+                      size="lg"
+                      bg="transparent"
+                      color="#0071E3"
+                      px={{ base: "24px", md: "28px", lg: "32px" }}
+                      py={{ base: "12px", md: "14px", lg: "16px" }}
+                      borderRadius="full"
+                      fontSize={{ base: "14px", md: "16px", lg: "16px" }}
+                      fontWeight="500"
+                      fontFamily="Inter, sans-serif"
+                      h={{ base: "44px", md: "48px", lg: "52px" }}
+                      minW={{ base: "180px", md: "200px", lg: "220px" }}
+                      border="2px solid #0071E3"
+                      _hover={{
+                        bg: "#0071E3",
+                        color: "white",
+                        transform: "translateY(-1px)",
+                        boxShadow: "0 4px 12px rgba(0, 113, 227, 0.3)"
+                      }}
+                      _active={{
+                        transform: "translateY(0)"
+                      }}
+                      transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      Audit Sample Logs
+                    </MotionButton>
+                  </HStack>
+                </VStack>
+              </MotionBox>
+            </GridItem>
+
+            {/* Right Column - Future Vault+ Capabilities */}
+            <GridItem px={{ base: "32px", md: "48px", lg: "120px" }} py={{ base: "40px", md: "60px", lg: "80px" }}>
+              <MotionBox
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+              >
+                <VStack spacing={{ base: "32px", md: "40px", lg: "48px" }} align="start" w="full">
+                  {/* Title */}
+                  <Heading
+                    as="h2"
+                    fontSize={{ base: "28px", md: "36px", lg: "42px" }}
+                    fontWeight="bold"
+                    color="#333333"
+                    fontFamily="Inter, sans-serif"
+                    lineHeight="1.2"
+                    mb={{ base: "24px", md: "32px", lg: "40px" }}
+                  >
+                    Future Link+ Capabilities{" "}
+                    <Text as="span" display="block">
+                      (Premium Layer)
+                    </Text>
+                  </Heading>
+
+                  {/* Feature List */}
+                  <VStack spacing={{ base: "20px", md: "24px", lg: "28px" }} align="start" w="full">
+                    {/* Feature 1 */}
+                    <MotionBox
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+                    >
+                      <Flex align="start" gap={{ base: "12px", md: "14px", lg: "16px" }}>
+                        <Box
+                          w={{ base: "5px", md: "6px", lg: "7px" }}
+                          h={{ base: "5px", md: "6px", lg: "7px" }}
+                          bg="#333333"
+                          borderRadius="full"
+                          mt={{ base: "7px", md: "8px", lg: "9px" }}
+                          flexShrink={0}
+                        />
+                        <Text
+                          fontSize={{ base: "16px", md: "1.25rem", lg: "1.5rem" }}
+                          fontWeight="400"
+                          color="#333333"
+                          fontFamily="Inter, sans-serif"
+                          lineHeight="1.5"
+                        >
+                          consent_required: true by default on all endpoints
+                        </Text>
+                      </Flex>
+                    </MotionBox>
+
+                    {/* Feature 2 */}
+                    <MotionBox
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+                    >
+                      <Flex align="start" gap={{ base: "12px", md: "14px", lg: "16px" }}>
+                        <Box
+                          w={{ base: "5px", md: "6px", lg: "7px" }}
+                          h={{ base: "5px", md: "6px", lg: "7px" }}
+                          bg="#333333"
+                          borderRadius="full"
+                          mt={{ base: "7px", md: "8px", lg: "9px" }}
+                          flexShrink={0}
+                        />
+                        <Text
+                          fontSize={{ base: "16px", md: "1.25rem", lg: "1.5rem" }}
+                          fontWeight="400"
+                          color="#333333"
+                          fontFamily="Inter, sans-serif"
+                          lineHeight="1.5"
+                        >
+                          Granular scope definitions per data type
+                        </Text>
+                      </Flex>
+                    </MotionBox>
+
+                    {/* Feature 3 */}
+                    <MotionBox
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+                    >
+                      <Flex align="start" gap={{ base: "12px", md: "14px", lg: "16px" }}>
+                        <Box
+                          w={{ base: "5px", md: "6px", lg: "7px" }}
+                          h={{ base: "5px", md: "6px", lg: "7px" }}
+                          bg="#333333"
+                          borderRadius="full"
+                          mt={{ base: "7px", md: "8px", lg: "9px" }}
+                          flexShrink={0}
+                        />
+                        <Text
+                          fontSize={{ base: "16px", md: "1.25rem", lg: "1.5rem" }}
+                          fontWeight="400"
+                          color="#333333"
+                          fontFamily="Inter, sans-serif"
+                          lineHeight="1.5"
+                        >
+                          Easy export to CSV or JSON for transparency
+                        </Text>
+                      </Flex>
+                    </MotionBox>
+                  </VStack>
+                </VStack>
               </MotionBox>
             </GridItem>
           </Grid>
