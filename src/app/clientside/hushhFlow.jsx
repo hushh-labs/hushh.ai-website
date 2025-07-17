@@ -121,7 +121,7 @@ const HushhFlow = () => {
                   fontFamily="Inter, sans-serif"
                   mb={{ base: 4, md: 6 }}
                 >
-                  Hushh FLow
+                  Hushh Flow
                 </Text>
               </MotionBox>
 
@@ -813,10 +813,9 @@ const HushhFlow = () => {
                 position="relative"
                 w="full"
                 h={{ base: "xs", md: "md", lg: "md" }}
-                borderRadius={'29px'}
+                borderRadius="29px"
                 overflow="hidden"
-                // boxShadow="0 4px 6.8px rgba(0, 0, 0, 0.25)"
-                backgroundImage={'/nikebg.svg'}   
+                backgroundImage="url('/nikebg.svg')"
                 backgroundSize="cover"
                 backgroundPosition="center"
                 backgroundRepeat="no-repeat"
@@ -835,6 +834,7 @@ const HushhFlow = () => {
                   left={{ base: 4, md: 5, lg: 6 }}
                   right={{ base: 4, md: 5, lg: 6 }}
                   zIndex={1}
+                  
                 >
                   <Text
                     fontSize={{ base: "sm", md: "2xl", lg: "3xl" }}
@@ -844,7 +844,7 @@ const HushhFlow = () => {
                     letterSpacing="tight"
                     fontFamily="Inter, sans-serif"
                   >
-                    Allow Nike to see purchase and sizing data from the last 6 months” → Earn ₹250
+                    Allow Nike to see purchase and sizing data from the last 6 months" → Earn ₹250
                   </Text>
                 </Box>
               </Box>
