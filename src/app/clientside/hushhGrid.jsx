@@ -31,6 +31,9 @@ import ConsentBasedIcon from '../_components/svg/hushhFlow/consentBasedIcon.svg'
 import TransparentRevenueIcon from '../_components/svg/hushhFlow/transparentRevenueIcon.svg'
 import ReplaceIcon from '../_components/svg/hushhFlow/replacesIcon.svg'
 import GlobeIcon from '../_components/svg/icons/globeIcon.svg'
+import AgentRuntime from '../_components/svg/hushhGrid/agentRuntime.svg'
+
+
 const MotionBox = motion(Box);
 const MotionHeading = motion(Heading);
 const MotionText = motion(Text);
@@ -868,9 +871,389 @@ const HushhGrid = () => {
         </Container>
       </Box>
 
+      {/* Agent Runtime Principles Section */}
+      <Box
+        bg="white"
+        py={{ base: 16, md: 20, lg: 0 }}
+        overflow="hidden"
+      >
+        <Container maxW="100%" px={0} w="full">
+          <Grid
+            templateColumns={{ base: "1fr", lg: "1fr 1fr" }}
+            minH={{ base: "auto", lg: "100vh" }}
+            gap={0}
+            alignItems="stretch"
+          >
+            {/* Left Column - Content */}
+            <GridItem 
+              bg="white" 
+              position="relative"
+              display="flex"
+              alignItems="center"
+            >
+              <Box
+                px={{ base: 6, md: 10, lg: 16 }}
+                py={{ base: 0, lg: 16 }}
+                w="full"
+                display="flex"
+                flexDirection="column"
+                justifyContent="center"
+                alignItems="flex-start"
+              >
+                <MotionBox {...fadeInLeft}>
+                  {/* Main Heading */}
+                  <Heading
+                    as="h2"
+                    fontSize={{ base: "28px", md: "40px", lg: "56px", xl: "64px" }}
+                    fontWeight="bold"
+                    color="#333333"
+                    fontFamily="Inter, sans-serif"
+                    letterSpacing={{ base: "-0.56px", md: "-0.8px", lg: "-1.12px", xl: "-1.28px" }}
+                    lineHeight={{ base: "1.1", md: "1.15", lg: "1.2", xl: "1.2" }}
+                    mb={{ base: "24px", md: "32px", lg: "48px", xl: "64px" }}
+                    maxW={{ base: "100%", md: "500px", lg: "600px", xl: "624px" }}
+                  >
+                    Agent Runtime Principles
+                  </Heading>
+
+                  {/* Bullet Points List */}
+                  <VStack spacing={{ base: "20px", md: "24px", lg: "32px", xl: "40px" }} align="stretch" mb={{ base: "32px", md: "40px", lg: "48px", xl: "60px" }}>
+                    <HStack spacing={{ base: "12px", md: "14px", lg: "16px", xl: "16px" }} align="flex-start">
+                      <Box
+                        w={{ base: "6px", md: "7px", lg: "8px", xl: "8px" }}
+                        h={{ base: "6px", md: "7px", lg: "8px", xl: "8px" }}
+                        bg="#333333"
+                        borderRadius="50%"
+                        flexShrink={0}
+                        mt={{ base: "8px", md: "10px", lg: "12px", xl: "12px" }}
+                      />
+                      <Text
+                        fontSize={{ base: "16px", md: "18px", lg: "20px", xl: "24px" }}
+                        fontWeight="400"
+                        color="#333333"
+                        fontFamily="Inter, sans-serif"
+                        lineHeight="1.4"
+                        letterSpacing={{ base: "-0.32px", md: "-0.36px", lg: "-0.4px", xl: "-0.48px" }}
+                      >
+                        Stateless when possible, stateful via Vault only
+                      </Text>
+                    </HStack>
+
+                    <HStack spacing={{ base: "12px", md: "14px", lg: "16px", xl: "16px" }} align="flex-start">
+                      <Box
+                        w={{ base: "6px", md: "7px", lg: "8px", xl: "8px" }}
+                        h={{ base: "6px", md: "7px", lg: "8px", xl: "8px" }}
+                        bg="#333333"
+                        borderRadius="50%"
+                        flexShrink={0}
+                        mt={{ base: "8px", md: "10px", lg: "12px", xl: "12px" }}
+                      />
+                      <Text
+                        fontSize={{ base: "16px", md: "18px", lg: "20px", xl: "24px" }}
+                        fontWeight="400"
+                        color="#333333"
+                        fontFamily="Inter, sans-serif"
+                        lineHeight="1.4"
+                        letterSpacing={{ base: "-0.32px", md: "-0.36px", lg: "-0.4px", xl: "-0.48px" }}
+                      >
+                        Sandbox per request
+                      </Text>
+                    </HStack>
+
+                    <HStack spacing={{ base: "12px", md: "14px", lg: "16px", xl: "16px" }} align="flex-start">
+                      <Box
+                        w={{ base: "6px", md: "7px", lg: "8px", xl: "8px" }}
+                        h={{ base: "6px", md: "7px", lg: "8px", xl: "8px" }}
+                        bg="#333333"
+                        borderRadius="50%"
+                        flexShrink={0}
+                        mt={{ base: "8px", md: "10px", lg: "12px", xl: "12px" }}
+                      />
+                      <Text
+                        fontSize={{ base: "16px", md: "18px", lg: "20px", xl: "24px" }}
+                        fontWeight="400"
+                        color="#333333"
+                        fontFamily="Inter, sans-serif"
+                        lineHeight="1.4"
+                        letterSpacing={{ base: "-0.32px", md: "-0.36px", lg: "-0.4px", xl: "-0.48px" }}
+                      >
+                        Opt-in sharing with other agents only via signed MCP token
+                      </Text>
+                    </HStack>
+
+                    <HStack spacing={{ base: "12px", md: "14px", lg: "16px", xl: "16px" }} align="flex-start">
+                      <Box
+                        w={{ base: "6px", md: "7px", lg: "8px", xl: "8px" }}
+                        h={{ base: "6px", md: "7px", lg: "8px", xl: "8px" }}
+                        bg="#333333"
+                        borderRadius="50%"
+                        flexShrink={0}
+                        mt={{ base: "8px", md: "10px", lg: "12px", xl: "12px" }}
+                      />
+                      <Text
+                        fontSize={{ base: "16px", md: "18px", lg: "20px", xl: "24px" }}
+                        fontWeight="400"
+                        color="#333333"
+                        fontFamily="Inter, sans-serif"
+                        lineHeight="1.4"
+                        letterSpacing={{ base: "-0.32px", md: "-0.36px", lg: "-0.4px", xl: "-0.48px" }}
+                      >
+                        TTLs and scope checks enforced on every execution
+                      </Text>
+                    </HStack>
+                  </VStack>
+
+                  {/* Bottom Description */}
+                  <Text
+                    fontSize={{ base: "16px", md: "18px", lg: "20px", xl: "24px" }}
+                    fontWeight="400"
+                    color="#333333"
+                    fontFamily="Inter, sans-serif"
+                    lineHeight="1.4"
+                    letterSpacing={{ base: "-0.32px", md: "-0.36px", lg: "-0.4px", xl: "-0.48px" }}
+                    maxW={{ base: "100%", md: "500px", lg: "550px", xl: "600px" }}
+                  >
+                    Every transaction is cryptographically logged and distributed via Hushh Flow.
+                  </Text>
+                </MotionBox>
+              </Box>
+            </GridItem>
+
+            {/* Right Column - Agent Runtime Image */}
+            <GridItem 
+              bg="#000000" 
+              position="relative"
+              minH={{ base: "400px", md: "500px", lg: "100vh", xl: "100vh" }}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <MotionBox {...fadeInRight} h="full" w="full" position="relative" display="flex" alignItems="center" justifyContent="center">
+                {/* Agent Runtime Image */}
+                <Box
+                  py={{ base: "40px", md: "50px", lg: "0", xl: "0" }}
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  h="full"
+                  w="full"
+                >
+                  <Image 
+                    src={AgentRuntime} 
+                    alt="Agent Runtime" 
+                    width={{ base: "280px", md: "350px", lg: "400px", xl: "500px" }}
+                    height={{ base: "200px", md: "250px", lg: "300px", xl: "400px" }}
+                    objectFit="contain"
+                  />
+                </Box>
+              </MotionBox>
+            </GridItem>
+          </Grid>
+        </Container>
+      </Box>
+
+       {/* Sample Usecase Section */}
+       <Box
+        bg="#f5f5f7"
+        position="relative"
+        py={{ base: "60px", md: "80px", lg: "100px", xl: "120px" }}
+        overflow="hidden"
+        mt={{ base: 0, md: 0, lg: 0, xl: 0 }}
+      >
+        <Container 
+          maxW="8xl" 
+          px={{ base: "24px", md: "40px", lg: "60px", xl: "80px" }}
+          position="relative" 
+          zIndex={2}
+        >
+          {/* Section Title */}
+          <MotionBox
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            textAlign="center"
+            mb={{ base: "48px", md: "64px", lg: "80px", xl: "96px" }}
+          >
+            <Heading
+              as="h2"
+              fontSize={{ base: "4xl", sm: "5xl", md: "6xl", lg: "7xl", xl: "8xl" }}
+              fontWeight="bold"
+              color="#333333"
+              letterSpacing="tight"
+              lineHeight={{ base: "shorter", md: "none" }}
+              fontFamily="Inter, sans-serif"
+              maxW="6xl"
+              mx="auto"
+            >
+              Sample Usecase
+            </Heading>
+          </MotionBox>
+
+          {/* Use Case Cards */}
+          <Flex
+            direction={{ base: "column", lg: "row" }}
+            justify="center"
+            align={{ base: "center", lg: "stretch" }}
+            gap={{ base: "24px", md: "32px", lg: "24px" }}
+            maxW="7xl"
+            mx="auto"
+          >
+            {/* Card 1 - Nike */}
+            <MotionBox
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+              flex="1"
+              maxW={{ base: "sm", lg: "sm" }}
+            >
+              <Box
+                position="relative"
+                w="full"
+                h={{ base: "xs", md: "md", lg: "md" }}
+                borderRadius={'29px'}
+                overflow="hidden"
+                // boxShadow="0 4px 4px rgba(0, 0, 0, 0.25)"
+                backgroundImage={'/courseraBg.svg'} 
+                backgroundSize="cover"
+                backgroundPosition="center"
+                backgroundRepeat="no-repeat"
+                cursor="pointer"
+                boxShadow="0 4px 4px rgba(0, 0, 0, 0.25)"
+                _hover={{
+                  transform: "translateY(-4px)",
+                  boxShadow: "0 8px 25px rgba(0, 0, 0, 0.3)"
+                }}
+                transition="all 0.3s ease"
+              >
+                {/* Text Overlay */}
+                <Box
+                  position="absolute"
+                  top={{ base: 4, md: 5, lg: 6 }}
+                  left={{ base: 4, md: 5, lg: 6 }}
+                  right={{ base: 4, md: 5, lg: 6 }}
+                  zIndex={1}
+                >
+                  <Text
+                    fontSize={{ base: "sm", md: "2xl", lg: "3xl" }}
+                    fontWeight="semibold"
+                    color="#000000"
+                    lineHeight="shorter"
+                    letterSpacing="tight"
+                    fontFamily="Inter, sans-serif"
+                  >
+                    Approve Coursera to recommend learning paths based on browsing” → 3 free courses
+                  </Text>
+                </Box>
+              </Box>
+            </MotionBox>
+
+            {/* Card 2 - Amazon */}
+            <MotionBox
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+              flex="1"
+              maxW={{ base: "sm", lg: "sm" }}
+            >
+              <Box
+                position="relative"
+                w="full"
+                h={{ base: "xs", md: "md", lg: "md" }}
+                borderRadius={'29px'}
+                overflow="hidden"
+                // boxShadow="0 4px 4px rgba(0, 0, 0, 0.25)"
+                backgroundImage={'/courseraBg.svg'} 
+                backgroundSize="cover"
+                backgroundPosition="center"
+                backgroundRepeat="no-repeat"
+                cursor="pointer"
+                boxShadow="0 4px 4px rgba(0, 0, 0, 0.25)"
+                _hover={{
+                  transform: "translateY(-4px)",
+                  boxShadow: "0 8px 25px rgba(0, 0, 0, 0.3)"
+                }}
+                transition="all 0.3s ease"
+              >
+                {/* Text Overlay */}
+                <Box
+                  position="absolute"
+                  top={{ base: 4, md: 5, lg: 6 }}
+                  left={{ base: 4, md: 5, lg: 6 }}
+                  right={{ base: 4, md: 5, lg: 6 }}
+                  zIndex={1}
+                >
+                  <Text
+                    fontSize={{ base: "sm", md: "2xl", lg: "3xl" }}
+                    fontWeight="semibold"
+                    color="#000000"
+                    lineHeight="shorter"
+                    letterSpacing="tight"
+                    fontFamily="Inter, sans-serif"
+                  >
+                    Approve Coursera to recommend learning paths based on browsing” → 3 free courses
+                  </Text>
+                </Box>
+              </Box>
+            </MotionBox>
+
+            {/* Card 3 - Gmail */}
+            <MotionBox
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+              flex="1"
+              maxW={{ base: "sm", lg: "sm" }}
+            >
+              <Box
+                position="relative"
+                w="full"
+                h={{ base: "xs", md: "md", lg: "md" }}
+                borderRadius={'29px'}
+                overflow="hidden"
+                // boxShadow="0 4px 4px rgba(0, 0, 0, 0.25)"
+                backgroundImage={'/spotifyBg.svg'}
+                backgroundSize="cover"
+                backgroundPosition="center"
+                backgroundRepeat="no-repeat"
+                cursor="pointer"
+                boxShadow="0 4px 4px rgba(0, 0, 0, 0.25)"
+                _hover={{
+                  transform: "translateY(-4px)",
+                  boxShadow: "0 8px 25px rgba(0, 0, 0, 0.3)"
+                }}
+                transition="all 0.3s ease"
+              >
+                {/* Text Overlay */}
+                <Box
+                  position="absolute"
+                  top={{ base: 4, md: 5, lg: 6 }}
+                  left={{ base: 4, md: 5, lg: 6 }}
+                  right={{ base: 4, md: 5, lg: 6 }}
+                  zIndex={1}
+                >
+                  <Text
+                    fontSize={{ base: "sm", md: "2xl", lg: "3xl" }}
+                    fontWeight="semibold"
+                    color="#000000"
+                    lineHeight="shorter"
+                    letterSpacing="tight"
+                    fontFamily="Inter, sans-serif"
+                  >
+                    Share concert interest profile with Spotify” → Premium trial
+                  </Text>
+                </Box>
+              </Box>
+            </MotionBox>
+          </Flex>
+
+          
+        </Container>
+      </Box>
       
     </>
   )
 }
+
+
 
 export default HushhGrid
