@@ -1369,8 +1369,8 @@ const HushhLink = () => {
                         />
                         <Text
                           fontSize={{ base: "16px", md: "1.25rem", lg: "1.5rem" }}
-                          fontWeight="400"
-                          color="#333333"
+                          fontWeight="600"
+                          color="#383737"
                           fontFamily="Inter, sans-serif"
                           lineHeight="1.5"
                         >
@@ -1396,8 +1396,8 @@ const HushhLink = () => {
                         />
                         <Text
                           fontSize={{ base: "16px", md: "1.25rem", lg: "1.5rem" }}
-                          fontWeight="400"
-                          color="#333333"
+                          fontWeight="600"
+                          color="#383737"
                           fontFamily="Inter, sans-serif"
                           lineHeight="1.5"
                         >
@@ -1423,8 +1423,8 @@ const HushhLink = () => {
                         />
                         <Text
                           fontSize={{ base: "16px", md: "1.25rem", lg: "1.5rem" }}
-                          fontWeight="400"
-                          color="#333333"
+                          fontWeight="600"
+                          color="#383737"
                           fontFamily="Inter, sans-serif"
                           lineHeight="1.5"
                         >
@@ -1449,8 +1449,8 @@ const HushhLink = () => {
                         />
                         <Text
                           fontSize={{ base: "16px", md: "1.25rem", lg: "1.5rem" }}
-                          fontWeight="400"
-                          color="#333333"
+                          fontWeight="600"
+                          color="#383737"
                           fontFamily="Inter, sans-serif"
                           lineHeight="1.5"
                         >
@@ -1571,8 +1571,8 @@ const HushhLink = () => {
                         />
                         <Text
                           fontSize={{ base: "16px", md: "1.25rem", lg: "1.5rem" }}
-                          fontWeight="400"
-                          color="#333333"
+                          fontWeight="600"
+                          color="#383737"
                           fontFamily="Inter, sans-serif"
                           lineHeight="1.5"
                         >
@@ -1598,8 +1598,8 @@ const HushhLink = () => {
                         />
                         <Text
                           fontSize={{ base: "16px", md: "1.25rem", lg: "1.5rem" }}
-                          fontWeight="400"
-                          color="#333333"
+                          fontWeight="600"
+                          color="#383737"
                           fontFamily="Inter, sans-serif"
                           lineHeight="1.5"
                         >
@@ -1625,8 +1625,8 @@ const HushhLink = () => {
                         />
                         <Text
                           fontSize={{ base: "16px", md: "1.25rem", lg: "1.5rem" }}
-                          fontWeight="400"
-                          color="#333333"
+                          fontWeight="600"
+                          color="#383737"
                           fontFamily="Inter, sans-serif"
                           lineHeight="1.5"
                         >
