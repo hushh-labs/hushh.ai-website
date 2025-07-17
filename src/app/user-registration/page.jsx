@@ -33,15 +33,18 @@ import {
   useColorModeValue,
   InputGroup,
   InputLeftElement,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useAuth } from "../context/AuthContext";
-import { FiUser, FiMail, FiPhone, FiMapPin, FiCalendar, FiEdit3, FiShield, FiClock, FiCheck } from "react-icons/fi";
+import { FiUser, FiMail, FiPhone, FiMapPin, FiCalendar, FiEdit3, FiShield, FiClock, FiCheck, FiLock } from "react-icons/fi";
 import { BiUser, BiMale, BiFemale } from "react-icons/bi";
 import { IoLocationOutline } from "react-icons/io5";
 import { MdWork, MdOutlineWorkOutline } from "react-icons/md";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import config from "../../lib/config/config";
+import { formatPhoneNumber, validatePhoneNumber } from "../../lib/utils/phoneUtils";
+import OTPVerificationModal from "../_components/auth/OTPVerificationModal";
 
 const MotionBox = motion(Box);
 const MotionCard = motion(Card);
@@ -60,22 +63,19 @@ const UserRegistrationContent = () => {
   const searchParams = useSearchParams();
   const { user, session, loading: authLoading } = useAuth();
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   
   const [isLoading, setIsLoading] = useState(false);
   const [isCheckingUser, setIsCheckingUser] = useState(false);
   const [isProcessingAuth, setIsProcessingAuth] = useState(false);
   const [error, setError] = useState(null);
   const [userEmail, setUserEmail] = useState("");
-  // const [initialEmail, setInitialEmail] = useState(""); // Store the initial email for comparison - COMMENTED OUT FOR UPDATE MODE
-  // const [isUpdateMode, setIsUpdateMode] = useState(false); // COMMENTED OUT FOR UPDATE MODE
-  // const [userId, setUserId] = useState(null); // COMMENTED OUT FOR UPDATE MODE
   const [mounted, setMounted] = useState(false);
   
   // Form fields - Only the ones that can be updated
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  // const [userCoins, setUserCoins] = useState(0); // COMMENTED OUT FOR UPDATE MODE
   const [investorType, setInvestorType] = useState("");
   
   // Form fields - Read-only for display purposes in update mode
@@ -84,6 +84,13 @@ const UserRegistrationContent = () => {
   const [city, setCity] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [reasonForUsingHushh, setReasonForUsingHushh] = useState("");
+
+  // 2FA Phone Authentication States
+  const [isSendingOTP, setIsSendingOTP] = useState(false);
+  const [isVerifyingOTP, setIsVerifyingOTP] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [phoneVerified, setPhoneVerified] = useState(false);
+  const [verificationId, setVerificationId] = useState(null);
 
   // Form validation states
   const [errors, setErrors] = useState({});
@@ -201,10 +208,150 @@ const UserRegistrationContent = () => {
 
     if (user?.email) {
       setUserEmail(user.email);
-      // setInitialEmail(user.email); // Store the initial email - COMMENTED OUT FOR UPDATE MODE
       checkExistingUser(user.email);
     }
   }, [user, authLoading, isProcessingAuth, router, mounted]);
+
+  // Phone verification functions for 2FA
+  const sendOTP = async () => {
+    if (!phoneNumber) {
+      toast({
+        title: "Phone Number Required",
+        description: "Please enter your phone number first.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    // Validate phone number format
+    if (!validatePhoneNumber(phoneNumber)) {
+      toast({
+        title: "Invalid Phone Number",
+        description: "Please enter a valid phone number with country code (e.g., +1234567890).",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (!user || !session) {
+      toast({
+        title: "Authentication Required",
+        description: "You must be logged in to set up phone verification.",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    const formattedPhone = formatPhoneNumber(phoneNumber);
+    console.log('Sending OTP to phone:', formattedPhone);
+    setIsSendingOTP(true);
+    try {
+      // Use Supabase phone OTP for verification
+      const { data, error } = await config.supabaseClient.auth.signInWithOtp({
+        phone: formattedPhone,
+        options: {
+          shouldCreateUser: false, // Don't create a new user, just send OTP
+        }
+      });
+
+      if (error) {
+        console.error('Error sending phone verification OTP:', error);
+        toast({
+          title: "Error Sending Verification Code",
+          description: error.message || "Failed to send verification code. Please try again.",
+          status: "error",
+          duration: 4000,
+          isClosable: true,
+        });
+        return;
+      }
+
+      console.log('OTP sent successfully:', data);
+      setOtpSent(true);
+      setVerificationId(formattedPhone); // Store phone number for verification
+      toast({
+        title: "Verification Code Sent!",
+        description: "A verification code has been sent to your phone number.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      onOpen(); // Open OTP modal
+
+    } catch (error) {
+      console.error('Unexpected error sending verification code:', error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+    } finally {
+      setIsSendingOTP(false);
+    }
+  };
+
+  const verifyOTP = async (otpCode) => {
+    setIsVerifyingOTP(true);
+    try {
+      console.log('Verifying OTP for phone:', verificationId);
+      
+      // Verify the OTP using Supabase phone verification
+      const { data, error } = await config.supabaseClient.auth.verifyOtp({
+        phone: verificationId,
+        token: otpCode,
+        type: 'sms'
+      });
+
+      if (error) {
+        console.error('Error verifying OTP:', error);
+        toast({
+          title: "Verification Failed",
+          description: error.message || "Invalid verification code. Please try again.",
+          status: "error",
+          duration: 4000,
+          isClosable: true,
+        });
+        throw error;
+      }
+
+      console.log('Phone verification successful:', data);
+
+      setPhoneVerified(true);
+      onClose();
+      toast({
+        title: "Phone Verification Complete!",
+        description: "Your phone number has been successfully verified.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+
+    } catch (error) {
+      console.error('Unexpected error verifying phone:', error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+      throw error;
+    } finally {
+      setIsVerifyingOTP(false);
+    }
+  };
+
+  const resendOTP = async () => {
+    await sendOTP();
+  };
 
   const checkExistingUser = async (email) => {
     try {
@@ -219,7 +366,7 @@ const UserRegistrationContent = () => {
           headers: API_HEADERS 
         }
       );
-      
+      console.log('response:',response);
       if (response.ok) {
         const data = await response.json();
         console.log('API Response:', data);
@@ -292,16 +439,8 @@ const UserRegistrationContent = () => {
     if (!dateOfBirth) newErrors.dateOfBirth = "Date of birth is required";
     if (!reasonForUsingHushh.trim()) newErrors.reasonForUsingHushh = "Reason for using Hushh is required";
     
-    /* COMMENTED OUT UPDATE MODE VALIDATION
-    // Only validate these fields if NOT in update mode
-    if (!isUpdateMode) {
-      if (!gender) newErrors.gender = "Gender is required";
-      if (!country.trim()) newErrors.country = "Country is required";
-      if (!city.trim()) newErrors.city = "City is required";
-      if (!dateOfBirth) newErrors.dateOfBirth = "Date of birth is required";
-      if (!reasonForUsingHushh.trim()) newErrors.reasonForUsingHushh = "Reason for using Hushh is required";
-    }
-    */
+    // Phone verification validation
+    if (!phoneVerified) newErrors.phoneVerification = "Phone verification must be completed";
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -313,9 +452,21 @@ const UserRegistrationContent = () => {
     if (!validateForm()) {
       toast({
         title: "Validation Error",
-        description: "Please fill in all required fields.",
+        description: "Please fill in all required fields and complete phone verification.",
         status: "error",
         duration: 4000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    // Mandatory phone verification check - user cannot proceed without phone verification
+    if (!phoneVerified) {
+      toast({
+        title: "Phone Verification Required",
+        description: "Phone verification is mandatory. Please verify your phone number to continue.",
+        status: "warning",
+        duration: 5000,
         isClosable: true,
       });
       return;
@@ -337,6 +488,8 @@ const UserRegistrationContent = () => {
         city: city,
         dob: dateOfBirth,
         reason_for_using: reasonForUsingHushh,
+        two_factor_enabled: true, // Mark that 2FA is enabled
+        phone_verified: true, // Mark that phone is verified
       };
 
       /* COMMENTED OUT UPDATE MODE LOGIC
@@ -575,6 +728,67 @@ const UserRegistrationContent = () => {
 
               <form onSubmit={handleSubmit}>
                 <VStack spacing={6}>
+                  {/* Progress Indicator for Mandatory Steps */}
+                  <Box w="full" p={4} bg="blue.50" borderRadius="lg" border="1px" borderColor="blue.200">
+                    <VStack spacing={3} align="start">
+                        <Text fontSize="md" fontWeight="600" color="blue.800">
+                          Registration Progress
+                        </Text>
+                      <HStack spacing={4} w="full">
+                        <HStack spacing={2}>
+                          <Box
+                            w={6}
+                            h={6}
+                            borderRadius="full"
+                            bg="green.500"
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
+                          >
+                            <Icon as={FiCheck} color="white" fontSize="sm" />
+                          </Box>
+                          <Text fontSize="sm" color="gray.700">Email Authentication</Text>
+                        </HStack>
+                        <HStack spacing={2}>
+                          <Box
+                            w={6}
+                            h={6}
+                            borderRadius="full"
+                            bg={phoneVerified ? "green.500" : "gray.300"}
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
+                          >
+                            {phoneVerified ? (
+                              <Icon as={FiCheck} color="white" fontSize="sm" />
+                            ) : (
+                              <Text fontSize="xs" color="gray.600">2</Text>
+                            )}
+                          </Box>
+                          <Text fontSize="sm" color={phoneVerified ? "gray.700" : "gray.500"}>
+                            Phone Verification {phoneVerified && "(Complete)"}
+                          </Text>
+                        </HStack>
+                        <HStack spacing={2}>
+                          <Box
+                            w={6}
+                            h={6}
+                            borderRadius="full"
+                            bg={phoneVerified ? "blue.500" : "gray.300"}
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
+                          >
+                            <Text fontSize="xs" color="white">3</Text>
+                          </Box>
+                          <Text fontSize="sm" color={phoneVerified ? "gray.700" : "gray.500"}>
+                            Profile Completion
+                          </Text>
+                        </HStack>
+                      </HStack>
+                    </VStack>
+                  </Box>
+
                   {/* Investor Type Field - At the top */}
                   <FormControl isInvalid={errors.investorType}>
                     <FormLabel color="gray.700" fontWeight="600">
@@ -664,20 +878,67 @@ const UserRegistrationContent = () => {
                       <FormControl isInvalid={errors.phoneNumber}>
                         <FormLabel color="gray.700" fontWeight="600">
                           <Icon as={FiPhone} mr={2} />
-                          Phone Number
+                          Phone Number <Badge colorScheme="red" ml={2}>Required for 2FA</Badge>
                         </FormLabel>
-                        <Input
-                          type="tel"
-                          value={phoneNumber}
-                          onChange={(e) => setPhoneNumber(e.target.value)}
-                          placeholder="Enter your phone number"
-                          bg="gray.50"
-                          border="1px"
-                          borderColor="gray.200"
-                          _hover={{ borderColor: "gray.300" }}
-                          _focus={{ borderColor: "blue.500", boxShadow: "0 0 0 1px #3182CE" }}
-                        />
+                        <InputGroup>
+                          <InputLeftElement
+                            pointerEvents="none"
+                            color="gray.300"
+                            fontSize="1.2em"
+                            children={<Icon as={FiPhone} />}
+                          />
+                          <Input
+                            type="tel"
+                            value={phoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            placeholder="Enter your phone number"
+                            bg="gray.50"
+                            border="1px"
+                            borderColor="gray.200"
+                            _hover={{ borderColor: "gray.300" }}
+                            _focus={{ borderColor: "blue.500", boxShadow: "0 0 0 1px #3182CE" }}
+                          />
+                        </InputGroup>
                         <FormErrorMessage>{errors.phoneNumber}</FormErrorMessage>
+                        
+                        {/* Mandatory Phone Verification Section */}
+                        <VStack spacing={2} mt={3}>
+                          {phoneVerified ? (
+                            <HStack spacing={2} color="green.500">
+                              <Icon as={FiCheck} />
+                              <Text fontSize="sm" fontWeight="500">Phone number verified</Text>
+                            </HStack>
+                          ) : (
+                            <VStack spacing={2} w="full">
+                              <Alert status="info" borderRadius="md" fontSize="sm">
+                                <AlertIcon />
+                                <Box>
+                                  <AlertTitle>Phone Verification Required</AlertTitle>
+                                  <AlertDescription>
+                                    Phone verification is mandatory for account security.
+                                  </AlertDescription>
+                                </Box>
+                              </Alert>
+                              <Button
+                                size="sm"
+                                colorScheme="blue"
+                                variant="outline"
+                                onClick={sendOTP}
+                                isLoading={isSendingOTP}
+                                leftIcon={<Icon as={FiLock} />}
+                                isDisabled={!phoneNumber.trim()}
+                                w="full"
+                              >
+                                {otpSent ? "Resend Verification Code" : "Send Verification Code"}
+                              </Button>
+                            </VStack>
+                          )}
+                          {errors.phoneVerification && (
+                            <Text fontSize="sm" color="red.500">
+                              {errors.phoneVerification}
+                            </Text>
+                          )}
+                        </VStack>
                       </FormControl>
                     </GridItem>
                   </Grid>
@@ -805,16 +1066,18 @@ const UserRegistrationContent = () => {
                     borderRadius="xl"
                     isLoading={isLoading}
                     loadingText="Completing Registration..."
+                    isDisabled={!phoneVerified}
                     _hover={{
-                      transform: "translateY(-2px)",
-                      boxShadow: "lg",
+                      transform: phoneVerified ? "translateY(-2px)" : "none",
+                      boxShadow: phoneVerified ? "lg" : "none",
                     }}
                     _active={{
-                      transform: "translateY(0)",
+                      transform: phoneVerified ? "translateY(0)" : "none",
                     }}
                     transition="all 0.2s"
+                    opacity={phoneVerified ? 1 : 0.6}
                   >
-                    Complete Registration
+                    {phoneVerified ? "Complete Registration" : "Complete Phone Verification First"}
                   </Button>
                 </VStack>
               </form>
@@ -849,6 +1112,17 @@ const UserRegistrationContent = () => {
           </MotionBox>
         </MotionBox>
       </Container>
+
+             {/* OTP Verification Modal */}
+       <OTPVerificationModal
+         isOpen={isOpen}
+         onClose={onClose}
+         phoneNumber={phoneNumber}
+         onVerify={verifyOTP}
+         onResend={resendOTP}
+         isLoading={isVerifyingOTP}
+         isResending={isSendingOTP}
+       />
     </Box>
   );
 };
