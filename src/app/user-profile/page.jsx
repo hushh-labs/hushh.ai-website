@@ -70,17 +70,14 @@ const MotionBox = motion(Box);
 const MotionCard = motion(Card);
 
 // API configuration - Using the same API configuration as UserRegistration
-const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJwbXp5a294cW5ib3pnZG9xYnBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5Mjc5NzEsImV4cCI6MjAxNzUwMzk3MX0.3GwG8YQKwZSWfGgTBEEA47YZAZ-Nr4HiirYPWiZtpZ0";
-const API_BASE_URL = "https://hushh-api-53407187172.us-central1.run.app";
+const API_BASE_URL = "https://hushh-api-53407187172.us-central1.run.app/api";
 const API_HEADERS = {
-  'api_key': API_KEY,
-  'Authorization': `Bearer ${API_KEY}`,
   'Content-Type': 'application/json'
 };
 
 const UserProfile = () => {
   const router = useRouter();
-  const { user, session, loading: authLoading, signOut } = useAuth();
+  const { user, session, loading: authLoading, signOut, isAuthenticated } = useAuth();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   
@@ -89,6 +86,7 @@ const UserProfile = () => {
   const [error, setError] = useState(null);
   const [userData, setUserData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
   
   // Form fields for editing
   const [firstName, setFirstName] = useState("");
@@ -126,34 +124,90 @@ const UserProfile = () => {
   };
 
   useEffect(() => {
-    if (authLoading) return;
+    console.log('UserProfile useEffect triggered:', { 
+      authLoading, 
+      user: user?.email, 
+      isAuthenticated,
+      session: !!session 
+    });
     
-    if (!user) {
+    if (authLoading) {
+      console.log('Auth still loading, waiting...');
+      return;
+    }
+    
+    if (!isAuthenticated || !user) {
+      console.log('Not authenticated or no user, redirecting to login');
       router.push('/login');
       return;
     }
 
     if (user?.email) {
+      console.log('User found, fetching profile for:', user.email);
       fetchUserProfile(user.email);
+    } else {
+      console.log('User found but no email, redirecting to login');
+      router.push('/login');
     }
-  }, [user, authLoading, router]);
+  }, [user, authLoading, isAuthenticated, session, router]);
+
+  // Add a timeout to prevent infinite loading
+  useEffect(() => {
+    if (isLoadingProfile) {
+      const timeout = setTimeout(() => {
+        console.log('Profile loading timeout reached');
+        setIsLoadingProfile(false);
+        setError('Profile loading timed out. Please try again.');
+      }, 15000); // 15 second timeout
+
+      return () => clearTimeout(timeout);
+    }
+  }, [isLoadingProfile]);
 
   const fetchUserProfile = async (email) => {
     try {
       setIsLoadingProfile(true);
+      setError(null); // Clear any previous errors
       console.log('Fetching user profile:', email);
       
+      // Try a simpler approach first - just check if the API is reachable
+      console.log('Making API request to check-user endpoint...');
       const response = await fetch(
         `https://hushh-api-53407187172.us-central1.run.app/api/check-user?email=${email}`,
-        { headers: API_HEADERS }
+        { 
+          headers: API_HEADERS,
+          signal: AbortSignal.timeout(10000) // 10 second timeout
+        }
       );
+      
+      console.log('Profile API Response status:', response.status);
       
       if (response.ok) {
         const data = await response.json();
-        console.log('Profile API Response:', data);
+        console.log('Profile API Response data:', data);
+        console.log('Profile API Response type:', typeof data);
+        console.log('Profile API Response keys:', data ? Object.keys(data) : 'null');
+        console.log('Profile API Response is array:', Array.isArray(data));
         
-        if (data && data.length > 0) {
-          const profileData = data[0];
+        // Handle different possible API response structures
+        let profileData = null;
+        
+        if (data && data.message === "User exists" && data.user) {
+          // API structure: { message: "User exists", user: {...} }
+          profileData = data.user;
+        } else if (data && data.exists && data.user) {
+          // Alternative API structure: { exists: true, user: {...} }
+          profileData = data.user;
+        } else if (data && Array.isArray(data) && data.length > 0) {
+          // Old API structure: [{...}]
+          profileData = data[0];
+        } else if (data && typeof data === 'object' && !Array.isArray(data)) {
+          // Direct object structure: {...}
+          profileData = data;
+        }
+        
+        if (profileData) {
+          console.log('Setting user data:', profileData);
           setUserData(profileData);
           
           // Populate form fields for editing
@@ -167,15 +221,23 @@ const UserProfile = () => {
           setCity(profileData.city || "");
           setDateOfBirth(profileData.dob || "");
           setReasonForUsingHushh(profileData.reason_for_using || "");
+        } else if (data && data.message === "User exists") {
+          console.log('User exists but no profile data, redirecting to registration');
+          // User exists but no profile data, redirect to registration
+          router.push('/user-registration');
         } else {
+          console.log('No profile data found, redirecting to registration');
           // User not found in database, redirect to registration
           router.push('/user-registration');
         }
       } else {
-        console.error('Profile API request failed:', response.status, response.statusText);
+        const errorText = await response.text();
+        console.error('Profile API request failed:', response.status, response.statusText, errorText);
+        const errorMessage = `Failed to load your profile. Status: ${response.status}`;
+        setError(errorMessage);
         toast({
           title: "Error Loading Profile",
-          description: "Failed to load your profile. Please try again.",
+          description: errorMessage,
           status: "error",
           duration: 4000,
           isClosable: true,
@@ -183,15 +245,51 @@ const UserProfile = () => {
       }
     } catch (error) {
       console.error("Error fetching user profile:", error);
-      toast({
-        title: "Profile Error",
-        description: `Failed to load profile: ${error.message}`,
-        status: "error",
-        duration: 4000,
-        isClosable: true,
-      });
+      
+      if (error.name === 'AbortError') {
+        const errorMessage = "The server is taking too long to respond. Please try again later.";
+        setError(errorMessage);
+        toast({
+          title: "Connection Timeout",
+          description: errorMessage,
+          status: "warning",
+          duration: 5000,
+          isClosable: true,
+        });
+      } else if (error.message.includes('Failed to fetch')) {
+        const errorMessage = "Unable to connect to the server. Please check your internet connection and try again.";
+        setError(errorMessage);
+        toast({
+          title: "Connection Error",
+          description: errorMessage,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      } else {
+        const errorMessage = `Failed to load profile: ${error.message}`;
+        setError(errorMessage);
+        toast({
+          title: "Profile Error",
+          description: errorMessage,
+          status: "error",
+          duration: 4000,
+          isClosable: true,
+        });
+      }
+      
+      // If we get here, something went wrong - set loading to false
+      setIsLoadingProfile(false);
     } finally {
       setIsLoadingProfile(false);
+    }
+  };
+
+  const handleRetry = () => {
+    setRetryCount(prev => prev + 1);
+    setError(null);
+    if (user?.email) {
+      fetchUserProfile(user.email);
     }
   };
 
@@ -237,11 +335,14 @@ const UserProfile = () => {
       };
 
       const response = await fetch(
-        `${API_BASE_URL}/users?hushh_id=eq.${userData.hushh_id}`,
+        `${API_BASE_URL}/update-user`,
         {
           method: 'PATCH',
           headers: API_HEADERS,
-          body: JSON.stringify(updateData)
+          body: JSON.stringify({
+            hushh_id: userData.hushh_id,
+            ...updateData
+          })
         }
       );
       
@@ -317,7 +418,45 @@ const UserProfile = () => {
     }
   };
 
-  if (authLoading || isLoadingProfile) {
+  if (authLoading) {
+    return (
+      <Box
+        minH="100vh"
+        bg="gray.50"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <VStack spacing={4}>
+          <Spinner size="xl" color="blue.500" />
+          <Text fontSize="lg" color="gray.600">
+            Loading authentication...
+          </Text>
+        </VStack>
+      </Box>
+    );
+  }
+
+  if (!isAuthenticated || !user) {
+    return (
+      <Box
+        minH="100vh"
+        bg="gray.50"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <VStack spacing={4}>
+          <Spinner size="xl" color="blue.500" />
+          <Text fontSize="lg" color="gray.600">
+            Redirecting to login...
+          </Text>
+        </VStack>
+      </Box>
+    );
+  }
+
+  if (isLoadingProfile) {
     return (
       <Box
         minH="100vh"
@@ -331,6 +470,52 @@ const UserProfile = () => {
           <Text fontSize="lg" color="gray.600">
             Loading your profile...
           </Text>
+          <Text fontSize="sm" color="gray.500">
+            This may take a few moments
+          </Text>
+          <Button 
+            onClick={() => {
+              setIsLoadingProfile(false);
+              setError('Loading cancelled by user');
+            }} 
+            variant="ghost" 
+            size="sm"
+          >
+            Cancel
+          </Button>
+        </VStack>
+      </Box>
+    );
+  }
+
+  if (!userData && error) {
+    return (
+      <Box
+        minH="100vh"
+        bg="gray.50"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <VStack spacing={6} mt={5}>
+          <Icon as={FiUser} fontSize="4xl" color="gray.400" />
+          <Text fontSize="lg" color="gray.600">
+            Unable to load profile
+          </Text>
+          <Text fontSize="sm" color="gray.500" textAlign="center">
+            {error}
+          </Text>
+          <HStack spacing={3}>
+            <Button onClick={handleRetry} colorScheme="blue">
+              Retry
+            </Button>
+            <Button onClick={() => router.push('/user-registration')} variant="outline">
+              Complete Registration
+            </Button>
+            <Button onClick={() => router.push('/')} variant="ghost">
+              Go to Home
+            </Button>
+          </HStack>
         </VStack>
       </Box>
     );
@@ -350,9 +535,17 @@ const UserProfile = () => {
           <Text fontSize="lg" color="gray.600">
             Profile not found
           </Text>
-          <Button onClick={() => router.push('/user-registration')} colorScheme="blue">
-            Complete Registration
-          </Button>
+          <Text fontSize="sm" color="gray.500" textAlign="center">
+            We couldn't find your profile. Please complete your registration.
+          </Text>
+          <HStack spacing={3}>
+            <Button onClick={() => router.push('/user-registration')} colorScheme="blue">
+              Complete Registration
+            </Button>
+            <Button onClick={() => router.push('/')} variant="outline">
+              Go to Home
+            </Button>
+          </HStack>
         </VStack>
       </Box>
     );

@@ -67,7 +67,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
   const checkUserExists = async () => {
     try {
       const response = await fetch(`https://hushh-api-53407187172.us-central1.run.app/api/check-user?email=${user.email}`);
-      
+      console.log('response:',response);
       if (response.ok) {
         const data = await response.json();
         // Check if user exists based on the API response message
