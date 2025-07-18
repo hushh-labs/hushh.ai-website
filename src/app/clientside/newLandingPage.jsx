@@ -120,7 +120,7 @@ const NewLandingPage = () => {
               display="flex"
               h="72px"
               px="28px"
-              onClick={() => router.push("/consent-ai-protocol")}
+              onClick={() => router.push("/products/personal-data-agent")}
               py="15px"
               justifyContent="center"
               alignItems="center"
@@ -1038,7 +1038,7 @@ const NewLandingPage = () => {
                   justifyContent="center"
                   alignItems="center"
                   gap="16px"
-                  onClick={() => window.open("https://github.com/hushh-labs", "_blank")}
+                  onClick={() => window.open("https://github.com/hushh-labs/Hushh-PDA-Hackathon-Starting-Repository", "_blank")}
                   fontSize={{ base: "lg", md: "xl" }}
                   fontWeight="semibold"
                   leftIcon={
