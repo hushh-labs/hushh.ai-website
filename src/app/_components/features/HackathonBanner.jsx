@@ -5,7 +5,6 @@ import {
   Container,
   Text,
   Button,
-  useBreakpointValue,
   Flex,
   VStack
 } from '@chakra-ui/react';
@@ -14,48 +13,16 @@ import { useRouter } from 'next/navigation';
 
 const HackathonBanner = () => {
   const router = useRouter();
-  
-  // Responsive layout
-  const bannerPadding = useBreakpointValue({ base: 2, md: 3 });
-  const textSize = useBreakpointValue({ base: 'sm', md: 'md' });
-  const buttonSize = useBreakpointValue({ base: 'sm', md: 'md' });
 
-  // Handle hackathon link click
   const handleHackathonClick = () => {
-    try {
-      const hackathonUrl = '/pda/iithackathon';
-      router.push(hackathonUrl);
-    } catch (error) {
-      console.error('Error navigating to hackathon page:', error);
-    }
+    router.push('/pda/iithackathon');
   };
-
-  // Set CSS custom property for banner height
-  React.useEffect(() => {
-    try {
-      if (typeof document !== 'undefined') {
-        const bannerHeight = window.innerWidth < 768 ? '80px' : '60px';
-        document.documentElement.style.setProperty('--banner-height', bannerHeight);
-        
-        // Update on resize
-        const handleResize = () => {
-          const newBannerHeight = window.innerWidth < 768 ? '80px' : '60px';
-          document.documentElement.style.setProperty('--banner-height', newBannerHeight);
-        };
-        
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-      }
-    } catch (error) {
-      console.error('Error setting banner height:', error);
-    }
-  }, []);
 
   return (
     <Box
       bg="linear-gradient(90deg, #007BFF 0%, #E91E63 100%)"
       color="white"
-      py={bannerPadding}
+      py={{ base: 3, md: 4 }}
       position="fixed"
       top={0}
       left={0}
@@ -70,7 +37,6 @@ const HackathonBanner = () => {
           direction={{ base: 'column', md: 'row' }}
           gap={{ base: 2, md: 4 }}
         >
-          {/* Banner Content */}
           <Flex
             align="center"
             justify="center"
@@ -79,10 +45,9 @@ const HackathonBanner = () => {
             gap={{ base: 2, sm: 4 }}
             textAlign="center"
           >
-            {/* Announcement Text */}
             <VStack spacing={1} align="center">
               <Text
-                fontSize={textSize}
+                fontSize={{ base: 'sm', md: 'md' }}
                 fontWeight="bold"
                 fontFamily="Figtree"
                 lineHeight="1.4"
@@ -99,9 +64,8 @@ const HackathonBanner = () => {
               </Text>
             </VStack>
 
-            {/* CTA Button */}
             <Button
-              size={buttonSize}
+              size={{ base: 'sm', md: 'md' }}
               bg="white"
               color="blue.600"
               _hover={{

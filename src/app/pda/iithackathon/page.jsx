@@ -10,15 +10,15 @@ export const metadata = {
     "Participate in the Hushh Data Nexus Hackathon on hushh.ai. Explore innovative solutions using emerging technologies.",
   keywords:
     "HUSHH, Hackathon Submission, Data Nexus, hushh hackathon, hushh.ai, project upload, project submission, assignment submission, hackathon submission, Hushh Data Nexus, Extended Reality, IoT, Internet of Things, Blockchain, 3D Modelling, Metaverse, AI, Emerging Technologies",
-  canonical: "https://hushh.ai/hushh-hackathon",
+  canonical: "https://hushh.ai/pda/iithackathon",
   alternates: {
-    canonical: "https://hushh.ai/hushh-hackathon",
+    canonical: "https://hushh.ai/pda/iithackathon",
   },
   openGraph: {
     title: "Hushh | Data Nexus Hackathon",
     description:
       "Participate in the Hushh Data Nexus Hackathon on hushh.ai. Explore innovative solutions using emerging technologies.",
-    url: "https://hushh.ai/hushh-hackathon",
+    url: "https://hushh.ai/pda/iithackathon",
     // images: [
     //   {
     //     url: "/path/to/hackathon-og-image.jpg",
@@ -52,8 +52,6 @@ const page = () => {
       property="og:description"
       content="Hackathon data nexus project on hushh.ai"
     />
-    {/* <meta property="og:url" content="https://hushh.ai/hushh-hackhathon" /> */}
-    {/* <link rel="canonical" href="https://hushh.ai/hushh-hackhathon" /> */}
   </Head>
    <HushhHackhathon/>
    </>

@@ -175,7 +175,7 @@ export default function RootLayout({ children }) {
         </div> */}
         <ResponsiveSizeProvider>
           <AuthProvider>
-            <header className="h-[90px] w-full absolute z-50" style={{ top: 'var(--banner-height, 60px)' }}>
+            <header className="h-[90px] w-full absolute z-50" style={{ top: '70px' }}>
               <HeaderComponent />
             </header>
             {" "}
