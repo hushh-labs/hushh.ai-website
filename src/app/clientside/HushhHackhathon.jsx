@@ -35,7 +35,8 @@ const items = [
 ];
 
 const HushhHackhathon = () => {
-  const targetDate = "2025-07-19T00:00:00+05:30";
+  const targetDate = "2025-07-22T00:00:00+05:30";
+
   const calculateTimeLeft = () => {
     const diff = +new Date(targetDate) - +new Date();
     if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
@@ -308,7 +309,7 @@ const HushhHackhathon = () => {
           <VStack alignItems="flex-start" spacing={2} fontSize={{md:'1.25rem',base:'0.75rem'}}>
             <Text fontWeight="700"  fontSize={{ md: '3.8rem', base: '1.9rem' }} className="hushh-gradient">Logistics</Text>
             <Text color="#E4E4E4" fontSize={{md:'1.25rem',base:'0.75rem'}}>Where: Online (hosted by DAV Team, IIT Bombay)</Text>
-            <Text color="#E4E4E4" fontSize={{md:'1.25rem',base:'0.75rem'}}>When: 19th July – 27th July</Text>
+            <Text color="#E4E4E4" fontSize={{md:'1.25rem',base:'0.75rem'}}>When: 22th July – 30th July</Text>
             <Text color="#E4E4E4" fontSize={{md:'1.25rem',base:'0.75rem'}}>Core 96-hour build window over the duration of 1 week total</Text>
             <Text color="#E4E4E4">Pre-Hack workshop & onboarding support with Hushh Team</Text>
             <Text color="#E4E4E4">Demo Day with panel of founders & AI operators (Google, Microsoft, Salesforce engineering leaders)</Text>
@@ -325,12 +326,12 @@ const HushhHackhathon = () => {
         <VStack alignItems="flex-start" spacing={2} my={{ md: '4rem', base: '2rem' }}>
           <Text fontWeight="700" fontSize={{ md: '3.8rem', base: '1.9rem' }} className="hushh-gradient">Timeline</Text>
           {[
-            { date: 'July 18', event: 'Application Deadline' },
-            { date: 'July 19', event: 'Final Team Confirmation' },
-            { date: 'July 20–21', event: 'Hackathon Sprint 1 (48 hrs)' },
-            { date: 'July 22–27', event: 'Hackathon Sprint 2 (48 hrs)' },
+            { date: 'July 21', event: 'Application Deadline' },
+            { date: 'July 22', event: 'Final Team Confirmation' },
+            { date: 'July 23–24', event: 'Hackathon Sprint 1 (48 hrs)' },
+            { date: 'July 25–30', event: 'Hackathon Sprint 2 (48 hrs)' },
             { date: 'Sprint 3 (48 hrs)', event: 'Polish + async mentorship (48 hrs)' },
-            { date: 'July 27', event: 'Final Demo Day' }
+            { date: 'July 30', event: 'Final Demo Day' }
           ].map((t,i)=>(
             <HStack key={i} spacing={2}>
               <Text color="#E4E4E4" fontWeight="600" fontSize={{md:'1.25rem',base:'0.75rem'}}>{t.date}:</Text>
