@@ -175,7 +175,7 @@ export default function RootLayout({ children }) {
         </div> */}
         <ResponsiveSizeProvider>
           <AuthProvider>
-            <header className="h-[90px] w-full absolute z-50" style={{ top: '70px' }}>
+            <header className="h-[90px] w-full absolute z-50" style={{ top: '40px' }}>
               <HeaderComponent />
             </header>
             {" "}

@@ -5,13 +5,20 @@ import {
   Container,
   Text,
   Button,
-  Flex
+  Flex,
+  keyframes
 } from '@chakra-ui/react';
 import { HiExternalLink } from 'react-icons/hi';
 import { useRouter } from 'next/navigation';
 
 const HackathonBanner = () => {
   const router = useRouter();
+
+  // Infinite slider animation for mobile
+  const slideLeft = keyframes`
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  `;
 
   const handleHackathonClick = () => {
     router.push('/pda/iithackathon');
@@ -29,7 +36,57 @@ const HackathonBanner = () => {
       zIndex={9999}
       boxShadow="0 2px 10px rgba(0,0,0,0.1)"
     >
-      <Container maxW="container.xl" px={{ base: 4, md: 8 }}>
+      {/* Mobile Infinite Slider Version */}
+      <Box
+        display={{ base: 'block', lg: 'none' }}
+        height={{ base: '40px', md: '45px' }}
+        overflow="hidden"
+        position="relative"
+        cursor="pointer"
+        onClick={handleHackathonClick}
+        _hover={{ opacity: 0.9 }}
+        transition="opacity 0.2s ease"
+      >
+        <Flex
+          align="center"
+          height="100%"
+          position="absolute"
+          whiteSpace="nowrap"
+          animation={`${slideLeft} 20s linear infinite`}
+        >
+          <Text
+            fontSize={{ base: 'sm', md: 'md' }}
+            fontWeight="bold"
+            fontFamily="Figtree"
+            px={4}
+            display="flex"
+            alignItems="center"
+            gap={2}
+          >
+            🚀 Hackathon for Our Open Source Protocol: Hushh Modular Consent Protocol for Agent to Agent Personal Data Agent Scenarios
+            <Box
+              as="span"
+              bg="white"
+              color="blue.600"
+              px={3}
+              py={1}
+              borderRadius="md"
+              fontSize="xs"
+              fontWeight="bold"
+              ml={4}
+            >
+              Click to Join →
+            </Box>
+          </Text>
+        </Flex>
+      </Box>
+
+      {/* Desktop Version - Keep unchanged */}
+      <Container 
+        maxW="container.xl" 
+        px={{ base: 4, md: 8 }}
+        display={{ base: 'none', lg: 'block' }}
+      >
         <Flex
           align="center"
           justify="center"
