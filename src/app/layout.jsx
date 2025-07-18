@@ -9,6 +9,7 @@ import { figtree } from "./_utilities/fonts";
 import { Providers } from "./provider";
 import ResponsiveSizeProvider from "./context/responsive";
 import HeaderComponent from "./_components/features/HeaderComponent";
+import HackathonBanner from "./_components/features/HackathonBanner";
 import { siteMetadata } from "./sitemetadata";
 import { AuthProvider } from "./context/AuthContext";
 
@@ -174,12 +175,16 @@ export default function RootLayout({ children }) {
         </div> */}
         <ResponsiveSizeProvider>
           <AuthProvider>
-            <header className="h-[90px] w-full absolute z-50">
+            <header className="h-[90px] w-full absolute z-50" style={{ top: 'var(--banner-height, 60px)' }}>
               <HeaderComponent />
             </header>
             {" "}
             <div className={`${figtree.variable}  w-full`}>
-              <Providers>{children}</Providers>
+              <Providers>
+                {/* Hackathon Banner - appears on all pages */}
+                <HackathonBanner />
+                {children}
+              </Providers>
             </div>
           </AuthProvider>
         </ResponsiveSizeProvider>
