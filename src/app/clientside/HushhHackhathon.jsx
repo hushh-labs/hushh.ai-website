@@ -205,7 +205,7 @@ const HushhHackhathon = () => {
             What's This Hackathon About?
           </Text>
           <Box mt={{ md: '1rem', base: '0.5rem' }} display="flex" flexDirection="column" gap={{ md: '0.75rem', base: '0.45rem' }} color="#E4E4E4" fontWeight="500" lineHeight={{ md: '32px', base: '20px' }} fontSize={{ md: '1.25rem', base: '0.75rem' }}>
-            <Text>The Hushh PDA Hackathon is a bold AI sprint hosted online by IIT Bombay to build the next generation of Personal Data Agents (PDAs) — intelligent AI tools that know your data, understand your needs, and act on your behalf.</Text>
+            <Text>The Hushh PDA Hackathon is a bold AI sprint hosted online by the DAV Team, IIT Bombay to build the next generation of Personal Data Agents (PDAs) — intelligent AI tools that know your data, understand your needs, and act on your behalf.</Text>
             <Text>Think: your own Jarvis × Notion × GPT-4. In one week.</Text>
             <Text>Whether it's managing your finances, organizing your calendar, or reminding you to take a break — these agents are meant to solve real human problems while you sleep.</Text>
           </Box>
@@ -307,7 +307,7 @@ const HushhHackhathon = () => {
         <Stack flexDirection={{ md: 'row', base: 'column' }} spacing={{ md: '4rem', base: '2rem' }} my={{ md: '4rem', base: '2rem' }}>
           <VStack alignItems="flex-start" spacing={2} fontSize={{md:'1.25rem',base:'0.75rem'}}>
             <Text fontWeight="700"  fontSize={{ md: '3.8rem', base: '1.9rem' }} className="hushh-gradient">Logistics</Text>
-            <Text color="#E4E4E4" fontSize={{md:'1.25rem',base:'0.75rem'}}>Where: Online (hosted by IIT Bombay)</Text>
+            <Text color="#E4E4E4" fontSize={{md:'1.25rem',base:'0.75rem'}}>Where: Online (hosted by DAV Team, IIT Bombay)</Text>
             <Text color="#E4E4E4" fontSize={{md:'1.25rem',base:'0.75rem'}}>When: 19th July – 27th July</Text>
             <Text color="#E4E4E4" fontSize={{md:'1.25rem',base:'0.75rem'}}>Core 96-hour build window over the duration of 1 week total</Text>
             <Text color="#E4E4E4">Pre-Hack workshop & onboarding support with Hushh Team</Text>
