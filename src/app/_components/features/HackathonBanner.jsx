@@ -14,10 +14,10 @@ import { useRouter } from 'next/navigation';
 const HackathonBanner = () => {
   const router = useRouter();
 
-  // Infinite slider animation for mobile
+  // Continuous infinite slider animation for mobile
   const slideLeft = keyframes`
-    0% { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
   `;
 
   const handleHackathonClick = () => {
@@ -30,13 +30,13 @@ const HackathonBanner = () => {
       color="white"
       py={{ base: 2, md: 2.5 }}
       position="fixed"
-      top={0}
+      top={{ base: '32px', md: '36px' }}
       left={0}
       right={0}
       zIndex={9999}
       boxShadow="0 2px 10px rgba(0,0,0,0.1)"
     >
-      {/* Mobile Infinite Slider Version */}
+      {/* Mobile Continuous Infinite Slider Version */}
       <Box
         display={{ base: 'block', lg: 'none' }}
         height={{ base: '40px', md: '45px' }}
@@ -52,14 +52,42 @@ const HackathonBanner = () => {
           height="100%"
           position="absolute"
           whiteSpace="nowrap"
-          animation={`${slideLeft} 20s linear infinite`}
+          animation={`${slideLeft} 22s linear infinite`}
         >
           <Text
             fontSize={{ base: 'sm', md: 'md' }}
             fontWeight="bold"
             fontFamily="Figtree"
             px={4}
-            display="flex"
+            display="inline-flex"
+            alignItems="center"
+            gap={2}
+          >
+            🚀 Hackathon for Our Open Source Protocol: Hushh Modular Consent Protocol for Agent to Agent Personal Data Agent Scenarios
+            <Box
+              as="span"
+              bg="white"
+              color="blue.600"
+              px={3}
+              py={1}
+              borderRadius="md"
+              fontSize="xs"
+              fontWeight="bold"
+              ml={4}
+            >
+              Click to Join →
+            </Box>
+          </Text>
+          
+          {/* Spacer */}
+          <Box width="120px" />
+          
+          <Text
+            fontSize={{ base: 'sm', md: 'md' }}
+            fontWeight="bold"
+            fontFamily="Figtree"
+            px={4}
+            display="inline-flex"
             alignItems="center"
             gap={2}
           >
