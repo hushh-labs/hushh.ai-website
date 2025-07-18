@@ -374,7 +374,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
               </div>
 
               {/* Mobile Menu Trigger */}
-              <div className="md:hidden flex items-center">
+              <div className="md:hidden flex items-center mt-5">
                 {!isMenuOpen && (
                   <div
                     className="text-white hamburger-icon-container cursor-pointer"
