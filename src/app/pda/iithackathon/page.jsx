@@ -52,8 +52,8 @@ const page = () => {
       property="og:description"
       content="Hackathon data nexus project on hushh.ai"
     />
-    <meta property="og:url" content="https://hushh.ai/hushh-hackhathon" />
-    <link rel="canonical" href="https://hushh.ai/hushh-hackhathon" />
+    {/* <meta property="og:url" content="https://hushh.ai/hushh-hackhathon" /> */}
+    {/* <link rel="canonical" href="https://hushh.ai/hushh-hackhathon" /> */}
   </Head>
    <HushhHackhathon/>
    </>

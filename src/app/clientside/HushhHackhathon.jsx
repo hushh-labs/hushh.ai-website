@@ -52,16 +52,16 @@ const HushhHackhathon = () => {
     return () => clearInterval(timer);
   }, []);
 
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://apply.devfolio.co/v2/sdk.js';
-    script.async = true;
-    script.defer = true;
-    document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const script = document.createElement('script');
+  //   script.src = 'https://apply.devfolio.co/v2/sdk.js';
+  //   script.async = true;
+  //   script.defer = true;
+  //   document.body.appendChild(script);
+  //   return () => {
+  //     document.body.removeChild(script);
+  //   };
+  // }, []);
   
 
   const pad = (num) => String(num).padStart(2, '0');
@@ -83,7 +83,7 @@ const HushhHackhathon = () => {
             <Text fontWeight="400" fontSize={{ md: '1.25rem', base: '0.75rem' }} lineHeight={{ md: '32px', base: '20px' }} color="#E4E4E4">
               Build AI agents that work for you — while you sleep.
             </Text>
-            <Button borderRadius="2px" fontSize={{ md: '1rem', base: '1rem' }} letterSpacing="0.29rem" border="1px solid #606060" fontWeight="400" bg="transparent" lineHeight={{ md: '28.8px', base: '15px' }} color="white" _hover={{ color:'white', background:'linear-gradient(256.5deg, #e0055f 6.97%, #2020ed 92.26%)', border:'none' }} onClick={() => window.open('https://forms.gle/AcJUMmhZXXCFytus9','_blank')}>
+            <Button borderRadius="2px" fontSize={{ md: '1rem', base: '1rem' }} letterSpacing="0.29rem" border="1px solid #606060" fontWeight="400" bg="transparent" lineHeight={{ md: '28.8px', base: '15px' }} color="white" _hover={{ color:'white', background:'linear-gradient(256.5deg, #e0055f 6.97%, #2020ed 92.26%)', border:'none' }} onClick={() => window.open('https://forms.gle/AcJUMmhZXXCFytus9')}>
               Apply Now
             </Button>
             {/* <div
@@ -341,7 +341,7 @@ const HushhHackhathon = () => {
 
         {/* Submission & Contact */}
         <VStack my={{ md: '4rem', base: '2rem' }} alignItems="center" spacing={4} mb={{ base: '4rem' }}>
-          <Button borderRadius="2px" fontSize={{ md: '1rem', base: '1rem' }} letterSpacing="0.29rem" border="1px solid #606060" fontWeight="400" bg="transparent" lineHeight={{ md: '28.8px', base: '15px' }} color="white" _hover={{ color:'white', background:'linear-gradient(256.5deg, #e0055f 6.97%, #2020ed 92.26%)', border:'none' }} onClick={() => window.open('https://forms.gle/AcJUMmhZXXCFytus9','_blank')}>
+          <Button borderRadius="2px" fontSize={{ md: '1rem', base: '1rem' }} letterSpacing="0.29rem" border="1px solid #606060" fontWeight="400" bg="transparent" lineHeight={{ md: '28.8px', base: '15px' }} color="white" _hover={{ color:'white', background:'linear-gradient(256.5deg, #e0055f 6.97%, #2020ed 92.26%)', border:'none' }} onClick={() => window.open('https://forms.gle/AcJUMmhZXXCFytus9')}>
             Apply Now
           </Button>
           <Text color="#E4E4E4" textAlign="center" fontSize={{md:'1.25rem',base:'0.85rem'}}>
