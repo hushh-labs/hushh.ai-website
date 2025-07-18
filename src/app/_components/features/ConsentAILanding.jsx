@@ -24,7 +24,7 @@ const ConsentAILanding = () => {
       alignItems="center"
       justifyContent="center"
       style={{ 
-        paddingTop: 'calc(90px + var(--banner-height, 0px))' 
+        paddingTop: 'calc(var(--total-banner-height, 72px) + 90px)' 
       }} // Account for fixed header + banner
     >
       <Container maxW="full" px={{ base: 4, md: 8, lg: 16 }}>

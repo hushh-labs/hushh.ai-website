@@ -337,7 +337,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                     onMouseEnter={() => setProductsSubmenu(false)}
                     className={`flex items-center gap-2 group link ${pathname === '/hushh-press' ? 'gradient-text' : ''}`}
                   >
-                    HUSHH PUBLISH
+                    HUSHH PR
                   </Link>
                 </div>
 
@@ -673,7 +673,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                   <Divider borderStyle={'solid'} borderWidth={"1px"} borderColor={"#5A5A5A"} />  
                   <li>
                     <Link style={{fontWeight:'700'}} onClick={() => setIsMenuOpen(false)} href="/hushh-press" className="text-lg text-white">
-                     Press Releases
+                     Hushh PR
                     </Link>
                   </li>
                   <Divider borderStyle={'solid'} borderWidth={"1px"} borderColor={"#5A5A5A"} />  
