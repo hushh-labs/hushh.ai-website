@@ -126,7 +126,7 @@ const ConsentAILanding = () => {
                 }}
                 transition="all 0.3s ease"
                 w={{ base: "280px", sm: "auto" }}
-                onClick={() => router.push("https://calendly.com/hushh/30min?month=2025-07")}
+                onClick={() => router.push("https://github.com/hushh-labs/Hushh-PDA-Hackathon-Starting-Repository")}
               >
                 Learn More
               </Button>
