@@ -26,7 +26,7 @@ const ConsentAILanding = () => {
         alignItems="center"
         justifyContent="center"
       >
-      <Container maxW="full" px={{ base: 4, md: 8, lg: 16 }}>
+      <Container maxW="full" mt={{md:0,base:4}} px={{ base: 4, md: 8, lg: 16 }}>
         <Box
           display={{ base: "block", lg: "flex" }}
           alignItems="center"

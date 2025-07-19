@@ -79,7 +79,7 @@ const HushhPDA = () => {
   }, []); // Empty dependency array - runs once and continues independently
 
   return (
-    <>
+    <Box w="100%" maxW="100vw" overflow="hidden" position="relative">
 
       {/* Product Page 1 - Hero Section */}
       <Box
@@ -92,7 +92,7 @@ const HushhPDA = () => {
         alignItems="center"
         justifyContent="center"
       >
-        <Container maxW="100%" minW={'100%'} h="full">
+        <Container maxW="100%" h="full" px={0}>
           <VStack
             spacing={{ base: 6, md: 8 }}
             align="center"
@@ -298,7 +298,7 @@ const HushhPDA = () => {
         />
 
         {/* Main Carousel Container */}
-        <Container maxW="100%" minH="100vh" display="flex" alignItems="center" px={{ base: 4, md: 4 }} >
+        <Container maxW="100%" minH="100vh" display="flex" alignItems="center" px={{ base: 2, md: 4 }} overflow="hidden">
           {/* Mobile Layout - Vertical Stack */}
           <VStack
             spacing={8}
@@ -939,7 +939,7 @@ const HushhPDA = () => {
         display="flex"
         alignItems="center"
       >
-        <Container maxW="1400px" my={'4rem'}  px={{ base: 4, md: 4 }}>
+        <Container maxW="100%" my={'4rem'} px={{ base: 2, md: 4 }} overflow="hidden">
           {/* Mobile Layout - Vertical Stack */}
           <VStack spacing={10} align="flex-start" display={{ base: "flex", lg: "none" }}>
             {/* Problem Section */}
@@ -1304,7 +1304,7 @@ const HushhPDA = () => {
         display="flex"
         alignItems="center"
       >
-        <Container maxW="1723px" px={{ base: 4, md: 0 }}>
+        <Container maxW="100%" px={{ base: 2, md: 4 }} overflow="hidden">
           <VStack spacing={{ base: 8, md: 16 }} align="center" w="full">
             {/* Section Header */}
             <VStack spacing={{ base: 2, md: 4 }} align="center" textAlign="center">
@@ -1462,7 +1462,7 @@ const HushhPDA = () => {
             </Grid>
 
             {/* Arrow Flow - Mobile optimized */}
-            <Box w="full" maxW={{ base: "300px", md: "900px" }} position="relative">
+            <Box w="full" maxW={{ base: "90vw", md: "900px" }} position="relative" overflow="hidden">
               <HStack spacing={0} justify="center" align="center">
                 {/* Arrow sequence */}
                 {[1, 2, 3, 4, 5].map((_, index) => (
@@ -1488,7 +1488,7 @@ const HushhPDA = () => {
         color="black"
         py={{ base: 12, md: 24 }}
       >
-        <Container maxW="1723px" px={{ base: 4, md: 0 }}>
+        <Container maxW="100%" px={{ base: 2, md: 4 }} overflow="hidden">
           {/* Mobile Layout - Vertical Stack */}
           <VStack spacing={2} display={{ base: "flex", lg: "none" }} w="full" align="center">
             {/* Why Different Content - Mobile */}
@@ -1585,7 +1585,7 @@ const HushhPDA = () => {
               {/* Upper Mobile Screen (Left Top) - Much Bigger */}
               <Box
                 position="absolute"
-                left="-16%"
+                left="-10%"
                 top="12%"
                 zIndex={2}
               >
@@ -1602,7 +1602,7 @@ const HushhPDA = () => {
               {/* Lower Mobile Screen (Right Bottom) - Much Bigger */}
               <Box
                 position="absolute"
-                right="2%"
+                right="5%"
                 bottom="0"
                 zIndex={2}
               >
@@ -1793,7 +1793,7 @@ const HushhPDA = () => {
 
       {/* Product Page 6 - Trust & Privacy First */}
       <Box minH="100vh" bg="gray.50" color="black" py={0}>
-        <Container maxW="1723px" px={0}>
+        <Container maxW="100%" px={0} overflow="hidden">
           <Grid
             templateColumns={{ base: "1fr", lg: "2fr 1.5fr",md:"2fr 1.7fr" }}
             minH="100vh"
@@ -1920,7 +1920,7 @@ const HushhPDA = () => {
         color="black"
         py={{ base: 12, md: 24 }}
       >
-        <Container maxW="1723px" px={{ base: 4, md: 0 }}>
+        <Container maxW="100%" px={{ base: 2, md: 4 }} overflow="hidden">
           <VStack spacing={{ base: 8, md: 16 }} align="center" textAlign="center" h="full" justify="center">
             <Heading
               as="h2"
@@ -1975,7 +1975,7 @@ const HushhPDA = () => {
             </VStack>
 
             {/* Horizontal Sliding Text Marquee */}
-            <Box w="100%" maxW="100%" overflow="hidden">
+            <Box w="100%" maxW="100vw" overflow="hidden">
               <Marquee 
                 pauseOnHover={false}
                 speed={40}
@@ -2074,7 +2074,7 @@ const HushhPDA = () => {
       </Box>
 
       <ContactForm />
-    </>
+    </Box>
   );
 };
 

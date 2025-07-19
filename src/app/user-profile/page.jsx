@@ -376,7 +376,7 @@ const UserProfile = () => {
     <ContentWrapper includeHeaderSpacing={true}>
       <Box
         minH="100vh"
-        bg="#000000"
+        bg="white"
         py={{ base: 8, md: 12 }}
         px={{ base: 4, md: 8 }}
       >
@@ -389,14 +389,21 @@ const UserProfile = () => {
           {/* Header */}
           <MotionCard
             variants={childVariants}
-            bg="linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)"
-            boxShadow="0px 10px 30px rgba(0, 0, 0, 0.6)"
-            borderRadius="30px"
-            border="1px solid rgba(255, 255, 255, 0.1)"
-            p={{ base: 6, md: 8 }}
+            bg="linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%)"
+            boxShadow="0px 10px 30px rgba(0, 0, 0, 0.1)"
+            borderRadius={{ base: "20px", md: "30px" }}
+            border="1px solid rgba(0, 0, 0, 0.05)"
+            p={{ base: 4, md: 8 }}
             mb={8}
           >
-            <Flex justify="space-between" align="center" wrap="wrap" gap={4}>
+            {/* Desktop Layout */}
+            <Flex 
+              justify="space-between" 
+              align="center" 
+              wrap="wrap" 
+              gap={4}
+              display={{ base: "none", lg: "flex" }}
+            >
               <HStack spacing={6}>
                 <Avatar
                   size="xl"
@@ -409,13 +416,13 @@ const UserProfile = () => {
                 <VStack align="start" spacing={2}>
                   <Heading
                     size="lg"
-                    color="white"
+                    color="black"
                     fontFamily="Inter, sans-serif"
                     fontWeight="700"
                   >
                     {userData.first_name} {userData.last_name}
                   </Heading>
-                  <Text color="rgba(255, 255, 255, 0.8)" fontSize="md">
+                  <Text color="rgba(0, 0, 0, 0.7)" fontSize="md">
                     {user?.email}
                   </Text>
                   <Badge 
@@ -428,8 +435,7 @@ const UserProfile = () => {
                   >
                     {userData.investor_type === 'individual' ? 'Individual Investor' : 'Institutional Investor'}
                   </Badge>
-                  {/* Add Hushh ID in header */}
-                  <Text color="rgba(255, 255, 255, 0.6)" fontSize="sm" fontFamily="mono">
+                  <Text color="rgba(0, 0, 0, 0.6)" fontSize="sm" fontFamily="mono">
                     <HStack spacing={2} align="center">
                       <Icon as={FiShield} color="#0071E3" />
                       <Text fontWeight="bold" color="#BB62FC" fontSize="sm">
@@ -519,7 +525,6 @@ const UserProfile = () => {
                       onClick={() => {
                         setIsEditing(false);
                         setErrors({});
-                        // Reset form fields
                         setFirstName(userData.first_name || "");
                         setLastName(userData.last_name || "");
                         setPhoneNumber(userData.phone_number || "");
@@ -546,24 +551,189 @@ const UserProfile = () => {
                 )}
               </HStack>
             </Flex>
+
+            {/* Mobile Layout */}
+            <VStack 
+              spacing={6} 
+              align="stretch" 
+              display={{ base: "flex", lg: "none" }}
+            >
+              {/* User Info Section */}
+              <VStack spacing={4} align="center" textAlign="center">
+                <Avatar
+                  size={{ base: "lg", sm: "xl" }}
+                  name={`${userData.first_name} ${userData.last_name}`}
+                  src={user?.user_metadata?.avatar_url}
+                  bg="linear-gradient(135deg, #0071E3, #BB62FC)"
+                  color="white"
+                  border="3px solid rgba(255, 255, 255, 0.2)"
+                />
+                <VStack spacing={2} align="center">
+                  <Heading
+                    size={{ base: "md", sm: "lg" }}
+                    color="black"
+                    fontFamily="Inter, sans-serif"
+                    fontWeight="700"
+                  >
+                    {userData.first_name} {userData.last_name}
+                  </Heading>
+                  <Text 
+                    color="rgba(0, 0, 0, 0.7)" 
+                    fontSize={{ base: "sm", sm: "md" }}
+                    wordBreak="break-word"
+                  >
+                    {user?.email}
+                  </Text>
+                  <Badge 
+                    bg="linear-gradient(135deg, #0071E3, #BB62FC)" 
+                    color="white" 
+                    borderRadius="full"
+                    px={3}
+                    py={1}
+                    fontSize="xs"
+                  >
+                    {userData.investor_type === 'individual' ? 'Individual Investor' : 'Institutional Investor'}
+                  </Badge>
+                  {/* Hushh ID - Mobile */}
+                  <VStack spacing={1} align="center">
+                    <HStack spacing={2} align="center">
+                      <Icon as={FiShield} color="#0071E3" size="sm" />
+                      <Text fontWeight="bold" color="#BB62FC" fontSize="xs">
+                        Hushh ID:
+                      </Text>
+                    </HStack>
+                    <Badge 
+                      bg="linear-gradient(135deg, #0071E3, #BB62FC)" 
+                      color="white"
+                      variant="solid" 
+                      px={2} 
+                      py={1} 
+                      borderRadius="md"
+                      fontFamily="mono"
+                      fontSize="xs"
+                    >
+                      {userData.hushh_id || 'N/A'}
+                    </Badge>
+                  </VStack>
+                </VStack>
+              </VStack>
+              
+              {/* Action Buttons - Mobile */}
+              <VStack spacing={3} w="full">
+                {!isEditing ? (
+                  <>
+                    <Button
+                      onClick={() => setIsEditing(true)}
+                      bg="linear-gradient(135deg, #0071E3, #BB62FC)"
+                      color="white"
+                      leftIcon={<FiEdit3 />}
+                      size="md"
+                      borderRadius="full"
+                      fontFamily="Inter, sans-serif"
+                      fontWeight="600"
+                      w="full"
+                      _hover={{
+                        bg: "linear-gradient(135deg, #005bb5, #9a4fd1)",
+                        transform: "translateY(-2px)",
+                        boxShadow: "0 8px 25px rgba(0, 113, 227, 0.4)"
+                      }}
+                      transition="all 0.3s ease"
+                    >
+                      Edit Profile
+                    </Button>
+                    <Button
+                      onClick={() => router.push('/')}
+                      variant="outline"
+                      borderColor="rgba(255, 255, 255, 0.3)"
+                      color="rgba(255, 255, 255, 0.8)"
+                      leftIcon={<FiLogOut />}
+                      size="md"
+                      borderRadius="full"
+                      fontFamily="Inter, sans-serif"
+                      fontWeight="600"
+                      w="full"
+                      _hover={{ 
+                        bg: "rgba(255, 255, 255, 0.1)", 
+                        borderColor: "rgba(255, 255, 255, 0.5)",
+                        transform: "translateY(-2px)"
+                      }}
+                      transition="all 0.3s ease"
+                    >
+                      Go to Home
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      onClick={handleSaveProfile}
+                      bg="linear-gradient(135deg, #4CAF50, #45A049)"
+                      color="white"
+                      leftIcon={<FiSave />}
+                      size="md"
+                      isLoading={isLoading}
+                      loadingText="Saving..."
+                      borderRadius="full"
+                      fontFamily="Inter, sans-serif"
+                      fontWeight="600"
+                      w="full"
+                      _hover={{
+                        bg: "linear-gradient(135deg, #45A049, #3d8b40)",
+                        transform: "translateY(-2px)",
+                        boxShadow: "0 8px 25px rgba(76, 175, 80, 0.4)"
+                      }}
+                      transition="all 0.3s ease"
+                    >
+                      Save Changes
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setIsEditing(false);
+                        setErrors({});
+                        setFirstName(userData.first_name || "");
+                        setLastName(userData.last_name || "");
+                        setPhoneNumber(userData.phone_number || "");
+                        setInvestorType(userData.investor_type || "");
+                      }}
+                      variant="outline"
+                      borderColor="rgba(255, 255, 255, 0.3)"
+                      color="rgba(255, 255, 255, 0.8)"
+                      leftIcon={<FiX />}
+                      size="md"
+                      borderRadius="full"
+                      fontFamily="Inter, sans-serif"
+                      fontWeight="600"
+                      w="full"
+                      _hover={{ 
+                        bg: "rgba(255, 255, 255, 0.1)", 
+                        borderColor: "rgba(255, 255, 255, 0.5)",
+                        transform: "translateY(-2px)"
+                      }}
+                      transition="all 0.3s ease"
+                    >
+                      Cancel
+                    </Button>
+                  </>
+                )}
+              </VStack>
+            </VStack>
           </MotionCard>
 
           {/* Profile Details */}
-          <Grid templateColumns={{ base: "1fr", lg: "2fr 1fr" }} gap={8}>
+          <Grid templateColumns={{ base: "1fr", lg: "2fr 1fr", md:'2fr 1fr' }} gap={{ base: 6, lg: 8 }}>
             {/* Main Profile Information */}
-            <GridItem>
+            <GridItem order={{ base: 1, lg: 1 }}>
               <MotionCard
                 variants={childVariants}
-                bg="linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)"
-                boxShadow="0px 10px 30px rgba(0, 0, 0, 0.6)"
-                borderRadius="30px"
-                border="1px solid rgba(255, 255, 255, 0.1)"
+                bg="linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%)"
+                boxShadow="0px 10px 30px rgba(0, 0, 0, 0.08)"
+                borderRadius={{ base: "20px", md: "30px" }}
+                border="1px solid rgba(0, 0, 0, 0.05)"
                 overflow="hidden"
               >
-                <CardBody p={{ base: 6, md: 8 }}>
+                <CardBody p={{ base: 4, sm: 6, md: 8 }}>
                   <VStack spacing={6} align="stretch">
                     <Flex justify="space-between" align="center">
-                      <Heading size="md" color="white" fontFamily="Inter, sans-serif">
+                      <Heading size="md" color="black" fontFamily="Inter, sans-serif">
                         Personal Information
                       </Heading>
                       {!isEditing && (
@@ -589,7 +759,7 @@ const UserProfile = () => {
                       <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
                         <GridItem>
                           <FormControl isInvalid={errors.firstName}>
-                            <FormLabel color="rgba(255, 255, 255, 0.9)" fontWeight="600">
+                            <FormLabel color="rgba(0, 0, 0, 0.9)" fontWeight="600">
                               <Icon as={FiUser} mr={2} color="#0071E3" />
                               First Name
                             </FormLabel>
@@ -598,17 +768,17 @@ const UserProfile = () => {
                                 value={firstName}
                                 onChange={(e) => setFirstName(e.target.value)}
                                 placeholder="Enter your first name"
-                                bg="rgba(255, 255, 255, 0.05)"
+                                bg="rgba(0, 0, 0, 0.03)"
                                 border="1px"
-                                borderColor="rgba(255, 255, 255, 0.2)"
-                                color="white"
-                                _placeholder={{ color: "rgba(255, 255, 255, 0.5)" }}
-                                _hover={{ borderColor: "rgba(255, 255, 255, 0.3)" }}
+                                borderColor="rgba(0, 0, 0, 0.1)"
+                                color="black"
+                                _placeholder={{ color: "rgba(0, 0, 0, 0.5)" }}
+                                _hover={{ borderColor: "rgba(0, 0, 0, 0.2)" }}
                                 _focus={{ borderColor: "#0071E3", boxShadow: "0 0 0 1px #0071E3" }}
                                 borderRadius="lg"
                               />
                             ) : (
-                              <Text fontSize="md" color="rgba(255, 255, 255, 0.8)" py={2} px={3} bg="rgba(255, 255, 255, 0.05)" borderRadius="lg" border="1px solid rgba(255, 255, 255, 0.1)">
+                              <Text fontSize="md" color="rgba(0, 0, 0, 0.8)" py={2} px={3} bg="rgba(0, 0, 0, 0.03)" borderRadius="lg" border="1px solid rgba(0, 0, 0, 0.08)">
                                 {userData.first_name || "Not provided"}
                               </Text>
                             )}
@@ -617,7 +787,7 @@ const UserProfile = () => {
                         </GridItem>
                         <GridItem>
                           <FormControl isInvalid={errors.lastName}>
-                            <FormLabel color="rgba(255, 255, 255, 0.9)" fontWeight="600">
+                            <FormLabel color="rgba(0, 0, 0, 0.9)" fontWeight="600">
                               <Icon as={FiUser} mr={2} color="#0071E3" />
                               Last Name
                             </FormLabel>
@@ -626,17 +796,17 @@ const UserProfile = () => {
                                 value={lastName}
                                 onChange={(e) => setLastName(e.target.value)}
                                 placeholder="Enter your last name"
-                                bg="rgba(255, 255, 255, 0.05)"
+                                bg="rgba(0, 0, 0, 0.03)"
                                 border="1px"
-                                borderColor="rgba(255, 255, 255, 0.2)"
-                                color="white"
-                                _placeholder={{ color: "rgba(255, 255, 255, 0.5)" }}
-                                _hover={{ borderColor: "rgba(255, 255, 255, 0.3)" }}
+                                borderColor="rgba(0, 0, 0, 0.1)"
+                                color="black"
+                                _placeholder={{ color: "rgba(0, 0, 0, 0.5)" }}
+                                _hover={{ borderColor: "rgba(0, 0, 0, 0.2)" }}
                                 _focus={{ borderColor: "#0071E3", boxShadow: "0 0 0 1px #0071E3" }}
                                 borderRadius="lg"
                               />
                             ) : (
-                              <Text fontSize="md" color="rgba(255, 255, 255, 0.8)" py={2} px={3} bg="rgba(255, 255, 255, 0.05)" borderRadius="lg" border="1px solid rgba(255, 255, 255, 0.1)">
+                              <Text fontSize="md" color="rgba(0, 0, 0, 0.8)" py={2} px={3} bg="rgba(0, 0, 0, 0.03)" borderRadius="lg" border="1px solid rgba(0, 0, 0, 0.08)">
                                 {userData.last_name || "Not provided"}
                               </Text>
                             )}
@@ -649,21 +819,21 @@ const UserProfile = () => {
                       <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
                         <GridItem>
                           <FormControl>
-                            <FormLabel color="rgba(255, 255, 255, 0.9)" fontWeight="600">
+                            <FormLabel color="rgba(0, 0, 0, 0.9)" fontWeight="600">
                               <Icon as={FiMail} mr={2} color="#BB62FC" />
                               Email Address
                             </FormLabel>
-                            <Text fontSize="md" color="rgba(255, 255, 255, 0.8)" py={2} px={3} bg="rgba(255, 255, 255, 0.08)" borderRadius="lg" border="1px solid rgba(255, 255, 255, 0.15)">
+                            <Text fontSize="md" color="rgba(0, 0, 0, 0.8)" py={2} px={3} bg="rgba(0, 0, 0, 0.05)" borderRadius="lg" border="1px solid rgba(0, 0, 0, 0.1)">
                               {user?.email}
                             </Text>
-                            <Text fontSize="xs" color="rgba(255, 255, 255, 0.5)" mt={1}>
+                            <Text fontSize="xs" color="rgba(0, 0, 0, 0.5)" mt={1}>
                               Email cannot be changed here
                             </Text>
                           </FormControl>
                         </GridItem>
                         <GridItem>
                           <FormControl isInvalid={errors.phoneNumber}>
-                            <FormLabel color="rgba(255, 255, 255, 0.9)" fontWeight="600">
+                            <FormLabel color="rgba(0, 0, 0, 0.9)" fontWeight="600">
                               <Icon as={FiPhone} mr={2} color="#0071E3" />
                               Phone Number
                             </FormLabel>
@@ -673,17 +843,17 @@ const UserProfile = () => {
                                 value={phoneNumber}
                                 onChange={(e) => setPhoneNumber(e.target.value)}
                                 placeholder="Enter your phone number"
-                                bg="rgba(255, 255, 255, 0.05)"
+                                bg="rgba(0, 0, 0, 0.03)"
                                 border="1px"
-                                borderColor="rgba(255, 255, 255, 0.2)"
-                                color="white"
-                                _placeholder={{ color: "rgba(255, 255, 255, 0.5)" }}
-                                _hover={{ borderColor: "rgba(255, 255, 255, 0.3)" }}
+                                borderColor="rgba(0, 0, 0, 0.1)"
+                                color="black"
+                                _placeholder={{ color: "rgba(0, 0, 0, 0.5)" }}
+                                _hover={{ borderColor: "rgba(0, 0, 0, 0.2)" }}
                                 _focus={{ borderColor: "#0071E3", boxShadow: "0 0 0 1px #0071E3" }}
                                 borderRadius="lg"
                               />
                             ) : (
-                              <Text fontSize="md" color="rgba(255, 255, 255, 0.8)" py={2} px={3} bg="rgba(255, 255, 255, 0.05)" borderRadius="lg" border="1px solid rgba(255, 255, 255, 0.1)">
+                              <Text fontSize="md" color="rgba(0, 0, 0, 0.8)" py={2} px={3} bg="rgba(0, 0, 0, 0.03)" borderRadius="lg" border="1px solid rgba(0, 0, 0, 0.08)">
                                 {userData.phone_number || "Not provided"}
                               </Text>
                             )}
@@ -694,7 +864,7 @@ const UserProfile = () => {
 
                       {/* Investor Type */}
                       <FormControl isInvalid={errors.investorType}>
-                        <FormLabel color="rgba(255, 255, 255, 0.9)" fontWeight="600">
+                        <FormLabel color="rgba(0, 0, 0, 0.9)" fontWeight="600">
                           <Icon as={MdOutlineWorkOutline} mr={2} color="#BB62FC" />
                           Investor Type
                         </FormLabel>
@@ -703,19 +873,19 @@ const UserProfile = () => {
                             value={investorType}
                             onChange={(e) => setInvestorType(e.target.value)}
                             placeholder="Select investor type"
-                            bg="rgba(255, 255, 255, 0.05)"
+                            bg="rgba(0, 0, 0, 0.03)"
                             border="1px"
-                            borderColor="rgba(255, 255, 255, 0.2)"
-                            color="white"
-                            _hover={{ borderColor: "rgba(255, 255, 255, 0.3)" }}
+                            borderColor="rgba(0, 0, 0, 0.1)"
+                            color="black"
+                            _hover={{ borderColor: "rgba(0, 0, 0, 0.2)" }}
                             _focus={{ borderColor: "#0071E3", boxShadow: "0 0 0 1px #0071E3" }}
                             borderRadius="lg"
                           >
-                            <option value="individual" style={{backgroundColor: '#1a1a1a', color: 'white'}}>Individual Investor</option>
-                            <option value="institutional" style={{backgroundColor: '#1a1a1a', color: 'white'}}>Institutional / Corporate Investor</option>
+                            <option value="individual" style={{backgroundColor: '#ffffff', color: 'black'}}>Individual Investor</option>
+                            <option value="institutional" style={{backgroundColor: '#ffffff', color: 'black'}}>Institutional / Corporate Investor</option>
                           </Select>
                         ) : (
-                          <Text fontSize="md" color="rgba(255, 255, 255, 0.8)" py={2} px={3} bg="rgba(255, 255, 255, 0.05)" borderRadius="lg" border="1px solid rgba(255, 255, 255, 0.1)">
+                          <Text fontSize="md" color="rgba(0, 0, 0, 0.8)" py={2} px={3} bg="rgba(0, 0, 0, 0.03)" borderRadius="lg" border="1px solid rgba(0, 0, 0, 0.08)">
                             {userData.investor_type === 'individual' ? 'Individual Investor' : 'Institutional / Corporate Investor'}
                           </Text>
                         )}
@@ -724,21 +894,21 @@ const UserProfile = () => {
 
                       {/* Add Hushh ID below investor type */}
                       <FormControl>
-                        <FormLabel color="rgba(255, 255, 255, 0.9)" fontWeight="600">
+                        <FormLabel color="rgba(0, 0, 0, 0.9)" fontWeight="600">
                           <Icon as={FiShield} mr={2} color="#0071E3" />
                           Hushh ID
                         </FormLabel>
-                        <Text fontSize="md" color="rgba(255, 255, 255, 0.8)" py={2} px={3} bg="rgba(255, 255, 255, 0.08)" borderRadius="lg" border="1px solid rgba(255, 255, 255, 0.15)" fontFamily="mono">
+                        <Text fontSize="md" color="rgba(0, 0, 0, 0.8)" py={2} px={3} bg="rgba(0, 0, 0, 0.05)" borderRadius="lg" border="1px solid rgba(0, 0, 0, 0.1)" fontFamily="mono">
                           {userData.hushh_id || "Not available"}
                         </Text>
-                        <Text fontSize="xs" color="rgba(255, 255, 255, 0.5)" mt={1}>
+                        <Text fontSize="xs" color="rgba(0, 0, 0, 0.5)" mt={1}>
                           Your unique Hushh identifier
                         </Text>
                       </FormControl>
 
                       {/* Additional Information */}
-                      <Divider borderColor="rgba(255, 255, 255, 0.1)" />
-                      <Text fontSize="lg" fontWeight="600" color="rgba(255, 255, 255, 0.9)">
+                      <Divider borderColor="rgba(0, 0, 0, 0.1)" />
+                      <Text fontSize="lg" fontWeight="600" color="rgba(0, 0, 0, 0.9)">
                         Additional Information
                       </Text>
 
@@ -746,8 +916,8 @@ const UserProfile = () => {
                       <Grid templateColumns={{ base: "1fr", md: "1fr 1fr 1fr" }} gap={4}>
                         <GridItem>
                           <FormControl>
-                            <FormLabel color="gray.700" fontWeight="600">
-                              <Icon as={BiUser} mr={2} />
+                            <FormLabel color="rgba(0, 0, 0, 0.9)" fontWeight="600">
+                              <Icon as={BiUser} mr={2} color="#0071E3" />
                               Gender
                             </FormLabel>
                             {isEditing ? (
@@ -755,11 +925,13 @@ const UserProfile = () => {
                                 value={gender}
                                 onChange={(e) => setGender(e.target.value)}
                                 placeholder="Select gender"
-                                bg="gray.50"
+                                bg="rgba(0, 0, 0, 0.03)"
                                 border="1px"
-                                borderColor="gray.200"
-                                _hover={{ borderColor: "gray.300" }}
-                                _focus={{ borderColor: "blue.500", boxShadow: "0 0 0 1px #3182CE" }}
+                                borderColor="rgba(0, 0, 0, 0.1)"
+                                color="black"
+                                _hover={{ borderColor: "rgba(0, 0, 0, 0.2)" }}
+                                _focus={{ borderColor: "#0071E3", boxShadow: "0 0 0 1px #0071E3" }}
+                                borderRadius="lg"
                               >
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
@@ -767,7 +939,7 @@ const UserProfile = () => {
                                 <option value="prefer-not-to-say">Prefer not to say</option>
                               </Select>
                             ) : (
-                              <Text fontSize="md" color="gray.700" py={2} px={3} bg="gray.50" borderRadius="md">
+                              <Text fontSize="md" color="rgba(0, 0, 0, 0.8)" py={2} px={3} bg="rgba(0, 0, 0, 0.03)" borderRadius="lg" border="1px solid rgba(0, 0, 0, 0.08)">
                                 {userData.gender || "Not provided"}
                               </Text>
                             )}
@@ -775,8 +947,8 @@ const UserProfile = () => {
                         </GridItem>
                         <GridItem>
                           <FormControl>
-                            <FormLabel color="gray.700" fontWeight="600">
-                              <Icon as={IoLocationOutline} mr={2} />
+                            <FormLabel color="rgba(0, 0, 0, 0.9)" fontWeight="600">
+                              <Icon as={IoLocationOutline} mr={2} color="#0071E3" />
                               Country
                             </FormLabel>
                             {isEditing ? (
@@ -784,14 +956,17 @@ const UserProfile = () => {
                                 value={country}
                                 onChange={(e) => setCountry(e.target.value)}
                                 placeholder="Enter your country"
-                                bg="gray.50"
+                                bg="rgba(0, 0, 0, 0.03)"
                                 border="1px"
-                                borderColor="gray.200"
-                                _hover={{ borderColor: "gray.300" }}
-                                _focus={{ borderColor: "blue.500", boxShadow: "0 0 0 1px #3182CE" }}
+                                borderColor="rgba(0, 0, 0, 0.1)"
+                                color="black"
+                                _placeholder={{ color: "rgba(0, 0, 0, 0.5)" }}
+                                _hover={{ borderColor: "rgba(0, 0, 0, 0.2)" }}
+                                _focus={{ borderColor: "#0071E3", boxShadow: "0 0 0 1px #0071E3" }}
+                                borderRadius="lg"
                               />
                             ) : (
-                              <Text fontSize="md" color="gray.700" py={2} px={3} bg="gray.50" borderRadius="md">
+                              <Text fontSize="md" color="rgba(0, 0, 0, 0.8)" py={2} px={3} bg="rgba(0, 0, 0, 0.03)" borderRadius="lg" border="1px solid rgba(0, 0, 0, 0.08)">
                                 {userData.country || "Not provided"}
                               </Text>
                             )}
@@ -799,7 +974,7 @@ const UserProfile = () => {
                         </GridItem>
                         <GridItem>
                           <FormControl>
-                            <FormLabel color="rgba(255, 255, 255, 0.9)" fontWeight="600">
+                            <FormLabel color="rgba(0, 0, 0, 0.9)" fontWeight="600">
                               <Icon as={FiMapPin} mr={2} color="#0071E3" />
                               City
                             </FormLabel>
@@ -808,17 +983,17 @@ const UserProfile = () => {
                                 value={city}
                                 onChange={(e) => setCity(e.target.value)}
                                 placeholder="Enter your city"
-                                bg="rgba(255, 255, 255, 0.05)"
+                                bg="rgba(0, 0, 0, 0.03)"
                                 border="1px"
-                                borderColor="rgba(255, 255, 255, 0.2)"
-                                color="white"
-                                _placeholder={{ color: "rgba(255, 255, 255, 0.5)" }}
-                                _hover={{ borderColor: "rgba(255, 255, 255, 0.3)" }}
+                                borderColor="rgba(0, 0, 0, 0.1)"
+                                color="black"
+                                _placeholder={{ color: "rgba(0, 0, 0, 0.5)" }}
+                                _hover={{ borderColor: "rgba(0, 0, 0, 0.2)" }}
                                 _focus={{ borderColor: "#0071E3", boxShadow: "0 0 0 1px #0071E3" }}
                                 borderRadius="lg"
                               />
                             ) : (
-                              <Text fontSize="md" color="rgba(255, 255, 255, 0.8)" py={2} px={3} bg="rgba(255, 255, 255, 0.05)" borderRadius="lg" border="1px solid rgba(255, 255, 255, 0.1)">
+                              <Text fontSize="md" color="rgba(0, 0, 0, 0.8)" py={2} px={3} bg="rgba(0, 0, 0, 0.03)" borderRadius="lg" border="1px solid rgba(0, 0, 0, 0.08)">
                                 {userData.city || "Not provided"}
                               </Text>
                             )}
@@ -828,7 +1003,7 @@ const UserProfile = () => {
 
                       {/* Date of Birth */}
                       <FormControl>
-                        <FormLabel color="rgba(255, 255, 255, 0.9)" fontWeight="600">
+                        <FormLabel color="rgba(0, 0, 0, 0.9)" fontWeight="600">
                           <Icon as={FiCalendar} mr={2} color="#BB62FC" />
                           Date of Birth
                         </FormLabel>
@@ -837,16 +1012,16 @@ const UserProfile = () => {
                             type="date"
                             value={dateOfBirth}
                             onChange={(e) => setDateOfBirth(e.target.value)}
-                            bg="rgba(255, 255, 255, 0.05)"
+                            bg="rgba(0, 0, 0, 0.03)"
                             border="1px"
-                            borderColor="rgba(255, 255, 255, 0.2)"
-                            color="white"
-                            _hover={{ borderColor: "rgba(255, 255, 255, 0.3)" }}
+                            borderColor="rgba(0, 0, 0, 0.1)"
+                            color="black"
+                            _hover={{ borderColor: "rgba(0, 0, 0, 0.2)" }}
                             _focus={{ borderColor: "#0071E3", boxShadow: "0 0 0 1px #0071E3" }}
                             borderRadius="lg"
                           />
                         ) : (
-                          <Text fontSize="md" color="rgba(255, 255, 255, 0.8)" py={2} px={3} bg="rgba(255, 255, 255, 0.05)" borderRadius="lg" border="1px solid rgba(255, 255, 255, 0.1)">
+                          <Text fontSize="md" color="rgba(0, 0, 0, 0.8)" py={2} px={3} bg="rgba(0, 0, 0, 0.03)" borderRadius="lg" border="1px solid rgba(0, 0, 0, 0.08)">
                             {userData.dob ? new Date(userData.dob).toLocaleDateString() : "Not provided"}
                           </Text>
                         )}
@@ -854,7 +1029,7 @@ const UserProfile = () => {
 
                       {/* Reason for using Hushh */}
                       <FormControl>
-                        <FormLabel color="rgba(255, 255, 255, 0.9)" fontWeight="600">
+                        <FormLabel color="rgba(0, 0, 0, 0.9)" fontWeight="600">
                           <Icon as={FiEdit3} mr={2} color="#0071E3" />
                           Reason for using Hushh
                         </FormLabel>
@@ -863,18 +1038,18 @@ const UserProfile = () => {
                             value={reasonForUsingHushh}
                             onChange={(e) => setReasonForUsingHushh(e.target.value)}
                             placeholder="Tell us why you're interested in using Hushh"
-                            bg="rgba(255, 255, 255, 0.05)"
+                            bg="rgba(0, 0, 0, 0.03)"
                             border="1px"
-                            borderColor="rgba(255, 255, 255, 0.2)"
-                            color="white"
-                            _placeholder={{ color: "rgba(255, 255, 255, 0.5)" }}
-                            _hover={{ borderColor: "rgba(255, 255, 255, 0.3)" }}
+                            borderColor="rgba(0, 0, 0, 0.1)"
+                            color="black"
+                            _placeholder={{ color: "rgba(0, 0, 0, 0.5)" }}
+                            _hover={{ borderColor: "rgba(0, 0, 0, 0.2)" }}
                             _focus={{ borderColor: "#0071E3", boxShadow: "0 0 0 1px #0071E3" }}
                             borderRadius="lg"
                             rows={4}
                           />
                         ) : (
-                          <Text fontSize="md" color="rgba(255, 255, 255, 0.8)" py={2} px={3} bg="rgba(255, 255, 255, 0.05)" borderRadius="lg" border="1px solid rgba(255, 255, 255, 0.1)" minH="80px">
+                          <Text fontSize="md" color="rgba(0, 0, 0, 0.8)" py={2} px={3} bg="rgba(0, 0, 0, 0.03)" borderRadius="lg" border="1px solid rgba(0, 0, 0, 0.08)" minH="80px">
                             {userData.reason_for_using || "Not provided"}
                           </Text>
                         )}
