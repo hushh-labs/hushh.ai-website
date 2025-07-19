@@ -1,6 +1,6 @@
 import React from "react";
 import ClientConciergeApp from "../../clientside/ConciergeApp";
-
+import ContentWrapper from "../../_components/layout/ContentWrapper";
 export const metadata = {
   title: "Hushh | Concierge App - get luxury experience",
   description:
@@ -31,7 +31,9 @@ export const metadata = {
 const conciergeApp = () => {
   return (
     <>
-      <ClientConciergeApp />
+      <ContentWrapper includeHeaderSpacing={true}>
+        <ClientConciergeApp />
+      </ContentWrapper>
     </>
   );
 };

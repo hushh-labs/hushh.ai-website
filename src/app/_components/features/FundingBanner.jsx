@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Box,
   Container,
@@ -7,8 +7,17 @@ import {
   Flex,
   keyframes
 } from '@chakra-ui/react';
+import { useBannerHeight } from '../../context/BannerHeightContext';
 
 const FundingBanner = () => {
+  const { registerBanner, unregisterBanner } = useBannerHeight();
+
+  // Register this banner when component mounts
+  useEffect(() => {
+    registerBanner('funding');
+    return () => unregisterBanner('funding');
+  }, [registerBanner, unregisterBanner]);
+
   // Subtle fade-in animation
   const fadeIn = keyframes`
     0% { opacity: 0; transform: translateY(-10px); }

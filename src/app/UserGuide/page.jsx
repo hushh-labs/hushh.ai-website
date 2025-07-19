@@ -2,7 +2,7 @@ import React from "react";
 import ContactForm from "../_components/features/contactForm";
 import AboutFaq from "../_components/features/faq/aboutFaq";
 import UserGuide from "../clientside/UserGuide";
-
+import ContentWrapper from "../_components/layout/ContentWrapper";
 export const metadata = {
   title: "Hushh | User Guide Walkthrough",
   description:
@@ -34,9 +34,11 @@ const userGuide = () => {
 
   return (
   <>  
-    <UserGuide/>
-    <AboutFaq/>
-    <ContactForm/>
+    <ContentWrapper includeHeaderSpacing={true}>
+      <UserGuide/>
+      <AboutFaq/>
+      <ContactForm/>
+    </ContentWrapper>
   </>  
   );
 };

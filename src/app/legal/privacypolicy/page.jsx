@@ -1,7 +1,7 @@
 import React from "react";
 import { Heading } from "@chakra-ui/react";
 import ContactForm from "../../_components/features/contactForm";
-
+import ContentWrapper from "../../_components/layout/ContentWrapper";
 export const metadata = {
   title: "Hushh | Privacy Policy - Your Data, Your Rights",
   description:
@@ -24,6 +24,7 @@ const PrivacyPolicy = () => {
   const gradient = "linear-gradient(265.3deg, #E54D60 8.81%, #A342FF 94.26%)";
   return (
     <>
+    <ContentWrapper includeHeaderSpacing={true}>
               <div 
           className="pt-12 px-6 md:px-32 text-white" 
           style={{ paddingTop: 'calc(90px + var(--banner-height, 0px))' }}
@@ -634,6 +635,7 @@ const PrivacyPolicy = () => {
         </div>
       </div>
       <ContactForm />
+    </ContentWrapper>
     </>
   );
 };

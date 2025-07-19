@@ -42,6 +42,7 @@ import { MdWork, MdOutlineWorkOutline } from "react-icons/md";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import config from "../../lib/config/config";
+import ContentWrapper from "../_components/layout/ContentWrapper";
 
 const MotionBox = motion(Box);
 const MotionCard = motion(Card);
@@ -492,13 +493,14 @@ const UserRegistrationContent = () => {
   }
 
   return (
-    <Box
-      minH="100vh"
-      bg="gray.50"
-      py={{ base: 8, md: 12 }}
-      px={{ base: 4, md: 8 }}
-    >
-      <Container maxW="4xl" mt={10}>
+    <ContentWrapper includeHeaderSpacing={true}>
+      <Box
+        minH="100vh"
+        bg="gray.50"
+        py={{ base: 8, md: 12 }}
+        px={{ base: 4, md: 8 }}
+      >
+        <Container maxW="4xl">
         <MotionBox
           initial="initial"
           animate="animate"
@@ -847,11 +849,12 @@ const UserRegistrationContent = () => {
               </Link>
             </Text>
           </MotionBox>
-        </MotionBox>
-      </Container>
-    </Box>
-  );
-};
+                  </MotionBox>
+        </Container>
+      </Box>
+    </ContentWrapper>
+    );
+  };
 
 // Main component with Suspense boundary
 const UserRegistration = () => {

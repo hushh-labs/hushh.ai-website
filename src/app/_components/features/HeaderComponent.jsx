@@ -1,13 +1,39 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../header";
-import Headroom from "react-headroom";
 import { usePathname } from "next/navigation";
+import { useBannerHeight } from "../../context/BannerHeightContext";
 
 const HeaderComponent = () => {
   const pathname = usePathname();
+  const { totalBannerHeight } = useBannerHeight();
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  
   const isHomePage = pathname === '/';
   const isConsentAIPage = pathname === '/consent-ai-protocol';
+
+  // Custom scroll behavior to hide/show header
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Show header when scrolling up or at the top
+      if (currentScrollY < lastScrollY || currentScrollY < 100) {
+        setIsVisible(true);
+      } 
+      // Hide header when scrolling down (past 100px)
+      else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   // For home page and consent-ai-protocol page, use light background to match Figma design
   const headerProps = (isHomePage || isConsentAIPage) ? {
@@ -17,17 +43,15 @@ const HeaderComponent = () => {
   } : {};
 
   return (
-    <div className="w-full">
-      <Headroom
-        style={{
-          webkitTransition: "all .5s ease-in-out",
-          mozTransition: "all .5s ease-in-out",
-          oTransition: "all .5s ease-in-out",
-          transition: "all .5s ease-in-out",
-        }}
-      >
-        <Header {...headerProps} />
-      </Headroom>
+    <div 
+      className="w-full fixed z-50 transition-transform duration-300 ease-in-out"
+      style={{ 
+        top: `${totalBannerHeight}px`,
+        height: '70px', // Consistent header height
+        transform: isVisible ? 'translateY(0)' : 'translateY(-100%)'
+      }}
+    >
+      <Header {...headerProps} />
     </div>
   );
 };

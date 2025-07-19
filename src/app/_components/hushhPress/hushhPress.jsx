@@ -12,6 +12,7 @@ import {
   } from "@chakra-ui/react";
 import { useState } from "react";  
 import FooterComponent from "../features/FooterComponent";
+import ContentWrapper from "../layout/ContentWrapper";
 // import Header from "../_components/header";
 
 
@@ -19,7 +20,9 @@ import FooterComponent from "../features/FooterComponent";
   const HushhPress = () => {
     return (
         <>
-        {/* <Header/> */}
+        
+        <ContentWrapper includeHeaderSpacing={true}>
+
       <Box
         bg="black"
         color="white"
@@ -254,6 +257,7 @@ import FooterComponent from "../features/FooterComponent";
           </VStack>
         </VStack>
       </Box>
+      </ContentWrapper>
       <FooterComponent/>
       </>
     );

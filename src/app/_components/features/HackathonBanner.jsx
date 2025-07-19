@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Box,
   Container,
@@ -10,9 +10,17 @@ import {
 } from '@chakra-ui/react';
 import { HiExternalLink } from 'react-icons/hi';
 import { useRouter } from 'next/navigation';
+import { useBannerHeight } from '../../context/BannerHeightContext';
 
 const HackathonBanner = () => {
   const router = useRouter();
+  const { registerBanner, unregisterBanner, fundingBannerHeight } = useBannerHeight();
+
+  // Register this banner when component mounts
+  useEffect(() => {
+    registerBanner('hackathon');
+    return () => unregisterBanner('hackathon');
+  }, [registerBanner, unregisterBanner]);
 
   // Continuous infinite slider animation for mobile
   const slideLeft = keyframes`
@@ -30,7 +38,7 @@ const HackathonBanner = () => {
       color="white"
       py={{ base: 2, md: 2.5 }}
       position="fixed"
-      top={{ base: '32px', md: '36px' }}
+      top={`${fundingBannerHeight || 36}px`}
       left={0}
       right={0}
       zIndex={9999}

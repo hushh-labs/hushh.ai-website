@@ -4,6 +4,7 @@ import { Container, Box, Heading } from '@chakra-ui/react'
 import ContactForm from '../_components/features/contactForm'
 import Head from 'next/head'
 import { siteMetadata } from '../sitemetadata'
+import ContentWrapper from '../_components/layout/ContentWrapper'
 
 // ContactPage JSON-LD structured data
 const contactPageJsonLd = {
@@ -36,6 +37,7 @@ const ContactUsClient = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(contactPageJsonLd) }}
       />
+      <ContentWrapper includeHeaderSpacing={true}>
       {/* Remove the Head component as it's deprecated in App Router */}
       <Box display={'flex'}>
         <Container minW={'100%'} textAlign={'center'} display={'flex'} flexDirection={'column'} mt={{ md:'4rem', base:'2rem'}}>
@@ -43,6 +45,7 @@ const ContactUsClient = () => {
           <ContactForm/>
         </Container>
       </Box> 
+      </ContentWrapper>
     </>
   )
 }

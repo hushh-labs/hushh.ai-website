@@ -1,6 +1,7 @@
 import React from 'react'
 import HushhCommunity from '../clientside/HushhCommunity'
 import Head from 'next/head';
+import ContentWrapper from '../_components/layout/ContentWrapper';
 
 
 export const metadata = {
@@ -53,7 +54,9 @@ const hushhCommunity = () => {
     <meta property="og:url" content="https://hushh.ai/hushh-community" />
     <link rel="canonical" href="https://hushh.ai/hushh-community" />
   </Head>
-       <HushhCommunity/>
+      <ContentWrapper includeHeaderSpacing={true}>
+        <HushhCommunity/>
+      </ContentWrapper>
     </>
   )
 }

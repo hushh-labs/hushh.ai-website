@@ -12,21 +12,20 @@ import {
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import section1Phone from "../svg/section_1_phone.svg";
+import ContentWrapper from "../layout/ContentWrapper";
 
 const ConsentAILanding = () => {
   const router = useRouter();
 
   return (
-    <Box
-      minH="100vh"
-      bg="#F8F9FA"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      style={{ 
-        paddingTop: 'calc(var(--total-banner-height, 72px) + 90px)' 
-      }} // Account for fixed header + banner
-    >
+    <ContentWrapper>
+      <Box
+        minH="100vh"
+        bg="#F8F9FA"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
       <Container maxW="full" px={{ base: 4, md: 8, lg: 16 }}>
         <Box
           display={{ base: "block", lg: "flex" }}
@@ -191,7 +190,8 @@ const ConsentAILanding = () => {
           </Box>
         </Box>
       </Container>
-    </Box>
+      </Box>
+    </ContentWrapper>
   );
 };
 

@@ -2,6 +2,7 @@ import { allBlogs } from "contentlayer/generated";
 import ContactForm from "../_components/features/contactForm";
 import HushhBlogsContent from "../_components/Blog/HushhBlogsContent";
 import { siteMetadata } from "../sitemetadata";
+import ContentWrapper from "../_components/layout/ContentWrapper";
 
 export const metadata = {
   title: "Hushh Newsroom | Latest Insights and Updates",
@@ -33,8 +34,10 @@ export const metadata = {
 export default function HushhBlogs() {
   return (
     <>
-      <HushhBlogsContent blogs={allBlogs} />
-      <ContactForm />
+      <ContentWrapper includeHeaderSpacing={true}>
+        <HushhBlogsContent blogs={allBlogs} />
+        <ContactForm />
+      </ContentWrapper>
     </>
   );
 }

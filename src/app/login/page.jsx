@@ -19,6 +19,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowBackIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import AppleSignInButton from './components/AppleSignInButton.jsx';
+import ContentWrapper from '../_components/layout/ContentWrapper';
 
 // Advanced Keyframe Animations 
 const float = keyframes`
@@ -194,14 +195,15 @@ const LoginPageContent = () => {
   }
 
   return (
-    <Box
-      minH="100vh"
-      position="relative"
-      overflow="hidden"
-      sx={{
-        background: "radial-gradient(ellipse at top, #0f0f23 0%, #000000 100%)",
-      }}
-    >
+    <ContentWrapper includeHeaderSpacing={true}>
+      <Box
+        // minH="100vh"
+        position="relative"
+        overflow="hidden"
+        sx={{
+          background: "radial-gradient(ellipse at top, #0f0f23 0%, #000000 100%)",
+        }}
+      >
       {/* Interactive Background Elements */}
       <Box position="absolute" top="0" left="0" w="100%" h="100%" zIndex={0}>
         {/* Main Animated Gradient Orbs */}
@@ -838,7 +840,8 @@ const LoginPageContent = () => {
           </VStack>
         </Flex>
       </Grid>
-    </Box>
+      </Box>
+    </ContentWrapper>
   );
 };
 

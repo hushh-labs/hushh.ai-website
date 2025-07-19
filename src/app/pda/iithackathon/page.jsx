@@ -2,6 +2,7 @@ import React from 'react'
 import HushhHackhathon from '../../clientside/HushhHackhathon'
 import Image from 'next/image';
 import Head from 'next/head';
+import ContentWrapper from '../../_components/layout/ContentWrapper';
 // import OGImage from '../../../public/OG/daraNexusOG.png';
 
 export const metadata = {
@@ -53,7 +54,9 @@ const page = () => {
       content="Hackathon data nexus project on hushh.ai"
     />
   </Head>
-   <HushhHackhathon/>
+   <ContentWrapper>
+     <HushhHackhathon/>
+   </ContentWrapper>
    </>
   )
 }

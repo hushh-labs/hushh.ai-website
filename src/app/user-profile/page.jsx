@@ -65,6 +65,7 @@ import { MdWork, MdOutlineWorkOutline } from "react-icons/md";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import HushhLogo from "../_components/svg/hushhLogoS.svg";
+import ContentWrapper from "../_components/layout/ContentWrapper";
 
 const MotionBox = motion(Box);
 const MotionCard = motion(Card);
@@ -359,13 +360,14 @@ const UserProfile = () => {
   }
 
   return (
-    <Box
-      minH="100vh"
-      bg="gray.50"
-      py={{ base: 8, md: 12 }}
-      px={{ base: 4, md: 8 }}
-    >
-      <Container maxW="6xl" mt={10}>
+    <ContentWrapper includeHeaderSpacing={true}>
+      <Box
+        minH="100vh"
+        bg="gray.50"
+        py={{ base: 8, md: 12 }}
+        px={{ base: 4, md: 8 }}
+      >
+        <Container maxW="6xl">
         <MotionBox
           initial="initial"
           animate="animate"
@@ -897,7 +899,8 @@ const UserProfile = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </Box>
+      </Box>
+    </ContentWrapper>
   );
 };
 

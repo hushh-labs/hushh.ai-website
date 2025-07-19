@@ -1,5 +1,6 @@
 import React from 'react'
 import HushhPress from '../_components/hushhPress/hushhPress'
+import ContentWrapper from '../_components/layout/ContentWrapper'
 
 export const metadata = {
   title: "Hushh | Empowering Your Data Journey",
@@ -20,7 +21,9 @@ export const metadata = {
 };
 const hushhPress = () => {
   return (
-    <HushhPress/>
+    <ContentWrapper>
+      <HushhPress/>
+    </ContentWrapper>
   )
 }
 

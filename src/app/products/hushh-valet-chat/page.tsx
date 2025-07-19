@@ -1,7 +1,7 @@
 import React from "react";
 import ClientHushhValetChat from "../../clientside/HushhValetChat";
 import { siteMetadata } from "../../sitemetadata";
-
+import ContentWrapper from "../../_components/layout/ContentWrapper";
 export const metadata = {
   title: "Hushh Valet Chat | AI-Powered Receipt & Finance Management",
   description:
@@ -93,7 +93,9 @@ const hushhValetChat = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
-      <ClientHushhValetChat />
+      <ContentWrapper includeHeaderSpacing={true}>
+        <ClientHushhValetChat />
+      </ContentWrapper>
     </>
   );
 };

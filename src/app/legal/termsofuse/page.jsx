@@ -2,6 +2,7 @@ import React from "react";
 import { Heading } from "@chakra-ui/react";
 import ContactForm from "../../_components/features/contactForm";
 import Head from "next/head";
+import ContentWrapper from "../../_components/layout/ContentWrapper";
 
 export const metadata = {
   title: "Hushh | Terms of Use - Understand Your Rights",
@@ -25,9 +26,9 @@ const TermsOfUse = () => {
   const gradient = "linear-gradient(265.3deg, #E54D60 8.81%, #A342FF 94.26%)";
   return (
     <>
-              <div 
-          className="pt-12 px-6 md:px-32 text-white" 
-          style={{ paddingTop: 'calc(90px + var(--banner-height, 0px))' }}
+      <ContentWrapper includeHeaderSpacing={true}>
+        <div 
+          className="px-6 md:px-32 text-white" 
         >
         <div className=" flex flex-col items-center">
           <Heading
@@ -573,7 +574,8 @@ const TermsOfUse = () => {
             restriction.
           </div>
         </div>
-      </div>
+        </div>
+      </ContentWrapper>
       <ContactForm />
     </>
   );

@@ -44,6 +44,7 @@ import GptStoreIcon from '../_components/svg/newLandingsvg/icons/gptStore.svg';
 import HuggingFaceIcon from '../_components/svg/newLandingsvg/icons/huggingfaceIcon.svg';
 import SalesforceIcon from '../_components/svg/newLandingsvg/icons/salesforceIcon.svg';
 import { useRouter } from 'next/navigation';
+import ContentWrapper from '../_components/layout/ContentWrapper';
 
 
 const NewLandingPage = () => {
@@ -63,9 +64,10 @@ const NewLandingPage = () => {
 
   return (
     <Box bg="white">
-      {/* Hero Section */}
-      <Container maxW="container.xl" py={{ base: 16, md: 20 }}>
-        <VStack my={{base:8,md:12}} spacing={{ base: 12, md: 14 }} align="center">
+      <ContentWrapper>
+        {/* Hero Section */}
+        <Container maxW="container.xl" py={{ base: 16, md: 20 }}>
+        <VStack spacing={{ base: 12, md: 14 }} align="center">
           {/* Lock Icon */}
           {/* <Box
             w={16}
@@ -1510,6 +1512,7 @@ const NewLandingPage = () => {
           </Button> */}
         </VStack>
       </Container>
+      </ContentWrapper>
 
           <FooterComponent/>
     </Box>

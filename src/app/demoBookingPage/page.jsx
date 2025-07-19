@@ -1,6 +1,7 @@
 import React from "react";
 import ClientDemoBooking from "../clientside/DemoBooking";
 import { siteMetadata } from "../sitemetadata";
+import ContentWrapper from "../_components/layout/ContentWrapper";
 
 export const metadata = {
   title: "Schedule a Demo | See Hushh's Data Privacy Solutions in Action",
@@ -85,7 +86,9 @@ const DemoBooking = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
       />
-      <ClientDemoBooking />
+      <ContentWrapper includeHeaderSpacing={true}>
+        <ClientDemoBooking />
+      </ContentWrapper>
     </>
   );
 };
