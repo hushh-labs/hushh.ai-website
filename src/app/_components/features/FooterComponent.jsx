@@ -36,13 +36,7 @@ const FooterComponent = () => {
   };
 
   const handleDownloadClick = () => {
-    if (isAndroid) {
-      window.location.href = "https://bit.ly/hushh-wallet-play-store";
-    } else if (isIOS) {
-      window.location.href = "https://bit.ly/hushh-app-ios";
-    } else {
-      handleOpenModal("https://bit.ly/hushh-wallet-play-store");
-    }
+    window.location.href = "https://apps.apple.com/in/app/hushh-app/id6498471189";
   };
 
   const scrollInMobile = () => {
@@ -130,7 +124,7 @@ const FooterComponent = () => {
                 </p>
                 <div className="flex flex-col justify-between h-max gap-3.5">
                   <button
-                    onClick={handleDownloadClick}
+                    onClick={() => router.push("https://apps.apple.com/in/app/hushh-app/id6498471189")}
                     className="flex px-4 hover:bg-gradientColor2  py-2 gap-1.5 w-max border border-myBorder rounded-full"
                   >
                     Download Our App
@@ -229,7 +223,7 @@ const FooterComponent = () => {
                   Get the app
                 </p>
                 <div className="flex items-center justify-center gap-5 h-full">
-                  <button onClick={handleDownloadClick} className="flex flex-1 hover:border-none justify-center px-4 py-2 gap-1.5 border border-myBorder rounded-full">
+                  <button onClick={() => router.push("https://apps.apple.com/in/app/hushh-app/id6498471189")} className="flex flex-1 hover:border-none justify-center px-4 py-2 gap-1.5 border border-myBorder rounded-full">
                     Download Hushh App
                   </button>
                 </div>

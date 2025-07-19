@@ -148,13 +148,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
 
   const handleDownloadClick = () => {
     console.log('Download clicked')
-    if (isAndroid) {
-      window.location.href = "https://bit.ly/hushh-wallet-play-store";
-    } else if (isIOS) {
-      window.location.href = "https://bit.ly/hushh-app-ios";
-    } else {
-      handleOpenModal();
-    }
+    window.location.href = "https://apps.apple.com/in/app/hushh-app/id6498471189";
   };
 
   useEffect(() => {

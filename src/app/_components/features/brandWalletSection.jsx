@@ -36,13 +36,7 @@ const BrandWalletSection = () => {
   };
 
   const handleDownloadClick = () => {
-    if (isAndroid) {
-      window.location.href = "https://bit.ly/hushh-wallet-play-store";
-    } else if (isIOS) {
-      window.location.href = "https://bit.ly/hushh-app-ios";
-    } else {
-      handleOpenModal("https://bit.ly/hushh-wallet-play-store");
-    }
+    window.location.href = "https://apps.apple.com/in/app/hushh-app/id6498471189";
   };
 
   return (
@@ -380,7 +374,7 @@ const BrandWalletSection = () => {
             color={theme.colors._white}
             lineHeight="28px"
             background="transparent"
-            onClick={handleDownloadClick}
+            onClick={() => router.push("https://apps.apple.com/in/app/hushh-app/id6498471189")}
             px="21px"
             py="15px"
             fontSize={{ md: "1rem", base: "0.75rem" }}

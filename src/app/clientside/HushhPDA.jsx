@@ -52,8 +52,8 @@ const HushhPDA = () => {
           element.style.background = 'none';
           element.style.webkitBackgroundClip = 'initial';
           element.style.backgroundClip = 'initial';
-          element.style.webkitTextFillColor = 'white';
-          element.style.color = 'white';
+          element.style.webkitTextFillColor = '#4a5568';
+          element.style.color = '#4a5568';
           element.style.fontSize = 'clamp(1rem, 2.5vw, 2rem)';
           element.style.fontWeight = 'normal';
           element.style.transform = 'scale(1)';
@@ -84,8 +84,8 @@ const HushhPDA = () => {
       {/* Product Page 1 - Hero Section */}
       <Box
         minH="100vh"
-        bg="#000000"
-        color="white"
+        bg="white"
+        color="black"
         position="relative"
         overflow="hidden"
         display="flex"
@@ -140,7 +140,7 @@ const HushhPDA = () => {
                 fontWeight={700}
                 letterSpacing="0"
                 lineHeight={{ base: "1.2", md: "shorter" }}
-                className="gradient"
+                color={'#222224'}
                 textAlign="center"
               >
                 Personal Data Agent
@@ -155,7 +155,7 @@ const HushhPDA = () => {
                 fontWeight={400}
                 letterSpacing="0"
                 lineHeight={{ base: "1.3", md: "base" }}
-                color="white"
+                color="#4e4e4e"
                 textAlign="center"
               >
                 Your Agent. Your data. Your business. Your vibe
@@ -177,7 +177,7 @@ const HushhPDA = () => {
                 position="absolute"
                 w={{ base: "80%", md: "95%" }}
                 h={{ base: "80%", md: "95%" }}
-                bgGradient="radial(circle, rgba(179, 69, 217, 0.6) 0%, rgba(218, 75, 122, 0.4) 40%, transparent 70%)"
+                bgGradient="radial(circle, rgba(0, 113, 227, 0.1) 0%, rgba(187, 98, 252, 0.08) 40%, transparent 70%)"
                 borderRadius="50%"
                 filter="blur(3rem)"
                 zIndex={0}
@@ -249,22 +249,20 @@ const HushhPDA = () => {
 
                   {/* Get Early Access Button */}
                   <Button
-                    bg="rgba(255, 255, 255, 0.95)"
-                    backdropFilter="blur(0.625rem)"
-                    borderRadius="20px"
+                    bg="#0071e3"
+                    borderRadius="full"
                     w={{ base: "13rem", sm: "13rem", md: "18rem" }}
                     h={{ base: "3rem", md: "3.5rem" }}
                     fontSize={{ base: "0.875rem", md: "1rem" }}
                     fontFamily="Figtree"
                     fontWeight={600}
-                    color="#8B5CF6"
-                    border="1px solid rgba(255, 255, 255, 0.3)"
-                    boxShadow="0 0.25rem 1.25rem rgba(139, 92, 246, 0.2)"
+                    color="white"
+                    border="none"
+                    boxShadow="0 0.25rem 1.25rem rgba(0, 113, 227, 0.3)"
                     _hover={{
-                      bg: "linear-gradient(135deg, #b345d9, #da4b7a)",
-                      color: "white",
+                      bg: "#005bb5",
                       transform: "translateY(-0.125rem)",
-                      boxShadow: "0 0.375rem 1.5rem rgba(139, 92, 246, 0.4)",
+                      boxShadow: "0 0.375rem 1.5rem rgba(0, 113, 227, 0.4)",
                     }}
                     transition="all 0.3s ease"
                     onClick={() => router.push("/contact-us")}
@@ -281,9 +279,9 @@ const HushhPDA = () => {
       {/* Product Page 2 - Full Height Carousel Section */}
       <Box
         minH="100vh"
-        bg="#000000"
-        mx={{ md: '5vh', base: '0' }}
-        color="white"
+        bg="gray.50"
+        // mx={{ md: '5vh', base: '0' }}
+        color="black"
         overflow="hidden"
         position="relative"
         py={{ base: 8, md: 0 }}
@@ -300,7 +298,7 @@ const HushhPDA = () => {
         />
 
         {/* Main Carousel Container */}
-        <Container maxW="100%" minH="100vh" display="flex" alignItems="center" px={{ base: 4, md: 0 }}>
+        <Container maxW="100%" minH="100vh" display="flex" alignItems="center" px={{ base: 4, md: 4 }} >
           {/* Mobile Layout - Vertical Stack */}
           <VStack
             spacing={8}
@@ -318,9 +316,7 @@ const HushhPDA = () => {
                 fontWeight={700}
                 letterSpacing="0px"
                 lineHeight={{ base: "30px", sm: "34px", md: "40px" }}
-                bgGradient="linear(to-b, #ffffff 0%, #999999 70%)"
-                bgClip="text"
-                opacity={0.97}
+                color="black"
                 maxW="100%"
                 px={2}
               >
@@ -345,7 +341,7 @@ const HushhPDA = () => {
                 left={0}
                 right={0}
                 h="3vh"
-                bgGradient="linear(to-b, #000000 0%, rgba(0,0,0,0.6) 80%, transparent 100%)"
+                bgGradient="linear(to-b, #f7fafc 0%, rgba(247,250,252,0.6) 80%, transparent 100%)"
                 zIndex={2}
                 pointerEvents="none"
               />
@@ -357,7 +353,7 @@ const HushhPDA = () => {
                 left={0}
                 right={0}
                 h="3vh"
-                bgGradient="linear(to-t, #000000 0%, rgba(0,0,0,0.6) 80%, transparent 100%)"
+                bgGradient="linear(to-t, #f7fafc 0%, rgba(247,250,252,0.6) 80%, transparent 100%)"
                 zIndex={2}
                 pointerEvents="none"
               />
@@ -375,7 +371,7 @@ const HushhPDA = () => {
                   left="0"
                   right="0"
                   bottom="0"
-                  background="linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 15%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.2) 85%, rgba(0,0,0,0.7) 100%)"
+                  background="linear-gradient(to bottom, rgba(247,250,252,0.7) 0%, rgba(247,250,252,0.2) 15%, rgba(247,250,252,0) 30%, rgba(247,250,252,0) 70%, rgba(247,250,252,0.2) 85%, rgba(247,250,252,0.7) 100%)"
                   pointerEvents="none"
                   zIndex="2"
                 />
@@ -447,7 +443,7 @@ const HushhPDA = () => {
                           py="3px"
                           style={{
                             fontSize: 'clamp(0.9rem, 4vw, 1.2rem)',
-                            color: 'white',
+                            color: '#4a5568',
                             transition: 'all 0.3s ease',
                             lineHeight: '1.2'
                           }}
@@ -499,7 +495,7 @@ const HushhPDA = () => {
                           py="3px"
                           style={{
                             fontSize: 'clamp(0.9rem, 4vw, 1.2rem)',
-                            color: 'white',
+                            color: '#4a5568',
                             transition: 'all 0.3s ease',
                             lineHeight: '1.2'
                           }}
@@ -522,8 +518,7 @@ const HushhPDA = () => {
                 fontWeight={700}
                 letterSpacing="0px"
                 lineHeight={{ base: "42px", sm: "48px", md: "56px" }}
-                bgGradient="linear(145deg, #ffffff 0%, #dddde0 58.33%, #7a7a7e 100%)"
-                bgClip="text"
+                color="black"
               >
                 About
               </Heading>
@@ -534,7 +529,7 @@ const HushhPDA = () => {
                 fontWeight={400}
                 letterSpacing="0px"
                 lineHeight="1.5"
-                color="#FFF"
+                color="#4e4e4e"
                 maxW="100%"
               >
                 Meet Your Personal Data Agent called 🤫 until you give it your personal hushhname like mani$h for our founder and ceo, Manish Sainani
@@ -546,7 +541,7 @@ const HushhPDA = () => {
                 fontWeight={400}
                 letterSpacing="0px"
                 lineHeight="1.5"
-                color="#FFF"
+                color="#4e4e4e"
                 maxW="100%"
               >
                 AI that organizes your life, protects your privacy, and helps your data work for you — not the other way around.
@@ -567,7 +562,7 @@ const HushhPDA = () => {
                     fontWeight={500}
                     letterSpacing="0px"
                     lineHeight="1.4"
-                    color="#ffffff"
+                    color="black"
                   >
                     Privacy-first
                   </Text>
@@ -586,7 +581,7 @@ const HushhPDA = () => {
                     fontWeight={500}
                     letterSpacing="0px"
                     lineHeight="1.4"
-                    color="#ffffff"
+                    color="black"
                   >
                     AI-Driven
                   </Text>
@@ -605,7 +600,7 @@ const HushhPDA = () => {
                     fontWeight={500}
                     letterSpacing="0px"
                     lineHeight="1.4"
-                    color="#ffffff"
+                    color="black"
                   >
                     Monetized by You
                   </Text>
@@ -626,18 +621,16 @@ const HushhPDA = () => {
             {/* Left Side - Target Audience */}
             <GridItem>
               <VStack spacing={8} align={{ base: "center", lg: "flex-start" }} textAlign={{ base: "center", lg: "left" }}>
-                <Heading
-                  as="h2"
-                  fontSize={{ base: "32px", md: "40px", lg: "48px" }}
-                  fontFamily="Poppins"
-                  fontWeight={700}
-                  letterSpacing="0px"
-                  lineHeight={{ base: "40px", md: "48px", lg: "56px" }}
-                  bgGradient="linear(to-b, #ffffff 0%, #999999 70%)"
-                  bgClip="text"
-                  opacity={0.97}
-                  maxW={{ base: "100%", lg: "400px" }}
-                >
+                            <Heading
+              as="h2"
+              fontSize={{ base: "32px", md: "40px", lg: "48px" }}
+              fontFamily="Poppins"
+              fontWeight={700}
+              letterSpacing="0px"
+              lineHeight={{ base: "40px", md: "48px", lg: "56px" }}
+              color="black"
+              maxW={{ base: "100%", lg: "400px" }}
+            >
                   Top 1024 Leaders we want to onboard onto our platform
                 </Heading>
               </VStack>
@@ -662,7 +655,7 @@ const HushhPDA = () => {
                   left={0}
                   right={0}
                   h="25vh"
-                  bgGradient="linear(to-b, #000000 0%, rgba(0,0,0,0.8) 50%, transparent 100%)"
+                  bgGradient="linear(to-b, #f7fafc 0%, rgba(247,250,252,0.8) 50%, transparent 100%)"
                   zIndex={2}
                   pointerEvents="none"
                 />
@@ -674,7 +667,7 @@ const HushhPDA = () => {
                   left={0}
                   right={0}
                   h="25vh"
-                  bgGradient="linear(to-t, #000000 0%, rgba(0,0,0,0.8) 50%, transparent 100%)"
+                  bgGradient="linear(to-t, #f7fafc 0%, rgba(247,250,252,0.8) 50%, transparent 100%)"
                   zIndex={2}
                   pointerEvents="none"
                 />
@@ -693,7 +686,7 @@ const HushhPDA = () => {
                     left="0"
                     right="0"
                     bottom="0"
-                    background="linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 25%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.4) 75%, rgba(0,0,0,0.9) 100%)"
+                    background="linear-gradient(to bottom, rgba(247,250,252,0.9) 0%, rgba(247,250,252,0.4) 25%, rgba(247,250,252,0.1) 40%, rgba(247,250,252,0) 50%, rgba(247,250,252,0.1) 60%, rgba(247,250,252,0.4) 75%, rgba(247,250,252,0.9) 100%)"
                     pointerEvents="none"
                     zIndex="2"
                   />
@@ -766,7 +759,7 @@ const HushhPDA = () => {
                             py="6px"
                             style={{ 
                               fontSize: 'clamp(1rem, 2.5vw, 2rem)',
-                              color: 'white',
+                              color: '#4a5568',
                               transition: 'all 0.3s ease',
                               lineHeight: '1.2'
                             }}
@@ -818,7 +811,7 @@ const HushhPDA = () => {
                             py="6px"
                             style={{ 
                               fontSize: 'clamp(1rem, 2.5vw, 2rem)',
-                              color: 'white',
+                              color: '#4a5568',
                               transition: 'all 1s ease',
                               lineHeight: '1.2'
                             }}
@@ -843,8 +836,7 @@ const HushhPDA = () => {
                   fontWeight={700}
                   letterSpacing="0px"
                   lineHeight={{ base: "56px", md: "64px", lg: "72px" }}
-                  bgGradient="linear(145deg, #ffffff 0%, #dddde0 58.33%, #7a7a7e 100%)"
-                  bgClip="text"
+                  color="black"
                 >
                   About
                 </Heading>
@@ -855,7 +847,7 @@ const HushhPDA = () => {
                   fontWeight={400}
                   letterSpacing="0px"
                   lineHeight="normal"
-                  color="#FFF"
+                  color="#4e4e4e"
                   maxW={{ base: "100%", lg: "500px" }}
                 >
                   Meet Your Personal Data Agent called 🤫 until you give it your personal hushhname like mani$h for our founder and ceo, Manish Sainani
@@ -867,7 +859,7 @@ const HushhPDA = () => {
                   fontWeight={400}
                   letterSpacing="0px"
                   lineHeight="normal"
-                  color="#FFF"
+                  color="#4e4e4e"
                   maxW={{ base: "100%", lg: "500px" }}
                 >                
                 AI that organizes your life, protects your privacy, and helps your data work for you — not the other way around.
@@ -888,7 +880,7 @@ const HushhPDA = () => {
                       fontWeight={500}
                       letterSpacing="0px"
                       lineHeight={{ base: "28px", md: "32px", lg: "36px" }}
-                      color="#ffffff"
+                      color="black"
                     >
                       Privacy-first
                     </Text>
@@ -907,7 +899,7 @@ const HushhPDA = () => {
                       fontWeight={500}
                       letterSpacing="0px"
                       lineHeight={{ base: "28px", md: "32px", lg: "36px" }}
-                      color="#ffffff"
+                      color="black"
                     >
                       AI-Driven
                     </Text>
@@ -926,7 +918,7 @@ const HushhPDA = () => {
                       fontWeight={500}
                       letterSpacing="0px"
                       lineHeight={{ base: "28px", md: "32px", lg: "36px" }}
-                      color="#ffffff"
+                      color="black"
                     >
                       Monetized by You
                     </Text>
@@ -941,14 +933,13 @@ const HushhPDA = () => {
       {/* Product Page 3 - Problem/Solution Section */}
       <Box
         minH={'100vh'}
-        bg="#000000"
-        color="white"
+        bg="white"
+        color="black"
         py={{ base: 12, md: 24 }}
         display="flex"
-        mx={{ md: '4rem', base: '0' }}
         alignItems="center"
       >
-        <Container maxW="1400px" my={'4rem'}  px={{ base: 4, md: 8 }}>
+        <Container maxW="1400px" my={'4rem'}  px={{ base: 4, md: 4 }}>
           {/* Mobile Layout - Vertical Stack */}
           <VStack spacing={10} align="flex-start" display={{ base: "flex", lg: "none" }}>
             {/* Problem Section */}
@@ -960,7 +951,7 @@ const HushhPDA = () => {
                 fontWeight={600}
                 letterSpacing="0px"
                 lineHeight="1.2"
-                color="#d6d6d6"
+                color="#4a5568"
                 mb={4}
               >
                 Problem
@@ -971,7 +962,7 @@ const HushhPDA = () => {
                 fontWeight={400}
                 letterSpacing="0px"
                 lineHeight="1.6"
-                color="#ffffff"
+                color="#4e4e4e"
               >
                 The most powerful companies in the world are built on your data. But you don't control it. You don't profit from it. You can't even see it. We built hushh to change that — forever.
               </Text>
@@ -1000,7 +991,7 @@ const HushhPDA = () => {
                 fontWeight={400}
                 letterSpacing="0px"
                 lineHeight="1.6"
-                color="#ffffff"
+                color="#4e4e4e"
                 mb={6}
               >
                 A smart AI that lives on your device, learns your preferences, and acts on your behalf
@@ -1012,7 +1003,7 @@ const HushhPDA = () => {
                   <Box
                     w="2"
                     h="2"
-                    bg="#ffffff"
+                    bg="#0071e3"
                     borderRadius="50%"
                     mt="1"
                     flexShrink={0}
@@ -1023,7 +1014,7 @@ const HushhPDA = () => {
                     fontWeight={400}
                     letterSpacing="0px"
                     lineHeight="1.5"
-                    color="#ffffff"
+                    color="#4e4e4e"
                   >
                     Collects and organizes your data (email, docs, receipts, habits)
                   </Text>
@@ -1033,7 +1024,7 @@ const HushhPDA = () => {
                   <Box
                     w="2"
                     h="2"
-                    bg="#ffffff"
+                    bg="#0071e3"
                     borderRadius="50%"
                     mt="1"
                     flexShrink={0}
@@ -1044,7 +1035,7 @@ const HushhPDA = () => {
                     fontWeight={400}
                     letterSpacing="0px"
                     lineHeight="1.5"
-                    color="#ffffff"
+                    color="#4e4e4e"
                   >
                     Answers your questions before you ask
                   </Text>
@@ -1054,7 +1045,7 @@ const HushhPDA = () => {
                   <Box
                     w="2"
                     h="2"
-                    bg="#ffffff"
+                    bg="#0071e3"
                     borderRadius="50%"
                     mt="1"
                     flexShrink={0}
@@ -1065,7 +1056,7 @@ const HushhPDA = () => {
                     fontWeight={400}
                     letterSpacing="0px"
                     lineHeight="1.5"
-                    color="#ffffff"
+                    color="#4e4e4e"
                   >
                     Buys things for you. Sells things you permit.
                   </Text>
@@ -1075,7 +1066,7 @@ const HushhPDA = () => {
                   <Box
                     w="2"
                     h="2"
-                    bg="#ffffff"
+                    bg="#0071e3"
                     borderRadius="50%"
                     mt="1"
                     flexShrink={0}
@@ -1086,7 +1077,7 @@ const HushhPDA = () => {
                     fontWeight={400}
                     letterSpacing="0px"
                     lineHeight="1.5"
-                    color="#ffffff"
+                    color="#4e4e4e"
                   >
                     Tracks your spend, tasks, and life — across services
                   </Text>
@@ -1096,7 +1087,7 @@ const HushhPDA = () => {
                   <Box
                     w="2"
                     h="2"
-                    bg="#ffffff"
+                    bg="#0071e3"
                     borderRadius="50%"
                     mt="1"
                     flexShrink={0}
@@ -1107,7 +1098,7 @@ const HushhPDA = () => {
                     fontWeight={400}
                     letterSpacing="0px"
                     lineHeight="1.5"
-                    color="#ffffff"
+                    color="#4e4e4e"
                   >
                     Finds offers you'll love and pays you when you share your data with consent
                   </Text>
@@ -1135,7 +1126,7 @@ const HushhPDA = () => {
                 fontWeight={600}
                 letterSpacing="0px"
                   lineHeight="normal"
-                  color="#d6d6d6"
+                  color="#4a5568"
                 >
                   Problem
                 </Heading>
@@ -1168,7 +1159,7 @@ const HushhPDA = () => {
                     fontWeight={400}
                     letterSpacing="0px"
                     lineHeight="normal"
-                color="#ffffff"
+                color="#4e4e4e"
                     // maxW="600px"
               >
                     The most powerful companies in the world are built on your data. But you don't control it. You don't profit from it. You can't even see it. We built hushh to change that — forever.
@@ -1183,7 +1174,7 @@ const HushhPDA = () => {
                     fontWeight={400}
                     letterSpacing="0px"
                     lineHeight="normal"
-                    color="#ffffff"
+                    color="#4e4e4e"
                     // maxW="600px"
                     mb={6}
                   >
@@ -1196,7 +1187,7 @@ const HushhPDA = () => {
                       <Box
                         w="1"
                         h="1"
-                        bg="#ffffff"
+                        bg="#0071e3"
                         borderRadius="50%"
                         mt="3"
                         flexShrink={0}
@@ -1207,7 +1198,7 @@ const HushhPDA = () => {
                         fontWeight={400}
                         letterSpacing="0px"
                         lineHeight="normal"
-                        color="#ffffff"
+                        color="#4e4e4e"
                       >
                         Collects and organizes your data (email, docs, receipts, habits)
                       </Text>
@@ -1217,7 +1208,7 @@ const HushhPDA = () => {
                       <Box
                         w="1"
                         h="1"
-                        bg="#ffffff"
+                        bg="#0071e3"
                         borderRadius="50%"
                         mt="3"
                         flexShrink={0}
@@ -1228,7 +1219,7 @@ const HushhPDA = () => {
                         fontWeight={400}
                         letterSpacing="0px"
                         lineHeight="normal"
-                        color="#ffffff"
+                        color="#4e4e4e"
                       >
                         Answers your questions before you ask
                       </Text>
@@ -1238,7 +1229,7 @@ const HushhPDA = () => {
                       <Box
                         w="1"
                         h="1"
-                        bg="#ffffff"
+                        bg="#0071e3"
                         borderRadius="50%"
                         mt="3"
                         flexShrink={0}
@@ -1249,7 +1240,7 @@ const HushhPDA = () => {
                         fontWeight={400}
                         letterSpacing="0px"
                         lineHeight="normal"
-                        color="#ffffff"
+                        color="#4e4e4e"
                       >
                         Buys things for you. Sells things you permit.
                       </Text>
@@ -1259,7 +1250,7 @@ const HushhPDA = () => {
                       <Box
                         w="1"
                         h="1"
-                        bg="#ffffff"
+                        bg="#0071e3"
                         borderRadius="50%"
                         mt="3"
                         flexShrink={0}
@@ -1270,7 +1261,7 @@ const HushhPDA = () => {
                         fontWeight={400}
                         letterSpacing="0px"
                         lineHeight="normal"
-                        color="#ffffff"
+                        color="#4e4e4e"
                       >
                         Tracks your spend, tasks, and life — across services
                       </Text>
@@ -1280,7 +1271,7 @@ const HushhPDA = () => {
                       <Box
                         w="1"
                         h="1"
-                        bg="#ffffff"
+                        bg="#0071e3"
                         borderRadius="50%"
                         mt="3"
                         flexShrink={0}
@@ -1291,7 +1282,7 @@ const HushhPDA = () => {
                         fontWeight={400}
                         letterSpacing="0px"
                         lineHeight="normal"
-                        color="#ffffff"
+                        color="#4e4e4e"
                       >
                         Finds offers you'll love and pays you when you share your data with consent
                       </Text>
@@ -1307,8 +1298,8 @@ const HushhPDA = () => {
       {/* Product Page 4 - Use Cases Section */}
       <Box
         minH={{ base: "100vh", md: "100vh" }}
-        bg="#000000"
-        color="white"
+        bg="gray.50"
+        color="black"
         py={{ base: 12, md: 24 }}
         display="flex"
         alignItems="center"
@@ -1325,8 +1316,7 @@ const HushhPDA = () => {
                   fontWeight={600}
                   letterSpacing="0px"
                   lineHeight="1.2"
-                  color="#d6d6d6"
-                  textShadow="0 0 1px rgba(255,255,255,0.2)"
+                  color="#4a5568"
                 >
                   Old vs.
                 </Heading>
@@ -1480,7 +1470,7 @@ const HushhPDA = () => {
                     key={index}
                     w={{ base: "6", sm: "8", md: "12" }}
                     h={{ base: "3", sm: "4", md: "6" }}
-                    bg={index < 2 ? "#ffffff" : index < 4 ? "#888888" : "#444444"}
+                    bg={index < 2 ? "#0071e3" : index < 4 ? "#888888" : "#444444"}
                     clipPath="polygon(0 0, calc(100% - 6px) 0, 100% 50%, calc(100% - 6px) 100%, 0 100%, 6px 50%)"
                     opacity={index < 2 ? 1 : index < 4 ? 0.7 : 0.4}
                   />
@@ -1494,8 +1484,8 @@ const HushhPDA = () => {
       {/* Product Page 5 - Why Different Section with iPhone Mockups */}
       <Box
         minH={{ base: "100vh", md: "100vh" }}
-        bg="#000000"
-        color="white"
+        bg="white"
+        color="black"
         py={{ base: 12, md: 24 }}
       >
         <Container maxW="1723px" px={{ base: 4, md: 0 }}>
@@ -1510,7 +1500,7 @@ const HushhPDA = () => {
                 fontWeight={600}
                 letterSpacing="0px"
                 lineHeight="1.2"
-                className="gradient"
+                color={'#000000'}
               >
                 Why is hushh Different
               </Heading>
@@ -1521,7 +1511,7 @@ const HushhPDA = () => {
                 fontWeight={600}
                 letterSpacing="0px"
                 lineHeight="1.4"
-                color="#ffffff"
+                color="#4e4e4e"
                 maxW="100%"
               >
                 We're not just another AI app.
@@ -1544,24 +1534,24 @@ const HushhPDA = () => {
 
               <List spacing={3} mt={6} fontSize={{ base: "sm", md: "md" }} w="full" maxW="400px">
                 <ListItem display="flex" alignItems="flex-start">
-                  <Text color="white" mr={3} fontSize={{ base: "md", md: "lg" }}>✓</Text>
-                  <Text textAlign="left">Built by former Google AI & Cloud leaders</Text>
+                  <Text color="#0071e3" mr={3} fontSize={{ base: "md", md: "lg" }}>✓</Text>
+                  <Text textAlign="left" color="black">Built by former Google AI & Cloud leaders</Text>
                 </ListItem>
                 <ListItem display="flex" alignItems="flex-start">
-                  <Text color="white" mr={3} fontSize={{ base: "md", md: "lg" }}>✓</Text>
-                  <Text textAlign="left">Runs on consent-first infrastructure</Text>
+                  <Text color="#0071e3" mr={3} fontSize={{ base: "md", md: "lg" }}>✓</Text>
+                  <Text textAlign="left" color="black">Runs on consent-first infrastructure</Text>
                 </ListItem>
                 <ListItem display="flex" alignItems="flex-start">
-                  <Text color="white" mr={3} fontSize={{ base: "md", md: "lg" }}>✓</Text>
-                  <Text textAlign="left">Designed with human psychology, not just tech</Text>
+                  <Text color="#0071e3" mr={3} fontSize={{ base: "md", md: "lg" }}>✓</Text>
+                  <Text textAlign="left" color="black">Designed with human psychology, not just tech</Text>
                 </ListItem>
                 <ListItem display="flex" alignItems="flex-start">
-                  <Text color="white" mr={3} fontSize={{ base: "md", md: "lg" }}>✓</Text>
-                  <Text textAlign="left">Monetization powered by you, not advertisers</Text>
+                  <Text color="#0071e3" mr={3} fontSize={{ base: "md", md: "lg" }}>✓</Text>
+                  <Text textAlign="left" color="black">Monetization powered by you, not advertisers</Text>
                 </ListItem>
                 <ListItem display="flex" alignItems="flex-start">
-                  <Text color="white" mr={3} fontSize={{ base: "md", md: "lg" }}>✓</Text>
-                  <Text textAlign="left">Powered by open protocols like A2A, MCP, and ADK</Text>
+                  <Text color="#0071e3" mr={3} fontSize={{ base: "md", md: "lg" }}>✓</Text>
+                  <Text textAlign="left" color="black">Powered by open protocols like A2A, MCP, and ADK</Text>
                 </ListItem>
               </List>
             </VStack>
@@ -1634,7 +1624,7 @@ const HushhPDA = () => {
                 transform="translate(-50%, -50%)"
                 w={{ base: "450px", sm: "500px" }}
                 h={{ base: "450px", sm: "500px" }}
-                bgGradient="radial(circle, rgba(187, 98, 252, 0.6) 0%, rgba(218, 75, 122, 0.5) 40%, transparent 70%)"
+                bgGradient="radial(circle, rgba(0, 113, 227, 0.1) 0%, rgba(187, 98, 252, 0.08) 40%, transparent 70%)"
                 borderRadius="50%"
                 filter="blur(60px)"
                 zIndex={0}
@@ -1717,7 +1707,7 @@ const HushhPDA = () => {
                   transform="translate(-50%, -50%)"
                   w={{ base: "400px", md: "600px", lg: "800px" }}
                   h={{ base: "400px", md: "600px", lg: "800px" }}
-                  bgGradient="radial(circle, rgba(187, 98, 252, 0.4) 0%, rgba(218, 75, 122, 0.3) 40%, transparent 70%)"
+                  bgGradient="radial(circle, rgba(0, 113, 227, 0.1) 0%, rgba(187, 98, 252, 0.08) 40%, transparent 70%)"
                   borderRadius="50%"
                   filter="blur(60px)"
                   zIndex={0}
@@ -1735,7 +1725,7 @@ const HushhPDA = () => {
                   fontWeight={600}
                   letterSpacing="0px"
                   lineHeight={{ base: "55px", md: "90px" }}
-                 className="gradient"
+                 color={'#000000'}
                 >
                   Why is hushh
                    
@@ -1745,7 +1735,7 @@ const HushhPDA = () => {
                   fontWeight={600}
                   letterSpacing="0px"
                   lineHeight={{ base: "55px", md: "90px" }}
-                 className="gradient">
+                 color={'#000000'}>
                   Different</Text>
 
                 <Text
@@ -1754,7 +1744,7 @@ const HushhPDA = () => {
                   fontWeight={600}
                   letterSpacing="0px"
                   lineHeight={'normal'}
-                  color="#ffffff"
+                  color="#4e4e4e"
                   maxW="893px"
                 >
                   We're not just another AI app.
@@ -1775,24 +1765,24 @@ const HushhPDA = () => {
                 </Text>
                 <List spacing={2} mt={4} fontSize={{base:"16px",md:"24px",lg:"32px"}}>
                     <ListItem display="flex" alignItems="center">
-                      <Text color="white" mr={3} fontSize={{base:"20px",md:"2rem",lg:"2.5rem"}}>✓</Text>
-                      <Text>Built by former Google AI & Cloud leaders</Text>
+                      <Text color="#0071e3" mr={3} fontSize={{base:"20px",md:"2rem",lg:"2.5rem"}}>✓</Text>
+                      <Text color="black">Built by former Google AI & Cloud leaders</Text>
                     </ListItem>
                     <ListItem display="flex" alignItems="center">
-                      <Text color="white" mr={3} fontSize={{base:"20px",md:"2rem",lg:"2.5rem"}}>✓</Text>
-                      <Text>Runs on consent-first infrastructure</Text>
+                      <Text color="#0071e3" mr={3} fontSize={{base:"20px",md:"2rem",lg:"2.5rem"}}>✓</Text>
+                      <Text color="black">Runs on consent-first infrastructure</Text>
                     </ListItem>
                     <ListItem display="flex" alignItems="center">
-                      <Text color="white" mr={3} fontSize={{base:"20px",md:"2rem",lg:"2.5rem"}}>✓</Text>
-                      <Text>Designed with human psychology, not just tech</Text>
+                      <Text color="#0071e3" mr={3} fontSize={{base:"20px",md:"2rem",lg:"2.5rem"}}>✓</Text>
+                      <Text color="black">Designed with human psychology, not just tech</Text>
                     </ListItem>
                     <ListItem display="flex" alignItems="center">
-                      <Text color="white" mr={3} fontSize={{base:"20px",md:"2rem",lg:"2.5rem"}}>✓</Text>
-                      <Text>Monetization powered by you, not advertisers</Text>
+                      <Text color="#0071e3" mr={3} fontSize={{base:"20px",md:"2rem",lg:"2.5rem"}}>✓</Text>
+                      <Text color="black">Monetization powered by you, not advertisers</Text>
                     </ListItem>
                     <ListItem display="flex" alignItems="center">
-                      <Text color="white" mr={3} fontSize={{base:"20px",md:"2rem",lg:"2.5rem"}}>✓</Text>
-                      <Text>Powered by open protocols like A2A, MCP, and ADK</Text>
+                      <Text color="#0071e3" mr={3} fontSize={{base:"20px",md:"2rem",lg:"2.5rem"}}>✓</Text>
+                      <Text color="black">Powered by open protocols like A2A, MCP, and ADK</Text>
                     </ListItem>
                   </List>
               </VStack>
@@ -1802,16 +1792,16 @@ const HushhPDA = () => {
       </Box>
 
       {/* Product Page 6 - Trust & Privacy First */}
-      <Box minH="100vh" bg="#000" color="black" py={0}>
+      <Box minH="100vh" bg="gray.50" color="black" py={0}>
         <Container maxW="1723px" px={0}>
           <Grid
             templateColumns={{ base: "1fr", lg: "2fr 1.5fr",md:"2fr 1.7fr" }}
             minH="100vh"
             w="full"
           >
-            {/* Left: Black background, centered content */}
+            {/* Left: White background, centered content */}
             <GridItem
-              bg="#000"
+              bg="white"
               display="flex"
               flexDirection="column"
               alignItems="center"
@@ -1823,7 +1813,7 @@ const HushhPDA = () => {
                   as="h2"
                   fontSize={{ base: "2xl", sm: "3xl", md: "6xl", lg: "7xl" }}
                   fontWeight={700}
-                  color="#E0E0E0"
+                  color="black"
                   textAlign="center"
                   mb={{ base: 4, md: 8 }}
                   lineHeight={1.1}
@@ -1834,29 +1824,29 @@ const HushhPDA = () => {
                 <SimpleGrid columns={{ base: 1, md: 2 }} spacingY={10} spacingX={8} w="full">
                   {/* Feature 1 */}
                   <VStack spacing={3} align="center">
-                    <svg width="32" height="36" viewBox="0 0 40 45" fill="none"><path d="M16.25 29.25H23.75L22.3125 21.9937C23.1458 21.6187 23.8021 21.075 24.2812 20.3625C24.7604 19.65 25 18.8625 25 18C25 16.7625 24.5104 15.7031 23.5312 14.8219C22.5521 13.9406 21.375 13.5 20 13.5C18.625 13.5 17.4479 13.9406 16.4688 14.8219C15.4896 15.7031 15 16.7625 15 18C15 18.8625 15.2396 19.65 15.7188 20.3625C16.1979 21.075 16.8542 21.6187 17.6875 21.9937L16.25 29.25ZM20 45C14.2083 43.6875 9.42708 40.6969 5.65625 36.0281C1.88542 31.3594 0 26.175 0 20.475V6.75L20 0L40 6.75V20.475C40 26.175 38.1146 31.3594 34.3438 36.0281C30.5729 40.6969 25.7917 43.6875 20 45ZM20 40.275C24.3333 39.0375 27.9167 36.5625 30.75 32.85C33.5833 29.1375 35 25.0125 35 20.475V9.84375L20 4.78125L5 9.84375V20.475C5 25.0125 6.41667 29.1375 9.25 32.85C12.0833 36.5625 15.6667 39.0375 20 40.275Z" fill="white"/></svg>
-                    <Text fontSize={{base:"md",md:'xl',lg:'2xl'}} color="#fff" textAlign="center" fontWeight={400}>
+                    <svg width="32" height="36" viewBox="0 0 40 45" fill="none"><path d="M16.25 29.25H23.75L22.3125 21.9937C23.1458 21.6187 23.8021 21.075 24.2812 20.3625C24.7604 19.65 25 18.8625 25 18C25 16.7625 24.5104 15.7031 23.5312 14.8219C22.5521 13.9406 21.375 13.5 20 13.5C18.625 13.5 17.4479 13.9406 16.4688 14.8219C15.4896 15.7031 15 16.7625 15 18C15 18.8625 15.2396 19.65 15.7188 20.3625C16.1979 21.075 16.8542 21.6187 17.6875 21.9937L16.25 29.25ZM20 45C14.2083 43.6875 9.42708 40.6969 5.65625 36.0281C1.88542 31.3594 0 26.175 0 20.475V6.75L20 0L40 6.75V20.475C40 26.175 38.1146 31.3594 34.3438 36.0281C30.5729 40.6969 25.7917 43.6875 20 45ZM20 40.275C24.3333 39.0375 27.9167 36.5625 30.75 32.85C33.5833 29.1375 35 25.0125 35 20.475V9.84375L20 4.78125L5 9.84375V20.475C5 25.0125 6.41667 29.1375 9.25 32.85C12.0833 36.5625 15.6667 39.0375 20 40.275Z" fill="#0071e3"/></svg>
+                    <Text fontSize={{base:"md",md:'xl',lg:'2xl'}} color="black" textAlign="center" fontWeight={400}>
                       End-to-end encrypted<br/>personal data vault
                     </Text>
                   </VStack>
                   {/* Feature 2 */}
                   <VStack spacing={3} align="center">
-                    <svg width="36" height="36" viewBox="0 0 45 45" fill="none"><path d="M3.75 16.875V9.375C3.75 8.34375 4.11719 7.46094 4.85156 6.72656C5.58594 5.99219 6.46875 5.625 7.5 5.625H37.5C38.5312 5.625 39.4141 5.99219 40.1484 6.72656C40.8828 7.46094 41.25 8.34375 41.25 9.375V16.875H37.5V9.375H7.5V16.875H3.75ZM7.5 33.75C6.46875 33.75 5.58594 33.3828 4.85156 32.6484C4.11719 31.9141 3.75 31.0312 3.75 30V20.625H7.5V30H37.5V20.625H41.25V30C41.25 31.0312 40.8828 31.9141 40.1484 32.6484C39.4141 33.3828 38.5312 33.75 37.5 33.75H7.5ZM1.875 39.375V35.625H43.125V39.375H1.875ZM3.75 20.625V16.875H15C15.3437 16.875 15.6719 16.9688 15.9844 17.1562C16.2969 17.3438 16.5312 17.5938 16.6875 17.9062L18.8906 22.2656L24.6562 12.1875C24.8125 11.9062 25.0312 11.6797 25.3125 11.5078C25.5937 11.3359 25.9062 11.25 26.25 11.25C26.5937 11.25 26.9219 11.3359 27.2344 11.5078C27.5469 11.6797 27.7812 11.9375 27.9375 12.2812L30.2344 16.875H41.25V20.625H29.0625C28.7187 20.625 28.3906 20.5391 28.0781 20.3672C27.7656 20.1953 27.5312 19.9375 27.375 19.5938L26.1562 17.1094L20.3906 27.1875C20.2344 27.5 20 27.7344 19.6875 27.8906C19.375 28.0469 19.0469 28.125 18.7031 28.125C18.3594 28.125 18.0391 28.0312 17.7422 27.8438C17.4453 27.6562 17.2187 27.4062 17.0625 27.0938L13.8281 20.625H3.75Z" fill="white"/></svg>
-                    <Text fontSize={{base:"md",md:'xl',lg:'2xl'}} color="#fff" textAlign="center" fontWeight={400}>
+                    <svg width="36" height="36" viewBox="0 0 45 45" fill="none"><path d="M3.75 16.875V9.375C3.75 8.34375 4.11719 7.46094 4.85156 6.72656C5.58594 5.99219 6.46875 5.625 7.5 5.625H37.5C38.5312 5.625 39.4141 5.99219 40.1484 6.72656C40.8828 7.46094 41.25 8.34375 41.25 9.375V16.875H37.5V9.375H7.5V16.875H3.75ZM7.5 33.75C6.46875 33.75 5.58594 33.3828 4.85156 32.6484C4.11719 31.9141 3.75 31.0312 3.75 30V20.625H7.5V30H37.5V20.625H41.25V30C41.25 31.0312 40.8828 31.9141 40.1484 32.6484C39.4141 33.3828 38.5312 33.75 37.5 33.75H7.5ZM1.875 39.375V35.625H43.125V39.375H1.875ZM3.75 20.625V16.875H15C15.3437 16.875 15.6719 16.9688 15.9844 17.1562C16.2969 17.3438 16.5312 17.5938 16.6875 17.9062L18.8906 22.2656L24.6562 12.1875C24.8125 11.9062 25.0312 11.6797 25.3125 11.5078C25.5937 11.3359 25.9062 11.25 26.25 11.25C26.5937 11.25 26.9219 11.3359 27.2344 11.5078C27.5469 11.6797 27.7812 11.9375 27.9375 12.2812L30.2344 16.875H41.25V20.625H29.0625C28.7187 20.625 28.3906 20.5391 28.0781 20.3672C27.7656 20.1953 27.5312 19.9375 27.375 19.5938L26.1562 17.1094L20.3906 27.1875C20.2344 27.5 20 27.7344 19.6875 27.8906C19.375 28.0469 19.0469 28.125 18.7031 28.125C18.3594 28.125 18.0391 28.0312 17.7422 27.8438C17.4453 27.6562 17.2187 27.4062 17.0625 27.0938L13.8281 20.625H3.75Z" fill="#0071e3"/></svg>
+                    <Text fontSize={{base:"md",md:'xl',lg:'2xl'}} color="black" textAlign="center" fontWeight={400}>
                       On-device preference<br/>learning
                     </Text>
                   </VStack>
                   {/* Feature 3 */}
                   <VStack spacing={3} align="center">
-                    <svg width="36" height="36" viewBox="0 0 45 45" fill="none"><path d="M7.5 37.5V16.875H15V37.5H7.5ZM18.75 37.5V18.75L26.25 26.25V37.5H18.75ZM26.25 20.9063L18.75 13.4063V7.5H26.25V20.9063ZM37.5 32.1563L30 24.6563V24.375H37.5V32.1563ZM37.0781 42.4219L2.57812 7.92188L5.25 5.25L39.75 39.75L37.0781 42.4219Z" fill="white"/></svg>
-                    <Text fontSize={{base:"md",md:'xl',lg:'2xl'}} color="#fff" textAlign="center" fontWeight={400}>
+                    <svg width="36" height="36" viewBox="0 0 45 45" fill="none"><path d="M7.5 37.5V16.875H15V37.5H7.5ZM18.75 37.5V18.75L26.25 26.25V37.5H18.75ZM26.25 20.9063L18.75 13.4063V7.5H26.25V20.9063ZM37.5 32.1563L30 24.6563V24.375H37.5V32.1563ZM37.0781 42.4219L2.57812 7.92188L5.25 5.25L39.75 39.75L37.0781 42.4219Z" fill="#0071e3"/></svg>
+                    <Text fontSize={{base:"md",md:'xl',lg:'2xl'}} color="black" textAlign="center" fontWeight={400}>
                       No data is shared without<br/>your opt-in
                     </Text>
                   </VStack>
                   {/* Feature 4 */}
                   <VStack spacing={3} align="center">
-                    <svg width="36" height="36" viewBox="0 0 45 45" fill="none"><path d="M22.5 41.25C17.6562 41.25 13.4531 39.6406 9.89062 36.4219C6.32812 33.2031 4.3125 29.1875 3.84375 24.375H7.64062C8.10938 28.1562 9.75781 31.2891 12.5859 33.7734C15.4141 36.2578 18.7188 37.5 22.5 37.5C26.6875 37.5 30.2344 36.0469 33.1406 33.1406C36.0469 30.2344 37.5 26.6875 37.5 22.5C37.5 18.3125 36.0469 14.7656 33.1406 11.8594C30.2344 8.95312 26.6875 7.5 22.5 7.5C19.8125 7.5 17.3203 8.16406 15.0234 9.49219C12.7266 10.8203 10.9062 12.6562 9.5625 15H15V18.75H4.125C5.03125 14.375 7.20312 10.7812 10.6406 7.96875C14.0781 5.15625 18.0312 3.75 22.5 3.75C25.0938 3.75 27.5312 4.24219 29.8125 5.22656C32.0938 6.21094 34.0781 7.54688 35.7656 9.23438C37.4531 10.9219 38.7891 12.9062 39.7734 15.1875C40.7578 17.4688 41.25 19.9062 41.25 22.5C41.25 25.0938 40.7578 27.5312 39.7734 29.8125C38.7891 32.0938 37.4531 34.0781 35.7656 35.7656C34.0781 37.4531 32.0938 38.7891 29.8125 39.7734C27.5312 40.7578 25.0938 41.25 22.5 41.25ZM27.75 30.375L20.625 23.25V13.125H24.375V21.75L30.375 27.75L27.75 30.375Z" fill="white"/></svg>
-                      <Text fontSize={{base:"md",md:'xl',lg:'2xl'}} color="#fff" textAlign="center" fontWeight={400}>
+                    <svg width="36" height="36" viewBox="0 0 45 45" fill="none"><path d="M22.5 41.25C17.6562 41.25 13.4531 39.6406 9.89062 36.4219C6.32812 33.2031 4.3125 29.1875 3.84375 24.375H7.64062C8.10938 28.1562 9.75781 31.2891 12.5859 33.7734C15.4141 36.2578 18.7188 37.5 22.5 37.5C26.6875 37.5 30.2344 36.0469 33.1406 33.1406C36.0469 30.2344 37.5 26.6875 37.5 22.5C37.5 18.3125 36.0469 14.7656 33.1406 11.8594C30.2344 8.95312 26.6875 7.5 22.5 7.5C19.8125 7.5 17.3203 8.16406 15.0234 9.49219C12.7266 10.8203 10.9062 12.6562 9.5625 15H15V18.75H4.125C5.03125 14.375 7.20312 10.7812 10.6406 7.96875C14.0781 5.15625 18.0312 3.75 22.5 3.75C25.0938 3.75 27.5312 4.24219 29.8125 5.22656C32.0938 6.21094 34.0781 7.54688 35.7656 9.23438C37.4531 10.9219 38.7891 12.9062 39.7734 15.1875C40.7578 17.4688 41.25 19.9062 41.25 22.5C41.25 25.0938 40.7578 27.5312 39.7734 29.8125C38.7891 32.0938 37.4531 34.0781 35.7656 35.7656C34.0781 37.4531 32.0938 38.7891 29.8125 39.7734C27.5312 40.7578 25.0938 41.25 22.5 41.25ZM27.75 30.375L20.625 23.25V13.125H24.375V21.75L30.375 27.75L27.75 30.375Z" fill="#0071e3"/></svg>
+                      <Text fontSize={{base:"md",md:'xl',lg:'2xl'}} color="black" textAlign="center" fontWeight={400}>
                       Clear audit logs for every action
                     </Text>
                   </VStack>
@@ -1864,7 +1854,7 @@ const HushhPDA = () => {
                 {/* Bottom message */}
                 <Text
                   fontSize={{base:"md",md:'xl',lg:'2xl'}}
-                  color="#fff"
+                  color="black"
                   textAlign="center"
                   mt={10}
                   fontWeight={400}
@@ -1926,8 +1916,8 @@ const HushhPDA = () => {
       {/* Product Page 7 - Developer CTA Section */}
       <Box
         minH={{ base: "100vh", md: "976px" }}
-        bg="#000000"
-        color="white"
+        bg="white"
+        color="black"
         py={{ base: 12, md: 24 }}
       >
         <Container maxW="1723px" px={{ base: 4, md: 0 }}>
@@ -1939,10 +1929,7 @@ const HushhPDA = () => {
               fontWeight={600}
               letterSpacing="0px"
               lineHeight="1.2"
-              bgGradient="linear(to-r, #ffffff 27.1%, #999999 100%)"
-              bgClip="text"
-              stroke="1px solid"
-              strokeColor="linear-gradient(-40.92deg, #ffffff 8.92%, #ffffff 24.19%, #ffffff 100%)"
+              color="black"
               maxW="100%"
             >
               Developer and Partner CTA
@@ -1968,7 +1955,7 @@ const HushhPDA = () => {
                 fontWeight={300}
                 letterSpacing="0px"
                 lineHeight="1.5"
-                color="#ffffff"
+                color="#4e4e4e"
                 textAlign="center"
               >
                 Are you a dev, creator, or data agent architect?
@@ -1980,7 +1967,7 @@ const HushhPDA = () => {
                 fontWeight={300}
                 letterSpacing="0px"
                 lineHeight="1.5"
-                color="#ffffff"
+                color="#4e4e4e"
                 textAlign="center"
               >
                 Use our open tools to build AI agents that plug into hushh's consent-first data vault, <br/> memory graph, and monetization APIs.
@@ -2011,7 +1998,7 @@ const HushhPDA = () => {
                     <Text
                     fontSize={{ base: "lg", sm: "lg", md: "2xl", lg: "2xl" }}
                     fontFamily="Figtree"
-                      fontWeight={300}
+                      fontWeight={500}
                       letterSpacing="0px"
                       lineHeight="1.4"
                       bgGradient="linear(to-r, #da4b7a 0%, #bb62fc 100%)"
@@ -2026,7 +2013,7 @@ const HushhPDA = () => {
                     <Text
                       fontSize={{ base: "lg", sm: "lg", md: "2xl", lg: "2xl" }}
                       fontFamily="Figtree"
-                      fontWeight={300}
+                      fontWeight={500}
                       letterSpacing="0px"
                       lineHeight="1.4"
                       bgGradient="linear(to-r, #da4b7a 0%, #bb62fc 100%)"
@@ -2041,7 +2028,7 @@ const HushhPDA = () => {
                     <Text
                       fontSize={{ base: "lg", sm: "lg", md: "2xl", lg: "2xl" }}
                       fontFamily="Figtree"
-                      fontWeight={300}
+                      fontWeight={500}
                       letterSpacing="0px"
                       lineHeight="1.4"
                       bgGradient="linear(to-r, #da4b7a 0%, #bb62fc 100%)"
