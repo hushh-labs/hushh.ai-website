@@ -128,7 +128,7 @@ const faqData = {
     },
     {
       question: "Contact Number",
-      answer: "call +14252969050",
+      answer: "call (888) 462-1726",
     },
     {
       question:"Headquarters",

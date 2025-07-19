@@ -144,7 +144,7 @@ const NewLandingPage = () => {
               px="28px"
               py="15px"
               justifyContent="center"
-              onClick={() => router.push("/contact-us")}
+              onClick={() => router.push("https://apps.apple.com/in/app/hushh-app/id6498471189")}
               alignItems="center"
               fontSize={{ base: "lg", md: "xl" }}
               fontWeight="semibold"
@@ -224,7 +224,7 @@ const NewLandingPage = () => {
                     fontSize={{ base: "lg", md: "xl" }}
                     mr={3}
                   />
-                  05 Verified Apple iOS Users Only
+                  iOS Verified Apple iOS Users Only
                 </ListItem>
                 
                 <ListItem

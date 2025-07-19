@@ -236,7 +236,7 @@ import ContentWrapper from "../layout/ContentWrapper";
               Email: press@hushh.ai
             </Text> */}
             {/* <Text fontSize={{ base: "md", md: "lg" }}>
-              Phone: +14252969050 
+              Phone: (888) 462-1726 
             </Text> */}
             <Link
               href="https://www.hushh.ai"

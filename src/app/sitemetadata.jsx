@@ -18,7 +18,7 @@ export const siteMetadata = {
   dribbble: 'https://www.hushh.ai',
   locale: 'en-US',
   keywords: 'data privacy, data monetization, user-controlled data, digital identity, personalized experiences, luxury consumers, AI-powered personalization, privacy-preserving technology, decentralized data, ethical advertising, data marketplace, human-AI interaction',
-  phoneNumber: '+14252969050',
+  phoneNumber: '(888) 462-1726',
   analytics: {
     googleAnalyticsId: 'G-1PDGMHH7CL',
   },
