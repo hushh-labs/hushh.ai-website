@@ -311,7 +311,7 @@ const VerifiediOSUserSection = () => {
                 <Text fontSize={{ base: "lg", md: "xl" }} color="black">
                   You initiate a smart request; your personal agent then privately checks your data, not algorithms. Trusted brand agents respond through your agent, enabling you to choose products securely and effortlessly from curated options.
                 </Text>
-                <Button bg="black" color="white" borderRadius="full" px={8} h="60px" _hover={{ bg: "#333" }} onClick={() => router.push("https://calendly.com/hushh/30min?month=2025-07")}>
+                <Button bg="black" color="white" borderRadius="full" px={8} h="60px" _hover={{ bg: "#333" }} onClick={() => router.push("https://docs.google.com/document/d/1eh6MF182bQgFo7AxWlKVhcBEvrpbMjiU8-cWRsS4oSg/edit?usp=sharing")}>
                   Learn More
                 </Button>
               </VStack>
@@ -329,7 +329,7 @@ const VerifiediOSUserSection = () => {
                     </Text>
                     <HStack spacing={4} wrap="wrap" justify="center">
                          <Button bg="black" color="white" borderRadius="full" px={8} h="60px" _hover={{ bg: "#333" }} onClick={() => router.push("/contact-us")}>Become a Partner</Button>
-                         <Button variant="outline" borderColor="black" color="black" borderRadius="full" px={8} h="60px" _hover={{ bg: "gray.100" }} onClick={() => router.push("https://calendly.com/hushh/30min?month=2025-07")}>Book a Demo</Button>
+                         {/* <Button variant="outline" borderColor="black" color="black" borderRadius="full" px={8} h="60px" _hover={{ bg: "gray.100" }} onClick={() => router.push("https://calendly.com/hushh/30min?month=2025-07")}>Book a Demo</Button> */}
                     </HStack>
                 </VStack>
              </Grid>
