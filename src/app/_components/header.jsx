@@ -32,6 +32,7 @@ import { isMobile, isAndroid, isIOS } from 'react-device-detect';
 import { useAuth } from "../context/AuthContext";
 import UserAvatar from "./auth/UserAvatar";
 import HushhNewLogo from "../../../public/svgs/hushh_new_logo.svg"
+import { useHushhIdFlow } from "../hooks/useHushhIdFlow";
 
 
 export default function Header({backgroundColor, textColor, borderBottom}) {
@@ -61,44 +62,21 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
   // Auth context
   const { isAuthenticated, user, loading, signOut } = useAuth();
   const toast = useToast();
-  const [userExists, setUserExists] = useState(null); // null = loading, true = exists, false = doesn't exist
-
-  // Check if user exists in the system
-  const checkUserExists = async () => {
-    try {
-      const response = await fetch(`https://hushh-api-53407187172.us-central1.run.app/api/check-user?email=${user.email}`);
-      
-      if (response.ok) {
-        const data = await response.json();
-        // Check if user exists based on the API response message
-        return data.message === "User exists";
-      }
-      return false;
-    } catch (error) {
-      console.error('Error checking user existence:', error);
-      return false;
-    }
-  };
-
-  // Check user existence when component mounts or user changes
-  useEffect(() => {
-    if (user?.email) {
-      checkUserExists().then(exists => {
-        setUserExists(exists);
-      });
-    }
-  }, [user?.email]);
+  
+  // Use our reusable authentication flow hook for consistent user status checking
+  const { 
+    navigateToProfile, 
+    navigateToRegistration,
+    userExists // Use centralized user existence state
+  } = useHushhIdFlow();
 
   // Handle sign out for mobile
   const handleSignOut = async () => {
     try {
-      // Reset user existence state immediately
-      setUserExists(null);
-      
       // Close mobile menu immediately
       setIsMenuOpen(false);
       
-      // Sign out
+      // Sign out (user existence state will be reset automatically by the hook)
       await signOut();
       
       // Navigate to home page immediately
@@ -751,9 +729,9 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                               onClick={() => {
                                 setIsMenuOpen(false);
                                 if (userExists) {
-                                  router.push('/user-profile');
+                                  navigateToProfile();
                                 } else {
-                                  router.push('/user-registration');
+                                  navigateToRegistration();
                                 }
                               }}
                               bg="rgba(255, 255, 255, 0.12)"

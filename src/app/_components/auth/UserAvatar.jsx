@@ -19,12 +19,20 @@ import { FiUser, FiLogOut, FiMail, FiSettings, FiChevronRight } from 'react-icon
 import { useAuth } from '../../context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useHushhIdFlow } from '../../hooks/useHushhIdFlow';
 
 const UserAvatar = () => {
   const { user, signOut } = useAuth();
   const toast = useToast();
   const router = useRouter();
-  const [userExists, setUserExists] = useState(null); // null = loading, true = exists, false = doesn't exist
+  
+  // Use our reusable authentication flow hook
+  const { 
+    navigateToProfile, 
+    navigateToRegistration,
+    isCheckingUser,
+    userExists // Use centralized user existence state
+  } = useHushhIdFlow();
 
   // Apple-inspired color values
   const menuBg = useColorModeValue('rgba(255, 255, 255, 0.95)', 'rgba(30, 30, 30, 0.95)');
@@ -34,38 +42,9 @@ const UserAvatar = () => {
   const itemHoverBg = useColorModeValue('rgba(0, 0, 0, 0.04)', 'rgba(255, 255, 255, 0.08)');
   const avatarBg = useColorModeValue('linear-gradient(135deg, #007AFF, #5E5CE6)', 'linear-gradient(135deg, #007AFF, #5E5CE6)');
 
-  // Check if user exists in the system
-  const checkUserExists = async () => {
-    try {
-      const response = await fetch(`https://hushh-api-53407187172.us-central1.run.app/api/check-user?email=${user.email}`);
-      
-      if (response.ok) {
-        const data = await response.json();
-        // Check if user exists based on the API response message
-        return data.message === "User exists";
-      }
-      return false;
-    } catch (error) {
-      console.error('Error checking user existence:', error);
-      return false;
-    }
-  };
-
-  // Check user existence when component mounts or user changes
-  useEffect(() => {
-    if (user?.email) {
-      checkUserExists().then(exists => {
-        setUserExists(exists);
-      });
-    }
-  }, [user?.email]);
-
   const handleSignOut = async () => {
     try {
-      // Reset user existence state immediately
-      setUserExists(null);
-      
-      // Sign out and redirect immediately
+      // Sign out and redirect immediately (user existence state will be reset automatically by the hook)
       await signOut();
       
       // Navigate to home page immediately
@@ -99,10 +78,10 @@ const UserAvatar = () => {
   const handleProfileClick = () => {
     if (userExists) {
       // User exists - go to view profile
-      router.push('/user-profile');
+      navigateToProfile();
     } else {
       // User doesn't exist - go to setup profile
-      router.push('/user-registration'); // or whatever the setup profile route is
+      navigateToRegistration();
     }
   };
 

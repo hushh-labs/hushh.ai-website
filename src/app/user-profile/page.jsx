@@ -142,8 +142,9 @@ const UserProfile = () => {
   const fetchUserProfile = async (email) => {
     try {
       setIsLoadingProfile(true);
-      console.log('Fetching user profile:', email);
+      console.log('🔍 Fetching user profile for:', email);
       
+      // Use the check-user API which returns both existence and full user data
       const response = await fetch(
         `https://hushh-api-53407187172.us-central1.run.app/api/check-user?email=${email}`,
         { headers: API_HEADERS }
@@ -151,29 +152,41 @@ const UserProfile = () => {
       
       if (response.ok) {
         const data = await response.json();
-        console.log('Profile API Response:', data);
+        console.log('✅ Profile API Response:', data);
         
-        if (data && data.length > 0) {
-          const profileData = data[0];
+        // Check if user exists and has data
+        if (data && (data.message === "User exists" || data.exists) && data.user) {
+          const profileData = data.user;
+          console.log('📝 User profile data found:', profileData);
           setUserData(profileData);
           
-          // Populate form fields for editing
+          // Populate form fields for editing using the correct field names
           setFirstName(profileData.first_name || "");
           setLastName(profileData.last_name || "");
-          setPhoneNumber(profileData.phone_number || "");
+          setPhoneNumber(profileData.phone_number || profileData.phone || "");
           setUserCoins(profileData.user_coins || 0);
           setInvestorType(profileData.investor_type || "");
           setGender(profileData.gender || "");
           setCountry(profileData.country || "");
           setCity(profileData.city || "");
           setDateOfBirth(profileData.dob || "");
-          setReasonForUsingHushh(profileData.reason_for_using || "");
+          setReasonForUsingHushh(profileData.reason_for_using_hushhTech || profileData.selected_reason_for_using_hushh || "");
+          
+          console.log('✅ Profile loaded successfully');
         } else {
           // User not found in database, redirect to registration
+          console.log('❌ User profile not found, redirecting to registration');
+          toast({
+            title: "Profile Not Found",
+            description: "Please complete your registration first.",
+            status: "warning",
+            duration: 3000,
+            isClosable: true,
+          });
           router.push('/user-registration');
         }
       } else {
-        console.error('Profile API request failed:', response.status, response.statusText);
+        console.error('❌ Profile API request failed:', response.status, response.statusText);
         toast({
           title: "Error Loading Profile",
           description: "Failed to load your profile. Please try again.",
@@ -183,7 +196,7 @@ const UserProfile = () => {
         });
       }
     } catch (error) {
-      console.error("Error fetching user profile:", error);
+      console.error("💥 Error fetching user profile:", error);
       toast({
         title: "Profile Error",
         description: `Failed to load profile: ${error.message}`,
@@ -408,7 +421,23 @@ const UserProfile = () => {
                   </Badge>
                   {/* Add Hushh ID in header */}
                   <Text color="gray.500" fontSize="sm" fontFamily="mono">
-                    ID: {userData.hushh_id || 'N/A'}
+                    <HStack spacing={2} align="center">
+                      <Icon as={FiShield} color="blue.500" />
+                      <Text fontWeight="bold" color="blue.600" fontSize="sm">
+                        Hushh ID:
+                      </Text>
+                      <Badge 
+                        colorScheme="blue" 
+                        variant="solid" 
+                        px={3} 
+                        py={1} 
+                        borderRadius="md"
+                        fontFamily="mono"
+                        fontSize="xs"
+                      >
+                        {userData.hushh_id || 'N/A'}
+                      </Badge>
+                    </HStack>
                   </Text>
                 </VStack>
               </HStack>
