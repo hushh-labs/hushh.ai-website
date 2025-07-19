@@ -61,7 +61,7 @@ const FooterComponent = () => {
               </p>
               <p className="text-lg">Manish Sainani, 2024</p>
               <p>
-                Call <a href="tel:+14252969050">+14252969050</a>
+                Call <a href="tel:(888) 462-1726">(888) 462-1726</a>
               </p>
             </div>
 
@@ -156,7 +156,7 @@ const FooterComponent = () => {
               </p>
               <p className="text-base">Manish Sainani, 2024</p>
               <p>
-                Call <a href="tel:+14252969050">+14252969050</a>
+                Call <a href="tel:(888) 462-1726">(888) 462-1726</a>
               </p>
             </div>
 
