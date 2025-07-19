@@ -40,8 +40,8 @@ const ContactUsClient = () => {
       <ContentWrapper includeHeaderSpacing={true}>
       {/* Remove the Head component as it's deprecated in App Router */}
       <Box display={'flex'}>
-        <Container minW={'100%'} textAlign={'center'} display={'flex'} flexDirection={'column'} mt={{ md:'4rem', base:'2rem'}}>
-          <Heading as={'h1'} className='gradient' my={{md:'2rem',base:'1rem'}}>Reach out to us</Heading>
+        <Container minW={'100%'} textAlign={'center'} display={'flex'} flexDirection={'column'} mt={{ md:'0', base:'0rem'}}>
+          {/* <Heading as={'h1'} className='gradient' my={{md:'2rem',base:'1rem'}}>Reach out to us</Heading> */}
           <ContactForm/>
         </Container>
       </Box> 

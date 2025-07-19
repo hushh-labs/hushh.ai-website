@@ -18,6 +18,9 @@ import {
   AlertIcon,
   AlertTitle,
   AlertDescription,
+  Grid,
+  GridItem,
+  Link,
 } from "@chakra-ui/react";
 import FooterComponent from "./FooterComponent";
 import CircelFormShadow from "../../_components/svg/circleFormShadow.svg";
@@ -218,363 +221,367 @@ export default function ContactForm() {
 
   return (
     <>
-      <div
-        className="relative"
-        style={{ backgroundColor: "#060606 !important" }}
-        id="contact-form"
-      >
-        <div className="relative z-10">
-          <Container
-            id="contact-form"
-            maxW={{ md: "74rem" }}
-            height={{ md: "667px" }}
-            p={"1rem"}
-            display={"flex"}
-            flexDirection={{ base: "column", md: "row" }}
-            bg={"#1D1D1D"}
-            mb={{ base: "0", md: "0" }}
-            zIndex={10}
+      {/* Contact Form Section */}
+      <Box bg="#f5f5f7" w="100%" m={0} p={0}>
+        <VStack spacing={8} align="center" textAlign="center" py={{ base: 12, md: 16 }} px={{ base: 4, md: 8 }}>
+          <Heading
+            as="h2"
+            fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
+            fontWeight="bold"
+            color="black"
+            lineHeight={{ base: 1.2, md: 1.25 }}
+            letterSpacing={{ base: "-0.5px", md: "-1.3px" }}
           >
-            <Box
-              p={"2rem"}
-              className="new-gradient-bg"
-              borderRadius={"0.5rem"}
-              flexDirection={"column"}
-              display={{ md: "flex", base: "none" }}
-              flex={1}
-              position={"relative"}
-            >
-              <HStack
-                textAlign={"left"}
-                alignItems={"left"}
-                flexDirection={"column"}
-                mb={{ md: "6rem", base: "2rem" }}
-              >
-                <Text
-                  color={"#FFFFFF"}
-                  fontWeight={"600"}
-                  fontSize={{ md: "3.75rem", base: "2rem" }}
-                  lineHeight={{ base: "28px", md: "55px" }}
-                  as={'h4'}
-                >
-                  Connect with Hushh
-                </Text>
-                <Text color={"#C9C9C9"}>Say something to reach out to us</Text>
-              </HStack>
-              <HStack
-                gap={{ md: "3rem", base: "0.5rem" }}
-                textAlign={"left"}
-                alignItems={"left"}
-                flexDirection={"column"}
-                color={"#FFFFFF"}
-              >
-<a href="mailto:info@hush1one.com" style={{ cursor: 'pointer' }}>
-  <Text cursor={'pointer'}>info@hush1one.com</Text>
-</a>                <a style={{cursor:'pointer'}} href="tel:+14252969050">
-                  <Text>+14252969050</Text>
-                </a>
-                <Text>
-                  Hushh.ai <br></br>
-                  1021 5th St W <br></br>
-                  Kirkland, WA 98033
-                </Text>
-              </HStack>
-              <Image
-                src={CircelFormShadow}
-                alt="CircelFormShadow"
-                style={{
-                  position: "absolute",
-                  zIndex: "7",
-                  top: "430px",
-                  right: "80px",
-                  bottom: "0",
-                }}
-              />
-              <Image
-                src={BigCircleFormShadow}
-                alt="BigCircleFormShadow"
-                style={{
-                  position: "absolute",
-                  zIndex: "7",
-                  right: "0",
-                  bottom: "0",
-                }}
-              />
-            </Box>
-            <Box
-              p={"2rem"}
-              className="new-gradient-bg"
-              borderRadius={"0.5rem"}
-              flexDirection={"column"}
-              display={{ md: "none", base: "flex" }}
-              flex={1}
-              position={"relative"}
-            >
-              <HStack
-                textAlign={"left"}
-                alignItems={"left"}
-                flexDirection={"column"}
-                mb={{ md: "6rem", base: "2rem" }}
-              >
-                <Text
-                  color={"#FFFFFF"}
-                  fontWeight={"600"}
-                  fontSize={{ md: "3.75rem", base: "2rem" }}
-                  lineHeight={{ base: "28px", md: "55px" }}
-                >
-                  Connect with hushh
-                </Text>
-                <Text color={"#C9C9C9"}>Say something to reach out to us</Text>
-              </HStack>
-              <HStack
-                gap={{ md: "3rem", base: "0.5rem" }}
-                textAlign={"left"}
-                alignItems={"left"}
-                flexDirection={"column"}
-                color={"#FFFFFF"}
-              >
-               <a href="mailto:info@hush1one.com" style={{ cursor: 'pointer' }}>
-  <Text cursor={'pointer'}>info@hush1one.com</Text>
-</a>
-<a style={{ cursor: 'pointer' }} href="tel:+14252969050">
-  <Text>+14252969050</Text>
-</a>
-                <Text>
-                  Hushh.ai <br></br>
-                  1021 5th St W <br></br>
-                  Kirkland, WA 98033
-                </Text>
-              </HStack>
-            </Box>
-            {/* Contact Form */}
-            <Box
-              p={{ md: "4rem", base: "1rem" }}
-              px={{ md: "4rem", base: "1rem" }}
-              flex={{ md: 1.75 }}
-              display={"flex"}
-              flexDirection="column"
-              // minW={{ base: "100%" }}
-            >
-              {/* Authentication Alert */}
-              {showAuthAlert && !isAuthenticated && (
-                <Alert 
-                  status="info" 
-                  bg="rgba(59, 130, 246, 0.1)" 
-                  border="1px solid rgba(59, 130, 246, 0.3)"
-                  borderRadius="lg"
-                  mb={4}
-                >
-                  <AlertIcon color="blue.400" />
-                  <Box>
-                    <AlertTitle color="blue.400" fontSize="sm">Sign in required!</AlertTitle>
-                    <AlertDescription color="white" fontSize="xs">
-                      Please sign in to submit the contact form. Your email will be automatically filled.
-                    </AlertDescription>
-                  </Box>
-                </Alert>
-              )}
-              
-              <form
-                id="form"
-                ref={form}
-                onSubmit={sendEmail}
-                style={{ color: "white", width: "100%" }}
-              >
-                <HStack
-                  display={{ base: "block", md: "flex" }}
-                  flexDirection={{ base: "column", md: "column" }}
-                  gap={{ md: "2rem", base: "1rem" }}
-                  w={"100%"}
-                >
-                  <Stack
-                    gap={{ md: "0rem", base: "0.5rem" }}
-                    mb={{ base: "1rem", md: "2rem" }}
-                    w="full"
-                  >
-                    <Input
-                      variant="unstyled"
-                      size={{ md: "sm", base: "sm" }}
-                      w="full"
-                      p={{ md: 2, base: 0 }}
-                      border={"none"}
-                      placeholder="Full Name"
-                      borderBottom="1px solid white"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      sx={{
-                        _focus: {
-                          borderBottom: "1px solid white",
-                          boxShadow: "none",
-                        },
-                      }}
-                    />
-                    {formErrors.firstName && (
-                      <Text color="red" mt={"1rem"} fontSize="xs">
-                        {formErrors.fullName}
-                      </Text>
-                    )}
-                  </Stack>
+            Reach out to us
+          </Heading>
+          <Text
+            fontSize={{ base: "lg", md: "xl" }}
+            color="black"
+            maxW={{ base: "full", md: "2xl" }}
+          >
+            Have questions about Hushh? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+          </Text>
+        </VStack>
 
-                  <Stack
-                    gap={{ md: "0rem", base: "0.5rem" }}
-                    mb={{ base: "1rem", md: "2rem" }}
-                    w="full"
-                  >
-                    <Input
-                      variant="unstyled"
-                      size={{ md: "sm", base: "sm" }}
-                      w="full"
-                      border="none"
-                      p={{ md: 2, base: 0 }}
-                      borderBottom="1px solid white"
-                      placeholder="Email"
-                      value={isAuthenticated && user?.email ? user.email : email}
-                      onChange={(e) => !isAuthenticated && setEmail(e.target.value)}
-                      readOnly={isAuthenticated}
-                      sx={{
-                        _focus: {
-                          borderBottom: "1px solid white",
-                          boxShadow: "none",
-                        },
-                        opacity: isAuthenticated ? 0.8 : 1,
-                      }}
-                    />
-                    {formErrors.email && (
-                      <Text color="red" mt={"1rem"} fontSize="xs">
-                        {formErrors.email}
-                      </Text>
-                    )}
-                  </Stack>
+        <Box w="100%" px={{ base: 4, md: 8 }} pb={{ base: 12, md: 16 }}>
+          <Box
+            bg="white"
+            borderRadius="2xl"
+            shadow="xl"
+            border="1px solid"
+            borderColor="#e2e8f0"
+            overflow="hidden"
+            maxW="container.xl"
+            mx="auto"
+          >
+            <Grid
+              templateColumns={{ base: "1fr", lg: "1fr 1.5fr" }}
+              minH={{ base: "auto", lg: "600px" }}
+            >
+              {/* Left Side - Contact Info */}
+              <GridItem>
+                <Box
+                  p={{ base: 8, md: 12 }}
+                  bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+                  h="full"
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="space-between"
+                  position="relative"
+                  overflow="hidden"
+                >
+                  {/* Background decoration */}
+                  <Box
+                    position="absolute"
+                    top="-50px"
+                    right="-50px"
+                    w="200px"
+                    h="200px"
+                    bg="rgba(255,255,255,0.1)"
+                    borderRadius="full"
+                  />
+                  <Box
+                    position="absolute"
+                    bottom="-100px"
+                    left="-50px"
+                    w="300px"
+                    h="300px"
+                    bg="rgba(255,255,255,0.05)"
+                    borderRadius="full"
+                  />
 
-                  <HStack
-                    mb={{base:"2rem",md:'0'}}
-                    py={"1rem"}
-                    display={"flex"}
-                    alignItems={"flex-start"}
-                    justifyContent={'flex-start'}
-                    textAlign={'left'}
-                    flexDirection={"column"}
-                    w={'100%'}
-                  >
-                    <Text
-                      fontWeight={"500"}
-                      fontSize={"0.75rem"}
-                      color={"white"}
-                    >
-                      Select Subject:{" "}
-                    </Text>
-                    <RadioGroup
-                      defaultValue="ProductInquiry"
-                      value={subject}
-                      onChange={(value) =>
-                        setSubject(value === subject ? null : value)
-                      }
-                    >
-                      {/* Email ope click redirect to email and same for phone number */}
-                      
-                      <HStack
-                        display={{ md: "flex", base: "flex" }}
-                        flexDirection={{ base: "column", md: "row" }}
-                        spacing={{ md: "2rem", base: "1rem" }}
-                        align={"stretch"}
+                  <VStack align="start" spacing={8} position="relative" zIndex={1}>
+                    <VStack align="start" spacing={4}>
+                      <Heading
+                        as="h3"
+                        fontSize={{ base: "2xl", md: "3xl" }}
+                        fontWeight="bold"
+                        color="white"
+                        lineHeight={1.2}
                       >
-                        <Radio
-                          colorScheme="white"
-                          name="subject"
-                          value="Explore Hushh Products"
-                          onChange={(e) => setSubject(e.target.value)}
+                        Connect with Hushh
+                      </Heading>
+                      <Text
+                        fontSize={{ base: "md", md: "lg" }}
+                        color="rgba(255,255,255,0.9)"
+                        lineHeight={1.6}
+                      >
+                        Say something to reach out to us
+                      </Text>
+                    </VStack>
+
+                    <VStack align="start" spacing={6} w="full">
+                      <HStack spacing={4} align="start">
+                        <Box
+                          w={6}
+                          h={6}
+                          bg="rgba(255,255,255,0.2)"
+                          borderRadius="full"
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="center"
+                          mt={1}
                         >
-                          <Text fontSize={"0.75rem"}>
-                            Explore Hushh Products
-                          </Text>
-                        </Radio>
-                        <Radio
-                          colorScheme="white"
-                          name="subject"
-                          value="Partner with Hushh"
-                          onChange={(e) => setSubject(e.target.value)}
-                        >
-                          <Text fontSize={"0.75rem"}>Partner with Hushh</Text>
-                        </Radio>
-                        <Radio
-                          colorScheme="white"
-                          name="subject"
-                          value="Get Support"
-                          onChange={(e) => setSubject(e.target.value)}
-                        >
-                          <Text fontSize={"0.75rem"}>Get Support</Text>
-                        </Radio>
+                          <Text color="white" fontSize="sm">✉</Text>
+                        </Box>
+                        <VStack align="start" spacing={1}>
+                          <Text color="rgba(255,255,255,0.8)" fontSize="sm">Email</Text>
+                          <Link href="mailto:info@hush1one.com">
+                            <Text 
+                              color="white" 
+                              fontWeight="medium"
+                              _hover={{ textDecoration: "underline" }}
+                            >
+                              info@hush1one.com
+                            </Text>
+                          </Link>
+                        </VStack>
                       </HStack>
-                    </RadioGroup>
-                    {formErrors.subject && (
-                      <Text color="red" fontSize="xs">
-                        {formErrors.subject}
-                      </Text>
-                    )}
-                  </HStack>
 
-                  <HStack
-                    mb={{ md: "2rem", base: "1rem" }}
-                    alignItems={"left"}
-                    flexDirection={"column"}
-                    w="full"
-                  >
-                    <Text
-                      fontWeight={"500"}
-                      fontSize={"0.75rem"}
-                      color={"white"}
-                    >
-                      Message
-                    </Text>
-                    <Textarea
-                      h={"6.25rem"}
-                      w="full"
-                      placeholder="Type your message here"
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                    />
-                    {formErrors.message && (
-                      <Text color="red" fontSize="xs">
-                        {formErrors.message}
-                      </Text>
-                    )}
-                  </HStack>
+                      <HStack spacing={4} align="start">
+                        <Box
+                          w={6}
+                          h={6}
+                          bg="rgba(255,255,255,0.2)"
+                          borderRadius="full"
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="center"
+                          mt={1}
+                        >
+                          <Text color="white" fontSize="sm">📞</Text>
+                        </Box>
+                        <VStack align="start" spacing={1}>
+                          <Text color="rgba(255,255,255,0.8)" fontSize="sm">Phone</Text>
+                          <Link href="tel:+14252969050">
+                            <Text 
+                              color="white" 
+                              fontWeight="medium"
+                              _hover={{ textDecoration: "underline" }}
+                            >
+                              +1 (425) 296-9050
+                            </Text>
+                          </Link>
+                        </VStack>
+                      </HStack>
 
-                  <HStack
-                    alignItems={"flex-start"}
-                    justifyContent="flex-end"
-                    w={"100%"}
-                  >
-                    <Button
-                      type="submit"
-                      bg={"transparent"}
-                      px={"2rem"}
-                      border={"3px solid #606060"}
-                      borderRadius={"2px"}
-                      _hover={{
-                        background:
-                          "linear-gradient(265.3deg, #E54D60 8.81%, #A342FF 94.26%)",
-                        border: "none",
-                      }}
-                      onClick={(e) => {
-                        sendEmail(e);
-                      }}
-                      color={'white'}
-                      w={{base:"full",md:'15rem'}} // Full width button
+                      <HStack spacing={4} align="start">
+                        <Box
+                          w={6}
+                          h={6}
+                          bg="rgba(255,255,255,0.2)"
+                          borderRadius="full"
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="center"
+                          mt={1}
+                        >
+                          <Text color="white" fontSize="sm">📍</Text>
+                        </Box>
+                        <VStack align="start" spacing={1}>
+                          <Text color="rgba(255,255,255,0.8)" fontSize="sm">Address</Text>
+                          <Text color="white" fontWeight="medium" lineHeight={1.5}>
+                            Hushh.ai<br />
+                            1021 5th St W<br />
+                            Kirkland, WA 98033
+                          </Text>
+                        </VStack>
+                      </HStack>
+                    </VStack>
+                  </VStack>
+                </Box>
+              </GridItem>
+
+              {/* Right Side - Contact Form */}
+              <GridItem>
+                <Box p={{ base: 8, md: 12 }}>
+                  {/* Authentication Alert */}
+                  {showAuthAlert && !isAuthenticated && (
+                    <Alert 
+                      status="info" 
+                      bg="rgba(0, 113, 227, 0.1)" 
+                      border="1px solid rgba(0, 113, 227, 0.3)"
+                      borderRadius="lg"
+                      mb={6}
                     >
-                      HUSHH IT!
-                    </Button>
-                  </HStack>
-                </HStack>
-              </form>
-            </Box>
-          </Container>
-        </div>
-      </div>
-      {/* Footer positioned normally, not absolutely */}
-      <div className="w-full">
-        <FooterComponent />
-      </div>
+                      <AlertIcon color="#0071e3" />
+                      <Box>
+                        <AlertTitle color="#0071e3" fontSize="sm">Sign in required!</AlertTitle>
+                        <AlertDescription color="black" fontSize="xs">
+                          Please sign in to submit the contact form. Your email will be automatically filled.
+                        </AlertDescription>
+                      </Box>
+                    </Alert>
+                  )}
+                  
+                  <form onSubmit={sendEmail}>
+                    <VStack spacing={6} align="stretch">
+                      {/* Full Name */}
+                      <VStack align="start" spacing={2}>
+                        <Text 
+                          fontSize="sm" 
+                          fontWeight="medium" 
+                          color="gray.700"
+                        >
+                          Full Name *
+                        </Text>
+                        <Input
+                          placeholder="Enter your full name"
+                          value={fullName}
+                          onChange={(e) => setFullName(e.target.value)}
+                          bg="gray.50"
+                          border="1px solid"
+                          borderColor="gray.200"
+                          borderRadius="lg"
+                          h={12}
+                          _placeholder={{ color: "gray.400" }}
+                          _focus={{
+                            borderColor: "#0071e3",
+                            boxShadow: "0 0 0 3px rgba(0, 113, 227, 0.1)",
+                            bg: "white"
+                          }}
+                        />
+                        {formErrors.fullName && (
+                          <Text color="red.500" fontSize="xs">
+                            {formErrors.fullName}
+                          </Text>
+                        )}
+                      </VStack>
+
+                      {/* Email */}
+                      <VStack align="start" spacing={2}>
+                        <Text 
+                          fontSize="sm" 
+                          fontWeight="medium" 
+                          color="gray.700"
+                        >
+                          Email Address *
+                        </Text>
+                        <Input
+                          type="email"
+                          placeholder="Enter your email address"
+                          value={isAuthenticated && user?.email ? user.email : email}
+                          onChange={(e) => !isAuthenticated && setEmail(e.target.value)}
+                          readOnly={isAuthenticated}
+                          bg={isAuthenticated ? "gray.100" : "gray.50"}
+                          border="1px solid"
+                          borderColor="gray.200"
+                          borderRadius="lg"
+                          h={12}
+                          _placeholder={{ color: "gray.400" }}
+                          _focus={{
+                            borderColor: "#0071e3",
+                            boxShadow: "0 0 0 3px rgba(0, 113, 227, 0.1)",
+                            bg: "white"
+                          }}
+                          opacity={isAuthenticated ? 0.8 : 1}
+                        />
+                        {formErrors.email && (
+                          <Text color="red.500" fontSize="xs">
+                            {formErrors.email}
+                          </Text>
+                        )}
+                      </VStack>
+
+                      {/* Subject Selection */}
+                      <VStack align="start" spacing={3}>
+                        <Text 
+                          fontSize="sm" 
+                          fontWeight="medium" 
+                          color="gray.700"
+                        >
+                          Select Subject
+                        </Text>
+                        <RadioGroup
+                          value={subject}
+                          onChange={(value) => setSubject(value)}
+                        >
+                          <VStack align="start" spacing={3}>
+                            <Radio value="Explore Hushh Products" colorScheme="blue">
+                              <Text fontSize="sm" color="gray.700">Explore Hushh Products</Text>
+                            </Radio>
+                            <Radio value="Partner with Hushh" colorScheme="blue">
+                              <Text fontSize="sm" color="gray.700">Partner with Hushh</Text>
+                            </Radio>
+                            <Radio value="Get Support" colorScheme="blue">
+                              <Text fontSize="sm" color="gray.700">Get Support</Text>
+                            </Radio>
+                          </VStack>
+                        </RadioGroup>
+                        {formErrors.subject && (
+                          <Text color="red.500" fontSize="xs">
+                            {formErrors.subject}
+                          </Text>
+                        )}
+                      </VStack>
+
+                      {/* Message */}
+                      <VStack align="start" spacing={2}>
+                        <Text 
+                          fontSize="sm" 
+                          fontWeight="medium" 
+                          color="gray.700"
+                        >
+                          Message
+                        </Text>
+                        <Textarea
+                          placeholder="Type your message here..."
+                          value={message}
+                          onChange={(e) => setMessage(e.target.value)}
+                          bg="gray.50"
+                          border="1px solid"
+                          borderColor="gray.200"
+                          borderRadius="lg"
+                          minH={32}
+                          resize="vertical"
+                          _placeholder={{ color: "gray.400" }}
+                          _focus={{
+                            borderColor: "#0071e3",
+                            boxShadow: "0 0 0 3px rgba(0, 113, 227, 0.1)",
+                            bg: "white"
+                          }}
+                        />
+                        {formErrors.message && (
+                          <Text color="red.500" fontSize="xs">
+                            {formErrors.message}
+                          </Text>
+                        )}
+                      </VStack>
+
+                      {/* Submit Button */}
+                      <Button
+                        type="submit"
+                        bg="#0071e3"
+                        color="white"
+                        size="lg"
+                        h={12}
+                        borderRadius="lg"
+                        fontWeight="semibold"
+                        _hover={{
+                          bg: "#005bb5",
+                          transform: "translateY(-1px)",
+                          shadow: "lg"
+                        }}
+                        _active={{
+                          bg: "#004494",
+                          transform: "translateY(0)"
+                        }}
+                        transition="all 0.2s"
+                        onClick={sendEmail}
+                      >
+                        Send Message
+                      </Button>
+                    </VStack>
+                  </form>
+                </Box>
+              </GridItem>
+            </Grid>
+          </Box>
+        </Box>
+      </Box>
+
+      {/* Footer */}
+      <FooterComponent />
     </>
   );
 }
