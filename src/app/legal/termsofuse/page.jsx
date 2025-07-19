@@ -50,7 +50,7 @@ const TermsOfUse = () => {
             </h2>
           </div>
           <div className="text-base font-semibold text-fontColor4 leading-9">
-            Updated Mar 17, 2024
+            Updated Mar 17, 2025
             <br />
             Hushone, Inc. Website Terms of Use
             <br />
@@ -448,7 +448,7 @@ const TermsOfUse = () => {
             The information contained in this web site is subject to change
             without notice.
             <br />
-            Copyright © 2021-2024 Hushone, Inc. All rights reserved.
+            Copyright © 2021-2025 Hushone, Inc. All rights reserved.
             <br />
             Hushone, Inc., 1021 5th St W, Kirkland, WA 98033, USA.
             <br />

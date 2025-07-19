@@ -50,7 +50,7 @@ const PrivacyPolicy = () => {
             </h2>
           </div>
           <div className="text-base font-semibold text-fontColor4 leading-9">
-            Updated Mar 17, 2024
+            Updated Mar 17, 2025
             <br />
             <br />
             In addition to this Privacy Policy, we provide data and privacy
