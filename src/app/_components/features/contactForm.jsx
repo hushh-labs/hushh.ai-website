@@ -222,7 +222,20 @@ export default function ContactForm() {
   return (
     <>
       {/* Contact Form Section */}
-      <Box bg="#f5f5f7" w="100%" m={0} p={0}>
+      <Box 
+        bg="#f5f5f7" 
+        w="100%" 
+        m={0} 
+        p={0}
+        sx={{
+          '& .chakra-container': {
+            paddingInlineStart: '0 !important',
+            paddingInlineEnd: '0 !important',
+            paddingLeft: '0 !important',
+            paddingRight: '0 !important',
+          }
+        }}
+      >
         <VStack spacing={8} align="center" textAlign="center" py={{ base: 12, md: 16 }} px={{ base: 4, md: 8 }}>
           <Heading
             as="h2"

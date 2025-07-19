@@ -9,9 +9,10 @@ const HeaderComponent = () => {
   const { totalBannerHeight } = useBannerHeight();
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  
+  const isContactUsPage = pathname === '/contact-us';
   const isHomePage = pathname === '/';
   const isConsentAIPage = pathname === '/consent-ai-protocol';
+
   const isPDA = pathname === '/products/personal-data-agent';
   const isHushhPDA = pathname.includes('/hushh-pda') || pathname.includes('/hushhpda') || pathname.includes('/clientside/HushhPDA') || pathname === '/products/hushh-pda';
   // Custom scroll behavior to hide/show header
@@ -37,7 +38,7 @@ const HeaderComponent = () => {
   }, [lastScrollY]);
 
   // For home page, consent-ai-protocol page, and HushhPDA page, use light background to match Figma design
-  const headerProps = (isHomePage || isConsentAIPage || isPDA || isHushhPDA) ? {
+  const headerProps = (isHomePage || isConsentAIPage || isPDA || isHushhPDA || isContactUsPage) ? {
     backgroundColor: "rgba(248, 249, 250, 0.95)", // Light background with slight transparency
     textColor: "#1A1A1A", // Dark text for light background
     borderBottom: "1px solid rgba(0, 0, 0, 0.1)" // Subtle border
