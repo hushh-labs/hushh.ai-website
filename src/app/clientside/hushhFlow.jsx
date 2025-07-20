@@ -23,7 +23,7 @@ import {
   GridItem,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { FaApple, FaFolder, FaLink, FaShieldAlt, FaUser } from 'react-icons/fa';
+import { FaApple, FaArrowRight, FaFolder, FaLink, FaShieldAlt, FaUser } from 'react-icons/fa';
 import HushhLinkBox from '../_components/svg/hushhLink/hushhLinkBox.svg'
 import Image from 'next/image';
 import HushhTrail from '../_components/svg/hushhLink/audit-trail.svg'
@@ -871,17 +871,20 @@ const HushhFlow = () => {
                         transform="translate(-50%, -50%)"
                         w={{ base: "80px", md: "100px", lg: "120px" }}
                         h={{ base: "80px", md: "100px", lg: "120px" }}
-                        bg="rgba(40,29,27,0.1)"
-                        borderRadius="full"
+                        // bg="rgba(40,29,27,0.1)"
+                        borderRadius="lg"
                         display="flex"
                         alignItems="center"
                         justifyContent="center"
                       >
-                        <Box
-                          w={{ base: "40px", md: "50px", lg: "60px" }}
-                          h={{ base: "40px", md: "50px", lg: "60px" }}
-                          bg="rgba(40,29,27,0.3)"
-                          borderRadius="full"
+                        <Image 
+                          src={require('../_components/svg/hushhFlow/user.svg')}
+                          alt="User icon"
+                          style={{ 
+                            width: '100px', 
+                            height: '100px',
+                            display: 'block'
+                          }} 
                         />
                       </Box>
                     </Box>
@@ -889,8 +892,8 @@ const HushhFlow = () => {
                     {/* User Label */}
                     <Box
                       position="absolute"
-                      bottom={{ base: "-80px", md: "-90px", lg: "-100px" }}
-                      left={{ base: "-20px", md: "-30px", lg: "-40px" }}
+                      bottom={{ base: "-80px", md: "50px", lg: "-100px" }}
+                      left={{ base: "-20px", md: "-70px", lg: "-40px" }}
                       background={'rgba(0, 113, 227, 0.09)'}
                       borderRadius="20px"
                       border="1.5px solid"
@@ -964,31 +967,18 @@ const HushhFlow = () => {
                 transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
               >
                 <Box
-                  w="60px"
+                  w="120px"
                   h="60px"
-                  borderRadius="full"
-                  bg="rgba(0,113,227,0.1)"
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
                   position="relative"
                 >
-                  <Box
-                    w="30px"
-                    h="2px"
-                    bg="#0071e3"
-                    position="relative"
-                    _after={{
-                      content: '""',
-                      position: "absolute",
-                      right: "-8px",
-                      top: "-6px",
-                      width: "0",
-                      height: "0",
-                      borderLeft: "8px solid #0071e3",
-                      borderTop: "6px solid transparent",
-                      borderBottom: "6px solid transparent",
-                    }}
+                  <Icon
+                    as={FaArrowRight}
+                    w="24px"
+                    h="24px"
+                    color="#0071e3"
                   />
                 </Box>
               </MotionBox>
@@ -1041,7 +1031,7 @@ const HushhFlow = () => {
                       
                       {/* Primary Section */}
                       <Box
-                        bg="rgba(40,29,27,0.2)"
+                        bg="#281D1B33"
                         opacity="0.5"
                         border="1px solid #000000"
                         borderRadius="16px"
@@ -1060,17 +1050,20 @@ const HushhFlow = () => {
                         transform="translate(-50%, -50%)"
                         w={{ base: "80px", md: "100px", lg: "120px" }}
                         h={{ base: "80px", md: "100px", lg: "120px" }}
-                        bg="rgba(40,29,27,0.1)"
+                        // bg="rgba(40,29,27,0.1)"
                         borderRadius="lg"
                         display="flex"
                         alignItems="center"
                         justifyContent="center"
                       >
-                        <Box
-                          w={{ base: "50px", md: "60px", lg: "70px" }}
-                          h={{ base: "30px", md: "35px", lg: "40px" }}
-                          bg="rgba(40,29,27,0.3)"
-                          borderRadius="md"
+                        <Image 
+                          src={require('../_components/svg/hushhFlow/support.svg')}
+                          alt=""
+                          style={{ 
+                            width: '100px', 
+                            height: '100px',
+                            display: 'block'
+                          }} 
                         />
                       </Box>
                     </Box>
@@ -1078,8 +1071,8 @@ const HushhFlow = () => {
                     {/* Brand Label */}
                     <Box
                       position="absolute"
-                      bottom={{ base: "-80px", md: "-90px", lg: "-100px" }}
-                      right={{ base: "-20px", md: "-30px", lg: "-40px" }}
+                      bottom={{ base: "-80px", md: "50px", lg: "-100px" }}
+                      right={{ base: "-20px", md: "160px", lg: "-40px" }}
                       borderRadius="20px"
                       background={'rgba(0, 113, 227, 0.09)'}
                       border="1.5px solid"
@@ -1112,7 +1105,7 @@ const HushhFlow = () => {
                     <Box
                       position="absolute"
                       top={{ base: "40px", md: "50px", lg: "60px" }}
-                      left={{ base: "-40px", md: "-50px", lg: "-60px" }}
+                      left={{ base: "-40px", md: "150px", lg: "-60px" }}
                       background={'rgba(0, 113, 227, 0.09)'}
                       borderRadius="20px"
                       border="1.5px solid"
