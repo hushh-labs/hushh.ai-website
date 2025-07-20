@@ -30,6 +30,7 @@ import HushhTrail from '../_components/svg/hushhLink/audit-trail.svg'
 import ConsentBasedIcon from '../_components/svg/hushhFlow/consentBasedIcon.svg'
 import TransparentRevenueIcon from '../_components/svg/hushhFlow/transparentRevenueIcon.svg'
 import ReplaceIcon from '../_components/svg/hushhFlow/replacesIcon.svg'
+// import PrivacyEarns from '../_components/svg/hushhFlow/privacyearns.svg'
 
 const MotionBox = motion(Box);
 const MotionHeading = motion(Heading);
@@ -251,6 +252,7 @@ const HushhFlow = () => {
         <Grid
           templateColumns={{ base: "1fr", lg: "1fr 1fr" }}
           minH={{ base: "auto", lg: "100vh" }}
+          // py={{md:4,base:2}}
         >
           {/* Left Side - White Background */}
           <GridItem
@@ -449,7 +451,7 @@ const HushhFlow = () => {
             justifyContent="center"
             py={{ base: 16, md: 20, lg: 24 }}
             px={{ base: 6, md: 8, lg: 12 }}
-            backgroundImage={`url('http://localhost:3845/assets/991641cebbdf9714c0f3475eda96acc252a83cce.png')`}
+            backgroundImage={`/privacyearns.svg`}
             backgroundSize="cover"
             backgroundPosition="center"
             backgroundRepeat="no-repeat"
@@ -634,7 +636,7 @@ const HushhFlow = () => {
                   as="h2"
                   fontSize={{ base: "3xl", md: "4xl", lg: "5xl", xl: "6xl" }}
                   fontWeight="bold"
-                  color="#22c55e"
+                  color="#0071E3"
                   lineHeight="shorter"
                   letterSpacing="tight"
                   fontFamily="Inter, sans-serif"
@@ -654,7 +656,7 @@ const HushhFlow = () => {
                         w="8px"
                         h="8px"
                         borderRadius="full"
-                        bg="#22c55e"
+                        bg="#FFFFFF"
                         mt="8px"
                         flexShrink={0}
                       />
@@ -680,7 +682,7 @@ const HushhFlow = () => {
                         w="8px"
                         h="8px"
                         borderRadius="full"
-                        bg="#22c55e"
+                        bg="#FFFFFF"
                         mt="8px"
                         flexShrink={0}
                       />
@@ -706,7 +708,7 @@ const HushhFlow = () => {
                         w="8px"
                         h="8px"
                         borderRadius="full"
-                        bg="#22c55e"
+                        bg="#FFFFFF"
                         mt="8px"
                         flexShrink={0}
                       />
@@ -732,7 +734,7 @@ const HushhFlow = () => {
                         w="8px"
                         h="8px"
                         borderRadius="full"
-                        bg="#22c55e"
+                        bg="#FFFFFF"
                         mt="8px"
                         flexShrink={0}
                       />
@@ -774,13 +776,13 @@ const HushhFlow = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            textAlign="center"
+            textAlign="left"
             mb={{ base: 12, md: 16, lg: 20, xl: 24 }}
           >
             <Heading
               as="h2"
-              fontSize={{ base: "4xl", sm: "5xl", md: "6xl", lg: "7xl", xl: "8xl" }}
-              fontWeight="bold"
+              fontSize={{ base: "3xl", md: "4xl", lg: "5xl", xl: "6xl" }}
+              fontWeight="700"
               color="#333333"
               letterSpacing="tight"
               lineHeight={{ base: "shorter", md: "none" }}
@@ -792,7 +794,7 @@ const HushhFlow = () => {
             </Heading>
           </MotionBox>
 
-          {/* Use Case Cards */}
+          {/* Desktop Use Case Cards */}
           <Flex
             direction={{ base: "column", lg: "row" }}
             justify="center"
@@ -800,6 +802,7 @@ const HushhFlow = () => {
             gap={{ base: 6, md: 8, lg: 6 }}
             maxW="7xl"
             mx="auto"
+            display={{ base: "none", md: "flex" }}
           >
             {/* Card 1 - Notion */}
             <MotionBox
@@ -948,6 +951,146 @@ const HushhFlow = () => {
               </Box>
             </MotionBox>
           </Flex>
+
+          {/* Mobile Use Case Cards - Apple Theme Layout */}
+          <Box display={{ base: "block", md: "none" }}>
+            <VStack spacing={8} align="stretch">
+              {/* Mobile Cards with Same Design */}
+              {[
+                {
+                  text: 'Allow Nike to see purchase and sizing data from the last 6 months → Earn ₹250',
+                  bgImage: 'url(\'/nikebg.svg\')',
+                  brand: 'Nike',
+                  reward: 'Earn'
+                },
+                {
+                  text: 'Approve Coursera to recommend learning paths based on browsing → 3 free courses',
+                  bgImage: 'url(\'/courseraBg.svg\')',
+                  brand: 'Coursera',
+                  reward: 'Free courses'
+                },
+                {
+                  text: 'Share concert interest profile with Spotify → Premium trial',
+                  bgImage: 'url(\'/spotifyBg.svg\')',
+                  brand: 'Spotify',
+                  reward: 'Premium trial'
+                }
+              ].map((card, index) => (
+                <MotionBox
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2 + (index * 0.2), ease: "easeOut" }}
+                  mx={4}
+                >
+                  <Box
+                    position="relative"
+                    w="full"
+                    h="280px"
+                    borderRadius="29px"
+                    overflow="hidden"
+                    backgroundImage={card.bgImage}
+                    backgroundSize="cover"
+                    backgroundPosition="center"
+                    backgroundRepeat="no-repeat"
+                    cursor="pointer"
+                    // boxShadow="0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08)"
+                    border="1px solid rgba(255, 255, 255, 0.1)"
+                    _hover={{
+                      transform: "translateY(-4px)",
+                      // boxShadow: "0 12px 40px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1)"
+                    }}
+                    transition="all 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
+                  >
+                    {/* Subtle Glass Overlay for Apple Effect */}
+                    {/* <Box
+                      position="absolute"
+                      top={0}
+                      left={0}
+                      right={0}
+                      bottom={0}
+                      bg="rgba(0, 0, 0, 0.08)"
+                      backdropFilter="blur(0.5px)"
+                    /> */}
+
+                    {/* Text Content */}
+                    <Box
+                      position="absolute"
+                      top={6}
+                      left={6}
+                      right={6}
+                      zIndex={2}
+                    >
+                      <Text
+                        fontSize="xl"
+                        fontWeight="600"
+                        color="#000000"
+                        lineHeight="shorter"
+                        letterSpacing="tight"
+                        fontFamily="SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif"
+                        textShadow="0 1px 3px rgba(255, 255, 255, 0.3)"
+                        mb={3}
+                      >
+                        {card.text}
+                      </Text>
+                    </Box>
+
+                    {/* Apple-style Brand Badge */}
+                    <Box
+                      position="absolute"
+                      bottom={6}
+                      left={6}
+                      bg="#F5F5F7"
+                      backdropFilter="blur(20px)"
+                      borderRadius="12px"
+                      px={3}
+                      py={2}
+                      border="1px solid rgba(255, 255, 255, 0.3)"
+                    >
+                      <HStack spacing={2} align="center">
+                        <Box
+                          w="8px"
+                          h="8px"
+                          bg="#34C759"
+                          borderRadius="full"
+                        />
+                        <Text
+                          fontSize="sm"
+                          fontWeight="600"
+                          color="#1D1D1F"
+                          fontFamily="SF Pro Text, -apple-system, BlinkMacSystemFont, sans-serif"
+                        >
+                          {card.brand}
+                        </Text>
+                      </HStack>
+                    </Box>
+
+                    {/* Apple-style Reward Badge */}
+                    <Box
+                      position="absolute"
+                      bottom={6}
+                      right={6}
+                      bg="black"
+                      backdropFilter="blur(20px)"
+                      borderRadius="12px"
+                      px={3}
+                      py={2}
+                      border="1px solid rgba(0, 122, 255, 0.3)"
+                    >
+                      <Text
+                        fontSize="sm"
+                        fontWeight="600"
+                        color="white"
+                        fontFamily="SF Pro Text, -apple-system, BlinkMacSystemFont, sans-serif"
+                      >
+                        {card.reward}
+                      </Text>
+                    </Box>
+                  </Box>
+                </MotionBox>
+              ))}
+            </VStack>
+          </Box>
 
           
         </Container>
