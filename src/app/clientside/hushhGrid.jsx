@@ -1528,13 +1528,13 @@ const HushhGrid = () => {
        <Box
         bg="#f5f5f7"
         position="relative"
-        py={{ base: "60px", md: "80px", lg: "100px", xl: "120px" }}
+        py={{ base: "40px", md: "80px", lg: "100px", xl: "120px" }}
         overflow="hidden"
         mt={{ base: 0, md: 0, lg: 0, xl: 0 }}
       >
         <Container 
           maxW="8xl" 
-          px={{ base: "24px", md: "40px", lg: "60px", xl: "80px" }}
+          px={{ base: "16px", md: "40px", lg: "60px", xl: "80px" }}
           position="relative" 
           zIndex={2}
         >
@@ -1543,49 +1543,213 @@ const HushhGrid = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            textAlign="left"
-            mb={{ base: "48px", md: "64px", lg: "80px", xl: "96px" }}
+            textAlign={{ base: "center", md: "left" }}
+            mb={{ base: "32px", md: "64px", lg: "80px", xl: "96px" }}
           >
             <Heading
               as="h2"
-              fontSize={{ base: "2xl", sm: "4xl", md: "4xl", lg: "7xl", xl: "8xl" }}
+              fontSize={{ base: "32px", sm: "40px", md: "48px", lg: "64px", xl: "80px" }}
               fontWeight="bold"
               color="#333333"
               letterSpacing="tight"
-              lineHeight={{ base: "shorter", md: "none" }}
+              lineHeight={{ base: "1.1", md: "1.0" }}
               fontFamily="Inter, sans-serif"
               maxW="6xl"
-              mx="auto"
+              mx={{ base: "auto", md: "0" }}
             >
               Sample Usecase
             </Heading>
           </MotionBox>
 
           {/* Use Case Cards */}
+          <VStack
+            spacing={{ base: "20px", md: "24px" }}
+            align="stretch"
+            display={{ base: "flex", lg: "none" }}
+            w="full"
+          >
+            {/* Mobile Card 1 */}
+            <MotionBox
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+              w="full"
+            >
+              <Box
+                position="relative"
+                w="full"
+                h="200px"
+                borderRadius="20px"
+                overflow="hidden"
+                backgroundImage="/usecasebggrid1.svg"
+                backgroundSize="cover"
+                backgroundPosition="center"
+                backgroundRepeat="no-repeat"
+                cursor="pointer"
+                boxShadow="0 4px 20px rgba(0, 0, 0, 0.15)"
+                _active={{
+                  transform: "scale(0.98)",
+                  boxShadow: "0 2px 10px rgba(0, 0, 0, 0.2)"
+                }}
+                transition="all 0.2s ease"
+              >
+                {/* Mobile Text Overlay */}
+                <Box
+                  position="absolute"
+                  top="16px"
+                  left="16px"
+                  right="16px"
+                  zIndex={1}
+                  display="flex"
+                  alignItems="flex-start"
+                  h="calc(100% - 32px)"
+                >
+                  <Text
+                    fontSize="18px"
+                    fontWeight="600"
+                    color="#FFFFFF"
+                    lineHeight="1.3"
+                    letterSpacing="-0.02em"
+                    fontFamily="Inter, sans-serif"
+                    textShadow="0 2px 8px rgba(0, 0, 0, 0.3)"
+                    maxW="280px"
+                  >
+                    Run my daily summary at 7am with updated calendar + email context
+                  </Text>
+                </Box>
+              </Box>
+            </MotionBox>
+
+            {/* Mobile Card 2 */}
+            <MotionBox
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+              w="full"
+            >
+              <Box
+                position="relative"
+                w="full"
+                h="200px"
+                borderRadius="20px"
+                overflow="hidden"
+                backgroundImage="/usecasebggrid2.svg"
+                backgroundSize="cover"
+                backgroundPosition="center"
+                backgroundRepeat="no-repeat"
+                cursor="pointer"
+                boxShadow="0 4px 20px rgba(0, 0, 0, 0.15)"
+                _active={{
+                  transform: "scale(0.98)",
+                  boxShadow: "0 2px 10px rgba(0, 0, 0, 0.2)"
+                }}
+                transition="all 0.2s ease"
+              >
+                {/* Mobile Text Overlay */}
+                <Box
+                  position="absolute"
+                  top="16px"
+                  left="16px"
+                  right="16px"
+                  zIndex={1}
+                  display="flex"
+                  alignItems="flex-start"
+                  h="calc(100% - 32px)"
+                >
+                  <Text
+                    fontSize="18px"
+                    fontWeight="600"
+                    color="#FFFFFF"
+                    lineHeight="1.3"
+                    letterSpacing="-0.02em"
+                    fontFamily="Inter, sans-serif"
+                    textShadow="0 2px 8px rgba(0, 0, 0, 0.3)"
+                    maxW="280px"
+                  >
+                    Query Vault for spending over ₹10,000 in last 30 days, trigger flow if true
+                  </Text>
+                </Box>
+              </Box>
+            </MotionBox>
+
+            {/* Mobile Card 3 */}
+            <MotionBox
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+              w="full"
+            >
+              <Box
+                position="relative"
+                w="full"
+                h="200px"
+                borderRadius="20px"
+                overflow="hidden"
+                backgroundImage="/usecasebggrid3.svg"
+                backgroundSize="cover"
+                backgroundPosition="center"
+                backgroundRepeat="no-repeat"
+                cursor="pointer"
+                boxShadow="0 4px 20px rgba(0, 0, 0, 0.15)"
+                _active={{
+                  transform: "scale(0.98)",
+                  boxShadow: "0 2px 10px rgba(0, 0, 0, 0.2)"
+                }}
+                transition="all 0.2s ease"
+              >
+                {/* Mobile Text Overlay */}
+                <Box
+                  position="absolute"
+                  top="16px"
+                  left="16px"
+                  right="16px"
+                  zIndex={1}
+                  display="flex"
+                  alignItems="flex-start"
+                  h="calc(100% - 32px)"
+                >
+                  <Text
+                    fontSize="18px"
+                    fontWeight="600"
+                    color="#FFFFFF"
+                    lineHeight="1.3"
+                    letterSpacing="-0.02em"
+                    fontFamily="Inter, sans-serif"
+                    textShadow="0 2px 8px rgba(0, 0, 0, 0.3)"
+                    maxW="280px"
+                  >
+                    Match friend's Spotify mood to my saved music tags — suggest meet-up song
+                  </Text>
+                </Box>
+              </Box>
+            </MotionBox>
+          </VStack>
+
+          {/* Desktop Cards Layout */}
           <Flex
-            direction={{ base: "column", lg: "row" }}
+            direction="row"
             justify="center"
-            align={{ base: "center", lg: "stretch" }}
-            gap={{ base: "24px", md: "32px", lg: "24px" }}
+            align="stretch"
+            gap={{ md: "32px", lg: "24px" }}
             maxW="7xl"
             mx="auto"
+            display={{ base: "none", lg: "flex" }}
           >
-            {/* Card 1 - Nike */}
+            {/* Desktop Card 1 */}
             <MotionBox
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
               flex="1"
-              maxW={{ base: "sm", lg: "sm" }}
+              maxW="sm"
             >
               <Box
                 position="relative"
                 w="full"
-                h={{ base: "xs", md: "md", lg: "md" }}
-                borderRadius={'29px'}
+                h={{ md: "md", lg: "md" }}
+                borderRadius="29px"
                 overflow="hidden"
-                // boxShadow="0 4px 4px rgba(0, 0, 0, 0.25)"
-                backgroundImage={'/usecasebggrid1.svg'} 
+                backgroundImage="/usecasebggrid1.svg"
                 backgroundSize="cover"
                 backgroundPosition="center"
                 backgroundRepeat="no-repeat"
@@ -1597,16 +1761,16 @@ const HushhGrid = () => {
                 }}
                 transition="all 0.3s ease"
               >
-                {/* Text Overlay */}
+                {/* Desktop Text Overlay */}
                 <Box
                   position="absolute"
-                  top={{ base: 4, md: 5, lg: 6 }}
-                  left={{ base: 4, md: 5, lg: 6 }}
-                  right={{ base: 4, md: 5, lg: 6 }}
+                  top={{ md: 5, lg: 6 }}
+                  left={{ md: 5, lg: 6 }}
+                  right={{ md: 5, lg: 6 }}
                   zIndex={1}
                 >
                   <Text
-                    fontSize={{ base: "sm", md: "2xl", lg: "3xl" }}
+                    fontSize={{ md: "2xl", lg: "3xl" }}
                     fontWeight="semibold"
                     color="#FFFFFF"
                     lineHeight="shorter"
@@ -1619,21 +1783,21 @@ const HushhGrid = () => {
               </Box>
             </MotionBox>
 
+            {/* Desktop Card 2 */}
             <MotionBox
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
               flex="1"
-              maxW={{ base: "sm", lg: "sm" }}
+              maxW="sm"
             >
               <Box
                 position="relative"
                 w="full"
-                h={{ base: "xs", md: "md", lg: "md" }}
-                borderRadius={'29px'}
+                h={{ md: "md", lg: "md" }}
+                borderRadius="29px"
                 overflow="hidden"
-                // boxShadow="0 4px 4px rgba(0, 0, 0, 0.25)"
-                backgroundImage={'/usecasebggrid2.svg'} 
+                backgroundImage="/usecasebggrid2.svg"
                 backgroundSize="cover"
                 backgroundPosition="center"
                 backgroundRepeat="no-repeat"
@@ -1645,16 +1809,16 @@ const HushhGrid = () => {
                 }}
                 transition="all 0.3s ease"
               >
-                {/* Text Overlay */}
+                {/* Desktop Text Overlay */}
                 <Box
                   position="absolute"
-                  top={{ base: 4, md: 5, lg: 6 }}
-                  left={{ base: 4, md: 5, lg: 6 }}
-                  right={{ base: 4, md: 5, lg: 6 }}
+                  top={{ md: 5, lg: 6 }}
+                  left={{ md: 5, lg: 6 }}
+                  right={{ md: 5, lg: 6 }}
                   zIndex={1}
                 >
                   <Text
-                    fontSize={{ base: "sm", md: "2xl", lg: "3xl" }}
+                    fontSize={{ md: "2xl", lg: "3xl" }}
                     fontWeight="semibold"
                     color="#FFFFFF"
                     lineHeight="shorter"
@@ -1667,22 +1831,21 @@ const HushhGrid = () => {
               </Box>
             </MotionBox>
 
-            {/* Card 3 - Gmail */}
+            {/* Desktop Card 3 */}
             <MotionBox
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
               flex="1"
-              maxW={{ base: "sm", lg: "sm" }}
+              maxW="sm"
             >
               <Box
                 position="relative"
                 w="full"
-                h={{ base: "xs", md: "md", lg: "md" }}
-                borderRadius={'29px'}
+                h={{ md: "md", lg: "md" }}
+                borderRadius="29px"
                 overflow="hidden"
-                // boxShadow="0 4px 4px rgba(0, 0, 0, 0.25)"
-                backgroundImage={'/usecasebggrid3.svg'}
+                backgroundImage="/usecasebggrid3.svg"
                 backgroundSize="cover"
                 backgroundPosition="center"
                 backgroundRepeat="no-repeat"
@@ -1694,16 +1857,16 @@ const HushhGrid = () => {
                 }}
                 transition="all 0.3s ease"
               >
-                {/* Text Overlay */}
+                {/* Desktop Text Overlay */}
                 <Box
                   position="absolute"
-                  top={{ base: 4, md: 5, lg: 6 }}
-                  left={{ base: 4, md: 5, lg: 6 }}
-                  right={{ base: 4, md: 5, lg: 6 }}
+                  top={{ md: 5, lg: 6 }}
+                  left={{ md: 5, lg: 6 }}
+                  right={{ md: 5, lg: 6 }}
                   zIndex={1}
                 >
                   <Text
-                    fontSize={{ base: "sm", md: "2xl", lg: "3xl" }}
+                    fontSize={{ md: "2xl", lg: "3xl" }}
                     fontWeight="semibold"
                     color="#FFFFFF"
                     lineHeight="shorter"
@@ -1716,8 +1879,6 @@ const HushhGrid = () => {
               </Box>
             </MotionBox>
           </Flex>
-
-          
         </Container>
       </Box>
 
