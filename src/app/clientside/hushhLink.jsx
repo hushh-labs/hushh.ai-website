@@ -23,7 +23,7 @@ import {
   Code
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { FaApple, FaFolder, FaLink, FaShieldAlt } from 'react-icons/fa';
+import { FaApple, FaFolder, FaLink, FaShieldAlt, FaCheckCircle, FaClipboardList, FaUsers } from 'react-icons/fa';
 import HushhLinkBox from '../_components/svg/hushhLink/hushhLinkBox.svg'
 import Image from 'next/image';
 import HushhTrail from '../_components/svg/hushhLink/audit-trail.svg'
@@ -347,14 +347,11 @@ const HushhLink = () => {
                       gap={{ base: 3, md: 4, lg: 4, xl: 4 }}
                     >
                       <Box flexShrink={0}>
-                        <img 
-                          src="http://localhost:3845/assets/d7617520d612e17c1c3357c9006f8d028f96ad94.svg" 
-                          alt=""
-                          style={{ 
-                            width: '40px', 
-                            height: '40px',
-                            display: 'block'
-                          }} 
+                        <Icon 
+                          as={FaShieldAlt}
+                          w={{ base: "40px", md: "40px", lg: "40px" }}
+                          h={{ base: "40px", md: "40px", lg: "40px" }}
+                          color="black"
                         />
                       </Box>
                       <Text
@@ -389,14 +386,11 @@ const HushhLink = () => {
                       gap={{ base: 3, md: 4, lg: 4, xl: 4 }}
                     >
                       <Box flexShrink={0}>
-                        <img 
-                          src="http://localhost:3845/assets/ea6e3b5354ca27c91f0acb803e0044e91d2a12c1.svg" 
-                          alt=""
-                          style={{ 
-                            width: '40px', 
-                            height: '40px',
-                            display: 'block'
-                          }} 
+                        <Icon 
+                          as={FaCheckCircle}
+                          w={{ base: "40px", md: "40px", lg: "40px" }}
+                          h={{ base: "40px", md: "40px", lg: "40px" }}
+                          color="black"
                         />
                       </Box>
                       <Text
@@ -431,14 +425,11 @@ const HushhLink = () => {
                       gap={{ base: 3, md: 4, lg: 4, xl: 4 }}
                     >
                       <Box flexShrink={0}>
-                        <img 
-                          src="http://localhost:3845/assets/779925a8b488d09bbd533b6bda951cfb6e690a5a.svg" 
-                          alt=""
-                          style={{ 
-                            width: '40px', 
-                            height: '40px',
-                            display: 'block'
-                          }} 
+                        <Icon 
+                          as={FaClipboardList}
+                          w={{ base: "40px", md: "40px", lg: "40px" }}
+                          h={{ base: "40px", md: "40px", lg: "40px" }}
+                          color="black"
                         />
                       </Box>
                       <Text
@@ -473,14 +464,11 @@ const HushhLink = () => {
                       gap={{ base: 3, md: 4, lg: 4, xl: 4 }}
                     >
                       <Box flexShrink={0}>
-                        <img 
-                          src="http://localhost:3845/assets/925b477b3680c981c98da6d2c021623da1d0b84b.svg" 
-                          alt=""
-                          style={{ 
-                            width: '40px', 
-                            height: '40px',
-                            display: 'block'
-                          }} 
+                        <Icon 
+                          as={FaUsers}
+                          w={{ base: "40px", md: "40px", lg: "40px" }}
+                          h={{ base: "40px", md: "40px", lg: "40px" }}
+                          color="black"
                         />
                       </Box>
                       <Text
