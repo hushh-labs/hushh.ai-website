@@ -136,26 +136,22 @@ export default function RootLayout({ children }) {
         }}
       >
         <NextTopLoader
-            color="red"
+            color="#007AFF"
             initialPosition={0.08}
-            crawlSpeed={200}
+            crawlSpeed={300}
             height={3}
             crawl={true}
-            showSpinner={true}
+            showSpinner={false}
             easing="ease"
-            speed={200}
-            shadow="0 0 10px #2299DD,0 0 5px #2299DD"
+            speed={500}
+            shadow="0 0 20px rgba(0, 122, 255, 0.6), 0 0 40px rgba(94, 92, 230, 0.4)"
             template='
-                      <div class="bar" role="bar">
-                        <div class="peg">
-                        </div>
-                      </div>
-                      <div class="spinner" role="spinner">
-                        <div class="spinner-icon">
+                      <div class="bar" role="bar" style="background: linear-gradient(135deg, #007AFF 0%, #5E5CE6 50%, #7C3AED 100%); box-shadow: 0 0 20px rgba(0, 122, 255, 0.6), 0 0 40px rgba(94, 92, 230, 0.4);">
+                        <div class="peg" style="background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.8) 100%); box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.4);">
                         </div>
                       </div>
                       '
-            zIndex={1600}
+            zIndex={99999}
             showAtBottom={false}
           />
         <link rel="icon" href="./favicon.ico" />

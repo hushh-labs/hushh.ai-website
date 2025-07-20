@@ -83,7 +83,6 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
     e.preventDefault();
     e.stopPropagation();
     setIsMenuOpen(!isMenuOpen);
-    console.log('Menu toggle clicked, new state will be:', !isMenuOpen);
   };
   
   useEffect(() => {
@@ -103,8 +102,18 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
 
   useEffect(() => {
     let handler = (e) => {
-      // Don't close if clicking on hamburger button or inside menu
-      if (!menuRef.current?.contains(e.target) && !hamburgerRef.current?.contains(e.target)) {
+      // Check if click is on a dropdown item (Link)
+      const isDropdownLink = e.target.closest('a[href]');
+      const isDropdownMenu = e.target.closest('.dropdown-menu');
+      
+      // Don't close if clicking on:
+      // 1. Hamburger button or inside mobile menu
+      // 2. Dropdown link (let navigation happen first)
+      // 3. Inside dropdown menu
+      if (!menuRef.current?.contains(e.target) && 
+          !hamburgerRef.current?.contains(e.target) && 
+          !isDropdownLink && 
+          !isDropdownMenu) {
         setIsMenuOpen(false);
         setActiveDropdown(null);
       }
@@ -291,7 +300,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
   const renderDropdownMenu = (menuKey, menuData) => {
     return (
       <div
-        className="absolute top-full left-0 bg-white shadow-2xl border border-gray-100 z-50 rounded-2xl mt-2"
+        className="dropdown-menu absolute top-full left-0 bg-white shadow-2xl border border-gray-100 z-50 rounded-2xl mt-2"
         style={{
           animation: "fadeInDown 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
           minWidth: "280px",
@@ -300,7 +309,10 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
           backdropFilter: "blur(20px)",
         }}
         onMouseEnter={() => setActiveDropdown(menuKey)}
-        onMouseLeave={() => setActiveDropdown(null)}
+        onMouseLeave={() => {
+          // Add small delay to prevent accidental closes when clicking
+          setTimeout(() => setActiveDropdown(null), 150);
+        }}
       >
         {/* Dropdown Arrow */}
         <div 
@@ -314,11 +326,17 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
           <div className="px-4 py-4">
             <div className="space-y-1">
               {menuData.items.map((item, index) => (
-                <Link
+                <div
                   key={index}
-                  href={item.href}
-                  className="group block p-3 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200 hover:shadow-sm dropdown-item"
-                  onClick={() => setActiveDropdown(null)}
+                  className="group block p-3 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200 hover:shadow-sm dropdown-item cursor-pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    // Close dropdown immediately
+                    setActiveDropdown(null);
+                    // Navigate using router
+                    router.push(item.href);
+                  }}
                 >
                   <div className="flex items-center space-x-3">
                     <div className="flex-shrink-0">
@@ -351,7 +369,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                       <ChevronRightIcon className="w-4 h-4 text-blue-500" />
                     </div>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           </div>
@@ -666,12 +684,16 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                       </button>
                       {activeDropdown === 'products' && (
                         <div className="mt-3 space-y-3 pl-4">
-                          {menuItems.products.items.map((item, index) => (
-                            <Link
+                                                    {menuItems.products.items.map((item, index) => (
+                            <div
                               key={index}
-                              href={item.href}
-                    onClick={() => setIsMenuOpen(false)}
-                              className="block mobile-menu-item"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setIsMenuOpen(false);
+                                router.push(item.href);
+                              }}
+                              className="block mobile-menu-item cursor-pointer"
                             >
                               <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
                                 <div className="flex-shrink-0 mt-1">
@@ -686,7 +708,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                                   <p className="text-xs text-gray-500 mt-1">{item.description}</p>
                                 </div>
                               </div>
-                            </Link>
+                            </div>
                           ))}
                         </div>
                       )}
@@ -704,11 +726,15 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                       {activeDropdown === 'developers' && (
                         <div className="mt-3 space-y-3 pl-4">
                           {menuItems.developers.items.map((item, index) => (
-                            <Link
+                            <div
                               key={index}
-                              href={item.href}
-                              onClick={() => setIsMenuOpen(false)}
-                              className="block mobile-menu-item"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setIsMenuOpen(false);
+                                router.push(item.href);
+                              }}
+                              className="block mobile-menu-item cursor-pointer"
                             >
                               <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
                                 <div className="flex-shrink-0 mt-1">
@@ -719,7 +745,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                                   <p className="text-xs text-gray-500 mt-1">{item.description}</p>
                                 </div>
                               </div>
-                            </Link>
+                            </div>
                           ))}
                         </div>
                       )}
@@ -737,11 +763,15 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                       {activeDropdown === 'whyHushh' && (
                         <div className="mt-3 space-y-3 pl-4">
                           {menuItems.whyHushh.items.map((item, index) => (
-                            <Link
+                            <div
                               key={index}
-                              href={item.href}
-                              onClick={() => setIsMenuOpen(false)}
-                              className="block mobile-menu-item"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setIsMenuOpen(false);
+                                router.push(item.href);
+                              }}
+                              className="block mobile-menu-item cursor-pointer"
                             >
                               <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
                                 <div className="flex-shrink-0 mt-1">
@@ -752,7 +782,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                                   <p className="text-xs text-gray-500 mt-1">{item.description}</p>
                                 </div>
                               </div>
-                            </Link>
+                            </div>
                           ))}
                         </div>
                       )}
@@ -770,11 +800,15 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                       {activeDropdown === 'docs' && (
                         <div className="mt-3 space-y-3 pl-4">
                           {menuItems.docs.items.map((item, index) => (
-                            <Link
+                            <div
                               key={index}
-                              href={item.href}
-                              onClick={() => setIsMenuOpen(false)}
-                              className="block mobile-menu-item"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setIsMenuOpen(false);
+                                router.push(item.href);
+                              }}
+                              className="block mobile-menu-item cursor-pointer"
                             >
                               <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
                                 <div className="flex-shrink-0 mt-1">
@@ -785,7 +819,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                                   <p className="text-xs text-gray-500 mt-1">{item.description}</p>
                                 </div>
                               </div>
-                            </Link>
+                            </div>
                           ))}
                         </div>
                       )}
@@ -803,11 +837,15 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                       {activeDropdown === 'community' && (
                         <div className="mt-3 space-y-3 pl-4">
                           {menuItems.community.items.map((item, index) => (
-                            <Link
+                            <div
                               key={index}
-                              href={item.href}
-                              onClick={() => setIsMenuOpen(false)}
-                              className="block mobile-menu-item"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setIsMenuOpen(false);
+                                router.push(item.href);
+                              }}
+                              className="block mobile-menu-item cursor-pointer"
                             >
                               <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
                                 <div className="flex-shrink-0 mt-1">
@@ -818,7 +856,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                                   <p className="text-xs text-gray-500 mt-1">{item.description}</p>
                                 </div>
                               </div>
-                            </Link>
+                            </div>
                           ))}
                         </div>
                       )}
@@ -836,11 +874,15 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                       {activeDropdown === 'company' && (
                         <div className="mt-3 space-y-3 pl-4">
                           {menuItems.company.items.map((item, index) => (
-                            <Link
+                            <div
                               key={index}
-                              href={item.href}
-                              onClick={() => setIsMenuOpen(false)}
-                              className="block mobile-menu-item"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setIsMenuOpen(false);
+                                router.push(item.href);
+                              }}
+                              className="block mobile-menu-item cursor-pointer"
                             >
                               <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
                                 <div className="flex-shrink-0 mt-1">
@@ -851,7 +893,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                                   <p className="text-xs text-gray-500 mt-1">{item.description}</p>
                                 </div>
                               </div>
-                            </Link>
+                            </div>
                           ))}
                         </div>
                       )}
