@@ -893,10 +893,11 @@ const HushhFlow = () => {
                       left={{ base: "-20px", md: "-30px", lg: "-40px" }}
                       background={'rgba(0, 113, 227, 0.09)'}
                       borderRadius="20px"
-                      
-                      // boxShadow="0 4px 12px rgba(0,0,0,0.15)"
-                      minW="190px"
+                      border="1.5px solid"
+                      borderColor="#6E504933"
                       backdropFilter="blur(10px)"
+                      boxShadow="15px 128px 36px 0px rgba(0,0,0,0), 10px 82px 33px 0px rgba(0,0,0,0.01), 5px 46px 28px 0px rgba(0,0,0,0.04), 2px 20px 21px 0px rgba(0,0,0,0.06), 1px 5px 11px 0px rgba(0,0,0,0.08)"
+                      minW="160px"
                     >
                       <HStack spacing={3} p={{md:'14px',base:'10px'}} justify="flex-start">
                         <Icon
@@ -927,7 +928,6 @@ const HushhFlow = () => {
                       borderRadius="20px"
                       border="1.5px solid"
                       borderColor="#6E504933"
-                      transform="rotate(-5deg)"
                       backdropFilter="blur(10px)"
                       boxShadow="15px 128px 36px 0px rgba(0,0,0,0), 10px 82px 33px 0px rgba(0,0,0,0.01), 5px 46px 28px 0px rgba(0,0,0,0.04), 2px 20px 21px 0px rgba(0,0,0,0.06), 1px 5px 11px 0px rgba(0,0,0,0.08)"
                       minW="160px"
@@ -1084,14 +1084,12 @@ const HushhFlow = () => {
                       background={'rgba(0, 113, 227, 0.09)'}
                       border="1.5px solid"
                       borderColor="#6E504933"
-                      px={{ base: 4, md: 5, lg: 6 }}
-                      py={{ base: 3, md: 4, lg: 5 }}
-                      
+                      backdropFilter="blur(10px)"
                       boxShadow="15px 128px 36px 0px rgba(0,0,0,0), 10px 82px 33px 0px rgba(0,0,0,0.01), 5px 46px 28px 0px rgba(0,0,0,0.04), 2px 20px 21px 0px rgba(0,0,0,0.06), 1px 5px 11px 0px rgba(0,0,0,0.08)"
                       minW="160px"
                     >
-                      <HStack spacing={3} justify="center">
-                        <Icon
+                      <HStack spacing={2} p={{md:'14px',base:'10px'}} justify="flex-start">
+                      <Icon
                           as={FiBriefcase}
                           w="32px"
                           h="32px"
@@ -1119,10 +1117,9 @@ const HushhFlow = () => {
                       borderRadius="20px"
                       border="1.5px solid"
                       borderColor="#6E504933"
+                      backdropFilter="blur(10px)"
                       boxShadow="15px 128px 36px 0px rgba(0,0,0,0), 10px 82px 33px 0px rgba(0,0,0,0.01), 5px 46px 28px 0px rgba(0,0,0,0.04), 2px 20px 21px 0px rgba(0,0,0,0.06), 1px 5px 11px 0px rgba(0,0,0,0.08)"
                       minW="160px"
-                      transform="rotate(5deg)"
-                      backdropFilter="blur(10px)"
                     >
                       <HStack spacing={2} p={{md:'14px',base:'10px'}} justify="flex-start">
                       <Icon
