@@ -962,384 +962,384 @@ const HushhGrid = () => {
 
         {/* Desktop Layout */}
         <Box display={{ base: "none", lg: "block" }}>
-          <Container maxW="8xl" px={{ base: 0, md: 0, lg: 0 }}>
-            <Grid
-              templateColumns={{ base: "1fr", lg: "300px 1fr" }}
-              gap={{ base: 8, lg: 16 }}
-              alignItems="start"
-            >
-              {/* Left Column - Title */}
-              <GridItem>
-                <MotionBox {...fadeInLeft}>
-                  <Heading
-                    as="h2"
-                    fontSize={{ base: "32px", md: "48px", lg: "64px" }}
-                    fontWeight="bold"
-                    color="white"
-                    fontFamily="Inter, sans-serif"
-                    letterSpacing="-0.02em"
-                    lineHeight="1.1"
-                    maxW="300px"
-                  >
-                    Grid Capabilities
-                  </Heading>
-                </MotionBox>
-              </GridItem>
+        <Container maxW="8xl" px={{ base: 0, md: 0, lg: 0 }}>
+          <Grid
+            templateColumns={{ base: "1fr", lg: "300px 1fr" }}
+            gap={{ base: 8, lg: 16 }}
+            alignItems="start"
+          >
+            {/* Left Column - Title */}
+            <GridItem>
+              <MotionBox {...fadeInLeft}>
+                <Heading
+                  as="h2"
+                  fontSize={{ base: "32px", md: "48px", lg: "64px" }}
+                  fontWeight="bold"
+                  color="white"
+                  fontFamily="Inter, sans-serif"
+                  letterSpacing="-0.02em"
+                  lineHeight="1.1"
+                  maxW="300px"
+                >
+                  Grid Capabilities
+                </Heading>
+              </MotionBox>
+            </GridItem>
 
-              {/* Right Column - Feature Cards Grid */}
-              <GridItem>
-                <MotionBox {...fadeInRight}>
-                  <SimpleGrid
-                    columns={{ base: 1, md: 2 }}
-                    spacing={{ base: 6, md: 8 }}
-                    w="full"
+            {/* Right Column - Feature Cards Grid */}
+            <GridItem>
+              <MotionBox {...fadeInRight}>
+                <SimpleGrid
+                  columns={{ base: 1, md: 2 }}
+                  spacing={{ base: 6, md: 8 }}
+                  w="full"
+                >
+                  {/* Real-Time Ops Card */}
+                  <Box
+                    bg="rgba(68, 68, 68, 0.8)"
+                    border="1px solid rgba(255, 255, 255, 0.1)"
+                    borderRadius="16px"
+                    p={{ base: "24px", md: "32px" }}
+                    minH="280px"
+                    position="relative"
                   >
-                    {/* Real-Time Ops Card */}
-                    <Box
-                      bg="rgba(68, 68, 68, 0.8)"
-                      border="1px solid rgba(255, 255, 255, 0.1)"
-                      borderRadius="16px"
-                      p={{ base: "24px", md: "32px" }}
-                      minH="280px"
-                      position="relative"
-                    >
-                      <VStack spacing="16px" align="stretch" h="full">
-                        <Box>
-                          <Heading
-                            as="h3"
-                            fontSize={{ base: "20px", md: "24px" }}
-                            fontWeight="600"
+                    <VStack spacing="16px" align="stretch" h="full">
+                      <Box>
+                        <Heading
+                          as="h3"
+                          fontSize={{ base: "20px", md: "24px" }}
+                          fontWeight="600"
+                          color="white"
+                          fontFamily="Inter, sans-serif"
+                          mb="8px"
+                        >
+                          Real-Time Ops
+                        </Heading>
+                        <Text
+                          fontSize={{ base: "14px", md: "16px" }}
+                          color="rgba(255, 255, 255, 0.8)"
+                          fontFamily="Inter, sans-serif"
+                          lineHeight="1.4"
+                        >
+                          Agents execute operations instantly via signed instructions
+                        </Text>
+                      </Box>
+
+                      <Box flex="1" display="flex" alignItems="center" justifyContent="center">
+                        <Box
+                          bg="rgba(255, 255, 255, 0.1)"
+                          border="1px solid rgba(255, 255, 255, 0.2)"
+                          borderRadius="12px"
+                          p="16px"
+                          w="full"
+                          maxW="300px"
+                        >
+                          <HStack spacing="12px" align="center">
+                            <Box
+                              w="40px"
+                              h="40px"
+                              bg="rgba(255, 255, 255, 0.2)"
+                              borderRadius="8px"
+                              flexShrink={0}
+                            />
+                            <VStack spacing="8px" align="stretch" flex="1">
+                              <Text
+                                fontSize="16px"
+                                fontWeight="500"
+                                color="white"
+                                fontFamily="Inter, sans-serif"
+                              >
+                                Real-Time Execution
+                              </Text>
+                              <Box
+                                h="6px"
+                                bg="rgba(255, 255, 255, 0.2)"
+                                borderRadius="3px"
+                                position="relative"
+                                overflow="hidden"
+                              >
+                                <Box
+                                  h="full"
+                                  w="70%"
+                                  bg="rgba(255, 255, 255, 0.6)"
+                                  borderRadius="3px"
+                                />
+                              </Box>
+                            </VStack>
+                          </HStack>
+                        </Box>
+                      </Box>
+                    </VStack>
+                  </Box>
+
+                  {/* Micro VM-style Envs Card */}
+                  <Box
+                    bg="rgba(68, 68, 68, 0.8)"
+                    border="1px solid rgba(255, 255, 255, 0.1)"
+                    borderRadius="16px"
+                    p={{ base: "24px", md: "32px" }}
+                    minH="280px"
+                    position="relative"
+                  >
+                    <VStack spacing="20px" align="stretch" h="full">
+                      <Box>
+                        <Heading
+                          as="h3"
+                          fontSize={{ base: "20px", md: "24px" }}
+                          fontWeight="600"
+                          color="white"
+                          fontFamily="Inter, sans-serif"
+                          mb="8px"
+                        >
+                          Micro VM-style Envs
+                        </Heading>
+                        <Text
+                          fontSize={{ base: "14px", md: "16px" }}
+                          color="rgba(255, 255, 255, 0.8)"
+                          fontFamily="Inter, sans-serif"
+                          lineHeight="1.4"
+                        >
+                          Run ephemeral, secure sessions for each agent task
+                        </Text>
+                      </Box>
+
+                      <Box flex="1" display="flex" alignItems="center" justifyContent="center">
+                        <Box
+                          bg="rgba(45, 45, 45, 0.9)"
+                          border="1px solid rgba(255, 255, 255, 0.15)"
+                          borderRadius="12px"
+                          p="16px"
+                          w="full"
+                          maxW="280px"
+                        >
+                          <Text
+                            fontSize="14px"
+                            fontWeight="500"
                             color="white"
                             fontFamily="Inter, sans-serif"
-                            mb="8px"
+                            mb="12px"
+                            textAlign="center"
                           >
-                            Real-Time Ops
-                          </Heading>
-                          <Text
-                            fontSize={{ base: "14px", md: "16px" }}
-                            color="rgba(255, 255, 255, 0.8)"
-                            fontFamily="Inter, sans-serif"
-                            lineHeight="1.4"
-                          >
-                            Agents execute operations instantly via signed instructions
+                            Ephemeral Sessions
                           </Text>
+                          <VStack spacing="8px">
+                            <Box
+                              h="32px"
+                              bg="rgba(80, 80, 80, 0.8)"
+                              borderRadius="6px"
+                              w="full"
+                              border="1px solid rgba(255, 255, 255, 0.1)"
+                            />
+                            <Box
+                              h="32px"
+                              bg="rgba(80, 80, 80, 0.8)"
+                              borderRadius="6px"
+                              w="full"
+                              border="1px solid rgba(255, 255, 255, 0.1)"
+                            />
+                          </VStack>
                         </Box>
+                      </Box>
+                    </VStack>
+                  </Box>
 
-                        <Box flex="1" display="flex" alignItems="center" justifyContent="center">
-                          <Box
-                            bg="rgba(255, 255, 255, 0.1)"
-                            border="1px solid rgba(255, 255, 255, 0.2)"
-                            borderRadius="12px"
-                            p="16px"
-                            w="full"
-                            maxW="300px"
-                          >
-                            <HStack spacing="12px" align="center">
+                  {/* Consent Boundaries Card */}
+                  <Box
+                    bg="rgba(68, 68, 68, 0.8)"
+                    border="1px solid rgba(255, 255, 255, 0.1)"
+                    borderRadius="16px"
+                    p={{ base: "24px", md: "32px" }}
+                    minH="280px"
+                    position="relative"
+                  >
+                    <VStack spacing="20px" align="stretch" h="full">
+                      <Box>
+                        <Heading
+                          as="h3"
+                          fontSize={{ base: "20px", md: "24px" }}
+                          fontWeight="600"
+                          color="white"
+                          fontFamily="Inter, sans-serif"
+                          mb="8px"
+                        >
+                          Consent Boundaries
+                        </Heading>
+                        <Text
+                          fontSize={{ base: "14px", md: "16px" }}
+                          color="rgba(255, 255, 255, 0.8)"
+                          fontFamily="Inter, sans-serif"
+                          lineHeight="1.4"
+                        >
+                          Every compute call passes hushh.link.verifyConsent()
+                        </Text>
+                      </Box>
+
+                      <Box flex="1" display="flex" alignItems="center" justifyContent="center">
+                        <Box
+                          bg="rgba(45, 45, 45, 0.9)"
+                          border="2px solid rgba(255, 255, 255, 0.2)"
+                          borderRadius="16px"
+                          p="12px"
+                          w="160px"
+                          h="220px"
+                          position="relative"
+                        >
+                          {/* Mobile Phone Interface */}
+                          <VStack spacing="0" h="full" justify="space-between">
+                            {/* Top Progress Bar */}
+                            <Box w="full" mb="16px">
                               <Box
-                                w="40px"
-                                h="40px"
+                                h="4px"
                                 bg="rgba(255, 255, 255, 0.2)"
-                                borderRadius="8px"
-                                flexShrink={0}
+                                borderRadius="2px"
+                                w="full"
                               />
-                              <VStack spacing="8px" align="stretch" flex="1">
+                            </Box>
+
+                            {/* Middle - Compute Call */}
+                            <Box flex="1" display="flex" alignItems="center" justifyContent="center">
+                              <Box
+                                bg="rgba(80, 80, 80, 0.8)"
+                                border="1px solid rgba(255, 255, 255, 0.2)"
+                                borderRadius="8px"
+                                px="12px"
+                                py="8px"
+                                display="flex"
+                                alignItems="center"
+                                gap="8px"
+                              >
+                                <Box
+                                  w="12px"
+                                  h="12px"
+                                  bg="rgba(255, 255, 255, 0.4)"
+                                  borderRadius="50%"
+                                />
                                 <Text
-                                  fontSize="16px"
-                                  fontWeight="500"
+                                  fontSize="11px"
                                   color="white"
                                   fontFamily="Inter, sans-serif"
+                                  fontWeight="500"
                                 >
-                                  Real-Time Execution
+                                  Compute Call
                                 </Text>
+                              </Box>
+                            </Box>
+
+                            {/* Bottom - Consent Verification */}
+                            <Box w="full" mt="16px">
+                              <Box
+                                bg="rgba(80, 80, 80, 0.8)"
+                                border="1px solid rgba(255, 255, 255, 0.2)"
+                                borderRadius="8px"
+                                px="8px"
+                                py="6px"
+                                display="flex"
+                                alignItems="center"
+                                gap="6px"
+                                justifyContent="center"
+                              >
                                 <Box
-                                  h="6px"
-                                  bg="rgba(255, 255, 255, 0.2)"
-                                  borderRadius="3px"
-                                  position="relative"
-                                  overflow="hidden"
+                                  w="10px"
+                                  h="10px"
+                                  bg="rgba(255, 255, 255, 0.4)"
+                                  borderRadius="50%"
+                                />
+                                <Text
+                                  fontSize="10px"
+                                  color="white"
+                                  fontFamily="Inter, sans-serif"
+                                  fontWeight="500"
                                 >
-                                  <Box
-                                    h="full"
-                                    w="70%"
-                                    bg="rgba(255, 255, 255, 0.6)"
-                                    borderRadius="3px"
-                                  />
-                                </Box>
-                              </VStack>
-                            </HStack>
+                                  Consent Verification
+                                </Text>
+                              </Box>
+                            </Box>
+                          </VStack>
+                        </Box>
+                      </Box>
+                    </VStack>
+                  </Box>
+
+                  {/* Plug-in AI Modules Card */}
+                  <Box
+                    bg="rgba(68, 68, 68, 0.8)"
+                    border="1px solid rgba(255, 255, 255, 0.1)"
+                    borderRadius="16px"
+                    p={{ base: "24px", md: "32px" }}
+                    minH="280px"
+                    position="relative"
+                  >
+                    <VStack spacing="20px" align="stretch" h="full">
+                      <Box>
+                        <Heading
+                          as="h3"
+                          fontSize={{ base: "20px", md: "24px" }}
+                          fontWeight="600"
+                          color="white"
+                          fontFamily="Inter, sans-serif"
+                          mb="8px"
+                        >
+                          Plug-in AI Modules
+                        </Heading>
+                        <Text
+                          fontSize={{ base: "14px", md: "16px" }}
+                          color="rgba(255, 255, 255, 0.8)"
+                          fontFamily="Inter, sans-serif"
+                          lineHeight="1.4"
+                        >
+                          Bring your own OpenAI, Gemini, Claude, Mistral endpoints
+                        </Text>
+                      </Box>
+
+                      <Box flex="1" display="flex" alignItems="center" justifyContent="center">
+                        <VStack spacing="20px" w="full" align="center" maxW="280px">
+                          {/* AI Integration Pill */}
+                          <Box
+                            bg="white"
+                            borderRadius="20px"
+                            px="20px"
+                            py="10px"
+                          >
+                            <Text
+                              fontSize="13px"
+                              fontWeight="600"
+                              color="black"
+                              fontFamily="Inter, sans-serif"
+                            >
+                              AI Integration
+                            </Text>
                           </Box>
-                        </Box>
-                      </VStack>
-                    </Box>
 
-                    {/* Micro VM-style Envs Card */}
-                    <Box
-                      bg="rgba(68, 68, 68, 0.8)"
-                      border="1px solid rgba(255, 255, 255, 0.1)"
-                      borderRadius="16px"
-                      p={{ base: "24px", md: "32px" }}
-                      minH="280px"
-                      position="relative"
-                    >
-                      <VStack spacing="20px" align="stretch" h="full">
-                        <Box>
-                          <Heading
-                            as="h3"
-                            fontSize={{ base: "20px", md: "24px" }}
-                            fontWeight="600"
-                            color="white"
-                            fontFamily="Inter, sans-serif"
-                            mb="8px"
-                          >
-                            Micro VM-style Envs
-                          </Heading>
-                          <Text
-                            fontSize={{ base: "14px", md: "16px" }}
-                            color="rgba(255, 255, 255, 0.8)"
-                            fontFamily="Inter, sans-serif"
-                            lineHeight="1.4"
-                          >
-                            Run ephemeral, secure sessions for each agent task
-                          </Text>
-                        </Box>
-
-                        <Box flex="1" display="flex" alignItems="center" justifyContent="center">
+                          {/* Large Dark Container */}
                           <Box
                             bg="rgba(45, 45, 45, 0.9)"
                             border="1px solid rgba(255, 255, 255, 0.15)"
                             borderRadius="12px"
-                            p="16px"
                             w="full"
-                            maxW="280px"
-                          >
-                            <Text
-                              fontSize="14px"
-                              fontWeight="500"
-                              color="white"
-                              fontFamily="Inter, sans-serif"
-                              mb="12px"
-                              textAlign="center"
-                            >
-                              Ephemeral Sessions
-                            </Text>
-                            <VStack spacing="8px">
-                              <Box
-                                h="32px"
-                                bg="rgba(80, 80, 80, 0.8)"
-                                borderRadius="6px"
-                                w="full"
-                                border="1px solid rgba(255, 255, 255, 0.1)"
-                              />
-                              <Box
-                                h="32px"
-                                bg="rgba(80, 80, 80, 0.8)"
-                                borderRadius="6px"
-                                w="full"
-                                border="1px solid rgba(255, 255, 255, 0.1)"
-                              />
-                            </VStack>
-                          </Box>
-                        </Box>
-                      </VStack>
-                    </Box>
-
-                    {/* Consent Boundaries Card */}
-                    <Box
-                      bg="rgba(68, 68, 68, 0.8)"
-                      border="1px solid rgba(255, 255, 255, 0.1)"
-                      borderRadius="16px"
-                      p={{ base: "24px", md: "32px" }}
-                      minH="280px"
-                      position="relative"
-                    >
-                      <VStack spacing="20px" align="stretch" h="full">
-                        <Box>
-                          <Heading
-                            as="h3"
-                            fontSize={{ base: "20px", md: "24px" }}
-                            fontWeight="600"
-                            color="white"
-                            fontFamily="Inter, sans-serif"
-                            mb="8px"
-                          >
-                            Consent Boundaries
-                          </Heading>
-                          <Text
-                            fontSize={{ base: "14px", md: "16px" }}
-                            color="rgba(255, 255, 255, 0.8)"
-                            fontFamily="Inter, sans-serif"
-                            lineHeight="1.4"
-                          >
-                            Every compute call passes hushh.link.verifyConsent()
-                          </Text>
-                        </Box>
-
-                        <Box flex="1" display="flex" alignItems="center" justifyContent="center">
-                          <Box
-                            bg="rgba(45, 45, 45, 0.9)"
-                            border="2px solid rgba(255, 255, 255, 0.2)"
-                            borderRadius="16px"
-                            p="12px"
-                            w="160px"
-                            h="220px"
+                            h="120px"
                             position="relative"
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
                           >
-                            {/* Mobile Phone Interface */}
-                            <VStack spacing="0" h="full" justify="space-between">
-                              {/* Top Progress Bar */}
-                              <Box w="full" mb="16px">
-                                <Box
-                                  h="4px"
-                                  bg="rgba(255, 255, 255, 0.2)"
-                                  borderRadius="2px"
-                                  w="full"
-                                />
-                              </Box>
-
-                              {/* Middle - Compute Call */}
-                              <Box flex="1" display="flex" alignItems="center" justifyContent="center">
-                                <Box
-                                  bg="rgba(80, 80, 80, 0.8)"
-                                  border="1px solid rgba(255, 255, 255, 0.2)"
-                                  borderRadius="8px"
-                                  px="12px"
-                                  py="8px"
-                                  display="flex"
-                                  alignItems="center"
-                                  gap="8px"
-                                >
-                                  <Box
-                                    w="12px"
-                                    h="12px"
-                                    bg="rgba(255, 255, 255, 0.4)"
-                                    borderRadius="50%"
-                                  />
-                                  <Text
-                                    fontSize="11px"
-                                    color="white"
-                                    fontFamily="Inter, sans-serif"
-                                    fontWeight="500"
-                                  >
-                                    Compute Call
-                                  </Text>
-                                </Box>
-                              </Box>
-
-                              {/* Bottom - Consent Verification */}
-                              <Box w="full" mt="16px">
-                                <Box
-                                  bg="rgba(80, 80, 80, 0.8)"
-                                  border="1px solid rgba(255, 255, 255, 0.2)"
-                                  borderRadius="8px"
-                                  px="8px"
-                                  py="6px"
-                                  display="flex"
-                                  alignItems="center"
-                                  gap="6px"
-                                  justifyContent="center"
-                                >
-                                  <Box
-                                    w="10px"
-                                    h="10px"
-                                    bg="rgba(255, 255, 255, 0.4)"
-                                    borderRadius="50%"
-                                  />
-                                  <Text
-                                    fontSize="10px"
-                                    color="white"
-                                    fontFamily="Inter, sans-serif"
-                                    fontWeight="500"
-                                  >
-                                    Consent Verification
-                                  </Text>
-                                </Box>
-                              </Box>
-                            </VStack>
+                            {/* Subtle pattern or placeholder */}
+                            <Box
+                              w="80%"
+                              h="60%"
+                              bg="rgba(80, 80, 80, 0.3)"
+                              borderRadius="8px"
+                              border="1px solid rgba(255, 255, 255, 0.08)"
+                            />
                           </Box>
-                        </Box>
-                      </VStack>
-                    </Box>
-
-                    {/* Plug-in AI Modules Card */}
-                    <Box
-                      bg="rgba(68, 68, 68, 0.8)"
-                      border="1px solid rgba(255, 255, 255, 0.1)"
-                      borderRadius="16px"
-                      p={{ base: "24px", md: "32px" }}
-                      minH="280px"
-                      position="relative"
-                    >
-                      <VStack spacing="20px" align="stretch" h="full">
-                        <Box>
-                          <Heading
-                            as="h3"
-                            fontSize={{ base: "20px", md: "24px" }}
-                            fontWeight="600"
-                            color="white"
-                            fontFamily="Inter, sans-serif"
-                            mb="8px"
-                          >
-                            Plug-in AI Modules
-                          </Heading>
-                          <Text
-                            fontSize={{ base: "14px", md: "16px" }}
-                            color="rgba(255, 255, 255, 0.8)"
-                            fontFamily="Inter, sans-serif"
-                            lineHeight="1.4"
-                          >
-                            Bring your own OpenAI, Gemini, Claude, Mistral endpoints
-                          </Text>
-                        </Box>
-
-                        <Box flex="1" display="flex" alignItems="center" justifyContent="center">
-                          <VStack spacing="20px" w="full" align="center" maxW="280px">
-                            {/* AI Integration Pill */}
-                            <Box
-                              bg="white"
-                              borderRadius="20px"
-                              px="20px"
-                              py="10px"
-                            >
-                              <Text
-                                fontSize="13px"
-                                fontWeight="600"
-                                color="black"
-                                fontFamily="Inter, sans-serif"
-                              >
-                                AI Integration
-                              </Text>
-                            </Box>
-
-                            {/* Large Dark Container */}
-                            <Box
-                              bg="rgba(45, 45, 45, 0.9)"
-                              border="1px solid rgba(255, 255, 255, 0.15)"
-                              borderRadius="12px"
-                              w="full"
-                              h="120px"
-                              position="relative"
-                              display="flex"
-                              alignItems="center"
-                              justifyContent="center"
-                            >
-                              {/* Subtle pattern or placeholder */}
-                              <Box
-                                w="80%"
-                                h="60%"
-                                bg="rgba(80, 80, 80, 0.3)"
-                                borderRadius="8px"
-                                border="1px solid rgba(255, 255, 255, 0.08)"
-                              />
-                            </Box>
-                          </VStack>
-                        </Box>
-                      </VStack>
-                    </Box>
-                  </SimpleGrid>
-                </MotionBox>
-              </GridItem>
-            </Grid>
-          </Container>
+                        </VStack>
+                      </Box>
+                    </VStack>
+                  </Box>
+                </SimpleGrid>
+              </MotionBox>
+            </GridItem>
+          </Grid>
+        </Container>
         </Box>
       </Box>
 
@@ -1795,7 +1795,7 @@ const HushhGrid = () => {
                             flexShrink={0}
                           />
                           <Text
-                            fontSize={{ base: "12px", md: "18px", lg: "24px" }}
+                            fontSize={{ base: "16px", md: "18px", lg: "24px" }}
                             fontWeight="medium"
                             color="#383737"
                             fontFamily="Inter, sans-serif"
@@ -1820,7 +1820,7 @@ const HushhGrid = () => {
                             flexShrink={0}
                           />
                           <Text
-                            fontSize={{ base: "12px", md: "18px", lg: "24px" }}
+                            fontSize={{ base: "16px", md: "18px", lg: "24px" }}
                             fontWeight="medium"
                             color="#383737"
                             fontFamily="Inter, sans-serif"
@@ -1845,7 +1845,7 @@ const HushhGrid = () => {
                             flexShrink={0}
                           />
                           <Text
-                            fontSize={{ base: "12px", md: "18px", lg: "24px" }}
+                            fontSize={{ base: "16px", md: "18px", lg: "24px" }}
                             fontWeight="medium"
                             color="#383737"
                             fontFamily="Inter, sans-serif"
@@ -1870,7 +1870,7 @@ const HushhGrid = () => {
                             flexShrink={0}
                           />
                           <Text
-                            fontSize={{ base: "12px", md: "18px", lg: "24px" }}
+                            fontSize={{ base: "16px", md: "18px", lg: "24px" }}
                             fontWeight="medium"
                             color="#383737"
                             fontFamily="Inter, sans-serif"
@@ -1944,7 +1944,7 @@ const HushhGrid = () => {
                           mt="14px"
                         />
                         <Text
-                          fontSize={{ base: "24px", md: "28px", lg: "32px" }}
+                          fontSize={{ base: "18px", md: "28px", lg: "32px" }}
                           fontWeight="medium"
                           color="#383737"
                           fontFamily="Inter, sans-serif"
@@ -1970,7 +1970,7 @@ const HushhGrid = () => {
                           mt="14px"
                         />
                         <Text
-                          fontSize={{ base: "24px", md: "28px", lg: "32px" }}
+                          fontSize={{ base: "18px", md: "28px", lg: "32px" }}
                           fontWeight="medium"
                           color="#383737"
                           fontFamily="Inter, sans-serif"
@@ -1996,7 +1996,7 @@ const HushhGrid = () => {
                           mt="14px"
                         />
                         <Text
-                          fontSize={{ base: "24px", md: "28px", lg: "32px" }}
+                          fontSize={{ base: "18px", md: "28px", lg: "32px" }}
                           fontWeight="medium"
                           color="#383737"
                           fontFamily="Inter, sans-serif"
@@ -2022,7 +2022,7 @@ const HushhGrid = () => {
                           mt="14px"
                         />
                         <Text
-                          fontSize={{ base: "24px", md: "28px", lg: "32px" }}
+                          fontSize={{ base: "18px", md: "28px", lg: "32px" }}
                           fontWeight="medium"
                           color="#383737"
                           fontFamily="Inter, sans-serif"

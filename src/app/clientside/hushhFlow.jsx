@@ -1128,7 +1128,7 @@ const HushhFlow = () => {
                       minW="160px"
                     >
                       <HStack spacing={2} p={{md:'14px',base:'10px'}} justify="flex-start">
-                      <Icon
+                        <Icon
                           as={FiBriefcase}
                           w="32px"
                           h="32px"
@@ -1398,7 +1398,7 @@ const HushhFlow = () => {
                     borderRadius="16px"
                     border="1.5px solid rgba(110,80,73,0.2)"
                     boxShadow="8px 64px 18px 0px rgba(0,0,0,0), 5px 41px 16px 0px rgba(0,0,0,0.01), 3px 23px 14px 0px rgba(0,0,0,0.04), 1px 10px 10px 0px rgba(0,0,0,0.06), 0px 3px 6px 0px rgba(0,0,0,0.08)"
-                    position="relative"
+                  position="relative"
                     overflow="hidden"
                   >
                     {/* Header Section */}
@@ -1445,10 +1445,10 @@ const HushhFlow = () => {
                           width: '60px', 
                           height: '60px',
                           display: 'block'
-                        }} 
-                      />
-                    </Box>
-                  </Box>
+                  }}
+                />
+              </Box>
+          </Box>
 
                   {/* Mobile Brand Label */}
                   <Box
