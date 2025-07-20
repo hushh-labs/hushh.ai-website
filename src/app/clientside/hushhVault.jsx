@@ -26,6 +26,7 @@ import { motion } from 'framer-motion';
 import { FaApple, FaFolder, FaLink, FaShieldAlt } from 'react-icons/fa';
 import HushhVaultMobile from '../_components/svg/hushhVaultMobile.svg'
 // import ExportDelete from '../../../public/exportordelete.svg'
+import HowHushhVaultWorks from '../_components/svg/hushhVault/howthevaultworks.svg'
 
 import Image from 'next/image';
 const MotionBox = motion(Box);
@@ -612,7 +613,7 @@ Enforces zero-trust access to every byte.
       {/* How the Vault Works Section */}
       <Box
         bg="#ffffff"
-        py={{ base: 16, md: 20, lg: 24 }}
+        pt={{ base: 16, md: 20, lg: 24 }}
         position="relative"
         minH="100vh"
         display="flex"
@@ -627,105 +628,233 @@ Enforces zero-trust access to every byte.
               fontSize={{ base: "40px", md: "56px", lg: "64px" }}
               fontWeight="bold"
               color="#333333"
-              letterSpacing="-0.02em"
+              letterSpacing={{ base: "-0.8px", md: "-1.12px", lg: "-1.28px" }}
               fontFamily="Inter, sans-serif"
               textAlign="center"
-              lineHeight="1.1"
+              lineHeight={{ base: "44px", md: "48px", lg: "52px" }}
             >
               How the Vault Works
             </Heading>
           </MotionBox>
 
-          {/* Bento Grid Layout */}
-          <Box maxW="1800px" mx="auto">
-            {/* Mobile Layout */}
-            <Box display={{ base: "block", lg: "none" }}>
-              <SimpleGrid columns={1} spacing={5}>
-                <FeatureCard
-                  title="Encryption"
-                  description="AES-256 and user-specific key signatures"
-                  placeholderText="Security"
-                  delay={0.1}
-                />
-                <FeatureCard
-                  title="Schema Core"
-                  description="Modular data structures per domain (calendar, health, commerce)"
-                  placeholderText="Schema"
-                  delay={0.2}
-                />
-                <FeatureCard
-                  title="Consent Logs"
-                  description="Every read/write must reference a valid signed token"
-                  placeholderText="Consent"
-                  delay={0.3}
-                />
-                <FeatureCard
-                  title="Sync Engine"
-                  description="Optional, user-approved syncing with cloud platforms"
-                  placeholderText="Sync"
-                  delay={0.4}
-                />
-                <FeatureCard
-                  title="Audit Trails"
-                  description="Inspect who accessed what and when — down to the millisecond"
-                  delay={0.5}
-                />
-              </SimpleGrid>
-            </Box>
-
-            {/* Desktop Bento Grid Layout */}
-            <Box display={{ base: "none", lg: "block" }}>
-              <Grid
-                templateColumns="repeat(12, 1fr)"
-                templateRows="repeat(2, 480px)"
-                gap={5}
-                w="100%"
-                maxW="1800px"
+          {/* Mobile Layout - Clean Text Only */}
+          <Box display={{ base: "block", lg: "none" }} mb={{md:0,base:10}} maxW="600px" mx="auto">
+            <VStack spacing={12}>
+              {/* Mobile Feature Text Blocks */}
+              <MotionBox
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                w="full"
+                textAlign="center"
               >
-                {/* Top Row - 2 Equal Cards */}
-                <GridItem colSpan={6} rowSpan={1}>
-                  <FeatureCard
-                    title="Encryption"
-                    description="AES-256 and user-specific key signatures"
-                    placeholderText="Security"
-                    delay={0.1}
-                  />
-                </GridItem>
-                <GridItem colSpan={6} rowSpan={1}>
-                  <FeatureCard
-                    title="Schema Core"
-                    description="Modular data structures per domain (calendar, health, commerce)"
-                    placeholderText="Schema"
-                    delay={0.2}
-                  />
-                </GridItem>
+                <Text fontSize="24px" fontWeight="bold" color="#000000" mb={2} fontFamily="Inter, sans-serif" letterSpacing="-0.48px" lineHeight="28px">
+                  Encryption
+                </Text>
+                <Text fontSize="18px" color="#000000" lineHeight="22px" fontFamily="Inter, sans-serif" letterSpacing="-0.09px">
+                  AES-256 and user-specific key signatures
+                </Text>
+              </MotionBox>
 
-                {/* Middle Row - 3 Cards */}
-                <GridItem colSpan={4} rowSpan={1}>
-                  <FeatureCard
-                    title="Consent Logs"
-                    description="Every read/write must reference a valid signed token"
-                    placeholderText="Consent"
-                    delay={0.3}
-                  />
-                </GridItem>
-                <GridItem colSpan={4} rowSpan={1}>
-                  <FeatureCard
-                    title="Sync Engine"
-                    description="Optional, user-approved syncing with cloud platforms"
-                    placeholderText="Sync"
-                    delay={0.4}
-                  />
-                </GridItem>
-                <GridItem colSpan={4} rowSpan={1}>
-                  <FeatureCard
-                    title="Audit Trails"
-                    description="Inspect who accessed what and when — down to the millisecond"
-                    delay={0.5}
-                  />
-                </GridItem>
+              <MotionBox
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                w="full"
+                textAlign="center"
+              >
+                <Text fontSize="24px" fontWeight="bold" color="#000000" mb={2} fontFamily="Inter, sans-serif" letterSpacing="-0.48px" lineHeight="28px">
+                  Schema Core
+                </Text>
+                <Text fontSize="18px" color="#000000" lineHeight="22px" fontFamily="Inter, sans-serif" letterSpacing="-0.09px">
+                  Modular data structures per domain (calendar, health, commerce)
+                </Text>
+              </MotionBox>
+
+              {/* Central Image for Mobile */}
+              <MotionBox
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+                w="full"
+                display="flex"
+                justifyContent="center"
+                py={8}
+              >
+                <Image 
+                  src={HowHushhVaultWorks} 
+                  alt="How Hushh Vault Works"
+                  width={200}
+                  height={240}
+                  style={{
+                    width: "200px",
+                    height: "auto"
+                  }}
+                  filter="drop-shadow(0px 4px 20px rgba(252, 242, 255, 0.8))"
+                />
+              </MotionBox>
+
+              <MotionBox
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                w="full"
+                textAlign="center"
+              >
+                <Text fontSize="24px" fontWeight="bold" color="#000000" mb={2} fontFamily="Inter, sans-serif" letterSpacing="-0.48px" lineHeight="28px">
+                  Audit Trails
+                </Text>
+                <Text fontSize="18px" color="#000000" lineHeight="22px" fontFamily="Inter, sans-serif" letterSpacing="-0.09px">
+                  Inspect who accessed what and when — down to the millisecond
+                </Text>
+              </MotionBox>
+
+              <MotionBox
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                w="full"
+                textAlign="center"
+              >
+                <Text fontSize="24px" fontWeight="bold" color="#000000" mb={2} fontFamily="Inter, sans-serif" letterSpacing="-0.48px" lineHeight="28px">
+                  Consent Logs
+                </Text>
+                <Text fontSize="18px" color="#000000" lineHeight="22px" fontFamily="Inter, sans-serif" letterSpacing="-0.09px">
+                  Every read/write must reference a valid signed token
+                </Text>
+              </MotionBox>
+
+              <MotionBox
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+                w="full"
+                textAlign="center"
+              >
+                <Text fontSize="24px" fontWeight="bold" color="#000000" mb={2} fontFamily="Inter, sans-serif" letterSpacing="-0.48px" lineHeight="28px">
+                  Sync Engine
+                </Text>
+                <Text fontSize="18px" color="#000000" lineHeight="22px" fontFamily="Inter, sans-serif" letterSpacing="-0.09px">
+                  Optional, user-approved syncing with cloud platforms
+                </Text>
+              </MotionBox>
+            </VStack>
+          </Box>
+
+          {/* Desktop Layout - Exact Figma Replication */}
+          <Box display={{ base: "none", lg: "block" }} position="relative" w="100%" mx="auto" pt={16}>
+            
+            {/* Top Row - 3 Text Blocks Evenly Spaced */}
+            <Box position="relative" mb={20} >
+              <Grid templateColumns="1fr 1fr 1fr" gap={12} mb={12}>
+                {/* Encryption - Top Left */}
+                <MotionBox
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                >
+                  <Text fontSize="28px" fontWeight="bold" color="#000000" mb={2} fontFamily="Inter, sans-serif" letterSpacing="-0.56px" lineHeight="32px">
+                    Encryption
+                  </Text>
+                  <Text fontSize="20px" color="#000000" lineHeight="24px" fontFamily="Inter, sans-serif" letterSpacing="-0.1px" maxW="300px">
+                    AES-256 and user-specific key signatures
+                  </Text>
+                </MotionBox>
+
+                {/* Schema Core - Top Center */}
+                <MotionBox
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                >
+                  <Text fontSize="28px" fontWeight="bold" color="#000000" mb={2} fontFamily="Inter, sans-serif" letterSpacing="-0.56px" lineHeight="32px">
+                    Schema Core
+                  </Text>
+                  <Text fontSize="20px" color="#000000" lineHeight="24px" fontFamily="Inter, sans-serif" letterSpacing="-0.1px" maxW="350px">
+                    Modular data structures per domain (calendar, health, commerce)
+                  </Text>
+                </MotionBox>
+
+                {/* Audit Trails - Top Right */}
+                <MotionBox
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                >
+                  <Text fontSize="28px" fontWeight="bold" color="#000000" mb={2} fontFamily="Inter, sans-serif" letterSpacing="-0.56px" lineHeight="32px">
+                    Audit Trails
+                  </Text>
+                  <Text fontSize="20px" color="#000000" lineHeight="24px" fontFamily="Inter, sans-serif" letterSpacing="-0.1px" maxW="300px">
+                    Inspect who accessed what and when — down to the millisecond
+                  </Text>
+                </MotionBox>
               </Grid>
             </Box>
+
+            {/* Central Vault Image */}
+          
+
+            {/* Bottom Row - 2 Text Blocks */}
+            <Box position="relative" mt={20}>
+              <Grid templateColumns="1fr 1fr 1fr" gap={12} alignItems="end">
+                {/* Consent Logs - Bottom Left */}
+                <MotionBox
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.5 }}
+                >
+                  <Text fontSize="28px" fontWeight="bold" color="#000000" mb={2} fontFamily="Inter, sans-serif" letterSpacing="-0.56px" lineHeight="32px">
+                    Consent Logs
+                  </Text>
+                  <Text fontSize="20px" color="#000000" lineHeight="24px" fontFamily="Inter, sans-serif" letterSpacing="-0.1px" maxW="280px">
+                    Every read/write must reference a valid signed token
+                  </Text>
+                </MotionBox>
+
+            
+
+                {/* Sync Engine - Bottom Right */}
+                <MotionBox
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.6 }}
+                >
+                  <Text fontSize="28px" fontWeight="bold" color="#000000" mb={2} fontFamily="Inter, sans-serif" letterSpacing="-0.56px" lineHeight="32px">
+                    Sync Engine
+                  </Text>
+                  <Text fontSize="20px" color="#000000" lineHeight="24px" fontFamily="Inter, sans-serif" letterSpacing="-0.1px" maxW="280px">
+                    Optional, user-approved syncing with cloud platforms
+                  </Text>
+                </MotionBox>
+              </Grid>
+
+              
+            </Box>
+                            <MotionBox
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  position="relative"
+                  zIndex={2}
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  mb={{ base: -20, md: -28, lg: -32 }}
+                >
+                  <Image 
+                    src={HowHushhVaultWorks} 
+                    alt="How Hushh Vault Works"
+                    width={440}
+                    height={420}
+                    style={{
+                      clipPath: "inset(0 0 25% 0)",
+                      display: "block",
+                      // width: "180px",
+                      // height: "220px"
+                    }}
+                    filter="drop-shadow(0px 4px 40px rgba(252, 242, 255, 0.8))"
+                  />
+                </MotionBox>
           </Box>
         </Container>
       </Box>
