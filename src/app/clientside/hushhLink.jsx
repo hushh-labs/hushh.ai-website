@@ -834,17 +834,17 @@ const HushhLink = () => {
                         </Box>
 
                         <VStack align="start" spacing={1} flex={1}>
-                          <Text
+                        <Text
                             fontSize="xs"
                             fontWeight="700"
                             color={item.color}
                             textTransform="uppercase"
                             letterSpacing="0.8px"
                             fontFamily="SF Pro Text, -apple-system, BlinkMacSystemFont, sans-serif"
-                          >
-                            Component
-                          </Text>
-                          <Code
+                        >
+                          Component
+                        </Text>
+                        <Code
                             fontSize="lg"
                             fontWeight="700"
                             color="#1D1D1F"
@@ -855,9 +855,9 @@ const HushhLink = () => {
                             borderRadius="12px"
                             letterSpacing="-0.3px"
                             border="1px solid rgba(0, 0, 0, 0.06)"
-                          >
-                            {item.component}
-                          </Code>
+                        >
+                          {item.component}
+                        </Code>
                         </VStack>
                       </HStack>
 
@@ -891,7 +891,7 @@ const HushhLink = () => {
                         >
                           {item.functionality}
                         </Text>
-                      </VStack>
+                    </VStack>
                     </VStack>
 
                     {/* Subtle Gradient Overlay */}
@@ -1663,35 +1663,35 @@ const HushhLink = () => {
           <Box
             position="relative"
             w="full"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
             // borderRadius={{ base: "lg", md: "xl", lg: "2xl" }}
             overflow="hidden"
             // bg="white"
             boxShadow="0 4px 20px rgba(0, 0, 0, 0.1)"
             // p={{ base: 4, md: 6, lg: 8 }}
-          >
-            <Box
-              position="relative"
+        >
+          <Box
+            position="relative"
               w="full"
               maxW={{ base: "full", md: "90%", lg: "85%", xl: "80%" }}
               mx="auto"
-            >
-              <Image 
-                src={HushhTrail} 
+          >
+            <Image 
+              src={HushhTrail} 
                 alt="Hushh Trail - Data Audit Dashboard" 
-                style={{
-                  width: '100%',
-                  height: 'auto',
+              style={{
+                width: '100%',
+                height: 'auto',
                   maxWidth: '100%',
                   objectFit: 'contain',
                   display: 'block'
-                }}
-                priority
+              }}
+              priority
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 90vw, 80vw"
-              />
-            </Box>
+            />
+          </Box>
           </Box>
         {/* </Container> */}
       </Box>

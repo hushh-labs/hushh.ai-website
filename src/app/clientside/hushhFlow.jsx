@@ -23,14 +23,17 @@ import {
   GridItem,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { FaApple, FaFolder, FaLink, FaShieldAlt } from 'react-icons/fa';
+import { FaApple, FaFolder, FaLink, FaShieldAlt, FaUser } from 'react-icons/fa';
 import HushhLinkBox from '../_components/svg/hushhLink/hushhLinkBox.svg'
 import Image from 'next/image';
 import HushhTrail from '../_components/svg/hushhLink/audit-trail.svg'
 import ConsentBasedIcon from '../_components/svg/hushhFlow/consentBasedIcon.svg'
 import TransparentRevenueIcon from '../_components/svg/hushhFlow/transparentRevenueIcon.svg'
 import ReplaceIcon from '../_components/svg/hushhFlow/replacesIcon.svg'
+import { FiBriefcase, FiUserCheck } from 'react-icons/fi';
 // import PrivacyEarns from '../_components/svg/hushhFlow/privacyearns.svg'
+import { GrAttachment } from "react-icons/gr";
+
 
 const MotionBox = motion(Box);
 const MotionHeading = motion(Heading);
@@ -496,6 +499,7 @@ const HushhFlow = () => {
         </Grid>
       </Box>
 
+
       {/* Consent Token Anatomy & Philosophy Section */}
       <Box
         position="relative"
@@ -755,6 +759,434 @@ const HushhFlow = () => {
           </GridItem>
         </Grid>
 
+      </Box>
+
+       {/* How it Works Section */}
+       <Box
+        bg="#ffffff"
+        position="relative"
+        py={{ base: 16, md: 20, lg: 24, xl: 28 }}
+        overflow="hidden"
+        minH={{ base: "auto", lg: "100vh" }}
+      >
+        <Container 
+          maxW="8xl" 
+          px={{ base: 4, md: 6, lg: 8, xl: 12 }}
+          position="relative" 
+          zIndex={2}
+        >
+          {/* Section Title */}
+          <MotionBox
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            textAlign="center"
+            mb={{ base: 12, md: 16, lg: 20, xl: 24 }}
+          >
+            <Heading
+              as="h2"
+              fontSize={{ base: "3xl", md: "4xl", lg: "5xl", xl: "6xl" }}
+              fontWeight="700"
+              color="#333333"
+              letterSpacing="tight"
+              lineHeight={{ base: "shorter", md: "none" }}
+              fontFamily="Inter, sans-serif"
+            >
+              How it Works
+            </Heading>
+          </MotionBox>
+
+          {/* Main Content Grid */}
+          <Grid
+            templateColumns={{ base: "1fr", lg: "1fr auto 1fr" }}
+            gap={{ base: 8, md: 12, lg: 8 }}
+            alignItems="center"
+            maxW="7xl"
+            mx="auto"
+          >
+            {/* Left Section - User */}
+            <GridItem>
+              <MotionBox
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+              >
+                <VStack spacing={{ base: 6, md: 8, lg: 10 }} align="center">
+                  {/* User Description */}
+                  <Box textAlign="center" maxW="lg">
+                    <Text
+                      fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
+                      fontWeight="400"
+                      color="#281d1b"
+                      fontFamily="Inter, sans-serif"
+                      lineHeight="relaxed"
+                    >
+                      <Text as="span" fontWeight="600">User:</Text> Approves data access → Earns credits, rewards, or $
+                    </Text>
+                  </Box>
+
+                  {/* User Mockup Container */}
+                  <Box position="relative">
+                    {/* Phone Mockup */}
+                    <Box
+                      w={{ base: "200px", md: "250px", lg: "296px" }}
+                      h={{ base: "300px", md: "350px", lg: "404px" }}
+                      bg="#ffffff"
+                      borderRadius="20px"
+                      border="1.5px solid"
+                      borderColor="rgba(0,113,227,0.17)"
+                      boxShadow="15px 128px 36px 0px rgba(0,0,0,0), 10px 82px 33px 0px rgba(0,0,0,0.01), 5px 46px 28px 0px rgba(0,0,0,0.04), 2px 20px 21px 0px rgba(0,0,0,0.06), 1px 5px 11px 0px rgba(0,0,0,0.08)"
+                      position="relative"
+                      overflow="hidden"
+                    >
+                      {/* Header Section */}
+                      <Box
+                        bg="rgba(40,29,27,0.2)"
+                        h="32px"
+                        w="142px"
+                        borderRadius="16px"
+                        position="absolute"
+                        top="28px"
+                        left="28px"
+                      />
+                      
+                      {/* Primary Section */}
+                      <Box
+                        bg="rgba(40,29,27,0.2)"
+                        opacity="0.5"
+                        border="1px solid #000000"
+                        borderRadius="16px"
+                        position="absolute"
+                        top="80px"
+                        left="28px"
+                        right="28px"
+                        bottom="28px"
+                      />
+
+                      {/* User Icon Placeholder */}
+                      <Box
+                        position="absolute"
+                        top="50%"
+                        left="50%"
+                        transform="translate(-50%, -50%)"
+                        w={{ base: "80px", md: "100px", lg: "120px" }}
+                        h={{ base: "80px", md: "100px", lg: "120px" }}
+                        bg="rgba(40,29,27,0.1)"
+                        borderRadius="full"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <Box
+                          w={{ base: "40px", md: "50px", lg: "60px" }}
+                          h={{ base: "40px", md: "50px", lg: "60px" }}
+                          bg="rgba(40,29,27,0.3)"
+                          borderRadius="full"
+                        />
+                      </Box>
+                    </Box>
+
+                    {/* User Label */}
+                    <Box
+                      position="absolute"
+                      bottom={{ base: "-80px", md: "-90px", lg: "-100px" }}
+                      left={{ base: "-20px", md: "-30px", lg: "-40px" }}
+                      background={'rgba(0, 113, 227, 0.09)'}
+                      borderRadius="20px"
+                      
+                      // boxShadow="0 4px 12px rgba(0,0,0,0.15)"
+                      minW="190px"
+                      backdropFilter="blur(10px)"
+                    >
+                      <HStack spacing={3} p={{md:'14px',base:'10px'}} justify="flex-start">
+                        <Icon
+                          as={FiUserCheck}
+                          w="32px"
+                          h="32px"
+                          color="#0071E3"
+                        />
+                        <Text
+                          fontSize="20px"
+                          fontWeight="bold"
+                          color="#281d1b"
+                          fontFamily="Inter, sans-serif"
+                          letterSpacing="-0.4px"
+                          lineHeight="24px"
+                        >
+                          User
+                        </Text>
+                      </HStack>
+                    </Box>
+
+                    {/* Agent Label (floating) */}
+                    <Box
+                      position="absolute"
+                      top={{ base: "40px", md: "50px", lg: "60px" }}
+                      right={{ base: "-40px", md: "-50px", lg: "-60px" }}
+                      background={'rgba(0, 113, 227, 0.09)'}
+                      borderRadius="20px"
+                      border="1.5px solid"
+                      borderColor="#6E504933"
+                      transform="rotate(-5deg)"
+                      backdropFilter="blur(10px)"
+                      boxShadow="15px 128px 36px 0px rgba(0,0,0,0), 10px 82px 33px 0px rgba(0,0,0,0.01), 5px 46px 28px 0px rgba(0,0,0,0.04), 2px 20px 21px 0px rgba(0,0,0,0.06), 1px 5px 11px 0px rgba(0,0,0,0.08)"
+                      minW="160px"
+                    >
+                      <HStack spacing={2} p={{md:'14px',base:'10px'}} justify="flex-start">
+                      <Icon
+                          as={GrAttachment}
+                          w="32px"
+                          h="32px"
+                          color="#0071E3"
+                        />
+                        <Text
+                          fontSize="20px"
+                          fontWeight="bold"
+                          color="#281d1b"
+                          fontFamily="Inter, sans-serif"
+                          letterSpacing="-0.4px"
+                          lineHeight="24px"
+                        >
+                          Agent
+                        </Text>
+                      </HStack>
+                    </Box>
+                  </Box>
+                </VStack>
+              </MotionBox>
+            </GridItem>
+
+            {/* Center Arrow - Only visible on desktop */}
+            <GridItem display={{ base: "none", lg: "block" }}>
+              <MotionBox
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
+              >
+                <Box
+                  w="60px"
+                  h="60px"
+                  borderRadius="full"
+                  bg="rgba(0,113,227,0.1)"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  position="relative"
+                >
+                  <Box
+                    w="30px"
+                    h="2px"
+                    bg="#0071e3"
+                    position="relative"
+                    _after={{
+                      content: '""',
+                      position: "absolute",
+                      right: "-8px",
+                      top: "-6px",
+                      width: "0",
+                      height: "0",
+                      borderLeft: "8px solid #0071e3",
+                      borderTop: "6px solid transparent",
+                      borderBottom: "6px solid transparent",
+                    }}
+                  />
+                </Box>
+              </MotionBox>
+            </GridItem>
+
+            {/* Right Section - Agent */}
+            <GridItem>
+              <MotionBox
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+              >
+                <VStack spacing={{ base: 6, md: 8, lg: 10 }} align="center">
+                  {/* Agent Description */}
+                  <Box textAlign="center" maxW="lg">
+                    <Text
+                      fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
+                      fontWeight="400"
+                      color="#281d1b"
+                      fontFamily="Inter, sans-serif"
+                      lineHeight="relaxed"
+                    >
+                      <Text as="span" fontWeight="600">Agent:</Text> Brokers access, enforces scope, reports outcomes
+                    </Text>
+                  </Box>
+
+                  {/* Agent Mockup Container */}
+                  <Box position="relative">
+                    {/* Phone Mockup */}
+                    <Box
+                      w={{ base: "200px", md: "250px", lg: "296px" }}
+                      h={{ base: "300px", md: "350px", lg: "404px" }}
+                      bg="#ffffff"
+                      borderRadius="20px"
+                      border="1.5px solid rgba(110,80,73,0.2)"
+                      boxShadow="15px 128px 36px 0px rgba(0,0,0,0), 10px 82px 33px 0px rgba(0,0,0,0.01), 5px 46px 28px 0px rgba(0,0,0,0.04), 2px 20px 21px 0px rgba(0,0,0,0.06), 1px 5px 11px 0px rgba(0,0,0,0.08)"
+                      position="relative"
+                      overflow="hidden"
+                    >
+                      {/* Header Section */}
+                      <Box
+                        bg="rgba(40,29,27,0.2)"
+                        h="32px"
+                        w="142px"
+                        borderRadius="16px"
+                        position="absolute"
+                        top="28px"
+                        left="28px"
+                      />
+                      
+                      {/* Primary Section */}
+                      <Box
+                        bg="rgba(40,29,27,0.2)"
+                        opacity="0.5"
+                        border="1px solid #000000"
+                        borderRadius="16px"
+                        position="absolute"
+                        top="80px"
+                        left="28px"
+                        right="28px"
+                        bottom="28px"
+                      />
+
+                      {/* Brand Icon Placeholder */}
+                      <Box
+                        position="absolute"
+                        top="50%"
+                        left="50%"
+                        transform="translate(-50%, -50%)"
+                        w={{ base: "80px", md: "100px", lg: "120px" }}
+                        h={{ base: "80px", md: "100px", lg: "120px" }}
+                        bg="rgba(40,29,27,0.1)"
+                        borderRadius="lg"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <Box
+                          w={{ base: "50px", md: "60px", lg: "70px" }}
+                          h={{ base: "30px", md: "35px", lg: "40px" }}
+                          bg="rgba(40,29,27,0.3)"
+                          borderRadius="md"
+                        />
+                      </Box>
+                    </Box>
+
+                    {/* Brand Label */}
+                    <Box
+                      position="absolute"
+                      bottom={{ base: "-80px", md: "-90px", lg: "-100px" }}
+                      right={{ base: "-20px", md: "-30px", lg: "-40px" }}
+                      borderRadius="20px"
+                      background={'rgba(0, 113, 227, 0.09)'}
+                      border="1.5px solid"
+                      borderColor="#6E504933"
+                      px={{ base: 4, md: 5, lg: 6 }}
+                      py={{ base: 3, md: 4, lg: 5 }}
+                      
+                      boxShadow="15px 128px 36px 0px rgba(0,0,0,0), 10px 82px 33px 0px rgba(0,0,0,0.01), 5px 46px 28px 0px rgba(0,0,0,0.04), 2px 20px 21px 0px rgba(0,0,0,0.06), 1px 5px 11px 0px rgba(0,0,0,0.08)"
+                      minW="160px"
+                    >
+                      <HStack spacing={3} justify="center">
+                        <Icon
+                          as={FiBriefcase}
+                          w="32px"
+                          h="32px"
+                          color="#0071E3"
+                        />
+                        <Text
+                          fontSize="20px"
+                          fontWeight="bold"
+                          color="#281d1b"
+                          fontFamily="Inter, sans-serif"
+                          letterSpacing="-0.4px"
+                          lineHeight="24px"
+                        >
+                          Brand
+                        </Text>
+                      </HStack>
+                    </Box>
+
+                    {/* Agent Label (floating) */}
+                    <Box
+                      position="absolute"
+                      top={{ base: "40px", md: "50px", lg: "60px" }}
+                      left={{ base: "-40px", md: "-50px", lg: "-60px" }}
+                      background={'rgba(0, 113, 227, 0.09)'}
+                      borderRadius="20px"
+                      border="1.5px solid"
+                      borderColor="#6E504933"
+                      boxShadow="15px 128px 36px 0px rgba(0,0,0,0), 10px 82px 33px 0px rgba(0,0,0,0.01), 5px 46px 28px 0px rgba(0,0,0,0.04), 2px 20px 21px 0px rgba(0,0,0,0.06), 1px 5px 11px 0px rgba(0,0,0,0.08)"
+                      minW="160px"
+                      transform="rotate(5deg)"
+                      backdropFilter="blur(10px)"
+                    >
+                      <HStack spacing={2} p={{md:'14px',base:'10px'}} justify="flex-start">
+                      <Icon
+                          as={GrAttachment}
+                          w="32px"
+                          h="32px"
+                          color="#0071E3"
+                        />
+                        <Text
+                          fontSize="20px"
+                          fontWeight="bold"
+                          color="#281d1b"
+                          fontFamily="Inter, sans-serif"
+                          letterSpacing="-0.4px"
+                          lineHeight="24px"
+                        >
+                          Agent
+                        </Text>
+                      </HStack>
+                    </Box>
+                  </Box>
+                </VStack>
+              </MotionBox>
+            </GridItem>
+          </Grid>
+
+          {/* Mobile Arrow - Only visible on mobile */}
+          <Box display={{ base: "flex", lg: "none" }} justify="center" mt={8} mb={4}>
+            <MotionBox
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
+            >
+              <Box
+                w="50px"
+                h="50px"
+                borderRadius="full"
+                bg="rgba(0,113,227,0.1)"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                transform="rotate(90deg)"
+              >
+                <Box
+                  w="25px"
+                  h="2px"
+                  bg="#0071e3"
+                  position="relative"
+                  _after={{
+                    content: '""',
+                    position: "absolute",
+                    right: "-6px",
+                    top: "-5px",
+                    width: "0",
+                    height: "0",
+                    borderLeft: "6px solid #0071e3",
+                    borderTop: "5px solid transparent",
+                    borderBottom: "5px solid transparent",
+                  }}
+                />
+              </Box>
+            </MotionBox>
+          </Box>
+        </Container>
       </Box>
 
        {/* Sample Usecase Section */}
