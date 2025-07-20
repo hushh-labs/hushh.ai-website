@@ -961,7 +961,7 @@ const HushhFlow = () => {
             </GridItem>
 
             {/* Center Arrow - Only visible on desktop */}
-            <GridItem display={{ base: "none", lg: "block" }}>
+            <GridItem display={{ base: "none", lg: "block", md:'block' }}>
               <MotionBox
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
