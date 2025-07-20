@@ -796,13 +796,14 @@ const HushhFlow = () => {
             </Heading>
           </MotionBox>
 
-          {/* Main Content Grid */}
+          {/* Desktop Content Grid */}
           <Grid
             templateColumns={{ base: "1fr", lg: "1fr auto 1fr" }}
-            gap={{ base: 8, md: 12, lg: 8 }}
+            gap={{ base: 12, md: 16, lg: 8 }}
             alignItems="center"
             maxW="7xl"
             mx="auto"
+            display={{ base: "none", lg: "grid" }}
           >
             {/* Left Section - User */}
             <GridItem>
@@ -881,8 +882,8 @@ const HushhFlow = () => {
                           src={require('../_components/svg/hushhFlow/user.svg')}
                           alt="User icon"
                           style={{ 
-                            width: '100px', 
-                            height: '100px',
+                            width: '80px', 
+                            height: '80px',
                             display: 'block'
                           }} 
                         />
@@ -892,8 +893,8 @@ const HushhFlow = () => {
                     {/* User Label */}
                     <Box
                       position="absolute"
-                      bottom={{ base: "-80px", md: "50px", lg: "-100px" }}
-                      left={{ base: "-20px", md: "-70px", lg: "-40px" }}
+                      bottom={{ base: "-80px", md: "-90px", lg: "-100px" }}
+                      left={{ base: "-20px", md: "-30px", lg: "-40px" }}
                       background={'rgba(0, 113, 227, 0.09)'}
                       borderRadius="20px"
                       border="1.5px solid"
@@ -967,7 +968,7 @@ const HushhFlow = () => {
                 transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
               >
                 <Box
-                  w="120px"
+                  w={{ base: "80px", lg: "120px" }}
                   h="60px"
                   display="flex"
                   alignItems="center"
@@ -976,8 +977,8 @@ const HushhFlow = () => {
                 >
                   <Icon
                     as={FaArrowRight}
-                    w="24px"
-                    h="24px"
+                    w={{ base: "20px", lg: "24px" }}
+                    h={{ base: "20px", lg: "24px" }}
                     color="#0071e3"
                   />
                 </Box>
@@ -1060,8 +1061,8 @@ const HushhFlow = () => {
                           src={require('../_components/svg/hushhFlow/support.svg')}
                           alt=""
                           style={{ 
-                            width: '100px', 
-                            height: '100px',
+                            width: '80px', 
+                            height: '80px',
                             display: 'block'
                           }} 
                         />
@@ -1071,8 +1072,8 @@ const HushhFlow = () => {
                     {/* Brand Label */}
                     <Box
                       position="absolute"
-                      bottom={{ base: "-80px", md: "50px", lg: "-100px" }}
-                      right={{ base: "-20px", md: "160px", lg: "-40px" }}
+                      bottom={{ base: "-80px", md: "-90px", lg: "-100px" }}
+                      right={{ base: "-20px", md: "-30px", lg: "-40px" }}
                       borderRadius="20px"
                       background={'rgba(0, 113, 227, 0.09)'}
                       border="1.5px solid"
@@ -1105,7 +1106,7 @@ const HushhFlow = () => {
                     <Box
                       position="absolute"
                       top={{ base: "40px", md: "50px", lg: "60px" }}
-                      left={{ base: "-40px", md: "150px", lg: "-60px" }}
+                      left={{ base: "-40px", md: "-50px", lg: "-60px" }}
                       background={'rgba(0, 113, 227, 0.09)'}
                       borderRadius="20px"
                       border="1.5px solid"
@@ -1139,43 +1140,341 @@ const HushhFlow = () => {
             </GridItem>
           </Grid>
 
-          {/* Mobile Arrow - Only visible on mobile */}
-          <Box display={{ base: "flex", lg: "none" }} justify="center" mt={8} mb={4}>
+          {/* Mobile Layout - Vertical Flow */}
+          <VStack 
+            spacing={8} 
+            display={{ base: "flex", lg: "none" }} 
+            maxW="sm" 
+            mx="auto"
+            mt={8}
+          >
+            {/* Mobile User Section */}
+            <MotionBox
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            >
+              <VStack spacing={6} align="center">
+                {/* User Description */}
+                <Box textAlign="center" maxW="sm">
+                  <Text
+                    fontSize={{ base: "md", sm: "lg" }}
+                    fontWeight="400"
+                    color="#281d1b"
+                    fontFamily="Inter, sans-serif"
+                    lineHeight="relaxed"
+                  >
+                    <Text as="span" fontWeight="600">User:</Text> Approves data access → Earns credits, rewards, or $
+                  </Text>
+                </Box>
+
+                {/* Mobile User Mockup */}
+                <Box position="relative">
+                  <Box
+                    w="200px"
+                    h="280px"
+                    bg="#ffffff"
+                    borderRadius="16px"
+                    border="1.5px solid"
+                    borderColor="rgba(0,113,227,0.17)"
+                    boxShadow="8px 64px 18px 0px rgba(0,0,0,0), 5px 41px 16px 0px rgba(0,0,0,0.01), 3px 23px 14px 0px rgba(0,0,0,0.04), 1px 10px 10px 0px rgba(0,0,0,0.06), 0px 3px 6px 0px rgba(0,0,0,0.08)"
+                    position="relative"
+                    overflow="hidden"
+                  >
+                    {/* Header Section */}
+                    <Box
+                      bg="rgba(40,29,27,0.2)"
+                      h="24px"
+                      w="120px"
+                      borderRadius="12px"
+                      position="absolute"
+                      top="20px"
+                      left="20px"
+                    />
+                    
+                    {/* Primary Section */}
+                    <Box
+                      bg="#281D1B33"
+                      opacity="0.5"
+                      border="1px solid #000000"
+                      borderRadius="12px"
+                      position="absolute"
+                      top="60px"
+                      left="20px"
+                      right="20px"
+                      bottom="20px"
+                    />
+
+                    {/* User Icon */}
+                    <Box
+                      position="absolute"
+                      top="50%"
+                      left="50%"
+                      transform="translate(-50%, -50%)"
+                      w="80px"
+                      h="80px"
+                      borderRadius="lg"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <Image 
+                        src={require('../_components/svg/hushhFlow/user.svg')}
+                        alt="User icon"
+                        style={{ 
+                          width: '60px', 
+                          height: '60px',
+                          display: 'block'
+                        }} 
+                      />
+                    </Box>
+                  </Box>
+
+                  {/* Mobile User Label */}
+                  <Box
+                    position="absolute"
+                    bottom="-60px"
+                    left="50%"
+                    transform="translateX(-90%) translateY(-110%)"
+                    
+                    background={'rgba(0, 113, 227, 0.09)'}
+                    borderRadius="16px"
+                    border="1.5px solid"
+                    borderColor="#6E504933"
+                    backdropFilter="blur(10px)"
+                    boxShadow="8px 64px 18px 0px rgba(0,0,0,0), 5px 41px 16px 0px rgba(0,0,0,0.01), 3px 23px 14px 0px rgba(0,0,0,0.04), 1px 10px 10px 0px rgba(0,0,0,0.06), 0px 3px 6px 0px rgba(0,0,0,0.08)"
+                    minW="140px"
+                  >
+                    <HStack spacing={2} p="12px" justify="center">
+                      <Icon
+                        as={FiUserCheck}
+                        w="24px"
+                        h="24px"
+                        color="#0071E3"
+                      />
+                      <Text
+                        fontSize="18px"
+                        fontWeight="bold"
+                        color="#281d1b"
+                        fontFamily="Inter, sans-serif"
+                        letterSpacing="-0.3px"
+                        lineHeight="22px"
+                      >
+                        User
+                      </Text>
+                    </HStack>
+                  </Box>
+
+                  {/* Mobile Agent Label (floating) */}
+                  <Box
+                    position="absolute"
+                    top="30px"
+                    right="-30px"
+                    background={'rgba(0, 113, 227, 0.09)'}
+                    borderRadius="16px"
+                    border="1.5px solid"
+                    borderColor="#6E504933"
+                    backdropFilter="blur(10px)"
+                    boxShadow="8px 64px 18px 0px rgba(0,0,0,0), 5px 41px 16px 0px rgba(0,0,0,0.01), 3px 23px 14px 0px rgba(0,0,0,0.04), 1px 10px 10px 0px rgba(0,0,0,0.06), 0px 3px 6px 0px rgba(0,0,0,0.08)"
+                    minW="140px"
+                  >
+                    <HStack spacing={2} p="10px" justify="center">
+                      <Icon
+                        as={GrAttachment}
+                        w="20px"
+                        h="20px"
+                        color="#0071E3"
+                      />
+                      <Text
+                        fontSize="16px"
+                        fontWeight="bold"
+                        color="#281d1b"
+                        fontFamily="Inter, sans-serif"
+                        letterSpacing="-0.3px"
+                        lineHeight="20px"
+                      >
+                        Agent
+                      </Text>
+                    </HStack>
+                  </Box>
+                </Box>
+              </VStack>
+            </MotionBox>
+
+            {/* Mobile Arrow Down */}
             <MotionBox
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
             >
               <Box
-                w="50px"
-                h="50px"
-                borderRadius="full"
-                bg="rgba(0,113,227,0.1)"
+                w="60px"
+                h="60px"
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
                 transform="rotate(90deg)"
               >
-                <Box
-                  w="25px"
-                  h="2px"
-                  bg="#0071e3"
-                  position="relative"
-                  _after={{
-                    content: '""',
-                    position: "absolute",
-                    right: "-6px",
-                    top: "-5px",
-                    width: "0",
-                    height: "0",
-                    borderLeft: "6px solid #0071e3",
-                    borderTop: "5px solid transparent",
-                    borderBottom: "5px solid transparent",
-                  }}
+                <Icon
+                  as={FaArrowRight}
+                  w="20px"
+                  h="20px"
+                  color="#0071e3"
                 />
               </Box>
             </MotionBox>
-          </Box>
+
+            {/* Mobile Agent/Brand Section */}
+            <MotionBox
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.7, ease: "easeOut" }}
+            >
+              <VStack spacing={6} align="center">
+                {/* Agent Description */}
+                <Box textAlign="center" maxW="sm">
+                  <Text
+                    fontSize={{ base: "md", sm: "lg" }}
+                    fontWeight="400"
+                    color="#281d1b"
+                    fontFamily="Inter, sans-serif"
+                    lineHeight="relaxed"
+                  >
+                    <Text as="span" fontWeight="600">Agent:</Text> Brokers access, enforces scope, reports outcomes
+                  </Text>
+                </Box>
+
+                {/* Mobile Brand Mockup */}
+                <Box position="relative">
+                  <Box
+                    w="200px"
+                    h="280px"
+                    bg="#ffffff"
+                    borderRadius="16px"
+                    border="1.5px solid rgba(110,80,73,0.2)"
+                    boxShadow="8px 64px 18px 0px rgba(0,0,0,0), 5px 41px 16px 0px rgba(0,0,0,0.01), 3px 23px 14px 0px rgba(0,0,0,0.04), 1px 10px 10px 0px rgba(0,0,0,0.06), 0px 3px 6px 0px rgba(0,0,0,0.08)"
+                    position="relative"
+                    overflow="hidden"
+                  >
+                    {/* Header Section */}
+                    <Box
+                      bg="rgba(40,29,27,0.2)"
+                      h="24px"
+                      w="120px"
+                      borderRadius="12px"
+                      position="absolute"
+                      top="20px"
+                      left="20px"
+                    />
+                    
+                    {/* Primary Section */}
+                    <Box
+                      bg="#281D1B33"
+                      opacity="0.5"
+                      border="1px solid #000000"
+                      borderRadius="12px"
+                      position="absolute"
+                      top="60px"
+                      left="20px"
+                      right="20px"
+                      bottom="20px"
+                    />
+
+                    {/* Brand Icon */}
+                    <Box
+                      position="absolute"
+                      top="50%"
+                      left="50%"
+                      transform="translate(-50%, -50%)"
+                      w="80px"
+                      h="80px"
+                      borderRadius="lg"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <Image 
+                        src={require('../_components/svg/hushhFlow/support.svg')}
+                        alt=""
+                        style={{ 
+                          width: '60px', 
+                          height: '60px',
+                          display: 'block'
+                        }} 
+                      />
+                    </Box>
+                  </Box>
+
+                  {/* Mobile Brand Label */}
+                  <Box
+                    position="absolute"
+                    bottom="30px"
+                    right="20%"
+                    transform="translateX(80%)"
+                    borderRadius="16px"
+                    background={'rgba(0, 113, 227, 0.09)'}
+                    border="1.5px solid"
+                    borderColor="#6E504933"
+                    backdropFilter="blur(10px)"
+                    boxShadow="8px 64px 18px 0px rgba(0,0,0,0), 5px 41px 16px 0px rgba(0,0,0,0.01), 3px 23px 14px 0px rgba(0,0,0,0.04), 1px 10px 10px 0px rgba(0,0,0,0.06), 0px 3px 6px 0px rgba(0,0,0,0.08)"
+                    minW="140px"
+                  >
+                    <HStack spacing={2} p="12px" justify="center">
+                      <Icon
+                        as={FiBriefcase}
+                        w="24px"
+                        h="24px"
+                        color="#0071E3"
+                      />
+                      <Text
+                        fontSize="18px"
+                        fontWeight="bold"
+                        color="#281d1b"
+                        fontFamily="Inter, sans-serif"
+                        letterSpacing="-0.3px"
+                        lineHeight="22px"
+                      >
+                        Brand
+                      </Text>
+                    </HStack>
+                  </Box>
+
+                  {/* Mobile Agent Label (floating) */}
+                  <Box
+                    position="absolute"
+                    top="30px"
+                    left="-30px"
+                    background={'rgba(0, 113, 227, 0.09)'}
+                    borderRadius="16px"
+                    border="1.5px solid"
+                    borderColor="#6E504933"
+                    backdropFilter="blur(10px)"
+                    boxShadow="8px 64px 18px 0px rgba(0,0,0,0), 5px 41px 16px 0px rgba(0,0,0,0.01), 3px 23px 14px 0px rgba(0,0,0,0.04), 1px 10px 10px 0px rgba(0,0,0,0.06), 0px 3px 6px 0px rgba(0,0,0,0.08)"
+                    minW="140px"
+                  >
+                    <HStack spacing={2} p="10px" justify="center">
+                      <Icon
+                        as={GrAttachment}
+                        w="20px"
+                        h="20px"
+                        color="#0071E3"
+                      />
+                      <Text
+                        fontSize="16px"
+                        fontWeight="bold"
+                        color="#281d1b"
+                        fontFamily="Inter, sans-serif"
+                        letterSpacing="-0.3px"
+                        lineHeight="20px"
+                      >
+                        Agent
+                      </Text>
+                    </HStack>
+                  </Box>
+                </Box>
+              </VStack>
+            </MotionBox>
+          </VStack>
         </Container>
       </Box>
 
