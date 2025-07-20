@@ -1071,12 +1071,12 @@ const HushhGrid = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            textAlign="center"
+            textAlign="left"
             mb={{ base: "48px", md: "64px", lg: "80px", xl: "96px" }}
           >
             <Heading
               as="h2"
-              fontSize={{ base: "4xl", sm: "5xl", md: "6xl", lg: "7xl", xl: "8xl" }}
+              fontSize={{ base: "2xl", sm: "4xl", md: "4xl", lg: "7xl", xl: "8xl" }}
               fontWeight="bold"
               color="#333333"
               letterSpacing="tight"
@@ -1113,7 +1113,7 @@ const HushhGrid = () => {
                 borderRadius={'29px'}
                 overflow="hidden"
                 // boxShadow="0 4px 4px rgba(0, 0, 0, 0.25)"
-                backgroundImage={'/courseraBg.svg'} 
+                backgroundImage={'/usecasebggrid1.svg'} 
                 backgroundSize="cover"
                 backgroundPosition="center"
                 backgroundRepeat="no-repeat"
@@ -1136,18 +1136,17 @@ const HushhGrid = () => {
                   <Text
                     fontSize={{ base: "sm", md: "2xl", lg: "3xl" }}
                     fontWeight="semibold"
-                    color="#000000"
+                    color="#FFFFFF"
                     lineHeight="shorter"
                     letterSpacing="tight"
                     fontFamily="Inter, sans-serif"
                   >
-                    Approve Coursera to recommend learning paths based on browsing” → 3 free courses
+                    Run my daily summary at 7am with updated calendar + email context
                   </Text>
                 </Box>
               </Box>
             </MotionBox>
 
-            {/* Card 2 - Amazon */}
             <MotionBox
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -1162,7 +1161,7 @@ const HushhGrid = () => {
                 borderRadius={'29px'}
                 overflow="hidden"
                 // boxShadow="0 4px 4px rgba(0, 0, 0, 0.25)"
-                backgroundImage={'/courseraBg.svg'} 
+                backgroundImage={'/usecasebggrid2.svg'} 
                 backgroundSize="cover"
                 backgroundPosition="center"
                 backgroundRepeat="no-repeat"
@@ -1185,12 +1184,12 @@ const HushhGrid = () => {
                   <Text
                     fontSize={{ base: "sm", md: "2xl", lg: "3xl" }}
                     fontWeight="semibold"
-                    color="#000000"
+                    color="#FFFFFF"
                     lineHeight="shorter"
                     letterSpacing="tight"
                     fontFamily="Inter, sans-serif"
                   >
-                    Approve Coursera to recommend learning paths based on browsing” → 3 free courses
+                    Query Vault for spending over ₹10,000 in last 30 days, trigger flow if true
                   </Text>
                 </Box>
               </Box>
@@ -1211,7 +1210,7 @@ const HushhGrid = () => {
                 borderRadius={'29px'}
                 overflow="hidden"
                 // boxShadow="0 4px 4px rgba(0, 0, 0, 0.25)"
-                backgroundImage={'/spotifyBg.svg'}
+                backgroundImage={'/usecasebggrid3.svg'}
                 backgroundSize="cover"
                 backgroundPosition="center"
                 backgroundRepeat="no-repeat"
@@ -1234,12 +1233,12 @@ const HushhGrid = () => {
                   <Text
                     fontSize={{ base: "sm", md: "2xl", lg: "3xl" }}
                     fontWeight="semibold"
-                    color="#000000"
+                    color="#FFFFFF"
                     lineHeight="shorter"
                     letterSpacing="tight"
                     fontFamily="Inter, sans-serif"
                   >
-                    Share concert interest profile with Spotify” → Premium trial
+                    Match friend’s Spotify mood to my saved music tags — suggest meet-up song
                   </Text>
                 </Box>
               </Box>
@@ -1247,6 +1246,325 @@ const HushhGrid = () => {
           </Flex>
 
           
+        </Container>
+      </Box>
+
+         {/* Agent Stores + Marketplace Integration Section */}
+         <Box
+        bg="#f5f5f7"
+        position="relative"
+        py={{ base: "60px", md: "80px", lg: "120px" }}
+        minH={{ base: "auto", lg: "100vh" }}
+      >
+        {/* White Background for Right Half */}
+        <Box
+          position="absolute"
+          top={0}
+          right={0}
+          w={{ base: "0%", lg: "50%" }}
+          h="full"
+          bg="#ffffff"
+          zIndex={1}
+        />
+        
+        <Container maxW="8xl" px={0} position="relative" zIndex={2}>
+          <Grid
+            templateColumns={{ base: "1fr", lg: "1fr 1fr" }}
+            gap={0}
+            alignItems="start"
+          >
+            {/* Left Column - Agent Stores + Marketplace Integration */}
+            <GridItem px={{ base: "32px", md: "48px", lg: "120px" }} py={{ base: "40px", md: "60px", lg: "80px" }}>
+              <MotionBox
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+              >
+                <VStack spacing={{ base: "32px", md: "40px", lg: "56px" }} align="start" w="full">
+                  {/* Main Title */}
+                  <Heading
+                    as="h2"
+                    fontSize={{ base: "28px", md: "36px", lg: "42px" }}
+                    fontWeight="bold"
+                    color="#333333"
+                    fontFamily="Inter, sans-serif"
+                    lineHeight="1.2"
+                    mb={{ base: "24px", md: "32px", lg: "40px" }}
+                  >
+                    Agent Stores + Marketplace Integration
+                  </Heading>
+
+                  {/* Deploy directly to Section */}
+                  <VStack spacing={{ base: "20px", md: "24px", lg: "28px" }} align="start" w="full">
+                    {/* Deploy Heading */}
+                    <Text
+                      fontSize={{ base: "24px", md: "28px", lg: "32px" }}
+                      fontWeight="medium"
+                      color="#383737"
+                      fontFamily="Inter, sans-serif"
+                      lineHeight="35px"
+                    >
+                      Deploy directly to:
+                    </Text>
+
+                    {/* Marketplace List */}
+                    <VStack spacing={{ base: "16px", md: "18px", lg: "20px" }} align="start" w="full" pl={{ base: "16px", md: "20px", lg: "24px" }}>
+                      <MotionBox
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+                      >
+                        <Flex align="center" gap="16px">
+                          <Box
+                            w="8px"
+                            h="8px"
+                            bg="#383737"
+                            borderRadius="full"
+                            flexShrink={0}
+                          />
+                          <Text
+                            fontSize={{ base: "12px", md: "18px", lg: "24px" }}
+                            fontWeight="medium"
+                            color="#383737"
+                            fontFamily="Inter, sans-serif"
+                            lineHeight="56px"
+                          >
+                            OpenAI Agents store
+                          </Text>
+                        </Flex>
+                      </MotionBox>
+
+                      <MotionBox
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+                      >
+                        <Flex align="center" gap="16px">
+                          <Box
+                            w="8px"
+                            h="8px"
+                            bg="#383737"
+                            borderRadius="full"
+                            flexShrink={0}
+                          />
+                          <Text
+                            fontSize={{ base: "12px", md: "18px", lg: "24px" }}
+                            fontWeight="medium"
+                            color="#383737"
+                            fontFamily="Inter, sans-serif"
+                            lineHeight="56px"
+                          >
+                            GitHub Action templates
+                          </Text>
+                        </Flex>
+                      </MotionBox>
+
+                      <MotionBox
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+                      >
+                        <Flex align="center" gap="16px">
+                          <Box
+                            w="8px"
+                            h="8px"
+                            bg="#383737"
+                            borderRadius="full"
+                            flexShrink={0}
+                          />
+                          <Text
+                            fontSize={{ base: "12px", md: "18px", lg: "24px" }}
+                            fontWeight="medium"
+                            color="#383737"
+                            fontFamily="Inter, sans-serif"
+                            lineHeight="56px"
+                          >
+                            Salesforce AppExchange
+                          </Text>
+                        </Flex>
+                      </MotionBox>
+
+                      <MotionBox
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+                      >
+                        <Flex align="center" gap="16px">
+                          <Box
+                            w="8px"
+                            h="8px"
+                            bg="#383737"
+                            borderRadius="full"
+                            flexShrink={0}
+                          />
+                          <Text
+                            fontSize={{ base: "12px", md: "18px", lg: "24px" }}
+                            fontWeight="medium"
+                            color="#383737"
+                            fontFamily="Inter, sans-serif"
+                            lineHeight="56px"
+                          >
+                            GCP Marketplace
+                          </Text>
+                        </Flex>
+                      </MotionBox>
+                    </VStack>
+                  </VStack>
+
+                  {/* Bottom Text */}
+                  <MotionBox
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
+                    // mt={{ base: "40px", md: "50px", lg: "60px" }}
+                  >
+                    <Text
+                      fontSize={{ base: "18px", md: "22px", lg: "24px" }}
+                      fontWeight="medium"
+                      color="#383737"
+                      fontFamily="Inter, sans-serif"
+                      lineHeight="1.5"
+                      maxW="600px"
+                    >
+                      Build once, run anywhere. Sell agents like apps, backed by Grid
+                    </Text>
+                  </MotionBox>
+                </VStack>
+              </MotionBox>
+            </GridItem>
+
+            {/* Right Column - Security & Privacy */}
+            <GridItem px={{ base: "32px", md: "48px", lg: "125px" }} py={{ base: "40px", md: "60px", lg: "100px" }}>
+              <MotionBox
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+              >
+                <VStack spacing={{ base: "32px", md: "40px", lg: "56px" }} align="start" w="full">
+                  {/* Main Title */}
+                  <Heading
+                    as="h2"
+                    fontSize={{ base: "32px", md: "40px", lg: "48px" }}
+                    fontWeight="bold"
+                    color="#333333"
+                    fontFamily="Inter, sans-serif"
+                    lineHeight={{ base: "1.3", md: "1.4", lg: "68px" }}
+                    letterSpacing="-0.96px"
+                    maxW="644px"
+                  >
+                    Security & Privacy
+                  </Heading>
+
+                  {/* Security Features List */}
+                  <VStack spacing={{ base: "28px", md: "32px", lg: "36px" }} align="start" w="full" pl={{ base: "16px", md: "20px", lg: "12px" }}>
+                    <MotionBox
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+                    >
+                      <Flex align="start" gap="16px">
+                        <Box
+                          w="8px"
+                          h="8px"
+                          bg="#383737"
+                          borderRadius="full"
+                          flexShrink={0}
+                          mt="14px"
+                        />
+                        <Text
+                          fontSize={{ base: "24px", md: "28px", lg: "32px" }}
+                          fontWeight="medium"
+                          color="#383737"
+                          fontFamily="Inter, sans-serif"
+                          lineHeight="35px"
+                        >
+                          Agent runs behind Vault and Link
+                        </Text>
+                      </Flex>
+                    </MotionBox>
+
+                    <MotionBox
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+                    >
+                      <Flex align="start" gap="16px">
+                        <Box
+                          w="8px"
+                          h="8px"
+                          bg="#383737"
+                          borderRadius="full"
+                          flexShrink={0}
+                          mt="14px"
+                        />
+                        <Text
+                          fontSize={{ base: "24px", md: "28px", lg: "32px" }}
+                          fontWeight="medium"
+                          color="#383737"
+                          fontFamily="Inter, sans-serif"
+                          lineHeight="35px"
+                        >
+                          Granular compute metering and user-aware rate limits
+                        </Text>
+                      </Flex>
+                    </MotionBox>
+
+                    <MotionBox
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+                    >
+                      <Flex align="start" gap="16px">
+                        <Box
+                          w="8px"
+                          h="8px"
+                          bg="#383737"
+                          borderRadius="full"
+                          flexShrink={0}
+                          mt="14px"
+                        />
+                        <Text
+                          fontSize={{ base: "24px", md: "28px", lg: "32px" }}
+                          fontWeight="medium"
+                          color="#383737"
+                          fontFamily="Inter, sans-serif"
+                          lineHeight="35px" 
+                        >
+                          Audit logs for every function, user, scope, and outcome
+                        </Text>
+                      </Flex>
+                    </MotionBox>
+
+                    <MotionBox
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+                    >
+                      <Flex align="start" gap="16px">
+                        <Box
+                          w="8px"
+                          h="8px"
+                          bg="#383737"
+                          borderRadius="full"
+                          flexShrink={0}
+                          mt="14px"
+                        />
+                        <Text
+                          fontSize={{ base: "24px", md: "28px", lg: "32px" }}
+                          fontWeight="medium"
+                          color="#383737"
+                          fontFamily="Inter, sans-serif"
+                          lineHeight="35px" 
+                        >
+                          E2E encrypted job tokens for long-running agent logic
+                        </Text>
+                      </Flex>
+                    </MotionBox>
+                  </VStack>
+                </VStack>
+              </MotionBox>
+            </GridItem>
+          </Grid>
         </Container>
       </Box>
       

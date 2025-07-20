@@ -1892,7 +1892,7 @@ const HushhFlow = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
               >
-                <VStack spacing={{ base: "32px", md: "40px", lg: "48px" }} align="start" w="full">
+                <VStack spacing={{ base: "32px", md: "40px", lg: "56px" }} align="start" w="full">
                   {/* Title */}
                   <Heading
                     as="h2"
