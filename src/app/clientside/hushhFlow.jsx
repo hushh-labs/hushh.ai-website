@@ -893,8 +893,8 @@ const HushhFlow = () => {
                     {/* User Label */}
                     <Box
                       position="absolute"
-                      bottom={{ base: "-80px", md: "-90px", lg: "-100px" }}
-                      left={{ base: "-20px", md: "-30px", lg: "-40px" }}
+                      bottom={{ base: "-80px", md: "70px", lg: "70px" }}
+                      left={{ base: "-20px", md: "-80px", lg: "-100px" }}
                       background={'rgba(0, 113, 227, 0.09)'}
                       borderRadius="20px"
                       border="1.5px solid"
@@ -968,18 +968,63 @@ const HushhFlow = () => {
                 transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
               >
                 <Box
-                  w={{ base: "80px", lg: "120px" }}
+                  w={{ base: "120px", md: "180px", lg: "220px" }}
                   h="60px"
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
                   position="relative"
                 >
-                  <Icon
-                    as={FaArrowRight}
-                    w={{ base: "20px", lg: "24px" }}
-                    h={{ base: "20px", lg: "24px" }}
-                    color="#0071e3"
+                  {/* Arrow Line */}
+                  <Box
+                    w={{ base: "60px", md: "100px", lg: "120px" }}
+                    h="3px"
+                    bg="#0071e3"
+                    borderRadius="2px"
+                    position="relative"
+                    _after={{
+                      content: '""',
+                      position: "absolute",
+                      right: "-8px",
+                      top: "-6px",
+                      width: "0",
+                      height: "0",
+                      borderLeft: "12px solid #0071e3",
+                      borderTop: "9px solid transparent",
+                      borderBottom: "9px solid transparent",
+                    }}
+                  />
+                  
+                  {/* Optional: Add subtle animation dots */}
+                  <Box
+                    position="absolute"
+                    left="20%"
+                    w="4px"
+                    h="4px"
+                    bg="#0071e3"
+                    borderRadius="full"
+                    opacity="0.6"
+                    animation="pulse 2s infinite"
+                  />
+                  <Box
+                    position="absolute"
+                    left="40%"
+                    w="3px"
+                    h="3px"
+                    bg="#0071e3"
+                    borderRadius="full"
+                    opacity="0.4"
+                    animation="pulse 2s infinite 0.5s"
+                  />
+                  <Box
+                    position="absolute"
+                    left="60%"
+                    w="3px"
+                    h="3px"
+                    bg="#0071e3"
+                    borderRadius="full"
+                    opacity="0.4"
+                    animation="pulse 2s infinite 1s"
                   />
                 </Box>
               </MotionBox>
@@ -1072,8 +1117,8 @@ const HushhFlow = () => {
                     {/* Brand Label */}
                     <Box
                       position="absolute"
-                      bottom={{ base: "-80px", md: "-90px", lg: "-100px" }}
-                      right={{ base: "-20px", md: "-30px", lg: "-40px" }}
+                      bottom={{ base: "-80px", md: "70px", lg: "-100px" }}
+                      right={{ base: "-20px", md: "-60px", lg: "-40px" }}
                       borderRadius="20px"
                       background={'rgba(0, 113, 227, 0.09)'}
                       border="1.5px solid"
