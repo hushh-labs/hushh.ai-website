@@ -23,8 +23,8 @@ import {
   Code
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { FaApple, FaFolder, FaLink, FaShieldAlt, FaCheckCircle, FaClipboardList, FaUsers, FaCode, FaCog, FaEye, FaHistory } from 'react-icons/fa';
-import { HiOutlineCog, HiOutlineEye, HiOutlineClipboardList, HiOutlineShieldCheck, HiOutlineUserGroup } from 'react-icons/hi';
+import { FaApple, FaFolder, FaLink, FaShieldAlt, FaCheckCircle, FaClipboardList, FaUsers, FaCode, FaCog, FaEye, FaHistory, FaEnvelope, FaShoppingCart, FaFileAlt } from 'react-icons/fa';
+import { HiOutlineCog, HiOutlineEye, HiOutlineClipboardList, HiOutlineShieldCheck, HiOutlineUserGroup, HiOutlineDocumentText, HiOutlineShoppingBag, HiOutlineMail } from 'react-icons/hi';
 import HushhLinkBox from '../_components/svg/hushhLink/hushhLinkBox.svg'
 import Image from 'next/image';
 import HushhTrail from '../_components/svg/hushhLink/audit-trail.svg'
@@ -356,7 +356,7 @@ const HushhLink = () => {
                         />
                       </Box>
                       <Text
-                        fontSize={{ base: "9px", md: "11px", lg: "12px", xl: "14px", "2xl": "16px" }}
+                        fontSize={{ base: "12px", md: "14px", lg: "16px", xl: "18px", "2xl": "20px" }}
                         fontWeight="500"
                         color="#000000"
                         fontFamily="Inter, sans-serif"
@@ -395,7 +395,7 @@ const HushhLink = () => {
                         />
                       </Box>
                       <Text
-                        fontSize={{ base: "9px", md: "11px", lg: "12px", xl: "14px", "2xl": "16px" }}
+                        fontSize={{ base: "12px", md: "14px", lg: "16px", xl: "18px", "2xl": "20px" }}
                         fontWeight="500"
                         color="#000000"
                         fontFamily="Inter, sans-serif"
@@ -434,7 +434,7 @@ const HushhLink = () => {
                         />
                       </Box>
                       <Text
-                        fontSize={{ base: "9px", md: "11px", lg: "12px", xl: "14px", "2xl": "16px" }}
+                        fontSize={{ base: "12px", md: "14px", lg: "16px", xl: "18px", "2xl": "20px" }}
                         fontWeight="500"
                         color="#000000"
                         fontFamily="Inter, sans-serif"
@@ -473,7 +473,7 @@ const HushhLink = () => {
                         />
                       </Box>
                       <Text
-                        fontSize={{ base: "9px", md: "11px", lg: "12px", xl: "14px", "2xl": "16px" }}
+                        fontSize={{ base: "12px", md: "14px", lg: "16px", xl: "18px", "2xl": "20px" }}
                         fontWeight="500"
                         color="#000000"
                         fontFamily="Inter, sans-serif"
@@ -743,36 +743,36 @@ const HushhLink = () => {
                   component: 'requestConsent()',
                   functionality: 'Shows user reason, data scope, expiration, and granularity options',
                   icon: HiOutlineShieldCheck,
-                  color: '#007AFF',
-                  bgGradient: 'linear(135deg, rgba(0, 122, 255, 0.1), rgba(0, 122, 255, 0.05))'
+                  color: 'black',
+                  bgGradient: '#F5F5F7'
                 },
                 {
                   component: 'logDecision()',
                   functionality: 'Logs the consent hash + signature to your Vault',
                   icon: HiOutlineClipboardList,
-                  color: '#34C759',
-                  bgGradient: 'linear(135deg, rgba(52, 199, 89, 0.1), rgba(52, 199, 89, 0.05))'
+                  color: 'black',
+                  bgGradient: '#F5F5F7'
                 },
                 {
                   component: 'revokeConsent()',
                   functionality: 'Revokes access for that session/token immediately',
                   icon: HiOutlineCog,
-                  color: '#FF9500',
-                  bgGradient: 'linear(135deg, rgba(255, 149, 0, 0.1), rgba(255, 149, 0, 0.05))'
+                  color: 'black',
+                  bgGradient: '#F5F5F7'
                 },
                 {
                   component: 'verifyConsent()',
                   functionality: 'All agent calls must pass this gate before data access',
                   icon: HiOutlineEye,
-                  color: '#5856D6',
-                  bgGradient: 'linear(135deg, rgba(88, 86, 214, 0.1), rgba(88, 86, 214, 0.05))'
+                  color: 'black',
+                  bgGradient: '#F5F5F7'
                 },
                 {
                   component: 'getAuditTrail()',
                   functionality: 'Shows every call, timestamp, scope, and revocation history',
                   icon: FaHistory,
-                  color: '#FF3B30',
-                  bgGradient: 'linear(135deg, rgba(255, 59, 48, 0.1), rgba(255, 59, 48, 0.05))'
+                  color: 'black',
+                  bgGradient: '#F5F5F7'
                 }
               ].map((item, index) => (
                 <MotionBox
@@ -1058,7 +1058,7 @@ const HushhLink = () => {
 
           {/* Right Side - Philosophy */}
           <GridItem
-            bg="#000000"
+            bg="#F5F5F7"
             position="relative"
             display="flex"
             alignItems="flex-start"
@@ -1080,7 +1080,7 @@ const HushhLink = () => {
                   as="h2"
                   fontSize={{ base: "3xl", md: "4xl", lg: "5xl", xl: "6xl" }}
                   fontWeight="bold"
-                  color="#22c55e"
+                  color="#0071E3"
                   lineHeight="shorter"
                   letterSpacing="tight"
                   fontFamily="Inter, sans-serif"
@@ -1100,7 +1100,7 @@ const HushhLink = () => {
                     <Text
                       fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
                       fontWeight="medium"
-                      color="white"
+                      color="#BDBDBD"
                       lineHeight="relaxed"
                       fontFamily="Inter, sans-serif"
                     >
@@ -1116,7 +1116,7 @@ const HushhLink = () => {
                     <Text
                       fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
                       fontWeight="medium"
-                      color="white"
+                      color="#BDBDBD"
                       lineHeight="relaxed"
                       fontFamily="Inter, sans-serif"
                     >
@@ -1132,7 +1132,7 @@ const HushhLink = () => {
                     <Text
                       fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
                       fontWeight="medium"
-                      color="white"
+                      color="#BDBDBD"
                       lineHeight="relaxed"
                       fontFamily="Inter, sans-serif"
                     >
@@ -1184,7 +1184,7 @@ const HushhLink = () => {
             </Heading>
           </MotionBox>
 
-          {/* Use Case Cards */}
+          {/* Desktop Use Case Cards */}
           <Flex
             direction={{ base: "column", lg: "row" }}
             justify="center"
@@ -1192,6 +1192,7 @@ const HushhLink = () => {
             gap={{ base: 6, md: 8, lg: 6 }}
             maxW="7xl"
             mx="auto"
+            display={{ base: "none", md: "flex" }}
           >
             {/* Card 1 - Notion */}
             <MotionBox
@@ -1337,11 +1338,279 @@ const HushhLink = () => {
               </Box>
             </MotionBox>
           </Flex>
+          {/* Apple-Themed Mobile Use Cases */}
+          <Box display={{ base: "block", md: "none" }} px={4}>
+            <VStack spacing={6} align="stretch">
+              {/* Mobile Section Header */}
+              <MotionBox
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                textAlign="center"
+                mb={4}
+              >
+                <Text
+                  fontSize="sm"
+                  fontWeight="600"
+                  color="#86868B"
+                  textTransform="uppercase"
+                  letterSpacing="1px"
+                  fontFamily="SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif"
+                  mb={3}
+                >
+                  Real World Examples
+                </Text>
+                <Box w="80px" h="2px" bg="linear-gradient(90deg, #007AFF, #5856D6)" mx="auto" borderRadius="1px" />
+              </MotionBox>
 
-          {/* Explore the Stack Button */}
+              {/* Mobile Use Case Cards */}
+              {[
+                {
+                  title: 'Notion Sync Authorization',
+                  description: 'Authorize Notion sync for 48 hours with read-only access',
+                  duration: '48 hours',
+                  access: 'Read-only',
+                  icon: HiOutlineDocumentText,
+                  color: 'black',
+                  bgColor: '#FFFFFF',
+                  borderColor: 'rgba(0, 122, 255, 0.1)'
+                },
+                {
+                  title: 'Amazon Shopping Personalization',
+                  description: 'Approve Amazon to personalize shopping for this week only',
+                  duration: '1 week',
+                  access: 'Shopping data',
+                  icon: HiOutlineShoppingBag,
+                  color: 'black',
+                  bgColor: '#FFFFFF',
+                  borderColor: 'rgba(255, 149, 0, 0.1)'
+                },
+                {
+                  title: 'Gmail Access Revocation',
+                  description: 'Revoke all prior access to Gmail with one tap',
+                  duration: 'Instant',
+                  access: 'All revoked',
+                  icon: HiOutlineMail,
+                  color: 'black',
+                  bgColor: '#FFFFFF',
+                  borderColor: 'rgba(255, 59, 48, 0.1)'
+                }
+              ].map((usecase, index) => (
+                <MotionBox
+                  key={index}
+                  initial={{ opacity: 0, y: 40, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ 
+                    duration: 0.7, 
+                    delay: 0.2 + (index * 0.2), 
+                    ease: [0.25, 0.46, 0.45, 0.94] 
+                  }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Box
+                    bg={usecase.bgColor}
+                    borderRadius="20px"
+                    p={6}
+                    border={`1px solid ${usecase.borderColor}`}
+                    boxShadow="0 4px 20px rgba(0, 0, 0, 0.08)"
+                    position="relative"
+                    overflow="hidden"
+                    _hover={{
+                      boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)"
+                    }}
+                    transition="all 0.3s ease"
+                  >
+                    {/* Header Section */}
+                    <HStack spacing={4} align="start" mb={5}>
+                      <Box
+                        w="56px"
+                        h="56px"
+                        bg="#F2F2F7"
+                        borderRadius="16px"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        flexShrink={0}
+                        border="1px solid #E5E5EA"
+                      >
+                        <Icon
+                          as={usecase.icon}
+                          w="28px"
+                          h="28px"
+                          color={usecase.color}
+                        />
+                      </Box>
+
+                      <VStack align="start" spacing={1} flex={1}>
+                        <Text
+                          fontSize="xs"
+                          fontWeight="600"
+                          color={usecase.color}
+                          textTransform="uppercase"
+                          letterSpacing="0.8px"
+                          fontFamily="SF Pro Text, -apple-system, BlinkMacSystemFont, sans-serif"
+                        >
+                          Use Case {index + 1}
+                        </Text>
+                        <Text
+                          fontSize="lg"
+                          fontWeight="600"
+                          color="#1D1D1F"
+                          lineHeight="1.3"
+                          fontFamily="SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif"
+                          letterSpacing="-0.3px"
+                        >
+                          {usecase.title}
+                        </Text>
+                      </VStack>
+                    </HStack>
+
+                    {/* Description */}
+                    <Text
+                      fontSize="md"
+                      fontWeight="400"
+                      color="#48484A"
+                      lineHeight="1.5"
+                      fontFamily="SF Pro Text, -apple-system, BlinkMacSystemFont, sans-serif"
+                      letterSpacing="-0.2px"
+                      mb={4}
+                    >
+                      {usecase.description}
+                    </Text>
+
+                    {/* Details Row */}
+                    <HStack spacing={4} justify="space-between" align="center">
+                      <VStack align="start" spacing={1}>
+                        <Text
+                          fontSize="xs"
+                          fontWeight="500"
+                          color="#8E8E93"
+                          textTransform="uppercase"
+                          letterSpacing="0.5px"
+                          fontFamily="SF Pro Text, -apple-system, BlinkMacSystemFont, sans-serif"
+                        >
+                          Duration
+                        </Text>
+                        <HStack spacing={2} align="center">
+                          <Box
+                            w="8px"
+                            h="8px"
+                            bg={usecase.color}
+                            borderRadius="full"
+                          />
+                          <Text
+                            fontSize="sm"
+                            fontWeight="500"
+                            color="#1D1D1F"
+                            fontFamily="SF Pro Text, -apple-system, BlinkMacSystemFont, sans-serif"
+                          >
+                            {usecase.duration}
+                          </Text>
+                        </HStack>
+                      </VStack>
+
+                      <VStack align="end" spacing={1}>
+                        <Text
+                          fontSize="xs"
+                          fontWeight="500"
+                          color="#8E8E93"
+                          textTransform="uppercase"
+                          letterSpacing="0.5px"
+                          fontFamily="SF Pro Text, -apple-system, BlinkMacSystemFont, sans-serif"
+                        >
+                          Access Level
+                        </Text>
+                        <Text
+                          fontSize="sm"
+                          fontWeight="500"
+                          color={usecase.color}
+                          fontFamily="SF Pro Text, -apple-system, BlinkMacSystemFont, sans-serif"
+                        >
+                          {usecase.access}
+                        </Text>
+                      </VStack>
+                    </HStack>
+                  </Box>
+                </MotionBox>
+              ))}
+
+              {/* Mobile CTA Section */}
+              <MotionBox
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 1.0, ease: "easeOut" }}
+                textAlign="center"
+                mt={6}
+                p={6}
+                bg="#FFFFFF"
+                borderRadius="20px"
+                border="1px solid #E5E5EA"
+                boxShadow="0 2px 16px rgba(0, 0, 0, 0.06)"
+              >
+                <VStack spacing={4}>
+                  <HStack spacing={2} justify="center">
+                    <Icon as={FaApple} w="20px" h="20px" color="#1D1D1F" />
+                    <Text
+                      fontSize="sm"
+                      fontWeight="600"
+                      color="#1D1D1F"
+                      fontFamily="SF Pro Text, -apple-system, BlinkMacSystemFont, sans-serif"
+                      letterSpacing="-0.2px"
+                    >
+                      Consent Management
+                    </Text>
+                  </HStack>
+                  
+                  <Text
+                    fontSize="xs"
+                    fontWeight="400"
+                    color="#8E8E93"
+                    fontFamily="SF Pro Text, -apple-system, BlinkMacSystemFont, sans-serif"
+                    textAlign="center"
+                    lineHeight="1.4"
+                  >
+                    Granular control over your data with time-bound permissions
+                  </Text>
+
+                  {/* Explore Stack Button for Mobile */}
+                  <MotionBox
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    mt={3}
+                  >
+                    <Box
+                      bg="#007AFF"
+                      borderRadius="14px"
+                      px={6}
+                      py={3}
+                      cursor="pointer"
+                      _hover={{
+                        bg: "#0056CC"
+                      }}
+                      transition="all 0.2s ease"
+                    >
+                      <Text
+                        fontSize="sm"
+                        fontWeight="600"
+                        color="white"
+                        fontFamily="SF Pro Text, -apple-system, BlinkMacSystemFont, sans-serif"
+                        letterSpacing="-0.2px"
+                      >
+                        Explore the Stack
+                      </Text>
+                    </Box>
+                  </MotionBox>
+                </VStack>
+              </MotionBox>
+            </VStack>
+          </Box>
+
+          {/* Desktop Explore the Stack Button */}
           <Box
             textAlign="center"
             mt={{ base: 16, md: 20, lg: 24 }}
+            display={{ base: "none", md: "block" }}
           >
             <MotionBox
               initial={{ opacity: 0, y: 20 }}
@@ -1380,46 +1649,53 @@ const HushhLink = () => {
 
       {/* Audit Trail Section */}
       <Box
-        minH="100vh"
-        bg="black"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
+        // bg="#f5f5f7"
         position="relative"
+        py={{ base: 12, md: 16, lg: 20, xl: 24 }}
         overflow="hidden"
-        py={{ base: 8, md: 12, lg: 16 }}
       >
-        <Container 
+        {/* <Container 
           maxW="8xl" 
-          px={{ base: 4, md: 6, lg: 8 }}
-          h="100%"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
+          px={{ base: 4, md: 6, lg: 8, xl: 12 }}
+          position="relative" 
+          zIndex={2}
+        > */}
           <Box
             position="relative"
-            w="100%"
-            h="100%"
-            minH={{ base: "70vh", md: "80vh", lg: "85vh" }}
+            w="full"
             display="flex"
             alignItems="center"
             justifyContent="center"
+            // borderRadius={{ base: "lg", md: "xl", lg: "2xl" }}
+            overflow="hidden"
+            // bg="white"
+            boxShadow="0 4px 20px rgba(0, 0, 0, 0.1)"
+            // p={{ base: 4, md: 6, lg: 8 }}
           >
-            <Image 
-              src={HushhTrail} 
-              alt="Hushh Trail" 
-              style={{
-                width: '100%',
-                height: 'auto',
-                maxHeight: '85vh',
-                objectFit: 'contain'
-              }}
-              priority
-            />
+            <Box
+              position="relative"
+              w="full"
+              maxW={{ base: "full", md: "90%", lg: "85%", xl: "80%" }}
+              mx="auto"
+            >
+              <Image 
+                src={HushhTrail} 
+                alt="Hushh Trail - Data Audit Dashboard" 
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  maxWidth: '100%',
+                  objectFit: 'contain',
+                  display: 'block'
+                }}
+                priority
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 90vw, 80vw"
+              />
+            </Box>
           </Box>
-        </Container>
+        {/* </Container> */}
       </Box>
+
       
        {/* Developer Ready Section */}
        <Box
