@@ -13,6 +13,7 @@ import AboutFaq from "../_components/features/faq/aboutFaq";
 import Head from "next/head";
 import ImageGrid from "../_components/features/dynamicImageGrid";
 import { siteMetadata } from "../sitemetadata";
+import ContentWrapper from "../_components/layout/ContentWrapper";
 
 export const metadata = {
   title: "About Hushh | Pioneering Data Empowerment & Privacy",
@@ -98,16 +99,16 @@ export default function About() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
       />
       <div className="w-full">
-        <Box
-          w={"100%"}
-          h={"100%"}
-          minW={'100%'}
-          pt={"10.5rem"}
-          px={{ base: "1.5rem", md: "6.25rem" }}
-          background={"black"}
-          fontFamily={"Figtree"}
-          mb={{ base: "2rem", md: "10.5rem" }}
-        >
+        <ContentWrapper includeHeaderSpacing={true}>  
+          <Box
+            w={"100%"}
+            h={"100%"}
+            minW={'100%'}
+            px={{ base: "1.5rem", md: "6.25rem" }}
+            background={"black"}
+            fontFamily={"Figtree"}
+            mb={{ base: "2rem", md: "10.5rem" }}
+          >
           <div className="md:flex md:justify-between md:gap-36">
             <div className="md:flex-1 w-full">
               <Heading
@@ -344,7 +345,8 @@ export default function About() {
             </div>
           </div>
           <TeamSection />
-        </Box>
+          </Box>
+        </ContentWrapper>
         <AboutFaq />
         <ContactForm />
       </div>

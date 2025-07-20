@@ -6,6 +6,7 @@ import Link from "next/link";
 import { format } from "date-fns";
 import ContactForm from "src/app/_components/features/contactForm";
 import CategoryPageContent from "../../_components/Blog/CategoryPageContent";
+import ContentWrapper from "../../_components/layout/ContentWrapper";
 
 const slugger = new GithubSlugger();
 
@@ -74,6 +75,7 @@ const CategoryPage = ({ params }) => {
 
   return (
     <>
+    <ContentWrapper includeHeaderSpacing={true}>
       <CategoryPageContent 
         blogs={blogs}
         allCategories={allCategories}
@@ -81,6 +83,7 @@ const CategoryPage = ({ params }) => {
         categoryName={categoryName}
       />
       <ContactForm />
+      </ContentWrapper>
     </>
   );
 };

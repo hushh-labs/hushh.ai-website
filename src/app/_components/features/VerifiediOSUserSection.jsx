@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useHushhIdFlow } from "../../hooks/useHushhIdFlow";
 
 // Reverting to user's original import paths
 import ecosystemPhone from "../svg/join_the_eco.svg";
@@ -28,8 +29,17 @@ import appleIcon from "../../_components/svg/icons/appleIconLogo.svg";
 import IosIcon from "../../_components/svg/icons/iOS.svg";
 import cloudIcon from "../../_components/svg/icons/cloudIcon.svg";
 import fingerprintIcon from "../../_components/svg/icons/fingerprintIcon.svg";
+
 const VerifiediOSUserSection = () => {
   const router = useRouter();
+  
+  // Use the reusable authentication flow hook
+  const { 
+    handleGetHushhId, 
+    isLoading, 
+    isCheckingUser, 
+    authLoading 
+  } = useHushhIdFlow();
 
   const verifiedFeatures = [
     { icon: appleIcon, text: "Apple Verified" },
@@ -145,7 +155,21 @@ const VerifiediOSUserSection = () => {
               <VStack w="30%" align="flex-start" spacing={6}>
                  <Image src={fingerprintIcon} alt="Ecosystem Icon" width={80} height={80} />
                  <Heading as="h2" fontSize="5xl" fontWeight="bold">Join the Ecosystem Today</Heading>
-                 <Button bg="black" color="white" borderRadius="full" px={8} h="60px" fontSize="xl" _hover={{ bg: "#333" }} onClick={() => router.push("/login")}>Get Your Hushh Id</Button>
+                 <Button 
+                   bg="black" 
+                   color="white" 
+                   borderRadius="full" 
+                   px={8} 
+                   h="60px" 
+                   fontSize="xl" 
+                   _hover={{ bg: "#333" }} 
+                   onClick={handleGetHushhId}
+                   isLoading={isLoading}
+                   loadingText={isCheckingUser ? "Checking..." : "Loading..."}
+                   isDisabled={isLoading}
+                 >
+                   Get Your Hushh Id
+                 </Button>
               </VStack>
               <Box position="relative" w="320px" transform="rotate(-8deg)"  borderRadius="40px">
                  <Image src={ecosystemPhone} alt="Ecosystem Phone" borderRadius="40px" />
@@ -162,7 +186,21 @@ const VerifiediOSUserSection = () => {
               <Box w="80%" maxW="280px" my={4}>
                  <Image src={ecosystemPhone} alt="Ecosystem Phone" borderRadius="30px" />
               </Box>
-              <Button bg="black" color="white" borderRadius="full" px={8} h="50px" fontSize="lg" _hover={{ bg: "#333" }} onClick={() => router.push("/login")}>Get Your Hushh Id</Button>
+              <Button 
+                bg="black" 
+                color="white" 
+                borderRadius="full" 
+                px={8} 
+                h="50px" 
+                fontSize="lg" 
+                _hover={{ bg: "#333" }} 
+                onClick={handleGetHushhId}
+                isLoading={isLoading}
+                loadingText={isCheckingUser ? "Checking..." : "Loading..."}
+                isDisabled={isLoading}
+              >
+                Get Your Hushh Id
+              </Button>
                <VStack spacing={4} pt={8}>
                 <Heading as="h3" fontSize="4xl" fontWeight="bold" sx={{ background: "linear-gradient(90deg, #0071e3, #bb62fc, #da4b7a, #f44f22)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>A Eukaryotic Backbone</Heading>
                 <Text fontSize="lg" color="gray.600">Structured coordination for platform-level orchestration</Text>
@@ -273,7 +311,7 @@ const VerifiediOSUserSection = () => {
                 <Text fontSize={{ base: "lg", md: "xl" }} color="black">
                   You initiate a smart request; your personal agent then privately checks your data, not algorithms. Trusted brand agents respond through your agent, enabling you to choose products securely and effortlessly from curated options.
                 </Text>
-                <Button bg="black" color="white" borderRadius="full" px={8} h="60px" _hover={{ bg: "#333" }} onClick={() => router.push("https://calendly.com/hushh/30min?month=2025-07")}>
+                <Button bg="black" color="white" borderRadius="full" px={8} h="60px" _hover={{ bg: "#333" }} onClick={() => router.push("https://docs.google.com/document/d/1eh6MF182bQgFo7AxWlKVhcBEvrpbMjiU8-cWRsS4oSg/edit?usp=sharing")}>
                   Learn More
                 </Button>
               </VStack>
@@ -291,7 +329,7 @@ const VerifiediOSUserSection = () => {
                     </Text>
                     <HStack spacing={4} wrap="wrap" justify="center">
                          <Button bg="black" color="white" borderRadius="full" px={8} h="60px" _hover={{ bg: "#333" }} onClick={() => router.push("/contact-us")}>Become a Partner</Button>
-                         <Button variant="outline" borderColor="black" color="black" borderRadius="full" px={8} h="60px" _hover={{ bg: "gray.100" }} onClick={() => router.push("https://calendly.com/hushh/30min?month=2025-07")}>Book a Demo</Button>
+                         {/* <Button variant="outline" borderColor="black" color="black" borderRadius="full" px={8} h="60px" _hover={{ bg: "gray.100" }} onClick={() => router.push("https://calendly.com/hushh/30min?month=2025-07")}>Book a Demo</Button> */}
                     </HStack>
                 </VStack>
              </Grid>

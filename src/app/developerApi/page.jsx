@@ -44,6 +44,7 @@ import SocialApi from "../_components/svg/developerApi/socialAPI";
 import TransactionApi from "../_components/svg/developerApi/transactionAPI"
 import TravelApi from "../_components/svg/developerApi/travelAPI";
 import { useToast } from "@chakra-ui/react";
+import ContentWrapper from "../_components/layout/ContentWrapper";
 
 const devloperApi = () => {
   const gradient = "linear-gradient(265.3deg, #E54D60 8.81%, #A342FF 94.26%)";
@@ -80,6 +81,7 @@ const devloperApi = () => {
 
         <meta property="og:url" content="https://hushh.ai/developer-api" />
       </Head>
+      <ContentWrapper includeHeaderSpacing={true}>
       <Box
         maxW={"100"}
         minW={"100%"}
@@ -809,6 +811,7 @@ const devloperApi = () => {
         <VibeSearchFaq />
       </Box>
       <ContactForm />
+      </ContentWrapper>
     </>
   );
 };

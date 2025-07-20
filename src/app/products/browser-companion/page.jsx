@@ -1,6 +1,6 @@
 import React from "react";
 import ClientBrowserCompanion from "../../clientside/BrowserCompanion";
-
+import ContentWrapper from "../../_components/layout/ContentWrapper";
 export const metadata = {
   title: "Hushh | Browser Companion - Track Your Digital Footprints",
   description:
@@ -24,7 +24,9 @@ export const metadata = {
 const browserCompanion = () => {
   return (
     <>
-      <ClientBrowserCompanion />
+      <ContentWrapper includeHeaderSpacing={true}>
+        <ClientBrowserCompanion />
+      </ContentWrapper>
     </>
   );
 };

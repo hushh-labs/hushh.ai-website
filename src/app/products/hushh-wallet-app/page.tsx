@@ -1,7 +1,7 @@
 import React from "react";
 import ClientHushhWallet from "../../clientside/HushhWallet";
 import { siteMetadata } from "../../sitemetadata";
-
+import ContentWrapper from "../../_components/layout/ContentWrapper";
 export const metadata = {
   title: "Hushh Wallet App | World's First AI-Powered Data Wallet",
   description:
@@ -81,7 +81,9 @@ const hushhWalletApp = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
-      <ClientHushhWallet />
+      <ContentWrapper includeHeaderSpacing={true}>
+        <ClientHushhWallet />
+      </ContentWrapper>
     </>
   );
 };

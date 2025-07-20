@@ -35,7 +35,8 @@ const items = [
 ];
 
 const HushhHackhathon = () => {
-  const targetDate = "2025-07-19T00:00:00+05:30";
+  const targetDate = "2025-07-22T00:00:00+05:30";
+
   const calculateTimeLeft = () => {
     const diff = +new Date(targetDate) - +new Date();
     if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
@@ -52,16 +53,16 @@ const HushhHackhathon = () => {
     return () => clearInterval(timer);
   }, []);
 
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://apply.devfolio.co/v2/sdk.js';
-    script.async = true;
-    script.defer = true;
-    document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const script = document.createElement('script');
+  //   script.src = 'https://apply.devfolio.co/v2/sdk.js';
+  //   script.async = true;
+  //   script.defer = true;
+  //   document.body.appendChild(script);
+  //   return () => {
+  //     document.body.removeChild(script);
+  //   };
+  // }, []);
   
 
   const pad = (num) => String(num).padStart(2, '0');
@@ -83,7 +84,7 @@ const HushhHackhathon = () => {
             <Text fontWeight="400" fontSize={{ md: '1.25rem', base: '0.75rem' }} lineHeight={{ md: '32px', base: '20px' }} color="#E4E4E4">
               Build AI agents that work for you — while you sleep.
             </Text>
-            <Button borderRadius="2px" fontSize={{ md: '1rem', base: '1rem' }} letterSpacing="0.29rem" border="1px solid #606060" fontWeight="400" bg="transparent" lineHeight={{ md: '28.8px', base: '15px' }} color="white" _hover={{ color:'white', background:'linear-gradient(256.5deg, #e0055f 6.97%, #2020ed 92.26%)', border:'none' }} onClick={() => window.open('https://forms.gle/AcJUMmhZXXCFytus9','_blank')}>
+            <Button borderRadius="2px" fontSize={{ md: '1rem', base: '1rem' }} letterSpacing="0.29rem" border="1px solid #606060" fontWeight="400" bg="transparent" lineHeight={{ md: '28.8px', base: '15px' }} color="white" _hover={{ color:'white', background:'linear-gradient(256.5deg, #e0055f 6.97%, #2020ed 92.26%)', border:'none' }} onClick={() => window.open('https://forms.gle/AcJUMmhZXXCFytus9')}>
               Apply Now
             </Button>
             {/* <div
@@ -205,7 +206,7 @@ const HushhHackhathon = () => {
             What's This Hackathon About?
           </Text>
           <Box mt={{ md: '1rem', base: '0.5rem' }} display="flex" flexDirection="column" gap={{ md: '0.75rem', base: '0.45rem' }} color="#E4E4E4" fontWeight="500" lineHeight={{ md: '32px', base: '20px' }} fontSize={{ md: '1.25rem', base: '0.75rem' }}>
-            <Text>The Hushh PDA Hackathon is a bold AI sprint hosted online by IIT Bombay to build the next generation of Personal Data Agents (PDAs) — intelligent AI tools that know your data, understand your needs, and act on your behalf.</Text>
+            <Text>The Hushh PDA Hackathon is a bold AI sprint hosted online by the Analytics Club and the DAV Team, IIT Bombay to build the next generation of Personal Data Agents (PDAs) — intelligent AI tools that know your data, understand your needs, and act on your behalf.</Text>
             <Text>Think: your own Jarvis × Notion × GPT-4. In one week.</Text>
             <Text>Whether it's managing your finances, organizing your calendar, or reminding you to take a break — these agents are meant to solve real human problems while you sleep.</Text>
           </Box>
@@ -270,7 +271,7 @@ const HushhHackhathon = () => {
             'Total Prize Pool: ₹1,70,000+',
             '1st Prize: ₹1,00,000 + Full-time offer @ Hushh.ai and/or HushhTech.com as L1-L3 Full Stack Engineer',
             '2nd Prize: ₹50,000 + Job/internship offer',
-            '3rd Prize: ₹20,000 + Collaboration with Hushh Labs (newly established Lab in collaboration with IIT Mumbai starting Fall 2025)',
+            '3rd Prize: ₹20,000 + Collaboration with Hushh Labs (newly established Lab starting Fall 2025)',
             'All finalists: Paid internship / Hushh Engineering Co-op Program from Fall 2025 through Spring 2026',
             'Top teams: Demo at global Hushh investor/founder event',
             'Other standout teams may receive internship offers too'
@@ -307,8 +308,8 @@ const HushhHackhathon = () => {
         <Stack flexDirection={{ md: 'row', base: 'column' }} spacing={{ md: '4rem', base: '2rem' }} my={{ md: '4rem', base: '2rem' }}>
           <VStack alignItems="flex-start" spacing={2} fontSize={{md:'1.25rem',base:'0.75rem'}}>
             <Text fontWeight="700"  fontSize={{ md: '3.8rem', base: '1.9rem' }} className="hushh-gradient">Logistics</Text>
-            <Text color="#E4E4E4" fontSize={{md:'1.25rem',base:'0.75rem'}}>Where: Online (hosted by IIT Bombay)</Text>
-            <Text color="#E4E4E4" fontSize={{md:'1.25rem',base:'0.75rem'}}>When: 19th July – 27th July</Text>
+            <Text color="#E4E4E4" fontSize={{md:'1.25rem',base:'0.75rem'}}>Where: Online (hosted by the Analytics Club and the DAV Team, IIT Bombay)</Text>
+            <Text color="#E4E4E4" fontSize={{md:'1.25rem',base:'0.75rem'}}>When: 22th July – 30th July</Text>
             <Text color="#E4E4E4" fontSize={{md:'1.25rem',base:'0.75rem'}}>Core 96-hour build window over the duration of 1 week total</Text>
             <Text color="#E4E4E4">Pre-Hack workshop & onboarding support with Hushh Team</Text>
             <Text color="#E4E4E4">Demo Day with panel of founders & AI operators (Google, Microsoft, Salesforce engineering leaders)</Text>
@@ -325,12 +326,12 @@ const HushhHackhathon = () => {
         <VStack alignItems="flex-start" spacing={2} my={{ md: '4rem', base: '2rem' }}>
           <Text fontWeight="700" fontSize={{ md: '3.8rem', base: '1.9rem' }} className="hushh-gradient">Timeline</Text>
           {[
-            { date: 'July 18', event: 'Application Deadline' },
-            { date: 'July 19', event: 'Final Team Confirmation' },
-            { date: 'July 20–21', event: 'Hackathon Sprint 1 (48 hrs)' },
-            { date: 'July 22–27', event: 'Hackathon Sprint 2 (48 hrs)' },
+            { date: 'July 21', event: 'Application Deadline' },
+            { date: 'July 22', event: 'Final Team Confirmation' },
+            { date: 'July 23–24', event: 'Hackathon Sprint 1 (48 hrs)' },
+            { date: 'July 25–30', event: 'Hackathon Sprint 2 (48 hrs)' },
             { date: 'Sprint 3 (48 hrs)', event: 'Polish + async mentorship (48 hrs)' },
-            { date: 'July 27', event: 'Final Demo Day' }
+            { date: 'July 30', event: 'Final Demo Day' }
           ].map((t,i)=>(
             <HStack key={i} spacing={2}>
               <Text color="#E4E4E4" fontWeight="600" fontSize={{md:'1.25rem',base:'0.75rem'}}>{t.date}:</Text>
@@ -341,7 +342,7 @@ const HushhHackhathon = () => {
 
         {/* Submission & Contact */}
         <VStack my={{ md: '4rem', base: '2rem' }} alignItems="center" spacing={4} mb={{ base: '4rem' }}>
-          <Button borderRadius="2px" fontSize={{ md: '1rem', base: '1rem' }} letterSpacing="0.29rem" border="1px solid #606060" fontWeight="400" bg="transparent" lineHeight={{ md: '28.8px', base: '15px' }} color="white" _hover={{ color:'white', background:'linear-gradient(256.5deg, #e0055f 6.97%, #2020ed 92.26%)', border:'none' }} onClick={() => window.open('https://forms.gle/AcJUMmhZXXCFytus9','_blank')}>
+          <Button borderRadius="2px" fontSize={{ md: '1rem', base: '1rem' }} letterSpacing="0.29rem" border="1px solid #606060" fontWeight="400" bg="transparent" lineHeight={{ md: '28.8px', base: '15px' }} color="white" _hover={{ color:'white', background:'linear-gradient(256.5deg, #e0055f 6.97%, #2020ed 92.26%)', border:'none' }} onClick={() => window.open('https://forms.gle/AcJUMmhZXXCFytus9')}>
             Apply Now
           </Button>
           <Text color="#E4E4E4" textAlign="center" fontSize={{md:'1.25rem',base:'0.85rem'}}>

@@ -12,20 +12,21 @@ import {
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import section1Phone from "../svg/section_1_phone.svg";
+import ContentWrapper from "../layout/ContentWrapper";
 
 const ConsentAILanding = () => {
   const router = useRouter();
 
   return (
-    <Box
-      minH="100vh"
-      bg="#F8F9FA"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      pt={{ base: "90px", md: "90px" }} // Account for fixed header
-    >
-      <Container maxW="full" px={{ base: 4, md: 8, lg: 16 }}>
+    <ContentWrapper>
+      <Box
+        minH="100vh"
+        bg="#F8F9FA"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+      <Container maxW="full" mt={{md:0,base:4}} px={{ base: 4, md: 8, lg: 16 }}>
         <Box
           display={{ base: "block", lg: "flex" }}
           alignItems="center"
@@ -124,7 +125,7 @@ const ConsentAILanding = () => {
                 }}
                 transition="all 0.3s ease"
                 w={{ base: "280px", sm: "auto" }}
-                onClick={() => router.push("https://calendly.com/hushh/30min?month=2025-07")}
+                onClick={() => router.push("https://github.com/hushh-labs/Hushh-PDA-Hackathon-Starting-Repository")}
               >
                 Learn More
               </Button>
@@ -189,7 +190,8 @@ const ConsentAILanding = () => {
           </Box>
         </Box>
       </Container>
-    </Box>
+      </Box>
+    </ContentWrapper>
   );
 };
 

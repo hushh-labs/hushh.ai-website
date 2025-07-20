@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { Box, Text, VStack, UnorderedList, ListItem } from "@chakra-ui/react";
 import jobs from "../_components/career/jobDetails";
 import JobDetail from "../_components/career/jobDetails";
+import ContentWrapper from "../_components/layout/ContentWrapper";
 
 const JobDetailPage = ({ job }) => {
   const router = useRouter();
@@ -11,7 +12,9 @@ const JobDetailPage = ({ job }) => {
   if (router.isFallback) {
     return <Text>Loading...</Text>;
   }
-  return <JobDetail job={job} />;
+  return <ContentWrapper includeHeaderSpacing={true}>
+    <JobDetail job={job} />
+  </ContentWrapper>
 };
 
 export default JobDetailPage;

@@ -1,6 +1,7 @@
 import React from "react";
 import CoreValues from "../clientside/hushhCoreValues"
 import Head from "next/head";
+import ContentWrapper from "../_components/layout/ContentWrapper";
 
 export const metadata = {
   title: "Hushh | Core Values",
@@ -53,7 +54,9 @@ const HushhCoreValues = () => {
     {/* Add canonical URL */}
     <link rel="canonical" href="https://hushh.ai/hushh-core-values" />
   </Head>
-      <CoreValues/>
+      <ContentWrapper includeHeaderSpacing={true}>
+        <CoreValues/>
+      </ContentWrapper>
     </>
   );
 };

@@ -8,6 +8,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+import ContentWrapper from "../_components/layout/ContentWrapper";
 import { useState } from "react";
 import AttachingCards from "../_components/userGuide/attachingCards";
 import BrandCardPreferences from "../_components/userGuide/brandCardPreferences";
@@ -132,9 +133,10 @@ const UserGuide = () => {
 
   return (
   <>  
-    <Box p={6} w={"100%"}>
-      {!selectedComponent ? (
-        <Stack px={{ md: "2rem", base: "0" }} mt={{ md: "9rem", base: "4rem" }}>
+    <ContentWrapper>
+      <Box p={6} w={"100%"}>
+        {!selectedComponent ? (
+          <Stack px={{ md: "2rem", base: "0" }}>
           <Heading
             as="h1"
             mb={{md:6,base:0}}
@@ -211,7 +213,8 @@ const UserGuide = () => {
           {selectedComponent}
         </>
       )}
-    </Box>
+      </Box>
+    </ContentWrapper>
     <AboutFaq/>
     <ContactForm/>
   </>  

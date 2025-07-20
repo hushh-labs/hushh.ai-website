@@ -18,6 +18,8 @@ import { useAuth } from '../context/AuthContext';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowBackIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import AppleSignInButton from './components/AppleSignInButton.jsx';
+import ContentWrapper from '../_components/layout/ContentWrapper';
 
 // Advanced Keyframe Animations 
 const float = keyframes`
@@ -103,19 +105,8 @@ const LoginPageContent = () => {
     
     setIsSigningIn(true);
     try {
-      await signIn(() => {
-        toast({
-          title: "🎉 Welcome to Hushh!",
-          description: "You have successfully signed in. Redirecting...",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-          position: "top",
-        });
-        setTimeout(() => {
-          router.push(redirectTo);
-        }, 1500);
-      });
+      await signIn();
+      // The OAuth process will redirect to Google, and success will be handled when user returns
     } catch (error) {
       console.error('Error signing in:', error);
       toast({
@@ -126,7 +117,6 @@ const LoginPageContent = () => {
         isClosable: true,
         position: "top",
       });
-    } finally {
       setIsSigningIn(false);
     }
   };
@@ -205,14 +195,15 @@ const LoginPageContent = () => {
   }
 
   return (
-    <Box
-      minH="100vh"
-      position="relative"
-      overflow="hidden"
-      sx={{
-        background: "radial-gradient(ellipse at top, #0f0f23 0%, #000000 100%)",
-      }}
-    >
+    <ContentWrapper includeHeaderSpacing={true}>
+      <Box
+        // minH="100vh"
+        position="relative"
+        overflow="hidden"
+        sx={{
+          background: "radial-gradient(ellipse at top, #0f0f23 0%, #000000 100%)",
+        }}
+      >
       {/* Interactive Background Elements */}
       <Box position="absolute" top="0" left="0" w="100%" h="100%" zIndex={0}>
         {/* Main Animated Gradient Orbs */}
@@ -697,6 +688,62 @@ const LoginPageContent = () => {
                   Continue with Google
                 </Button>
 
+                {/* Premium Apple Sign In Button */}
+                <AppleSignInButton 
+                  isDisabled={isSigningIn}
+                  onSuccess={(data) => {
+                    console.log('Apple Sign-In Success:', data);
+                    toast({
+                      title: "🍎 Apple Sign-In Successful!",
+                      description: "Welcome to Hushh! Redirecting you now...",
+                      status: "success",
+                      duration: 3000,
+                      isClosable: true,
+                      position: "top",
+                    });
+                  }}
+                  onError={(error) => {
+                    console.error('Apple Sign-In Error:', error);
+                    toast({
+                      title: "Apple Sign-In Failed",
+                      description: error.message || "Failed to sign in with Apple. Please try again.",
+                      status: "error",
+                      duration: 5000,
+                      isClosable: true,
+                      position: "top",
+                    });
+                  }}
+                />
+
+                {/* Divider */}
+                <Box position="relative" w="full">
+                  <Box
+                    position="absolute"
+                    top="50%"
+                    left="0"
+                    right="0"
+                    h="1px"
+                    bg="rgba(255, 255, 255, 0.1)"
+                    transform="translateY(-50%)"
+                  />
+                  <Text
+                    bg="rgba(255, 255, 255, 0.05)"
+                    px={4}
+                    py={2}
+                    fontSize="sm"
+                    color="rgba(255, 255, 255, 0.6)"
+                    textAlign="center"
+                    borderRadius="full"
+                    border="1px solid rgba(255, 255, 255, 0.1)"
+                    backdropFilter="blur(10px)"
+                    position="relative"
+                    w="fit-content"
+                    mx="auto"
+                  >
+                    or continue with email
+                  </Text>
+                </Box>
+
                 {/* Security Badges */}
                 {/* <VStack spacing={3} w="full">
                   <HStack
@@ -793,7 +840,8 @@ const LoginPageContent = () => {
           </VStack>
         </Flex>
       </Grid>
-    </Box>
+      </Box>
+    </ContentWrapper>
   );
 };
 

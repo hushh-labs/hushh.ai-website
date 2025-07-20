@@ -3,7 +3,7 @@ import React, { useRef, useState, useEffect } from "react";
 import HushhHeaderLogo from "./svg/hushhHeaderLogo";
 import Link from "next/link";
 import { Link as ScrollLink } from "react-scroll";
-import { Box, Button, Container, Flex, Text, Badge, Divider, HStack } from "@chakra-ui/react";
+import { Box, Button, Container,VStack, Flex, Text, Badge, Divider, HStack } from "@chakra-ui/react";
 import { useResponsiveSizes } from "../context/responsive";
 import { Bars3Icon } from "./svg/icons/hamburgerMenuIcon";
 import { CloseMenuIcon } from "./svg/icons/closeMenuIcon";
@@ -24,6 +24,7 @@ import { useMediaQuery } from "react-responsive";
 import SmallVibeSearch from "./svg/smallVibeSearch.svg";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useToast } from '@chakra-ui/react';
 import Image from "next/image";
 import { ChevronRightIcon, CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import UnicodeQR from "./svg/onelinkQrdownload.svg"
@@ -31,6 +32,7 @@ import { isMobile, isAndroid, isIOS } from 'react-device-detect';
 import { useAuth } from "../context/AuthContext";
 import UserAvatar from "./auth/UserAvatar";
 import HushhNewLogo from "../../../public/svgs/hushh_new_logo.svg"
+import { useHushhIdFlow } from "../hooks/useHushhIdFlow";
 
 
 export default function Header({backgroundColor, textColor, borderBottom}) {
@@ -58,7 +60,52 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
   const isMobileScreen = useMediaQuery({ maxWidth: 768 });
   
   // Auth context
-  const { isAuthenticated, user, loading } = useAuth();
+  const { isAuthenticated, user, loading, signOut } = useAuth();
+  const toast = useToast();
+  
+  // Use our reusable authentication flow hook for consistent user status checking
+  const { 
+    navigateToProfile, 
+    navigateToRegistration,
+    userExists // Use centralized user existence state
+  } = useHushhIdFlow();
+
+  // Handle sign out for mobile
+  const handleSignOut = async () => {
+    try {
+      // Close mobile menu immediately
+      setIsMenuOpen(false);
+      
+      // Sign out (user existence state will be reset automatically by the hook)
+      await signOut();
+      
+      // Navigate to home page immediately
+      router.push('/');
+      
+      // Show success toast after navigation
+      setTimeout(() => {
+        toast({
+          title: "✅ Signed out successfully",
+          description: "You have been signed out of your account.",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+          position: "top",
+        });
+      }, 100);
+      
+    } catch (error) {
+      console.error('Error signing out:', error);
+      toast({
+        title: "Sign out error",
+        description: "There was an error signing out. Please try again.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+    }
+  };
 
   // useEffect(() => {
   //   const checkLoginStatus = async () => {
@@ -101,13 +148,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
 
   const handleDownloadClick = () => {
     console.log('Download clicked')
-    if (isAndroid) {
-      window.location.href = "https://bit.ly/hushh-wallet-play-store";
-    } else if (isIOS) {
-      window.location.href = "https://bit.ly/hushh-app-ios";
-    } else {
-      handleOpenModal();
-    }
+    window.location.href = "https://apps.apple.com/in/app/hushh-app/id6498471189";
   };
 
   useEffect(() => {
@@ -268,7 +309,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                     onMouseEnter={() => setProductsSubmenu(false)}
                     className={`flex items-center gap-2 group link ${pathname === '/hushh-press' ? 'gradient-text' : ''}`}
                   >
-                    HUSHH PUBLISH
+                    HUSHH PR
                   </Link>
                 </div>
 
@@ -305,7 +346,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
               </div>
 
               {/* Mobile Menu Trigger */}
-              <div className="md:hidden flex items-center">
+              <div className="md:hidden flex items-center mt-5">
                 {!isMenuOpen && (
                   <div
                     className="text-white hamburger-icon-container cursor-pointer"
@@ -604,7 +645,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                   <Divider borderStyle={'solid'} borderWidth={"1px"} borderColor={"#5A5A5A"} />  
                   <li>
                     <Link style={{fontWeight:'700'}} onClick={() => setIsMenuOpen(false)} href="/hushh-press" className="text-lg text-white">
-                     Press Releases
+                     Hushh PR
                     </Link>
                   </li>
                   <Divider borderStyle={'solid'} borderWidth={"1px"} borderColor={"#5A5A5A"} />  
@@ -620,20 +661,134 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                     {loading ? (
                       <div className="flex items-center justify-center py-4">
                         <div className="w-8 h-8 animate-pulse bg-gray-600 rounded-full"></div>
+                        <Text className="text-gray-400 ml-3">Loading...</Text>
                       </div>
                     ) : isAuthenticated ? (
-                      <div className="flex items-center py-3 px-3 bg-gray-900 rounded-lg">
-                        <HStack spacing={3} w="full">
-                          <UserAvatar />
-                          <VStack align="start" spacing={0} flex={1}>
-                            <Text className="text-white text-md font-semibold">
-                              {user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'}
-                            </Text>
-                            <Text className="text-gray-400 text-sm">
-                              {user?.email}
-                            </Text>
+                      <div 
+                        className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-6 border border-gray-700"
+                        style={{
+                          backdropFilter: "blur(20px) saturate(180%)",
+                          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.2)"
+                        }}
+                      >
+                        <VStack spacing={5} align="start" w="full">
+                          {/* User Info Header */}
+                          <HStack spacing={4} w="full">
+                            <div 
+                              className="w-16 h-16 rounded-full flex items-center justify-center text-white font-semibold text-xl relative"
+                              style={{
+                                background: "linear-gradient(135deg, #007AFF, #5E5CE6)",
+                                boxShadow: "0 4px 12px rgba(0, 122, 255, 0.3)"
+                              }}
+                            >
+                              {user?.user_metadata?.avatar_url ? (
+                                <img 
+                                  src={user.user_metadata.avatar_url} 
+                                  alt="Avatar" 
+                                  className="w-full h-full rounded-full object-cover"
+                                />
+                              ) : (
+                                (user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'U').charAt(0).toUpperCase()
+                              )}
+                            </div>
+                            <VStack align="start" spacing={1} flex={1}>
+                              <Text 
+                                className="text-white font-semibold"
+                                style={{
+                                  fontSize: "18px",
+                                  lineHeight: "1.2",
+                                  fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+                                }}
+                              >
+                                {user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'}
+                              </Text>
+                              <Text 
+                                className="text-white"
+                                style={{
+                                  fontSize: "14px",
+                                  fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+                                }}
+                              >
+                                {user?.email}
+                              </Text>
+                            </VStack>
+                          </HStack>
+                          
+                          {/* Divider */}
+                          <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent"></div>
+                          
+                          {/* Action Buttons */}
+                          <VStack spacing={3} w="full">
+                            <Button
+                              onClick={() => {
+                                setIsMenuOpen(false);
+                                if (userExists) {
+                                  navigateToProfile();
+                                } else {
+                                  navigateToRegistration();
+                                }
+                              }}
+                              bg="rgba(255, 255, 255, 0.12)"
+                              color="white"
+                              border="1px solid rgba(255, 255, 255, 0.18)"
+                              borderRadius="12px"
+                              w="full"
+                              h="48px"
+                              py={3}
+                              px={5}
+                              fontSize="16px"
+                              fontWeight={600}
+                              _hover={{
+                                bg: "rgba(255, 255, 255, 0.18)",
+                                transform: "translateY(-1px)",
+                                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)"
+                              }}
+                              _active={{
+                                transform: "translateY(0)",
+                                bg: "rgba(255, 255, 255, 0.08)"
+                              }}
+                              transition="all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)"
+                              isDisabled={userExists === null}
+                              style={{
+                                fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+                              }}
+                            >
+                              {userExists === null 
+                                ? "Loading..." 
+                                : userExists 
+                                  ? "View Profile" 
+                                  : "Setup Your Profile"
+                              }
+                            </Button>
+                            
+                            <Button
+                              onClick={handleSignOut}
+                              bg="rgba(255, 59, 48, 0.12)"
+                              color="#FF453A"
+                              border="1px solid rgba(255, 59, 48, 0.25)"
+                              borderRadius="12px"
+                              w="full"
+                              h="48px"
+                              fontSize="16px"
+                              fontWeight={600}
+                              _hover={{
+                                bg: "rgba(255, 59, 48, 0.18)",
+                                transform: "translateY(-1px)",
+                                boxShadow: "0 4px 12px rgba(255, 59, 48, 0.2)"
+                              }}
+                              _active={{
+                                transform: "translateY(0)",
+                                bg: "rgba(255, 59, 48, 0.08)"
+                              }}
+                              transition="all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)"
+                              style={{
+                                fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+                              }}
+                            >
+                              Sign Out
+                            </Button>
                           </VStack>
-                        </HStack>
+                        </VStack>
                       </div>
                     ) : (
                       <Button
@@ -686,3 +841,5 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
     </>
   );
 }
+
+

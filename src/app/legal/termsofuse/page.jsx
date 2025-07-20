@@ -2,6 +2,7 @@ import React from "react";
 import { Heading } from "@chakra-ui/react";
 import ContactForm from "../../_components/features/contactForm";
 import Head from "next/head";
+import ContentWrapper from "../../_components/layout/ContentWrapper";
 
 export const metadata = {
   title: "Hushh | Terms of Use - Understand Your Rights",
@@ -25,7 +26,10 @@ const TermsOfUse = () => {
   const gradient = "linear-gradient(265.3deg, #E54D60 8.81%, #A342FF 94.26%)";
   return (
     <>
-      <div className="pt-12 px-6 md:pt-[90px] md:px-32 text-white">
+      <ContentWrapper includeHeaderSpacing={true}>
+        <div 
+          className="px-6 md:px-32 text-white" 
+        >
         <div className=" flex flex-col items-center">
           <Heading
             fontWeight={"700"}
@@ -46,7 +50,7 @@ const TermsOfUse = () => {
             </h2>
           </div>
           <div className="text-base font-semibold text-fontColor4 leading-9">
-            Updated Mar 17, 2024
+            Updated Mar 17, 2025
             <br />
             Hushone, Inc. Website Terms of Use
             <br />
@@ -444,7 +448,7 @@ const TermsOfUse = () => {
             The information contained in this web site is subject to change
             without notice.
             <br />
-            Copyright © 2021-2024 Hushone, Inc. All rights reserved.
+            Copyright © 2021-2025 Hushone, Inc. All rights reserved.
             <br />
             Hushone, Inc., 1021 5th St W, Kirkland, WA 98033, USA.
             <br />
@@ -570,7 +574,8 @@ const TermsOfUse = () => {
             restriction.
           </div>
         </div>
-      </div>
+        </div>
+      </ContentWrapper>
       <ContactForm />
     </>
   );

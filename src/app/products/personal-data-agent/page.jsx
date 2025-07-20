@@ -1,5 +1,6 @@
 import React from 'react'
 import HushhPDA from '../../clientside/HushhPDA';
+import ContentWrapper from '../../_components/layout/ContentWrapper';
 export const metadata = {
     title: "Personal Data Agent | Hushh AI - Your Data, Your Control",
     description:
@@ -43,8 +44,10 @@ export const metadata = {
 const PersonalDataAgent = () => {
   return (
    <>
+   <ContentWrapper includeHeaderSpacing={true}>
    <HushhPDA />
-   </>
+   </ContentWrapper>
+   </>  
   )
 }
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { siteMetadata } from "../../sitemetadata";
 import ClientHushhForStudents from "../../clientside/HFS";
+import ContentWrapper from "../../_components/layout/ContentWrapper";
 export const metadata = {
   title: "Hushh For Students | Empower Your Academic Journey with Data Control",
   description:
@@ -92,7 +93,9 @@ const hushhForStudents = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
-      <ClientHushhForStudents />
+      <ContentWrapper includeHeaderSpacing={true}>
+        <ClientHushhForStudents />
+      </ContentWrapper>
     </>
   );
 };

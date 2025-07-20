@@ -2,28 +2,14 @@ import config from "../config/config";
 
 export default async function appleSignIn(setUserEmail) {
   try {
-    // const redirectTo =
-    //   process.env.NODE_ENV === "development"
-    //     ? "https://localhost:3000/auth/v1/callback"
-    //     : "https://rpmzykoxqnbozgdoqbpc.supabase.co/auth/v1/callback";
-    const redirectTo =
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:3000/developer-Api/on-boarding"
-      : "https://hushh.ai/developer-Api/on-boarding";
+    const redirectTo = window.location.origin + '/user-registration';
 
     console.log("Starting Apple Sign-In process...");
-    const appleConfig = {
-      clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID,
-      teamId: process.env.NEXT_PUBLIC_APPLE_TEAM_ID,
-      privateKey: process.env.NEXT_PUBLIC_APPLE_PRIVATE_KEY,
-      keyId: process.env.NEXT_PUBLIC_APPLE_KEY_ID,
-    };
 
     const { data, error } = await config.supabaseClient.auth.signInWithOAuth({
       provider: "apple",
       options: {
         redirectTo: redirectTo,
-        ...appleConfig,
       },
     });
 

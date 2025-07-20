@@ -9,8 +9,11 @@ import { figtree } from "./_utilities/fonts";
 import { Providers } from "./provider";
 import ResponsiveSizeProvider from "./context/responsive";
 import HeaderComponent from "./_components/features/HeaderComponent";
+import HackathonBanner from "./_components/features/HackathonBanner";
+import FundingBanner from "./_components/features/FundingBanner";
 import { siteMetadata } from "./sitemetadata";
 import { AuthProvider } from "./context/AuthContext";
+import { BannerHeightProvider } from "./context/BannerHeightContext";
 
 export const metadata = {
   metadataBase: new URL(siteMetadata.siteUrl),
@@ -174,13 +177,19 @@ export default function RootLayout({ children }) {
         </div> */}
         <ResponsiveSizeProvider>
           <AuthProvider>
-            <header className="h-[90px] w-full absolute z-50">
-              <HeaderComponent />
-            </header>
-            {" "}
-            <div className={`${figtree.variable}  w-full`}>
-              <Providers>{children}</Providers>
-            </div>
+            <BannerHeightProvider>
+              <div className={`${figtree.variable} w-full`}>
+                <Providers>
+                  {/* Funding Banner - top priority */}
+                  <FundingBanner />
+                  {/* Hackathon Banner - appears below funding banner */}
+                  <HackathonBanner />
+                  {/* Header positioned dynamically after banners */}
+                  <HeaderComponent />
+                  {children}
+                </Providers>
+              </div>
+            </BannerHeightProvider>
           </AuthProvider>
         </ResponsiveSizeProvider>
       </body>

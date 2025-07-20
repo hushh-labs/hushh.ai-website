@@ -1,6 +1,6 @@
 import React from 'react'
 import OutBoundService from '../clientside/OutBoundService';
-
+import ContentWrapper from '../_components/layout/ContentWrapper';
 
 export const metadata = {
   title: "Hushh | Expert Advisory Services for AI and Data Technologies",
@@ -31,7 +31,9 @@ export const metadata = {
 
 const outBoundServie = () => {
   return (
-    <OutBoundService/> 
+    <ContentWrapper includeHeaderSpacing={true}>
+      <OutBoundService/> 
+    </ContentWrapper>
   )
 }
 

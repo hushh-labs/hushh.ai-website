@@ -1,7 +1,7 @@
 import React from "react";
 import { Heading } from "@chakra-ui/react";
 import ContactForm from "../../_components/features/contactForm";
-
+import ContentWrapper from "../../_components/layout/ContentWrapper";
 export const metadata = {
   title: "Hushh | Privacy Policy - Your Data, Your Rights",
   description:
@@ -24,7 +24,11 @@ const PrivacyPolicy = () => {
   const gradient = "linear-gradient(265.3deg, #E54D60 8.81%, #A342FF 94.26%)";
   return (
     <>
-      <div className="pt-12 px-6 md:pt-[90px] md:px-32 text-white">
+    <ContentWrapper includeHeaderSpacing={true}>
+              <div 
+          className="pt-12 px-6 md:px-32 text-white" 
+          style={{ paddingTop: 'calc(90px + var(--banner-height, 0px))' }}
+        >
         <div className=" flex flex-col items-center">
           <Heading
             fontWeight={"700"}
@@ -46,7 +50,7 @@ const PrivacyPolicy = () => {
             </h2>
           </div>
           <div className="text-base font-semibold text-fontColor4 leading-9">
-            Updated Mar 17, 2024
+            Updated Mar 17, 2025
             <br />
             <br />
             In addition to this Privacy Policy, we provide data and privacy
@@ -631,6 +635,7 @@ const PrivacyPolicy = () => {
         </div>
       </div>
       <ContactForm />
+    </ContentWrapper>
     </>
   );
 };

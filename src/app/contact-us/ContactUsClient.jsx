@@ -1,9 +1,10 @@
 'use client'
 import React from 'react'
-import { Container, Box, Heading } from '@chakra-ui/react'
+import { Box, Heading } from '@chakra-ui/react'
 import ContactForm from '../_components/features/contactForm'
 import Head from 'next/head'
 import { siteMetadata } from '../sitemetadata'
+import ContentWrapper from '../_components/layout/ContentWrapper'
 
 // ContactPage JSON-LD structured data
 const contactPageJsonLd = {
@@ -36,13 +37,41 @@ const ContactUsClient = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(contactPageJsonLd) }}
       />
-      {/* Remove the Head component as it's deprecated in App Router */}
-      <Box display={'flex'}>
-        <Container minW={'100%'} textAlign={'center'} display={'flex'} flexDirection={'column'} mt={{ md:'4rem', base:'2rem'}}>
-          <Heading as={'h1'} className='gradient' my={{md:'2rem',base:'1rem'}}>Reach out to us</Heading>
-          <ContactForm/>
-        </Container>
-      </Box> 
+      <ContentWrapper 
+        includeHeaderSpacing={true}
+        px={0}
+        mx={0}
+        sx={{
+          paddingInlineStart: '0 !important',
+          paddingInlineEnd: '0 !important',
+        }}
+      >
+        {/* Remove the Head component as it's deprecated in App Router */}
+        <Box 
+          w="100%" 
+          m={0} 
+          p={0}
+          sx={{
+            paddingInlineStart: '0 !important',
+            paddingInlineEnd: '0 !important',
+          }}
+        >
+          <Box 
+            w="100%" 
+            display="flex" 
+            flexDirection="column" 
+            m={0} 
+            p={0}
+            sx={{
+              paddingInlineStart: '0 !important',
+              paddingInlineEnd: '0 !important',
+            }}
+          >
+            {/* <Heading as={'h1'} className='gradient' my={{md:'2rem',base:'1rem'}}>Reach out to us</Heading> */}
+            <ContactForm/>
+          </Box>
+        </Box> 
+      </ContentWrapper>
     </>
   )
 }

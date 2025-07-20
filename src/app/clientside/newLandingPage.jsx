@@ -44,6 +44,7 @@ import GptStoreIcon from '../_components/svg/newLandingsvg/icons/gptStore.svg';
 import HuggingFaceIcon from '../_components/svg/newLandingsvg/icons/huggingfaceIcon.svg';
 import SalesforceIcon from '../_components/svg/newLandingsvg/icons/salesforceIcon.svg';
 import { useRouter } from 'next/navigation';
+import ContentWrapper from '../_components/layout/ContentWrapper';
 
 
 const NewLandingPage = () => {
@@ -63,9 +64,10 @@ const NewLandingPage = () => {
 
   return (
     <Box bg="white">
-      {/* Hero Section */}
-      <Container maxW="container.xl" py={{ base: 16, md: 20 }}>
-        <VStack my={{base:8,md:12}} spacing={{ base: 12, md: 14 }} align="center">
+      <ContentWrapper>
+        {/* Hero Section */}
+        <Container maxW="container.xl" py={{ base: 16, md: 20 }}>
+        <VStack spacing={{ base: 12, md: 14 }} align="center">
           {/* Lock Icon */}
           {/* <Box
             w={16}
@@ -120,7 +122,7 @@ const NewLandingPage = () => {
               display="flex"
               h="72px"
               px="28px"
-              onClick={() => router.push("/consent-ai-protocol")}
+              onClick={() => router.push("/products/personal-data-agent")}
               py="15px"
               justifyContent="center"
               alignItems="center"
@@ -142,7 +144,7 @@ const NewLandingPage = () => {
               px="28px"
               py="15px"
               justifyContent="center"
-              onClick={() => router.push("/contact-us")}
+              onClick={() => router.push("https://apps.apple.com/in/app/hushh-app/id6498471189")}
               alignItems="center"
               fontSize={{ base: "lg", md: "xl" }}
               fontWeight="semibold"
@@ -222,7 +224,7 @@ const NewLandingPage = () => {
                     fontSize={{ base: "lg", md: "xl" }}
                     mr={3}
                   />
-                  05 Verified Apple iOS Users Only
+                  iOS Verified Apple iOS Users Only
                 </ListItem>
                 
                 <ListItem
@@ -1038,7 +1040,7 @@ const NewLandingPage = () => {
                   justifyContent="center"
                   alignItems="center"
                   gap="16px"
-                  onClick={() => window.open("https://github.com/hushh-labs", "_blank")}
+                  onClick={() => window.open("https://github.com/hushh-labs/Hushh-PDA-Hackathon-Starting-Repository", "_blank")}
                   fontSize={{ base: "lg", md: "xl" }}
                   fontWeight="semibold"
                   leftIcon={
@@ -1510,6 +1512,7 @@ const NewLandingPage = () => {
           </Button> */}
         </VStack>
       </Container>
+      </ContentWrapper>
 
           <FooterComponent/>
     </Box>

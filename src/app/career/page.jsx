@@ -1,6 +1,7 @@
 import React from 'react'
 import CareerPage from '../_components/career/carrer';
 import { siteMetadata } from '../sitemetadata';
+import ContentWrapper from '../_components/layout/ContentWrapper';
 export const metadata = {
   title: "Careers at Hushh | Join Our Data Privacy Revolution",
   description:
@@ -73,7 +74,9 @@ const Career = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jobPostingJsonLd) }}
       />
-      <CareerPage />
+      <ContentWrapper>
+        <CareerPage />
+      </ContentWrapper>
     </>
   )
 }

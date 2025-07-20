@@ -57,7 +57,8 @@ import { AndroidIcon } from "../_components/svg/icons/androidIcon";
 import UnicodeQR from "../_components/svg/onelinkQrdownload.svg"
 import { isMobile, isAndroid, isIOS } from 'react-device-detect';
 import DownloadModal from "../_components/primitives/downloadModal";
-import Reliance from "../_components/svg/images/reliance"
+import Reliance from "../_components/svg/images/reliance";
+import ContentWrapper from "../_components/layout/ContentWrapper";
 
 const BrandContainer = styled.div`
   display: flex;
@@ -82,44 +83,37 @@ const ClientHushhWallet = () => {
   };
 
   const handleDownloadClick = () => {
-    if (isAndroid) {
-      window.location.href = "https://bit.ly/hushh-wallet-play-store";
-    } else if (isIOS) {
-      window.location.href = "https://bit.ly/hushh-app-ios";
-    } else {
-      handleOpenModal();
-    }
+    window.location.href = "https://apps.apple.com/in/app/hushh-app/id6498471189";
   };
 
   return (
     <>
-      <Box
-        maxW={"100%"}
-        minW={"100%"}
-        display={"flex"}
-        flexDirection={"column"}
-      >
+      <ContentWrapper>
         <Box
-          alignItems={"center"}
-          w={"100%"}
-          id={"1"}
+          maxW={"100%"}
+          minW={"100%"}
           display={"flex"}
           flexDirection={"column"}
-          mt={{ base: "3rem" }}
-          gap={{ base: "1rem", md: "2rem" }}
-          px={{ md: "15rem", base: "1.5rem" }}
-          position={{ md: "relative" }}
         >
-          <Heading
-            fontWeight={"400"}
-            lineHeight={{ md: "87.46px", base: "43px" }}
-            textAlign={"center"}
-            fontSize={{ md: "5.4rem", base: "2rem" }}
-            pt={{ md: "4rem", base: "3rem" }}
-            color={"#FFFFFF"}
-            mb={{ base: "0.5rem" }}
-            as={"h1"}
+          <Box
+            alignItems={"center"}
+            w={"100%"}
+            id={"1"}
+            display={"flex"}
+            flexDirection={"column"}
+            gap={{ base: "1rem", md: "2rem" }}
+            px={{ md: "15rem", base: "1.5rem" }}
+            position={{ md: "relative" }}
           >
+            <Heading
+              fontWeight={"400"}
+              lineHeight={{ md: "87.46px", base: "43px" }}
+              textAlign={"center"}
+              fontSize={{ md: "5.4rem", base: "2rem" }}
+              color={"#FFFFFF"}
+              mb={{ base: "0.5rem" }}
+              as={"h1"}
+            >
             World's first AI Powered Data Wallet
           </Heading>
           <Text
@@ -791,7 +785,8 @@ const ClientHushhWallet = () => {
             alt="BrandWalletMobile"
           />
         </Box>
-      </Stack>
+        </Stack>
+      </ContentWrapper>
 
       <WalletFaq />
       <ContactForm />
