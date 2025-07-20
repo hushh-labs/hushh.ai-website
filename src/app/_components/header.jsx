@@ -247,7 +247,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
               {/* Logo */}
               <div className="flex-shrink-0">
                 <Link href="/">
-                  {pathname === '/' || pathname === '/consent-ai-protocol' || pathname === '/products/personal-data-agent' || pathname.includes('/hushh-pda') || pathname.includes('/hushhpda') || pathname.includes('/clientside/HushhPDA') || pathname === '/products/hushh-pda' || pathname === '/contact-us' ? (
+                  {pathname === '/' || pathname === '/consent-ai-protocol' || pathname === '/hushh-link' || pathname === '/hushh-vault' || pathname === '/products/hushh-flow' || pathname === '/products/hushh-grid' ? (
                     <Image src={HushhNewLogo} alt="Hushh Logo" width={120} height={40} priority />
                   ) : (
                     <HushhHeaderLogo />
