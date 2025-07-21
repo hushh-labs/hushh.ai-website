@@ -99,7 +99,7 @@ const FooterComponent = () => {
                       Future of Digital Identity & Personalised Experiences
                     </Heading>
                     <Text fontSize="md" color="gray.500" fontWeight="400" mb={4}>
-                      Manish Sainani, 2024
+                      Manish Sainani, 2025
                     </Text>
                   </Box>
                   
@@ -406,7 +406,7 @@ const FooterComponent = () => {
                     Future of Digital Identity & Personalised Experiences
                   </Heading>
                   <Text fontSize="sm" color="gray.500" fontWeight="400">
-                    Manish Sainani, 2024
+                    Manish Sainani, 2025
                   </Text>
                 </VStack>
                 
