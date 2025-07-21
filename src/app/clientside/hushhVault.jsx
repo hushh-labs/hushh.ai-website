@@ -27,7 +27,7 @@ import { FaApple, FaFolder, FaLink, FaShieldAlt } from 'react-icons/fa';
 import HushhVaultMobile from '../_components/svg/hushhVaultMobile.svg'
 // import ExportDelete from '../../../public/exportordelete.svg'
 import HowHushhVaultWorks from '../_components/svg/hushhVault/howthevaultworks.svg'
-
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 const MotionBox = motion(Box);
 const MotionHeading = motion(Heading);
@@ -35,6 +35,7 @@ const MotionText = motion(Text);
 const MotionButton = motion(Button);
 
 const HushhVault = () => {
+  const router = useRouter();
   // State for managing highlighted security feature (default is line 2)
   const [highlightedFeature, setHighlightedFeature] = React.useState(2);
 
@@ -319,6 +320,9 @@ const HushhVault = () => {
                     size="lg"
                     bg="#0071E3"
                     color="white"
+                    onClick={() => {
+                      router.push("/contact-us");
+                    }}
                     px={{ base: 8, md: 10 }}
                     py={{ base: 6, md: 6 }}
                     borderRadius="60px"
@@ -352,6 +356,9 @@ const HushhVault = () => {
                     borderRadius="60px"
                     fontSize={{ base: "18px", md: "20px", lg: "32px" }}
                     fontWeight="500"
+                    onClick={() => {
+                      window.open("https://github.com/hushh-labs/consent-protocol", "_blank");
+                    }}
                     fontFamily="Inter, sans-serif"
                     letterSpacing="-0.02em"
                     minW={{ base: "250px", md: "300px" }}
@@ -1733,6 +1740,9 @@ Enforces zero-trust access to every byte.
                       fontFamily="Inter, sans-serif"
                       h={{ base: "44px", md: "48px", lg: "52px" }}
                       minW={{ base: "180px", md: "200px", lg: "220px" }}
+                      onClick={() => {
+                        router.push("/contact-us");
+                      }}
                       _hover={{
                         bg: "#0056B3",
                         transform: "translateY(-1px)",
@@ -1769,6 +1779,9 @@ Enforces zero-trust access to every byte.
                       }}
                       _active={{
                         transform: "translateY(0)"
+                      }}
+                      onClick={() => {
+                        router.push("https://github.com/hushh-labs/consent-protocol");
                       }}
                       transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
                       whileHover={{ scale: 1.02 }}

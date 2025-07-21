@@ -517,7 +517,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
 
                   {/* Get Early Access Button - Desktop */}
                   <Button
-                    onClick={() => router.push('/demoBookingPage')}
+                    onClick={() => router.push('https://apps.apple.com/in/app/hushh-app/id6498471189')}
                     bg="linear-gradient(135deg, #007AFF, #5E5CE6, #7C3AED)"
                     color="white"
                     borderRadius="10px"
@@ -900,7 +900,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                     <button
                       onClick={() => {
                         setIsMenuOpen(false);
-                        router.push('/demoBookingPage');
+                        router.push('https://apps.apple.com/in/app/hushh-app/id6498471189');
                       }}
                       className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg text-base font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-lg"
                     style={{ 
