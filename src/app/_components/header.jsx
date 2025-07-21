@@ -327,30 +327,30 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                 >
                   <div className="flex items-center space-x-3">
                     {item.icon && (
-                      <div className="flex-shrink-0">
-                        <div 
-                          className="w-8 h-8 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center group-hover:from-blue-100 group-hover:to-indigo-100 transition-all duration-200"
-                        >
-                          {typeof item.icon === 'string' ? (
+                    <div className="flex-shrink-0">
+                      <div 
+                        className="w-8 h-8 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center group-hover:from-blue-100 group-hover:to-indigo-100 transition-all duration-200"
+                      >
+                        {typeof item.icon === 'string' ? (
+                          <Image 
+                            src={item.icon} 
+                            alt={item.name} 
+                            width={16} 
+                            height={16} 
+                            className="w-4 h-4"
+                            style={{borderRadius:'20%'}}
+                          />
+                        ) : (
                             <Image 
                               src={item.icon} 
                               alt={item.name} 
                               width={16} 
                               height={16} 
                               className="w-4 h-4"
-                              style={{borderRadius:'20%'}}
                             />
-                          ) : (
-                            <Image 
-                              src={item.icon} 
-                              alt={item.name} 
-                              width={16} 
-                              height={16} 
-                              className="w-4 h-4"
-                            />
-                          )}
-                        </div>
+                        )}
                       </div>
+                    </div>
                     )}
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-semibold text-gray-900 group-hover:text-blue-700 transition-colors duration-200">
@@ -560,7 +560,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
 
 
                   {/* Mobile menu button */}
-                                    <button
+                  <button
                     ref={hamburgerRef}
                     onClick={handleMenuIconToggle}
                     className="lg:hidden relative p-3 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-lg active:scale-95"
@@ -573,7 +573,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                     {isMenuOpen ? (
                       <CloseIcon className="w-6 h-6 text-gray-700" />
                     ) : (
-                      <HamburgerIcon className="w-6 h-6 text-gray-700" />
+                    <HamburgerIcon className="w-6 h-6 text-gray-700" />
                     )}
                   </button>
                 </div>
@@ -601,9 +601,9 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
               }} 
               ref={menuRef}
             >
-                              <div className="h-full overflow-y-auto custom-scrollbar">
-                  {/* Mobile Menu Content */}
-                  <div className="px-6 py-6">
+              <div className="h-full overflow-y-auto custom-scrollbar">
+                {/* Mobile Menu Content */}
+                <div className="px-6 py-6">
                     {/* Close button for mobile menu */}
                     <div className="flex justify-end mb-4 lg:hidden">
                       <button
@@ -613,7 +613,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                       >
                         <CloseIcon className="w-5 h-5 text-gray-600" />
                       </button>
-                    </div>
+                  </div>
                   {/* Authentication Section */}
                   {!loading && (
                     <div className="mb-6 pb-4 border-b border-gray-200">
@@ -903,12 +903,12 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                         router.push('/demoBookingPage');
                       }}
                       className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg text-base font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-lg"
-                      style={{
+                    style={{ 
                         background: "linear-gradient(135deg, #007AFF, #5E5CE6, #7C3AED)",
                       }}
                     >
                       🚀 Get Early Access
-                    </button>
+                  </button>
                     
                     <button
                       onClick={() => {

@@ -16,23 +16,29 @@ import Vertical7 from "../../../../public/Images/gridImages/Vertical 7.jpg";
 
 const images = {
   left: [
+    Horizontal1,
+    Horizontal2,
+    Horizontal3,
+    Horizontal4,
+  ],
+  rightTop: [
     Vertical1,
     Vertical2,
     Vertical3,
     Vertical4,
+  ],
+  rightBottom: [
     Vertical5,
     Vertical6,
     Vertical7,
-  ],
-  right: [
-    [Horizontal1, Horizontal2, Horizontal3, Horizontal4],
-    [Horizontal4, Horizontal3, Horizontal2, Horizontal1],
+    Vertical1,
   ],
 };
 
 export default function ImageGrid() {
   const [currentLeftImage, setCurrentLeftImage] = useState(0);
-  const [currentRightImages, setCurrentRightImages] = useState(0);
+  const [currentRightTopImage, setCurrentRightTopImage] = useState(0);
+  const [currentRightBottomImage, setCurrentRightBottomImage] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -40,7 +46,8 @@ export default function ImageGrid() {
     
     const interval = setInterval(() => {
       setCurrentLeftImage((prev) => (prev + 1) % images.left.length);
-      setCurrentRightImages((prev) => (prev + 1) % images.right.length);
+      setCurrentRightTopImage((prev) => (prev + 1) % images.rightTop.length);
+      setCurrentRightBottomImage((prev) => (prev + 1) % images.rightBottom.length);
     }, 4000); // 4 seconds interval for smoother experience
 
     return () => clearInterval(interval);
@@ -48,27 +55,33 @@ export default function ImageGrid() {
 
   return (
     <Box width="100%" height="auto" minHeight={{ base: "400px", md: "500px" }}>
-     <Grid
-       templateColumns={{ base: '1fr', md: '1fr 1fr' }}
-        gap="8px"
+      <Grid
+        templateColumns={{ base: '1fr', md: '1fr 1fr' }}
+        gap="12px"
         height="100%"
-        minHeight="inherit" 
+        minHeight="inherit"
       >
+        {/* Left Side - Single Horizontal Box */}
         <Box
-          position="relative" 
+          position="relative"
           height="100%"
-          minHeight={{ base: "200px", md: "250px" }}
+          minHeight={{ base: "400px", md: "500px" }}
           overflow="hidden"
+          borderRadius="20px"
+          boxShadow="0 4px 20px rgba(0, 0, 0, 0.08)"
+          bg="white"
         >
           {images.left.map((image, index) => (
-             <Box 
-              key={`left-${index}`} 
-              position="absolute" 
-                            top="0" 
-                            left="0" 
-                            width="100%" 
-                            height="100%" 
-                            display={currentLeftImage === index ? 'block' : 'none'}
+            <Box
+              key={`left-${index}`}
+              position="absolute"
+              top="0"
+              left="0"
+              width="100%"
+              height="100%"
+              display={currentLeftImage === index ? 'block' : 'none'}
+              borderRadius="20px"
+              overflow="hidden"
             >
               <Image
                 src={image}
@@ -77,7 +90,7 @@ export default function ImageGrid() {
                 quality={90}
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
-                style={{ 
+                style={{
                   objectFit: 'cover',
                   opacity: isLoaded ? 1 : 0,
                   transition: 'opacity 0.3s ease-in-out'
@@ -85,38 +98,94 @@ export default function ImageGrid() {
               />
             </Box>
           ))}
-         </Box> 
-         <Box
-          display="flex" 
-          flexDirection="column" 
-          gap="8px" 
-          height="100%" 
-          minHeight={{ base: "200px", md: "250px" }}
+        </Box>
+
+        {/* Right Side - Two Vertical Boxes Stacked */}
+        <Box
+          display="flex"
+          flexDirection="column"
+          gap="12px"
+          height="100%"
+          minHeight={{ base: "400px", md: "500px" }}
         >
-          {images.right[currentRightImages].map((image, index) => (
-            <Box 
-              key={`right-${index}`} 
-              flex={index === 0 ? 2 : 1}
-                          position="relative" 
-                          width="100%"
-                          overflow="hidden" 
-            >
-              <Image
-                src={image}
-                alt={`Hushh Featured Image Right ${index + 1}`}
-                priority={index === 0 && currentRightImages === 0}
-                quality={90}
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                style={{ 
-                  objectFit: 'cover',
-                  opacity: isLoaded ? 1 : 0,
-                  transition: 'opacity 0.3s ease-in-out'
-                }}
-              />
-             </Box> 
-          ))}
-         </Box> 
+          {/* Top Right Box */}
+          <Box
+            position="relative"
+            flex="1"
+            minHeight={{ base: "194px", md: "244px" }}
+            overflow="hidden"
+            borderRadius="20px"
+            boxShadow="0 4px 20px rgba(0, 0, 0, 0.08)"
+            bg="white"
+          >
+            {images.rightTop.map((image, index) => (
+              <Box
+                key={`right-top-${index}`}
+                position="absolute"
+                top="0"
+                left="0"
+                width="100%"
+                height="100%"
+                display={currentRightTopImage === index ? 'block' : 'none'}
+                borderRadius="20px"
+                overflow="hidden"
+              >
+                <Image
+                  src={image}
+                  alt={`Hushh Featured Image Top ${index + 1}`}
+                  priority={index === 0}
+                  quality={90}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  style={{
+                    objectFit: 'cover',
+                    opacity: isLoaded ? 1 : 0,
+                    transition: 'opacity 0.3s ease-in-out'
+                  }}
+                />
+              </Box>
+            ))}
+          </Box>
+
+          {/* Bottom Right Box */}
+          <Box
+            position="relative"
+            flex="1"
+            minHeight={{ base: "194px", md: "244px" }}
+            overflow="hidden"
+            borderRadius="20px"
+            boxShadow="0 4px 20px rgba(0, 0, 0, 0.08)"
+            bg="white"
+          >
+            {images.rightBottom.map((image, index) => (
+              <Box
+                key={`right-bottom-${index}`}
+                position="absolute"
+                top="0"
+                left="0"
+                width="100%"
+                height="100%"
+                display={currentRightBottomImage === index ? 'block' : 'none'}
+                borderRadius="20px"
+                overflow="hidden"
+              >
+                <Image
+                  src={image}
+                  alt={`Hushh Featured Image Bottom ${index + 1}`}
+                  priority={index === 0}
+                  quality={90}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  style={{
+                    objectFit: 'cover',
+                    opacity: isLoaded ? 1 : 0,
+                    transition: 'opacity 0.3s ease-in-out'
+                  }}
+                />
+              </Box>
+            ))}
+          </Box>
+        </Box>
       </Grid>
     </Box>
   );
