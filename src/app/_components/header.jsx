@@ -253,7 +253,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
         {
           name: "Hackathons",
           description: "Build the future with us",
-          href: "/hackathons"
+          href: "/pda/iithackathon"
         },
         {
           name: "Blog",

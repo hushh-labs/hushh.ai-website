@@ -8,46 +8,6 @@ import './solutions.css';
 import Head from "next/head";
 import { siteMetadata } from "../sitemetadata";
 
-// export const metadata = {
-//   title: "Enterprise Solutions | Hushh Technologies",
-//   description:
-//     "Discover Hushh Technologies' enterprise-grade IT services and hardware solutions for modern business demands across the GCC.",
-//   keywords:
-//     "enterprise IT, server architecture, cloud computing, data centre setup, hardware solutions, GCC technology provider",
-//   canonical: "https://hushh.ai/solutions",
-//   alternates: {
-//     canonical: "https://hushh.ai/solutions",
-//     languages: {
-//       'en-US': 'https://hushh.ai/solutions',
-//     },
-//   },
-//   openGraph: {
-//     title: "Enterprise Solutions | Hushh Technologies",
-//     description:
-//       "Discover Hushh Technologies' enterprise-grade IT services and hardware solutions for modern business demands across the GCC.",
-//     url: "https://hushh.ai/solutions",
-//     type: "website",
-//     siteName: "Hushh AI",
-//     images: [
-//       {
-//         url: siteMetadata?.socialBanner,
-//         width: 1200,
-//         height: 630,
-//         alt: "Hushh Enterprise Solutions",
-//       },
-//     ],
-//     locale: "en_US",
-//   },
-//   twitter: {
-//     card: "summary_large_image",
-//     title: "Enterprise Solutions | Hushh Technologies",
-//     description: "Enterprise-grade IT services and hardware solutions for modern business demands.",
-//     images: [siteMetadata?.socialBanner],
-//     creator: "@hushh_ai",
-//     site: "@hushh_ai",
-//   },
-// };
-
 const SolutionsPage = () => {
   const gradient = "linear(63.68deg, #ADA785, #D6D3C2)";
 
