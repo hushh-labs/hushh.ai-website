@@ -322,6 +322,137 @@ const page = () => {
         </VStack>
       </Container>
     </ContentWrapper>
+
+    {/* Consent Protocol Section - Dark */}
+    <Box bg="black" color="white">
+      <ContentWrapper>
+        <Container maxW="container.xl" py={{ base: 16, md: 20, lg: 24 }}>
+          <VStack spacing={{ base: 8, md: 10, lg: 12 }} align="center" maxW="4xl" mx="auto">
+            
+            {/* Consent Protocol Heading */}
+            <Heading
+              as="h2"
+              fontSize={{ base: "36px", md: "48px", lg: "56px" }}
+              fontWeight="bold"
+              color="white"
+              fontFamily="Inter, sans-serif"
+              letterSpacing="-0.02em"
+              lineHeight={1.1}
+              textAlign="center"
+            >
+              Consent Protocol
+            </Heading>
+
+            {/* Protocol Description */}
+            <Text
+              fontSize={{ base: "18px", md: "20px", lg: "22px" }}
+              color="white"
+              fontFamily="Inter, sans-serif"
+              lineHeight={1.6}
+              letterSpacing="-0.01em"
+              fontWeight="400"
+              textAlign="center"
+              maxW={{ base: "100%", md: "90%", lg: "85%" }}
+              px={{ base: 4, md: 0 }}
+            >
+              We designed the Consent Protocol as the cryptographic handshake between agents, brands, and users
+            </Text>
+
+            {/* Protocol Features */}
+            <VStack spacing={{ base: 4, md: 5, lg: 6 }} align="center">
+              <Text
+                fontSize={{ base: "18px", md: "20px", lg: "22px" }}
+                color="white"
+                fontFamily="Inter, sans-serif"
+                lineHeight={1.6}
+                letterSpacing="-0.01em"
+                fontWeight="400"
+                textAlign="center"
+              >
+                Every data flow is signed, scoped, timestamped
+              </Text>
+
+              <Text
+                fontSize={{ base: "18px", md: "20px", lg: "22px" }}
+                color="white"
+                fontFamily="Inter, sans-serif"
+                lineHeight={1.6}
+                letterSpacing="-0.01em"
+                fontWeight="400"
+                textAlign="center"
+              >
+                Every interaction is logged and human-readable
+              </Text>
+
+              <Text
+                fontSize={{ base: "18px", md: "20px", lg: "22px" }}
+                color="white"
+                fontFamily="Inter, sans-serif"
+                lineHeight={1.6}
+                letterSpacing="-0.01em"
+                fontWeight="400"
+                textAlign="center"
+              >
+                Revoke, replay, or limit any consent — at any time
+              </Text>
+
+              <Text
+                fontSize={{ base: "18px", md: "20px", lg: "22px" }}
+                color="white"
+                fontFamily="Inter, sans-serif"
+                lineHeight={1.6}
+                letterSpacing="-0.01em"
+                fontWeight="400"
+                textAlign="center"
+              >
+                Compatible with OAuth2, Apple Sign-in, Google Auth, and beyond
+              </Text>
+            </VStack>
+
+            {/* Blue Highlighted Statement */}
+            <Text
+              fontSize={{ base: "18px", md: "20px", lg: "22px" }}
+              color="#0071E3"
+              fontFamily="Inter, sans-serif"
+              lineHeight={1.6}
+              letterSpacing="-0.01em"
+              fontWeight="500"
+              textAlign="center"
+              maxW={{ base: "100%", md: "90%", lg: "85%" }}
+              px={{ base: 4, md: 0 }}
+            >
+              This protocol is our north star — and it's fully open
+            </Text>
+
+            {/* CTA Button */}
+            <Button
+              size="lg"
+              bg="#0071E3"
+              color="white"
+              borderRadius="full"
+              px={{ base: 6, md: 8 }}
+              py={{ base: 4, md: 5 }}
+              fontSize={{ base: "16px", md: "18px" }}
+              fontWeight="500"
+              fontFamily="Inter, sans-serif"
+              _hover={{ 
+                bg: "#005bb5",
+                transform: "translateY(-1px)",
+                boxShadow: "0 10px 25px rgba(0, 113, 227, 0.4)"
+              }}
+              _active={{ 
+                bg: "#004494",
+                transform: "translateY(0px)"
+              }}
+              transition="all 0.2s ease"
+            >
+              View Consent Protocol
+            </Button>
+
+          </VStack>
+        </Container>
+      </ContentWrapper>
+    </Box>
     </Box>
   )
 }
