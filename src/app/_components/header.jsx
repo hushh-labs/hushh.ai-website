@@ -246,9 +246,9 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
           href: "/hushh-community"
         },
         {
-          name: "Founding 1024 Program",
-          description: "Exclusive early adopter program",
-          href: "/founding-1024"
+          name: "Solutions",
+          description: "Delivering tailored IT services that meets the rigorous demands of modern business",
+          href: "/solutions"
         },
         {
           name: "Hackathons",
