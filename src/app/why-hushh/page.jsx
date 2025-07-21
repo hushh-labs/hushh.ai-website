@@ -5,9 +5,11 @@ import { useRouter } from 'next/navigation'
 import NextImage from 'next/image'
 // import BlackLockIcon from '@/public/images/black-lock-icon.png'
 import ContentWrapper from '../_components/layout/ContentWrapper'
+import ContactForm from '../_components/features/contactForm'
 
 const page = () => {
   return (
+    <>
     <Box bg="#f5f5f7">
     <ContentWrapper>
     <Container maxW="container.xl" pb={{ base: 20, md: 24, lg: 32 }}>
@@ -454,6 +456,8 @@ const page = () => {
       </ContentWrapper>
     </Box>
     </Box>
+    <ContactForm/>
+    </>
   )
 }
 
