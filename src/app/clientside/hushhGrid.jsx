@@ -32,6 +32,7 @@ import TransparentRevenueIcon from '../_components/svg/hushhFlow/transparentReve
 import ReplaceIcon from '../_components/svg/hushhFlow/replacesIcon.svg'
 import GlobeIcon from '../_components/svg/icons/globeIcon.svg'
 import AgentRuntime from '../_components/svg/hushhGrid/agentRuntime.svg'
+import ContactForm from '../_components/features/contactForm';
 
 
 const MotionBox = motion(Box);
@@ -2200,7 +2201,7 @@ const HushhGrid = () => {
           </Grid>
         </Container>
       </Box>
-      
+      <ContactForm/>
     </>
   )
 }

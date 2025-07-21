@@ -20,6 +20,11 @@ import { useAuth } from "../context/AuthContext";
 import UserAvatar from "./auth/UserAvatar";
 import HushhNewLogo from "../../../public/svgs/hushh_new_logo.svg"
 import { useHushhIdFlow } from "../hooks/useHushhIdFlow";
+import HushhFlow from '../_components/svg/icons/flowLogo.svg'
+import HushhGrid from '../_components/svg/icons/girdLogo.svg';  
+import HushhLink from '../_components/svg/icons/linkLogo.svg';
+import HushhVault from '../_components/svg/icons/vaultLogo.svg';
+import HushhPDA from '../_components/svg/icons/pdaLogo.svg';
 
 export default function Header({backgroundColor, textColor, borderBottom}) {
   const { isTablet, isDesktop } = useResponsiveSizes();
@@ -134,31 +139,31 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
           name: "Personal Data Agent (PDA)",
           description: "Your AI-powered personal data assistant",
           href: "/products/personal-data-agent",
-          icon: "/svgs/pdaLogo.svg"
+          icon:HushhPDA
         },
         {
           name: "Hushh Vault",
           description: "Secure personal data storage and management",
           href: "/hushh-vault",
-          icon: <HushhWalletIcon className="w-6 h-6" />
+          icon:HushhVault
         },
         {
           name: "Hushh Link",
           description: "Connect and share data seamlessly",
           href: "/hushh-link",
-          icon: <VibeSearchIcon className="w-6 h-6" />
+          icon:HushhLink
         },
         {
           name: "Hushh Flow",
           description: "Streamline your data workflows",
           href: "/products/hushh-flow",
-          icon: <HushhButtonIcon size={24} />
+          icon:HushhFlow
         },
         {
           name: "Hushh Grid",
           description: "Visualize and organize your data",
           href: "/products/hushh-grid",
-          icon: <ChromeExtentionLogo className="w-6 h-6" />
+          icon: HushhGrid
         }
       ]
     },
@@ -168,26 +173,22 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
         {
           name: "GitHub Protocol",
           description: "Open source development framework",
-          href: "/developers/github-protocol",
-          icon: <VibeSearchApi className="w-6 h-6" />
+          href: "/developers/github-protocol"
         },
         {
           name: "Agentkit CLI",
           description: "Command line tools for developers",
-          href: "/developers/agentkit-cli",
-          icon: <VibeSearchApi className="w-6 h-6" />
+          href: "/developers/agentkit-cli"
         },
         {
           name: "Build an Operon",
           description: "Create custom data operations",
-          href: "/developers/build-operon",
-          icon: <VibeSearchApi className="w-6 h-6" />
+          href: "/developers/build-operon"
         },
         {
           name: "Submit to Marketplace",
           description: "Publish your creations",
-          href: "/developers/marketplace",
-          icon: <VibeSearchApi className="w-6 h-6" />
+          href: "/developers/marketplace"
         }
       ]
     },
@@ -197,20 +198,17 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
         {
           name: "Our Philosophy",
           description: "Understanding our core beliefs",
-          href: "/philosophy",
-          icon: <HushhWalletIcon className="w-6 h-6" />
+          href: "/philosophy"
         },
         {
           name: "Privacy Manifesto",
           description: "Our commitment to your privacy",
-          href: "/privacy-manifesto",
-          icon: <HushhWalletIcon className="w-6 h-6" />
+          href: "/privacy-manifesto"
         },
         {
           name: "Consent Protocol",
           description: "How we handle your consent",
-          href: "/consent-ai-protocol",
-          icon: <HushhWalletIcon className="w-6 h-6" />
+          href: "/consent-ai-protocol"
         }
       ]
     },
@@ -220,26 +218,22 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
         {
           name: "Getting Started",
           description: "Begin your journey with Hushh",
-          href: "/docs/getting-started",
-          icon: <VibeSearchApi className="w-6 h-6" />
+          href: "/docs/getting-started"
         },
         {
           name: "API Reference",
           description: "Complete API documentation",
-          href: "/developerApi",
-          icon: <VibeSearchApi className="w-6 h-6" />
+          href: "/developerApi"
         },
         {
           name: "FAQ",
           description: "Frequently asked questions",
-          href: "/docs/faq",
-          icon: <VibeSearchApi className="w-6 h-6" />
+          href: "/docs/faq"
         },
         {
           name: "Blueprint Recipes",
           description: "Pre-built solutions and templates",
-          href: "/docs/blueprints",
-          icon: <VibeSearchApi className="w-6 h-6" />
+          href: "/docs/blueprints"
         }
       ]
     },
@@ -249,26 +243,22 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
         {
           name: "Agent Builders Club",
           description: "Join our developer community",
-          href: "/hushh-community",
-          icon: <HushhWalletIcon className="w-6 h-6" />
+          href: "/hushh-community"
         },
         {
           name: "Founding 1024 Program",
           description: "Exclusive early adopter program",
-          href: "/founding-1024",
-          icon: <HushhWalletIcon className="w-6 h-6" />
+          href: "/founding-1024"
         },
         {
           name: "Hackathons",
           description: "Build the future with us",
-          href: "/hackathons",
-          icon: <HushhWalletIcon className="w-6 h-6" />
+          href: "/hackathons"
         },
         {
           name: "Blog",
           description: "Latest news and insights",
-          href: "/hushhBlogs",
-          icon: <HushhWalletIcon className="w-6 h-6" />
+          href: "/hushhBlogs"
         }
       ]
     },
@@ -278,20 +268,17 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
         {
           name: "About",
           description: "Learn about our mission",
-          href: "/about",
-          icon: <HushhWalletIcon className="w-6 h-6" />
+          href: "/about"
         },
         {
           name: "Contact",
           description: "Get in touch with us",
-          href: "/contact-us",
-          icon: <HushhWalletIcon className="w-6 h-6" />
+          href: "/contact-us"
         },
         {
           name: "Careers",
           description: "Join our team",
-          href: "/career",
-          icon: <HushhWalletIcon className="w-6 h-6" />
+          href: "/career"
         }
       ]
     }
@@ -339,24 +326,32 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                   }}
                 >
                   <div className="flex items-center space-x-3">
-                    <div className="flex-shrink-0">
-                      <div 
-                        className="w-8 h-8 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center group-hover:from-blue-100 group-hover:to-indigo-100 transition-all duration-200"
-                      >
-                        {typeof item.icon === 'string' ? (
-                          <Image 
-                            src={item.icon} 
-                            alt={item.name} 
-                            width={16} 
-                            height={16} 
-                            className="w-4 h-4"
-                            style={{borderRadius:'20%'}}
-                          />
-                        ) : (
-                          <div className="w-4 h-4 text-gray-600 group-hover:text-blue-600 transition-colors duration-200">{item.icon}</div>
-                        )}
+                    {item.icon && (
+                      <div className="flex-shrink-0">
+                        <div 
+                          className="w-8 h-8 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center group-hover:from-blue-100 group-hover:to-indigo-100 transition-all duration-200"
+                        >
+                          {typeof item.icon === 'string' ? (
+                            <Image 
+                              src={item.icon} 
+                              alt={item.name} 
+                              width={16} 
+                              height={16} 
+                              className="w-4 h-4"
+                              style={{borderRadius:'20%'}}
+                            />
+                          ) : (
+                            <Image 
+                              src={item.icon} 
+                              alt={item.name} 
+                              width={16} 
+                              height={16} 
+                              className="w-4 h-4"
+                            />
+                          )}
+                        </div>
                       </div>
-                    </div>
+                    )}
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-semibold text-gray-900 group-hover:text-blue-700 transition-colors duration-200">
                         {item.name}
