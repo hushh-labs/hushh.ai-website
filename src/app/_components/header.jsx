@@ -173,7 +173,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
         {
           name: "GitHub Protocol",
           description: "Open source development framework",
-          href: "/developers/github-protocol"
+          href: "https://github.com/hushh-labs/consent-protocol"
         },
         {
           name: "Agentkit CLI",
@@ -521,11 +521,11 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                     bg="linear-gradient(135deg, #007AFF, #5E5CE6, #7C3AED)"
                     color="white"
                     borderRadius="10px"
-                    px={8}
-                    py={2}
+                    px={4}
+                    py={1}
                     fontSize="sm"
                     fontWeight={700}
-                    height="48px"
+                    // height="48px"
                     position="relative"
                     overflow="hidden"
                     _hover={{
