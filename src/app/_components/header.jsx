@@ -198,12 +198,12 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
         {
           name: "Our Philosophy",
           description: "Understanding our core beliefs",
-          href: "/philosophy"
+          href: "/why-hushh"
         },
         {
           name: "Privacy Manifesto",
           description: "Our commitment to your privacy",
-          href: "/privacy-manifesto"
+          href: "/legal/privacypolicy"
         },
         {
           name: "Consent Protocol",
@@ -218,7 +218,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
         {
           name: "Getting Started",
           description: "Begin your journey with Hushh",
-          href: "/docs/getting-started"
+          href: "/getting-started"
         },
         {
           name: "API Reference",
@@ -230,11 +230,11 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
           description: "Frequently asked questions",
           href: "/docs/faq"
         },
-        {
-          name: "Blueprint Recipes",
-          description: "Pre-built solutions and templates",
-          href: "/docs/blueprints"
-        }
+        // {
+        //   name: "Blueprint Recipes",
+        //   description: "Pre-built solutions and templates",
+        //   href: "/docs/blueprints"
+        // }
       ]
     },
     community: {
