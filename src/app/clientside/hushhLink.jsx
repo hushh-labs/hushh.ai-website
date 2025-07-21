@@ -28,6 +28,7 @@ import { HiOutlineCog, HiOutlineEye, HiOutlineClipboardList, HiOutlineShieldChec
 import HushhLinkBox from '../_components/svg/hushhLink/hushhLinkBox.svg'
 import Image from 'next/image';
 import HushhTrail from '../_components/svg/hushhLink/audit-trail.svg'
+import ContactForm from '../_components/features/contactForm';
 
 const MotionBox = motion(Box);
 const MotionHeading = motion(Heading);
@@ -2032,6 +2033,8 @@ const HushhLink = () => {
           </Grid>
         </Container>
       </Box>
+
+      <ContactForm/>
     </>
   )
 }

@@ -29,6 +29,7 @@ import HushhVaultMobile from '../_components/svg/hushhVaultMobile.svg'
 import HowHushhVaultWorks from '../_components/svg/hushhVault/howthevaultworks.svg'
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import ContactForm from '../_components/features/contactForm';
 const MotionBox = motion(Box);
 const MotionHeading = motion(Heading);
 const MotionText = motion(Text);
@@ -1908,7 +1909,7 @@ Enforces zero-trust access to every byte.
         </Container>
       </Box>
 
-     
+     <ContactForm/>
     </>
   );
 };

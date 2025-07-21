@@ -33,6 +33,7 @@ import ReplaceIcon from '../_components/svg/hushhFlow/replacesIcon.svg'
 import { FiBriefcase, FiUserCheck } from 'react-icons/fi';
 // import PrivacyEarns from '../_components/svg/hushhFlow/privacyearns.svg'
 import { GrAttachment } from "react-icons/gr";
+import ContactForm from '../_components/features/contactForm';
 
 
 const MotionBox = motion(Box);
@@ -2224,6 +2225,7 @@ const HushhFlow = () => {
           </Grid>
         </Container>
       </Box>
+      <ContactForm/>
     </>
   )
 }

@@ -45,6 +45,7 @@ import HuggingFaceIcon from '../_components/svg/newLandingsvg/icons/huggingfaceI
 import SalesforceIcon from '../_components/svg/newLandingsvg/icons/salesforceIcon.svg';
 import { useRouter } from 'next/navigation';
 import ContentWrapper from '../_components/layout/ContentWrapper';
+import ContactForm from '../_components/features/contactForm'
 
 
 const NewLandingPage = () => {
@@ -626,6 +627,10 @@ const NewLandingPage = () => {
                 w={{ base: "full", md: "400px" }}
                 maxW="400px"
                 position="relative"
+                onClick={() => {
+                  router.push("/products/personal-data-agent");
+                }}
+                cursor={"pointer"}
                 border="1px solid"
                 borderColor="#eaecf0"
                 _hover={{ transform: "translateY(-2px)", transition: "all 0.3s ease" }}
@@ -703,6 +708,10 @@ const NewLandingPage = () => {
                   borderColor="#eaecf0"
                   _hover={{ transform: "translateY(-2px)", transition: "all 0.3s ease" }}
                   overflow="hidden"
+                  onClick={() => {
+                    router.push("/hushh-vault");
+                  }}  
+                  cursor={"pointer"}
                 >
                   {/* Background Image filling entire box */}
                   <NextImage
@@ -767,6 +776,10 @@ const NewLandingPage = () => {
                   borderColor="#eaecf0"
                   _hover={{ transform: "translateY(-2px)", transition: "all 0.3s ease" }}
                   overflow="hidden"
+                  onClick={() => {
+                    router.push("/hushh-link");
+                  }}
+                  cursor={"pointer"}
                 >
                   {/* Background Image filling entire box */}
                   <NextImage
@@ -831,6 +844,10 @@ const NewLandingPage = () => {
                   borderColor="#eaecf0"
                   _hover={{ transform: "translateY(-2px)", transition: "all 0.3s ease" }}
                   overflow="hidden"
+                  onClick={() => {
+                    router.push("/products/hushh-flow");
+                  }}
+                  cursor={"pointer"}
                 >
                   {/* Background Image filling entire box */}
                   <NextImage
@@ -895,7 +912,11 @@ const NewLandingPage = () => {
                   borderColor="#eaecf0"
                   _hover={{ transform: "translateY(-2px)", transition: "all 0.3s ease" }}
                   overflow="hidden"
-                >
+                  onClick={() => {
+                    router.push("/products/hushh-grid");
+                  }}
+                  cursor={"pointer"}
+                  >
                   {/* Background Image filling entire box */}
                   <NextImage
                     src={HushhGridBgSvg}
@@ -1514,7 +1535,7 @@ const NewLandingPage = () => {
       </Container>
       </ContentWrapper>
 
-          <FooterComponent/>
+         <ContactForm/>
     </Box>
   )
 }
