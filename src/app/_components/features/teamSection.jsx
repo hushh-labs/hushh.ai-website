@@ -468,7 +468,50 @@ const TeamSection = () => {
                 </Text>
               </VStack>
             </VStack>
-
+ {/* Adil Khan */}
+ <VStack spacing={4}>
+              <Box
+                borderRadius="16px"
+                overflow="hidden"
+                boxShadow="0 4px 20px rgba(0, 0, 0, 0.08)"
+                bg="white"
+                p={2}
+                _hover={{
+                  transform: "translateY(-4px)",
+                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)"
+                }}
+                transition="all 0.3s ease"
+              >
+                <Image
+                    alt="Sani Patel"
+                    src={teamImages.SatyamArora}
+                  width={260}
+                  height={276}
+                  style={{ borderRadius: '12px' }}
+                />
+              </Box>
+              
+              <VStack spacing={2} textAlign="center">
+                <Heading
+                  as="h4"
+                  fontSize={{ base: "16px", md: "18px" }}
+                  fontWeight="600"
+                  color="black"
+                  fontFamily="Inter, sans-serif"
+                  letterSpacing="-0.01em"
+                >
+                 Sani Patel
+                </Heading>
+                <Text
+                  fontSize={{ base: "14px", md: "15px" }}
+                  color="#666"
+                  fontFamily="Inter, sans-serif"
+                  fontWeight="400"
+                >
+                  Backend Engineer
+                </Text>
+              </VStack>
+            </VStack>
             
           </Grid>
 
@@ -634,13 +677,21 @@ const TeamSection = () => {
       </Box>
 
       {/* Modal */}
-      <Modal isOpen={isOpen} onClose={closeModal}>
-        <ModalOverlay />
+      <Modal 
+        isOpen={isOpen} 
+        onClose={closeModal} 
+        isCentered
+        motionPreset="slideInBottom"
+      >
+        <ModalOverlay bg="blackAlpha.600" />
         <ModalContent
-          minW={{ md: "30rem", base: "10rem" }}
+          minW={{ md: "30rem", base: "90vw" }}
+          maxW={{ base: "90vw", md: "35rem" }}
           borderRadius="2rem"
-          p={{ md: "1rem", base: "0" }}
+          p={{ md: "1rem", base: "1rem" }}
           bg="white"
+          mx={{ base: 4, md: 0 }}
+          my={{ base: 4, md: 0 }}
         >
           {selectedAdvisor && (
             <>
