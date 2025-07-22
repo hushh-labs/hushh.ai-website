@@ -150,7 +150,7 @@ const FooterComponent = () => {
                     spacing={3} 
                     w="full"
                   >
-                    <Link href="/products/hushhWalletApp">
+                    <Link href="/products/personal-data-agent">
                       <Text 
                         fontSize="sm" 
                         fontWeight="400" 
@@ -159,10 +159,11 @@ const FooterComponent = () => {
                         transition="color 0.2s ease"
                         textAlign={{ base: "center", md: "left" }}
                       >
-                        Hushh Wallet App
+                        Personal Data Agent (PDA)
                       </Text>
                     </Link>
-                    <Link href="/products/hushhButton">
+
+                    <Link href="/consent-ai-protocol">
                       <Text 
                         fontSize="sm" 
                         fontWeight="400" 
@@ -171,10 +172,11 @@ const FooterComponent = () => {
                         transition="color 0.2s ease"
                         textAlign={{ base: "center", md: "left" }}
                       >
-                        Hushh Button
+                        Consent AI Protocol
                       </Text>
                     </Link>
-                    <Link href="/products/vibeSearch">
+
+                    <Link href="/hushh-vault">
                       <Text 
                         fontSize="sm" 
                         fontWeight="400" 
@@ -183,10 +185,10 @@ const FooterComponent = () => {
                         transition="color 0.2s ease"
                         textAlign={{ base: "center", md: "left" }}
                       >
-                        Vibe Search
+                        Hushh Vault
                       </Text>
                     </Link>
-                    <Link href="/products/browserCompanion">
+                    <Link href="/products/hushh-grid">
                       <Text 
                         fontSize="sm" 
                         fontWeight="400" 
@@ -195,7 +197,19 @@ const FooterComponent = () => {
                         transition="color 0.2s ease"
                         textAlign={{ base: "center", md: "left" }}
                       >
-                        Browser Companion
+                        Hushh Grid
+                      </Text>
+                    </Link>
+                    <Link href="/hushh-link">
+                      <Text 
+                        fontSize="sm" 
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black" }} 
+                        transition="color 0.2s ease"
+                        textAlign={{ base: "center", md: "left" }}
+                      >
+                       Hushh Link
                       </Text>
                     </Link>
                     <Link href="/developerApi">
@@ -210,18 +224,7 @@ const FooterComponent = () => {
                         Developer API
                       </Text>
                     </Link>
-                    <Link href="/products/hushhForStudents">
-                      <Text 
-                        fontSize="sm" 
-                        fontWeight="400" 
-                        color="gray.600" 
-                        _hover={{ color: "black" }} 
-                        transition="color 0.2s ease"
-                        textAlign={{ base: "center", md: "left" }}
-                      >
-                        HFS App
-                      </Text>
-                    </Link>
+                    
                   </VStack>
                 </VStack>
               </GridItem>
@@ -245,7 +248,7 @@ const FooterComponent = () => {
                     spacing={3} 
                     w="full"
                   >
-                    <Link href="/demoBookingPage">
+                    <Link href="/about-us">
                       <Text 
                         fontSize="sm" 
                         fontWeight="400" 
@@ -254,11 +257,35 @@ const FooterComponent = () => {
                         transition="color 0.2s ease"
                         textAlign={{ base: "center", md: "left" }}
                       >
-                        Free Demo
+                        About Us
+                      </Text>
+                    </Link>
+                    <Link href="/solutions">
+                      <Text 
+                        fontSize="sm" 
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black" }} 
+                        transition="color 0.2s ease"
+                        textAlign={{ base: "center", md: "left" }}
+                      >
+                       Solutions
+                      </Text>
+                    </Link>
+                    <Link href="/why-hushh">
+                      <Text 
+                        fontSize="sm" 
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black" }} 
+                        transition="color 0.2s ease"
+                        textAlign={{ base: "center", md: "left" }}
+                      >
+                       Our Philosophy (Why Hushh ?)
                       </Text>
                     </Link>
                     <ChakraLink 
-                      href="https://hushh-labs.github.io/hushh-labs-blog/"
+                      href="/hushhBlogs"
                       fontSize="sm"
                       fontWeight="400"
                       color="gray.600"
@@ -270,7 +297,7 @@ const FooterComponent = () => {
                       Blog
                     </ChakraLink>
                     <ChakraLink 
-                      href="https://www.linkedin.com/company/hushh-ai/jobs/"
+                      href="/career"
                       fontSize="sm"
                       fontWeight="400"
                       color="gray.600"
@@ -288,7 +315,9 @@ const FooterComponent = () => {
                       _hover={{ color: "black" }}
                       transition="color 0.2s ease"
                       cursor="pointer"
-                      onClick={scrollTo}
+                      onClick={()=>{
+                        router.push('/contact-us')
+                      }}
                       textAlign={{ base: "center", md: "left" }}
                     >
                       Contact Us
