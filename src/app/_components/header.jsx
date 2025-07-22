@@ -563,7 +563,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                   <button
                     ref={hamburgerRef}
                     onClick={handleMenuIconToggle}
-                    className="lg:hidden relative p-3 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-lg active:scale-95"
+                    className="lg:hidden relative p-3 rounded-xl border  hover:border-gray-300 transition-all duration-200 hover:shadow-lg active:scale-95"
                     style={{
                       backdropFilter: "blur(10px)",
                     }}
@@ -691,13 +691,30 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                               className="block mobile-menu-item cursor-pointer"
                             >
                               <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                                <div className="flex-shrink-0 mt-1">
-                                  {typeof item.icon === 'string' ? (
-                                    <Image src={item.icon} alt="" width={20} height={20} />
-                                  ) : (
-                                    <div className="w-5 h-5">{item.icon}</div>
-                                  )}
-                                </div>
+                                {item.icon && (
+                                  <div className="flex-shrink-0 mt-1">
+                                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                      {typeof item.icon === 'string' ? (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                          style={{borderRadius:'20%'}}
+                                        />
+                                      ) : (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
                                 <div>
                                   <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
                                   <p className="text-xs text-gray-500 mt-1">{item.description}</p>
@@ -732,9 +749,30 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                               className="block mobile-menu-item cursor-pointer"
                             >
                               <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                                <div className="flex-shrink-0 mt-1">
-                                  <div className="w-5 h-5">{item.icon}</div>
-                                </div>
+                                {item.icon && (
+                                  <div className="flex-shrink-0 mt-1">
+                                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                      {typeof item.icon === 'string' ? (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                          style={{borderRadius:'20%'}}
+                                        />
+                                      ) : (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
                                 <div>
                                   <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
                                   <p className="text-xs text-gray-500 mt-1">{item.description}</p>
@@ -769,9 +807,30 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                               className="block mobile-menu-item cursor-pointer"
                             >
                               <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                                <div className="flex-shrink-0 mt-1">
-                                  <div className="w-5 h-5">{item.icon}</div>
-                                </div>
+                                {item.icon && (
+                                  <div className="flex-shrink-0 mt-1">
+                                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                      {typeof item.icon === 'string' ? (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                          style={{borderRadius:'20%'}}
+                                        />
+                                      ) : (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
                                 <div>
                                   <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
                                   <p className="text-xs text-gray-500 mt-1">{item.description}</p>
@@ -806,9 +865,30 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                               className="block mobile-menu-item cursor-pointer"
                             >
                               <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                                <div className="flex-shrink-0 mt-1">
-                                  <div className="w-5 h-5">{item.icon}</div>
-                                </div>
+                                {item.icon && (
+                                  <div className="flex-shrink-0 mt-1">
+                                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                      {typeof item.icon === 'string' ? (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                          style={{borderRadius:'20%'}}
+                                        />
+                                      ) : (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
                                 <div>
                                   <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
                                   <p className="text-xs text-gray-500 mt-1">{item.description}</p>
@@ -843,9 +923,30 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                               className="block mobile-menu-item cursor-pointer"
                             >
                               <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                                <div className="flex-shrink-0 mt-1">
-                                  <div className="w-5 h-5">{item.icon}</div>
-                                </div>
+                                {item.icon && (
+                                  <div className="flex-shrink-0 mt-1">
+                                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                      {typeof item.icon === 'string' ? (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                          style={{borderRadius:'20%'}}
+                                        />
+                                      ) : (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
                                 <div>
                                   <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
                                   <p className="text-xs text-gray-500 mt-1">{item.description}</p>
@@ -880,9 +981,30 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                               className="block mobile-menu-item cursor-pointer"
                             >
                               <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                                <div className="flex-shrink-0 mt-1">
-                                  <div className="w-5 h-5">{item.icon}</div>
-                                </div>
+                                {item.icon && (
+                                  <div className="flex-shrink-0 mt-1">
+                                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                      {typeof item.icon === 'string' ? (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                          style={{borderRadius:'20%'}}
+                                        />
+                                      ) : (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
                                 <div>
                                   <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
                                   <p className="text-xs text-gray-500 mt-1">{item.description}</p>
