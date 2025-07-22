@@ -124,6 +124,7 @@ import communityIcon from '../_components/svg/agentKit/communityIcon.svg';
               bg="#0c8ce9"
               color="white"
               size="lg"
+              onClick={() => router.push("/consent-ai-protocol")}
               px={{ base: 6, md: 8 }}
               py={{ base: 6, md: 7 }}
               rounded="full"
@@ -142,6 +143,7 @@ import communityIcon from '../_components/svg/agentKit/communityIcon.svg';
               px={{ base: 6, md: 8 }}
               py={{ base: 6, md: 7 }}
               rounded="full"
+              onClick={() => router.push("https://apps.apple.com/in/app/hushh-app/id6498471189", target="_blank")}
               fontSize={{ base: "lg", md: "xl" }}
               fontWeight="semibold"
               _hover={{ bg: "#333333" }}
@@ -252,6 +254,7 @@ import communityIcon from '../_components/svg/agentKit/communityIcon.svg';
                 bg="gray.800"
                 color="white"
                 size="lg"
+                onClick={() => router.push("https://github.com/hushh-labs/consent-protocol", target="_blank")}
                 px={8}
                 py={6}
                 rounded="full"
@@ -341,6 +344,7 @@ import communityIcon from '../_components/svg/agentKit/communityIcon.svg';
                 size="lg"
                 px={8}
                 py={6}
+                onClick={() => router.push("https://github.com/hushh-labs/consent-protocol/blob/main/docs/agentcli.md", target="_blank")}
                 rounded="full"
                 fontSize="xl"
                 fontWeight="semibold"
@@ -458,6 +462,7 @@ import communityIcon from '../_components/svg/agentKit/communityIcon.svg';
                   bg="transparent"
                   color="white"
                   size="lg"
+                  onClick={() => router.push("https://github.com/hushh-labs/consent-protocol/blob/main/docs/operons.md", target="_blank")}
                   px={8}
                   py={6}
                   rounded="40px"

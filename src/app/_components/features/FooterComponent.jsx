@@ -61,10 +61,10 @@ const FooterComponent = () => {
     <>
       {/* Main Footer */}
       <Box bg="white" w="100%" m={0} p={0}>
-        <Box py={{ base: 12, md: 16 }} px={{ base: 6, md: 8 }}>
+        <Box py={{ base: 16, md: 16 }} px={{ base: 8, md: 8 }}>
           <Box maxW="1200px" mx="auto">
             {/* Footer Logo Section */}
-            <Box mb={{ base: 12, md: 16 }} textAlign={{ base: "center", md: "left" }}>
+            <Box mb={{ base: 16, md: 16 }} textAlign={{ base: "left", md: "left" }}>
               <Box display={{ base: "none", md: "block" }}>
                 <HushhFooterLogo />
               </Box>
@@ -77,11 +77,11 @@ const FooterComponent = () => {
             <Grid
               templateColumns={{ 
                 base: "1fr", 
-                sm: "repeat(2, 1fr)",
+                sm: "1fr",
                 md: "repeat(4, 1fr)",
                 lg: "2fr repeat(4, 1fr)" 
               }}
-              gap={{ base: 10, md: 12, lg: 8 }}
+              gap={{ base: 8, sm: 10, md: 12, lg: 8 }}
               alignItems="start"
               fontFamily={'Inter'}
             >
@@ -134,31 +134,43 @@ const FooterComponent = () => {
 
               {/* Products Section */}
               <GridItem>
-                <VStack align={{ base: "center", md: "start" }} spacing={4}>
-                  <Text 
-                    fontSize="sm" 
-                    fontWeight="600" 
-                    color="black"
-                    textTransform="uppercase" 
-                    letterSpacing="0.5px"
-                    textAlign={{ base: "center", md: "left" }}
-                    w="full"
-                  >
-                    Products
-                  </Text>
+                <VStack align={{ base: "start", md: "start" }} spacing={{ base: 5, md: 4 }}>
+                  <Box w="full" pb={{ base: 2, md: 0 }}>
+                    <Text 
+                      fontSize={{ base: "md", md: "sm" }}
+                      fontWeight="600" 
+                      color="black"
+                      textTransform="uppercase" 
+                      letterSpacing="0.5px"
+                      textAlign="left"
+                      mb={{ base: 1, md: 0 }}
+                    >
+                      Products
+                    </Text>
+                    <Box 
+                      w="40px" 
+                      h="2px" 
+                      bg="black" 
+                      display={{ base: "block", md: "none" }}
+                      mt={2}
+                    />
+                  </Box>
                   <VStack 
-                    align={{ base: "center", md: "start" }} 
-                    spacing={3} 
+                    align="start"
+                    spacing={{ base: 4, md: 3 }}
                     w="full"
                   >
                     <Link href="/products/personal-data-agent">
                       <Text 
-                        fontSize="sm" 
+                        fontSize={{ base: "sm", md: "sm" }}
                         fontWeight="400" 
                         color="gray.600" 
-                        _hover={{ color: "black" }} 
-                        transition="color 0.2s ease"
-                        textAlign={{ base: "center", md: "left" }}
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
                       >
                         Personal Data Agent (PDA)
                       </Text>
@@ -166,12 +178,15 @@ const FooterComponent = () => {
 
                     <Link href="/consent-ai-protocol">
                       <Text 
-                        fontSize="sm" 
+                        fontSize={{ base: "sm", md: "sm" }}
                         fontWeight="400" 
                         color="gray.600" 
-                        _hover={{ color: "black" }} 
-                        transition="color 0.2s ease"
-                        textAlign={{ base: "center", md: "left" }}
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
                       >
                         Consent AI Protocol
                       </Text>
@@ -179,48 +194,60 @@ const FooterComponent = () => {
 
                     <Link href="/hushh-vault">
                       <Text 
-                        fontSize="sm" 
+                        fontSize={{ base: "sm", md: "sm" }}
                         fontWeight="400" 
                         color="gray.600" 
-                        _hover={{ color: "black" }} 
-                        transition="color 0.2s ease"
-                        textAlign={{ base: "center", md: "left" }}
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
                       >
                         Hushh Vault
                       </Text>
                     </Link>
                     <Link href="/products/hushh-grid">
                       <Text 
-                        fontSize="sm" 
+                        fontSize={{ base: "sm", md: "sm" }}
                         fontWeight="400" 
                         color="gray.600" 
-                        _hover={{ color: "black" }} 
-                        transition="color 0.2s ease"
-                        textAlign={{ base: "center", md: "left" }}
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
                       >
                         Hushh Grid
                       </Text>
                     </Link>
                     <Link href="/hushh-link">
                       <Text 
-                        fontSize="sm" 
+                        fontSize={{ base: "sm", md: "sm" }}
                         fontWeight="400" 
                         color="gray.600" 
-                        _hover={{ color: "black" }} 
-                        transition="color 0.2s ease"
-                        textAlign={{ base: "center", md: "left" }}
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
                       >
                        Hushh Link
                       </Text>
                     </Link>
                     <Link href="/developerApi">
                       <Text 
-                        fontSize="sm" 
+                        fontSize={{ base: "sm", md: "sm" }}
                         fontWeight="400" 
                         color="gray.600" 
-                        _hover={{ color: "black" }} 
-                        transition="color 0.2s ease"
-                        textAlign={{ base: "center", md: "left" }}
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
                       >
                         Developer API
                       </Text>
@@ -232,106 +259,151 @@ const FooterComponent = () => {
 
               {/* Company Section */}
               <GridItem>
-                <VStack align={{ base: "center", md: "start" }} spacing={4}>
-                  <Text 
-                    fontSize="sm" 
-                    fontWeight="600" 
-                    color="black"
-                    textTransform="uppercase" 
-                    letterSpacing="0.5px"
-                    textAlign={{ base: "center", md: "left" }}
-                    w="full"
-                  >
-                    Company
-                  </Text>
+                <VStack align="start" spacing={{ base: 5, md: 4 }}>
+                  <Box w="full" pb={{ base: 2, md: 0 }}>
+                    <Text 
+                      fontSize={{ base: "md", md: "sm" }}
+                      fontWeight="600" 
+                      color="black"
+                      textTransform="uppercase" 
+                      letterSpacing="0.5px"
+                      textAlign="left"
+                      mb={{ base: 1, md: 0 }}
+                    >
+                      Company
+                    </Text>
+                    <Box 
+                      w="40px" 
+                      h="2px" 
+                      bg="black" 
+                      display={{ base: "block", md: "none" }}
+                      mt={2}
+                    />
+                  </Box>
                   <VStack 
-                    align={{ base: "center", md: "start" }} 
-                    spacing={3} 
+                    align="start"
+                    spacing={{ base: 4, md: 3 }}
                     w="full"
                   >
                     <Link href="/about-us">
                       <Text 
-                        fontSize="sm" 
+                        fontSize={{ base: "sm", md: "sm" }}
                         fontWeight="400" 
                         color="gray.600" 
-                        _hover={{ color: "black" }} 
-                        transition="color 0.2s ease"
-                        textAlign={{ base: "center", md: "left" }}
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
                       >
                         About Us
                       </Text>
                     </Link>
                     <Link href="/solutions">
                       <Text 
-                        fontSize="sm" 
+                        fontSize={{ base: "sm", md: "sm" }}
                         fontWeight="400" 
                         color="gray.600" 
-                        _hover={{ color: "black" }} 
-                        transition="color 0.2s ease"
-                        textAlign={{ base: "center", md: "left" }}
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
                       >
                        Solutions
                       </Text>
                     </Link>
                     <Link href="https://hushhtech.com" target="_blank">
                       <Text 
-                        fontSize="sm" 
+                        fontSize={{ base: "sm", md: "sm" }}
                         fontWeight="400" 
                         color="gray.600" 
-                        _hover={{ color: "black" }} 
-                        transition="color 0.2s ease"
-                        textAlign={{ base: "center", md: "left" }}
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
                       >
                        Hushh Tech (Investor Relations)
                       </Text>
                     </Link>
                     <Link href="/why-hushh">
                       <Text 
-                        fontSize="sm" 
+                        fontSize={{ base: "sm", md: "sm" }}
                         fontWeight="400" 
                         color="gray.600" 
-                        _hover={{ color: "black" }} 
-                        transition="color 0.2s ease"
-                        textAlign={{ base: "center", md: "left" }}
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
                       >
                        Our Philosophy (Why Hushh ?)
                       </Text>
                     </Link>
                     <ChakraLink 
                       href="/hushhBlogs"
-                      fontSize="sm"
+                      fontSize={{ base: "sm", md: "sm" }}
                       fontWeight="400"
                       color="gray.600"
-                      _hover={{ color: "black" }}
-                      transition="color 0.2s ease"
+                      _hover={{ color: "black", transform: "translateX(4px)" }}
+                      transition="all 0.2s ease"
                       isExternal
-                      textAlign={{ base: "center", md: "left" }}
+                      textAlign="left"
+                      py={{ base: 1, md: 0 }}
+                      display="block"
+                      w="full"
                     >
                       Blog
                     </ChakraLink>
                     <ChakraLink 
                       href="/career"
-                      fontSize="sm"
+                      fontSize={{ base: "sm", md: "sm" }}
                       fontWeight="400"
                       color="gray.600"
-                      _hover={{ color: "black" }}
-                      transition="color 0.2s ease"
+                      _hover={{ color: "black", transform: "translateX(4px)" }}
+                      transition="all 0.2s ease"
                       isExternal
-                      textAlign={{ base: "center", md: "left" }}
+                      textAlign="left"
+                      py={{ base: 1, md: 0 }}
+                      display="block"
+                      w="full"
                     >
                       Careers
                     </ChakraLink>
-                    <Text
-                      fontSize="sm"
+                    <ChakraLink 
+                      href="https://github.com/hushh-labs/consent-protocol/blob/main/docs/faq.md"
+                      fontSize={{ base: "sm", md: "sm" }}
                       fontWeight="400"
                       color="gray.600"
-                      _hover={{ color: "black" }}
-                      transition="color 0.2s ease"
+                      _hover={{ color: "black", transform: "translateX(4px)" }}
+                      transition="all 0.2s ease"
+                      isExternal
+                      textAlign="left"
+                      py={{ base: 1, md: 0 }}
+                      display="block"
+                      w="full"
+                    >
+                      FAQ
+                    </ChakraLink>
+                    <Text
+                      fontSize={{ base: "sm", md: "sm" }}
+                      fontWeight="400"
+                      color="gray.600"
+                      _hover={{ color: "black", transform: "translateX(4px)" }}
+                      transition="all 0.2s ease"
                       cursor="pointer"
                       onClick={()=>{
                         router.push('/contact-us')
                       }}
-                      textAlign={{ base: "center", md: "left" }}
+                      textAlign="left"
+                      py={{ base: 1, md: 0 }}
+                      display="block"
+                      w="full"
                     >
                       Contact Us
                     </Text>
@@ -341,68 +413,89 @@ const FooterComponent = () => {
 
                {/* Social Section */}
                <GridItem>
-                <VStack align={{ base: "center", md: "start" }} spacing={4}>
-                  <Text 
-                    fontSize="sm" 
-                    fontWeight="600" 
-                    color="black"
-                    textTransform="uppercase" 
-                    letterSpacing="0.5px"
-                    textAlign={{ base: "center", md: "left" }}
-                    w="full"
-                  >
-                    Social
-                  </Text>
+                <VStack align="start" spacing={{ base: 5, md: 4 }}>
+                  <Box w="full" pb={{ base: 2, md: 0 }}>
+                    <Text 
+                      fontSize={{ base: "md", md: "sm" }}
+                      fontWeight="600" 
+                      color="black"
+                      textTransform="uppercase" 
+                      letterSpacing="0.5px"
+                      textAlign="left"
+                      mb={{ base: 1, md: 0 }}
+                    >
+                      Social
+                    </Text>
+                    <Box 
+                      w="40px" 
+                      h="2px" 
+                      bg="black" 
+                      display={{ base: "block", md: "none" }}
+                      mt={2}
+                    />
+                  </Box>
                   <VStack 
-                    align={{ base: "center", md: "start" }} 
-                    spacing={3} 
+                    align="start"
+                    spacing={{ base: 4, md: 3 }}
                     w="full"
                   >
                     <Link href="https://www.linkedin.com/company/hushh-ai/" target="_blank">
                       <Text 
-                        fontSize="sm" 
+                        fontSize={{ base: "sm", md: "sm" }}
                         fontWeight="400" 
                         color="gray.600" 
-                        _hover={{ color: "black" }} 
-                        transition="color 0.2s ease"
-                        textAlign={{ base: "center", md: "left" }}
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
                       >
                         Linkedin
                       </Text>
                     </Link>
                     <Link href="https://x.com/hushh_ai" target="_blank">
                       <Text 
-                        fontSize="sm" 
+                        fontSize={{ base: "sm", md: "sm" }}
                         fontWeight="400" 
                         color="gray.600" 
-                        _hover={{ color: "black" }} 
-                        transition="color 0.2s ease"
-                        textAlign={{ base: "center", md: "left" }}
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
                       >
                        X (Twitter)
                       </Text>
                     </Link>
                     <Link href="https://github.com/hushh-labs" target="_blank">
                       <Text 
-                        fontSize="sm" 
+                        fontSize={{ base: "sm", md: "sm" }}
                         fontWeight="400" 
                         color="gray.600" 
-                        _hover={{ color: "black" }} 
-                        transition="color 0.2s ease"
-                        textAlign={{ base: "center", md: "left" }}
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
                       >
                        Github
                       </Text>
                     </Link>
                     <ChakraLink 
                       href=""
-                      fontSize="sm"
+                      fontSize={{ base: "sm", md: "sm" }}
                       fontWeight="400"
                       color="gray.600"
-                      _hover={{ color: "black" }}
-                      transition="color 0.2s ease"
+                      _hover={{ color: "black", transform: "translateX(4px)" }}
+                      transition="all 0.2s ease"
                       isExternal
-                      textAlign={{ base: "center", md: "left" }}
+                      textAlign="left"
+                      py={{ base: 1, md: 0 }}
+                      display="block"
+                      w="full"
                     >
                      Instagram
                     </ChakraLink>
@@ -414,91 +507,117 @@ const FooterComponent = () => {
 
               {/* Support Section */}
               <GridItem>
-                <VStack align={{ base: "center", md: "start" }} spacing={4}>
-                  <Text 
-                    fontSize="sm" 
-                    fontWeight="600" 
-                    color="black"
-                    textTransform="uppercase" 
-                    letterSpacing="0.5px"
-                    textAlign={{ base: "center", md: "left" }}
-                    w="full"
-                  >
-                    Support
-                  </Text>
+                <VStack align="start" spacing={{ base: 5, md: 4 }}>
+                  <Box w="full" pb={{ base: 2, md: 0 }}>
+                    <Text 
+                      fontSize={{ base: "md", md: "sm" }}
+                      fontWeight="600" 
+                      color="black"
+                      textTransform="uppercase" 
+                      letterSpacing="0.5px"
+                      textAlign="left"
+                      mb={{ base: 1, md: 0 }}
+                    >
+                      Support
+                    </Text>
+                    <Box 
+                      w="40px" 
+                      h="2px" 
+                      bg="black" 
+                      display={{ base: "block", md: "none" }}
+                      mt={2}
+                    />
+                  </Box>
                   <VStack 
-                    align={{ base: "center", md: "start" }} 
-                    spacing={3} 
+                    align="start"
+                    spacing={{ base: 4, md: 3 }}
                     w="full"
                   >
                     <Link href="/demoBookingPage">
                       <Text 
-                        fontSize="sm" 
+                        fontSize={{ base: "sm", md: "sm" }}
                         fontWeight="400" 
                         color="gray.600" 
-                        _hover={{ color: "black" }} 
-                        transition="color 0.2s ease"
-                        textAlign={{ base: "center", md: "left" }}
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
                       >
                         Live Demo
                       </Text>
                     </Link>
-                    <ChakraLink 
+                    {/* <ChakraLink 
                       href="https://hushh-labs.github.io/hushh-labs-blog/"
-                      fontSize="sm"
+                      fontSize={{ base: "sm", md: "sm" }}
                       fontWeight="400"
                       color="gray.600"
-                      _hover={{ color: "black" }}
-                      transition="color 0.2s ease"
+                      _hover={{ color: "black", transform: "translateX(4px)" }}
+                      transition="all 0.2s ease"
                       isExternal
-                      textAlign={{ base: "center", md: "left" }}
+                      textAlign="left"
+                      py={{ base: 1, md: 0 }}
+                      display="block"
+                      w="full"
                     >
                       Documentation
-                    </ChakraLink>
+                    </ChakraLink> */}
                   </VStack>
                 </VStack>
               </GridItem>
 
               {/* Download Section */}
               <GridItem>
-                <VStack align={{ base: "center", md: "start" }} spacing={4}>
-                  <Text 
-                    fontSize="sm" 
-                    fontWeight="600" 
-                    color="black"
-                    textTransform="uppercase" 
-                    letterSpacing="0.5px"
-                    textAlign={{ base: "center", md: "left" }}
-                    w="full"
-                  >
-                    Download
-                  </Text>
+                <VStack align="start" spacing={{ base: 5, md: 4 }}>
+                  <Box w="full" pb={{ base: 2, md: 0 }}>
+                    <Text 
+                      fontSize={{ base: "md", md: "sm" }}
+                      fontWeight="600" 
+                      color="black"
+                      textTransform="uppercase" 
+                      letterSpacing="0.5px"
+                      textAlign="left"
+                      mb={{ base: 1, md: 0 }}
+                    >
+                      Download
+                    </Text>
+                    <Box 
+                      w="40px" 
+                      h="2px" 
+                      bg="black" 
+                      display={{ base: "block", md: "none" }}
+                      mt={2}
+                    />
+                  </Box>
                   <VStack 
-                    align={{ base: "center", md: "start" }} 
-                    spacing={3} 
+                    align="start"
+                    spacing={{ base: 4, md: 3 }}
                     w="full"
                   >
                     <Button
                       onClick={() => router.push("https://apps.apple.com/in/app/hushh-app/id6498471189")}
-                      size="sm"
+                      size={{ base: "md", md: "sm" }}
                       bg="black"
                       color="white"
                       borderRadius="lg"
-                      px={4}
-                      py={2}
-                      fontSize="xs"
+                      px={{ base: 6, md: 4 }}
+                      py={{ base: 3, md: 2 }}
+                      fontSize={{ base: "sm", md: "xs" }}
                       fontWeight="500"
                       _hover={{
                         bg: "gray.800",
                         transform: "translateY(-1px)",
-                        shadow: "sm"
+                        shadow: "md"
                       }}
                       _active={{
                         bg: "gray.900",
                         transform: "translateY(0)"
                       }}
                       transition="all 0.2s ease"
-                      minW="120px"
+                      minW={{ base: "160px", md: "120px" }}
+                      w={{ base: "100%", sm: "auto", md: "auto" }}
+                      maxW={{ base: "200px", md: "none" }}
                     >
                       Download App
                     </Button>
@@ -508,45 +627,64 @@ const FooterComponent = () => {
             </Grid>
 
             {/* Mobile Company Info */}
-            <Box display={{ base: "block", lg: "none" }} mt={12} pt={8} borderTop="1px solid" borderColor="gray.100">
-              <VStack spacing={6} textAlign="center">
-                <VStack spacing={2}>
+            <Box display={{ base: "block", lg: "none" }} mt={{ base: 16, md: 12 }} pt={{ base: 10, md: 8 }} borderTop="2px solid" borderColor="gray.100">
+              <VStack spacing={{ base: 8, md: 6 }} textAlign="left" align="start">
+                <VStack spacing={4} align="start" w="full">
+                  <Box>
+                    <Text
+                      fontSize="md"
+                      fontWeight="600"
+                      color="black"
+                      textTransform="uppercase"
+                      letterSpacing="0.5px"
+                      mb={2}
+                    >
+                      Contact
+                    </Text>
+                    <Box w="40px" h="2px" bg="black" />
+                  </Box>
+                  
                   <Heading
                     as="h3"
-                    fontSize="lg"
+                    fontSize={{ base: "lg", md: "xl" }}
                     fontWeight="600"
                     color="black"
                     lineHeight={1.4}
+                    textAlign="left"
                   >
                     Future of Digital Identity & Personalised Experiences
                   </Heading>
-                  <Text fontSize="sm" color="gray.500" fontWeight="400">
+                  <Text fontSize="sm" color="gray.500" fontWeight="400" textAlign="left">
                     Manish Sainani, 2025
                   </Text>
                 </VStack>
                 
-                <HStack spacing={6} justify="center">
+                <VStack spacing={4} align="start" w="full">
                   <ChakraLink 
                     href="tel:(888) 462-1726" 
                     fontSize="sm"
                     fontWeight="400"
                     color="gray.600"
-                    _hover={{ color: "black" }}
-                    transition="color 0.2s ease"
+                    _hover={{ color: "black", transform: "translateX(4px)" }}
+                    transition="all 0.2s ease"
+                    py={1}
+                    display="block"
                   >
-                    (888) 462-1726
+                    📞 (888) 462-1726
                   </ChakraLink>
                   <ChakraLink 
                     href="mailto:sales@hushh.ai" 
                     fontSize="sm"
                     fontWeight="400"
                     color="gray.600"
-                    _hover={{ color: "black" }}
-                    transition="color 0.2s ease"
+                    _hover={{ color: "black", transform: "translateX(4px)" }}
+                    transition="all 0.2s ease"
+                    py={1}
+                    display="block"
                   >
-                    Email Us
+                    ✉️ sales@hushh.ai
                   </ChakraLink>
-                </HStack>
+                </VStack>
               </VStack>
             </Box>
           </Box>
@@ -555,54 +693,54 @@ const FooterComponent = () => {
 
       {/* Footer Bottom */}
       <Box bg="gray.50" w="100%" m={0} p={0}>
-        <Box py={6} px={{ base: 6, md: 8 }}>
+        <Box py={{ base: 8, md: 6 }} px={{ base: 8, md: 8 }}>
           <Box maxW="1200px" mx="auto">
             <Flex
               direction={{ base: "column", md: "row" }}
               justify="space-between"
-              align="center"
-              gap={4}
+              align={{ base: "start", md: "center" }}
+              gap={{ base: 6, md: 4 }}
             >
-              <HStack spacing={1} justify={{ base: "center", md: "flex-start" }}>
-                <Text fontSize="xs" color="gray.500" fontWeight="400">
-                  © 2025 HushOne Inc.
+              <VStack spacing={1} align={{ base: "start", md: "flex-start" }}>
+                <Text fontSize={{ base: "sm", md: "xs" }} color="gray.500" fontWeight="400">
+                  © 2025 HushOne Inc. All rights reserved.
                 </Text>
-                <Text fontSize="xs" color="gray.400">
-                  All rights reserved.
-                </Text>
-              </HStack>
+              </VStack>
               
-              <HStack 
-                spacing={6} 
-                justify="center"
-                flexWrap="wrap"
+              <VStack 
+                spacing={{ base: 3, md: 6 }}
+                align={{ base: "start", md: "center" }}
+                direction={{ base: "column", md: "row" }}
+                w={{ base: "full", md: "auto" }}
               >
                 <Link href="/legal/termsofuse">
                   <Text 
-                    fontSize="xs" 
+                    fontSize={{ base: "sm", md: "xs" }}
                     color="gray.500" 
-                    _hover={{ color: "black" }} 
-                    transition="color 0.2s ease"
+                    _hover={{ color: "black", transform: "translateX(2px)" }} 
+                    transition="all 0.2s ease"
                     fontWeight="400"
+                    py={{ base: 1, md: 0 }}
                   >
                     Terms of Service
                   </Text>
                 </Link>
                 <Link href="/legal/privacypolicy">
                   <Text 
-                    fontSize="xs" 
+                    fontSize={{ base: "sm", md: "xs" }}
                     color="gray.500" 
-                    _hover={{ color: "black" }} 
-                    transition="color 0.2s ease"
+                    _hover={{ color: "black", transform: "translateX(2px)" }} 
+                    transition="all 0.2s ease"
                     fontWeight="400"
+                    py={{ base: 1, md: 0 }}
                   >
                     Privacy Policy
                   </Text>
                 </Link>
-                <Text fontSize="xs" color="gray.400" fontWeight="400">
+                <Text fontSize={{ base: "sm", md: "xs" }} color="gray.400" fontWeight="400">
                   Duns # 119019629
                 </Text>
-              </HStack>
+              </VStack>
             </Flex>
           </Box>
         </Box>

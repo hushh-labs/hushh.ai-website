@@ -228,7 +228,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
         {
           name: "FAQ",
           description: "Frequently asked questions",
-          href: "/docs/faq"
+          href: "https://github.com/hushh-labs/consent-protocol/blob/main/docs/faq.md"
         },
         // {
         //   name: "Blueprint Recipes",
