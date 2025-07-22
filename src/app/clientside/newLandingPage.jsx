@@ -623,7 +623,7 @@ const NewLandingPage = () => {
             <GridItem>
               <Box
                 borderRadius="xl"
-                h={{ base: "500px", md: "600px", lg: "830px" }}
+                h={{ base: "500px", md: "100%", lg: "100%" }}
                 w={{ base: "full", md: "400px" }}
                 maxW="400px"
                 position="relative"
