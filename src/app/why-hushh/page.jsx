@@ -303,6 +303,9 @@ const page = () => {
             borderRadius="full"
             px={{ base: 6, md: 8 }}
             py={{ base: 4, md: 5 }}
+            onClick={() => {
+              router.push("/legal/privacy-policy");
+            }}
             fontSize={{ base: "16px", md: "18px" }}
             fontWeight="500"
             fontFamily="Inter, sans-serif"
@@ -437,6 +440,9 @@ const page = () => {
               fontSize={{ base: "16px", md: "18px" }}
               fontWeight="500"
               fontFamily="Inter, sans-serif"
+              onClick={() => {
+                router.push("/consent-ai-protocol");
+              }}
               _hover={{ 
                 bg: "#005bb5",
                 transform: "translateY(-1px)",

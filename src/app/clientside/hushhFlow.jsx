@@ -170,6 +170,9 @@ const HushhFlow = () => {
                   <MotionButton
                     size="lg"
                     bg="#0071E3"
+                    onClick={() => {
+                        router.push("/contact-us");
+                      }}
                     color="white"
                     px={{ base: 8, md: 10 }}
                     py={{ base: 6, md: 6 }}
@@ -194,7 +197,7 @@ const HushhFlow = () => {
                   >
                     Join Flow Pilot
                   </MotionButton>
-
+{/* 
                   <MotionButton
                     size="lg"
                     bg="transparent"
@@ -223,7 +226,7 @@ const HushhFlow = () => {
                     whileTap={{ scale: 0.98 }}
                   >
                     View Revenue Plans
-                  </MotionButton>
+                  </MotionButton> */}
                 </HStack>
               </MotionBox>
 
@@ -2018,70 +2021,7 @@ const HushhFlow = () => {
                     </MotionBox>
                   </VStack>
 
-                  {/* Buttons Section */}
-                  <HStack 
-                    spacing={{ base: "12px", md: "16px", lg: "20px" }}
-                    flexDir={{ base: "column", sm: "row" }}
-                    w="full"
-                    align="start"
-                    mt={{ base: "32px", md: "40px", lg: "48px" }}
-                  >
-                    <MotionButton
-                      size="lg"
-                      bg="#0071E3"
-                      color="white"
-                      px={{ base: "24px", md: "28px", lg: "32px" }}
-                      py={{ base: "12px", md: "14px", lg: "16px" }}
-                      borderRadius="full"
-                      fontSize={{ base: "14px", md: "16px", lg: "16px" }}
-                      fontWeight="500"
-                      fontFamily="Inter, sans-serif"
-                      h={{ base: "44px", md: "48px", lg: "52px" }}
-                      minW={{ base: "180px", md: "200px", lg: "220px" }}
-                      _hover={{
-                        bg: "#0056B3",
-                        transform: "translateY(-1px)",
-                        boxShadow: "0 4px 12px rgba(0, 113, 227, 0.3)"
-                      }}
-                      _active={{
-                        transform: "translateY(0)"
-                      }}
-                      transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      Use Link in your Agent
-                    </MotionButton>
-
-                    <MotionButton
-                      size="lg"
-                      bg="transparent"
-                      color="#0071E3"
-                      px={{ base: "24px", md: "28px", lg: "32px" }}
-                      py={{ base: "12px", md: "14px", lg: "16px" }}
-                      borderRadius="full"
-                      fontSize={{ base: "14px", md: "16px", lg: "16px" }}
-                      fontWeight="500"
-                      fontFamily="Inter, sans-serif"
-                      h={{ base: "44px", md: "48px", lg: "52px" }}
-                      minW={{ base: "180px", md: "200px", lg: "220px" }}
-                      border="2px solid #0071E3"
-                      _hover={{
-                        bg: "#0071E3",
-                        color: "white",
-                        transform: "translateY(-1px)",
-                        boxShadow: "0 4px 12px rgba(0, 113, 227, 0.3)"
-                      }}
-                      _active={{
-                        transform: "translateY(0)"
-                      }}
-                      transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      Audit Sample Logs
-                    </MotionButton>
-                  </HStack>
+                  
                 </VStack>
               </MotionBox>
             </GridItem>

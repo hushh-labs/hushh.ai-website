@@ -1742,7 +1742,7 @@ Enforces zero-trust access to every byte.
                       h={{ base: "44px", md: "48px", lg: "52px" }}
                       minW={{ base: "180px", md: "200px", lg: "220px" }}
                       onClick={() => {
-                        router.push("/contact-us");
+                        router.push("/hushh-link");
                       }}
                       _hover={{
                         bg: "#0056B3",
@@ -1759,7 +1759,7 @@ Enforces zero-trust access to every byte.
                       Use Link in your Agent
                     </MotionButton>
 
-                    <MotionButton
+                    {/* <MotionButton
                       size="lg"
                       bg="transparent"
                       color="#0071E3"
@@ -1789,7 +1789,7 @@ Enforces zero-trust access to every byte.
                       whileTap={{ scale: 0.98 }}
                     >
                       Audit Sample Logs
-                    </MotionButton>
+                    </MotionButton> */}
                   </HStack>
                 </VStack>
               </MotionBox>

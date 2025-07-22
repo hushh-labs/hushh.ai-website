@@ -171,6 +171,9 @@ const HushhGrid = () => {
                 >
                   <MotionButton
                     size="lg"
+                    onClick={() => {
+                        router.push("https://github.com/hushh-labs/consent-protocol", target="_blank");
+                      }}
                     bg="#0071E3"
                     color="white"
                     px={{ base: 8, md: 10 }}
@@ -196,7 +199,7 @@ const HushhGrid = () => {
                   >
                     Deploy an Agent
                   </MotionButton>
-
+{/* Scroll down to next section */}
                   <MotionButton
                     size="lg"
                     bg="transparent"
