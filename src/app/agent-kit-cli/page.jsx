@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Box,
   Container,
@@ -33,14 +33,37 @@ import join from '../_components/svg/agentKit/join.svg';
 import reachUser from '../_components/svg/agentKit/reachUser.svg';
 import ContactForm from '../_components/features/contactForm';
 import communityIcon from '../_components/svg/agentKit/communityIcon.svg';
+import { useRouter } from 'next/navigation';
 
   const AgentKitCliPage = () => {
+    const router = useRouter();
     const bgGradient = 'linear(135deg, #667eea 0%, #764ba2 100%)';
     const textGradient = 'linear(90deg, #E91E63 0%, #F44336 100%)';
 
+    // Handle smooth scrolling to sections
+    useEffect(() => {
+      const hash = window.location.hash;
+      if (hash) {
+        const targetId = hash.substring(1); // Remove # from hash
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          setTimeout(() => {
+            const headerOffset = 80; // Account for fixed header
+            const elementPosition = targetElement.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+          }, 100); // Small delay to ensure page is fully loaded
+        }
+      }
+    }, []);
+
       return (
       <ContentWrapper>
-      <Box bg="white" minH="100vh" overflowX="hidden" w="100%" maxW="100vw">
+      <Box bg="white" minH="100vh" overflowX="hidden" w="100%" maxW="100vw" style={{ scrollBehavior: 'smooth' }}>
         {/* Background Pattern */}
         <Box
           position="absolute"
@@ -61,7 +84,7 @@ import communityIcon from '../_components/svg/agentKit/communityIcon.svg';
         </Box>
 
               {/* Hero Section */}
-        <Container maxW={{ base: "95%", md: "90%", lg: "1365px" }} pt={{ base: 12, md: 20, lg: 24 }} pb={{ base: 8, md: 12 }}>
+        <Container maxW={{ base: "95%", md: "90%", lg: "1365px" }} pt={{ base: 12, md: 20, lg: 24 }} pb={{ base: 8, md: 12 }} id="hero-section">
         <VStack spacing={{ base: 8, md: 12, lg: 14 }} align="center" textAlign="center">
           {/* Main Heading */}
           <VStack spacing={{ base: 2, md: 4 }}>
@@ -157,7 +180,7 @@ import communityIcon from '../_components/svg/agentKit/communityIcon.svg';
       </Container>
 
       {/* GitHub Protocol Section */}
-      <Container maxW={{ base: "95%", md: "90%", lg: "1589px" }} py={{ base: 12, md: 20 }}>
+      <Container maxW={{ base: "95%", md: "90%", lg: "1589px" }} py={{ base: 12, md: 20 }} id="github-protocol">
         <Grid
           templateColumns={{ base: "1fr", lg: "1fr 1fr" }}
           gap={{ base: 8, md: 12, lg: 20 }}
@@ -271,7 +294,7 @@ import communityIcon from '../_components/svg/agentKit/communityIcon.svg';
       </Container>
 
       {/* Agentkit CLI Section */}
-      <Container maxW={{ base: "95%", md: "90%", lg: "1589px" }} py={{ base: 12, md: 20 }}>
+      <Container maxW={{ base: "95%", md: "90%", lg: "1589px" }} py={{ base: 12, md: 20 }} id="agentkit-cli">
         <Grid
           templateColumns={{ base: "1fr", lg: "1fr 1fr" }}
           gap={{ base: 8, md: 12, lg: 20 }}
@@ -388,6 +411,7 @@ import communityIcon from '../_components/svg/agentKit/communityIcon.svg';
         backgroundBlendMode="overlay"
         py={{ base: 16, md: 24 }}
         position="relative"
+        id="build-operon"
       >
         <Container maxW={{ base: "95%", md: "90%", lg: "1275px" }}>
           <VStack spacing={8} align="center" textAlign="center">
@@ -482,7 +506,7 @@ import communityIcon from '../_components/svg/agentKit/communityIcon.svg';
       </Box>
 
       {/* Submit to Marketplace Section */}
-      <Container maxW={{ base: "95%", md: "90%", lg: "1400px" }} py={{ base: 16, md: 20 }}>
+      <Container maxW={{ base: "95%", md: "90%", lg: "1400px" }} py={{ base: 16, md: 20 }} id="submit-marketplace">
         <VStack spacing={{ base: 8, md: 12 }} align="center">
           {/* Heading */}
           <VStack spacing={3} textAlign="center">
@@ -601,6 +625,7 @@ import communityIcon from '../_components/svg/agentKit/communityIcon.svg';
             rightIcon={<Icon as={BsArrowRight} boxSize={4} />}
             _hover={{ bg: "#333333" }}
             mt={{ base: 4, md: 6 }}
+            onClick={() => router.push("/contact-us")}
           >
             Submit Your Agent →
           </Button>

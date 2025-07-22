@@ -173,22 +173,22 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
         {
           name: "GitHub Protocol",
           description: "Open source development framework",
-          href: "https://github.com/hushh-labs/consent-protocol"
+          href: "/agent-kit-cli#github-protocol"
         },
         {
           name: "Agentkit CLI",
           description: "Command line tools for developers",
-          href: "/developers/agentkit-cli"
+          href: "/agent-kit-cli#agentkit-cli"  
         },
         {
           name: "Build an Operon",
           description: "Create custom data operations",
-          href: "/developers/build-operon"
+          href: "/agent-kit-cli#build-operon"
         },
         {
           name: "Submit to Marketplace",
           description: "Publish your creations",
-          href: "/developers/marketplace"
+          href: "/agent-kit-cli#submit-marketplace"
         }
       ]
     },
