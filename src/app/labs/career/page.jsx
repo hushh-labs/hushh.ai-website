@@ -615,7 +615,7 @@ const HushhLabsCareers = () => {
 
                   <VStack spacing={4} align={{ base: "stretch", lg: "end" }} mt={{ base: 6, lg: 0 }} minW={{ lg: "200px" }}>
                     <Button
-                      bg="blue.600"
+                      bg="#0071E3"
                       color="white"
                       size="lg"
                       rightIcon={<FiArrowRight />}
@@ -962,14 +962,36 @@ const HushhLabsCareers = () => {
         </Container>
 
         {/* Application Modal */}
-        <Modal isOpen={isOpen} onClose={onClose} size="6xl">
-          <ModalOverlay />
-          <ModalContent borderRadius="16px" maxH="90vh">
-            <ModalHeader fontFamily="'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+        <Modal isOpen={isOpen} onClose={onClose} size="4xl" isCentered>
+          <ModalOverlay 
+            // bg="blackAlpha.600" 
+            // backdropFilter="blur(10px)"
+            // zIndex={9999}
+          />
+          <ModalContent 
+            mt={10}
+            borderRadius="16px" 
+            // maxH="90vh" 
+            // zIndex={10000}
+            // mx={{ base: 4, md: 8 }}
+            // my={{ base: 4, md: 8 }}
+          >
+            <ModalHeader 
+              fontFamily="'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+              borderBottom="1px solid"
+              borderColor="gray.200"
+              bg="white"
+              borderTopRadius="16px"
+              py={6}
+            >
               Apply for {selectedJob?.title}
             </ModalHeader>
-            <ModalCloseButton />
-            <ModalBody p={0}>
+            <ModalCloseButton 
+              top={6}
+              right={6}
+              zIndex={10001}
+            />
+            <ModalBody p={0} bg="white">
               <Box
                 as="iframe"
                 src={`https://docs.google.com/forms/d/e/1FAIpQLSeWzoc7AsiVKm4IX3pCxmHmiJY2OMA7Ulx_9DW6oHsQZPkrRg/viewform?embedded=true&entry.472327161=${encodeURIComponent(selectedJob?.title || '')}`}
@@ -985,11 +1007,18 @@ const HushhLabsCareers = () => {
               </Box>
             </ModalBody>
             
-            <ModalFooter>
+            <ModalFooter 
+              borderTop="1px solid"
+              borderColor="gray.200"
+              bg="white"
+              borderBottomRadius="16px"
+              py={4}
+            >
               <Button 
                 variant="ghost" 
                 onClick={onClose}
                 fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+                _hover={{ bg: "gray.100" }}
               >
                 Close
               </Button>
