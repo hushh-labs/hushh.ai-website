@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import {
   Box,
+  Input,
   Container,
   VStack,
   HStack,
@@ -30,10 +31,7 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Input,
-  Textarea,
   FormControl,
-  FormLabel,
   Select,
   useToast
 } from '@chakra-ui/react';
@@ -44,10 +42,7 @@ import {
   FiUsers, 
   FiBriefcase,
   FiArrowRight,
-  FiCheck,
-  FiMail,
-  FiUser,
-  FiFileText
+  FiCheck
 } from 'react-icons/fi';
 import ContentWrapper from 'src/app/_components/layout/ContentWrapper';
 import ContactForm from 'src/app/_components/features/contactForm';
@@ -360,17 +355,6 @@ const HushhLabsCareers = () => {
   const handleApplyClick = (job) => {
     setSelectedJob(job);
     onOpen();
-  };
-
-  const handleSubmitApplication = () => {
-    toast({
-      title: "Application Submitted!",
-      description: "Thank you for your interest in joining Hushh Labs. We'll review your application and get back to you soon.",
-      status: "success",
-      duration: 5000,
-      isClosable: true,
-    });
-    onClose();
   };
 
   return (
@@ -978,82 +962,36 @@ const HushhLabsCareers = () => {
         </Container>
 
         {/* Application Modal */}
-        <Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <Modal isOpen={isOpen} onClose={onClose} size="6xl">
           <ModalOverlay />
-          <ModalContent borderRadius="16px">
+          <ModalContent borderRadius="16px" maxH="90vh">
             <ModalHeader fontFamily="'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
               Apply for {selectedJob?.title}
             </ModalHeader>
             <ModalCloseButton />
-            <ModalBody>
-              <VStack spacing={4}>
-                <FormControl isRequired>
-                  <FormLabel fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Full Name</FormLabel>
-                  <Input 
-                    placeholder="Your full name" 
-                    borderRadius="8px" 
-                    fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-                  />
-                </FormControl>
-                
-                <FormControl isRequired>
-                  <FormLabel fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Email</FormLabel>
-                  <Input 
-                    type="email" 
-                    placeholder="your.email@example.com" 
-                    borderRadius="8px"
-                    fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-                  />
-                </FormControl>
-                
-                <FormControl isRequired>
-                  <FormLabel fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Resume/CV</FormLabel>
-                  <Input 
-                    type="file" 
-                    accept=".pdf,.doc,.docx" 
-                    borderRadius="8px"
-                    fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-                  />
-                </FormControl>
-                
-                <FormControl>
-                  <FormLabel fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Cover Letter</FormLabel>
-                  <Textarea 
-                    placeholder="Tell us why you're interested in this role and what makes you exceptional..."
-                    rows={6}
-                    borderRadius="8px"
-                    fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-                  />
-                </FormControl>
-                
-                <FormControl>
-                  <FormLabel fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Portfolio/GitHub (Optional)</FormLabel>
-                  <Input 
-                    placeholder="https://github.com/yourprofile" 
-                    borderRadius="8px"
-                    fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-                  />
-                </FormControl>
-              </VStack>
+            <ModalBody p={0}>
+              <Box
+                as="iframe"
+                src={`https://docs.google.com/forms/d/e/1FAIpQLSeWzoc7AsiVKm4IX3pCxmHmiJY2OMA7Ulx_9DW6oHsQZPkrRg/viewform?embedded=true&entry.472327161=${encodeURIComponent(selectedJob?.title || '')}`}
+                width="100%"
+                height="600px"
+                frameBorder="0"
+                marginHeight="0"
+                marginWidth="0"
+                style={{ border: "none" }}
+                title="Job Application Form"
+              >
+                Loading…
+              </Box>
             </ModalBody>
             
             <ModalFooter>
               <Button 
                 variant="ghost" 
-                mr={3} 
                 onClick={onClose}
                 fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
               >
-                Cancel
-              </Button>
-              <Button 
-                bg="blue.600" 
-                color="white"
-                onClick={handleSubmitApplication}
-                _hover={{ bg: "blue.700" }}
-                fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-              >
-                Submit Application
+                Close
               </Button>
             </ModalFooter>
           </ModalContent>
