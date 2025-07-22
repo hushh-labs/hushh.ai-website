@@ -466,6 +466,29 @@ const TeamSection = () => {
                 >
                   UI/UX Designer
                 </Text>
+                <Link href="https://www.linkedin.com/in/adil-k/">
+                  <Box
+                    w="32px"
+                    h="32px"
+                    borderRadius="50%"
+                    bg="#0071E3"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    _hover={{
+                      bg: "#0056B3",
+                      transform: "translateY(-2px)"
+                    }}
+                    transition="all 0.3s ease"
+                  >
+                    <Image
+                      alt="LinkedIn"
+                      src={linkedln}
+                      width={16}
+                      height={16}
+                    />
+                  </Box>
+                </Link>
               </VStack>
             </VStack>
  {/* Adil Khan */}
