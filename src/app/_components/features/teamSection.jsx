@@ -508,7 +508,7 @@ const TeamSection = () => {
                   fontFamily="Inter, sans-serif"
                   fontWeight="400"
                 >
-                  Backend Engineer
+                  Software Engineer - Full Stack
                 </Text>
               </VStack>
             </VStack>
