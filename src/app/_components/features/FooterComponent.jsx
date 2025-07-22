@@ -78,11 +78,12 @@ const FooterComponent = () => {
               templateColumns={{ 
                 base: "1fr", 
                 sm: "repeat(2, 1fr)",
-                md: "repeat(3, 1fr)",
+                md: "repeat(4, 1fr)",
                 lg: "2fr repeat(4, 1fr)" 
               }}
               gap={{ base: 10, md: 12, lg: 8 }}
               alignItems="start"
+              fontFamily={'Inter'}
             >
               {/* Company Info Section - Desktop Only */}
               <GridItem display={{ base: "none", lg: "block" }}>
@@ -272,6 +273,18 @@ const FooterComponent = () => {
                        Solutions
                       </Text>
                     </Link>
+                    <Link href="https://hushhtech.com" target="_blank">
+                      <Text 
+                        fontSize="sm" 
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black" }} 
+                        transition="color 0.2s ease"
+                        textAlign={{ base: "center", md: "left" }}
+                      >
+                       Hushh Tech (Investor Relations)
+                      </Text>
+                    </Link>
                     <Link href="/why-hushh">
                       <Text 
                         fontSize="sm" 
@@ -322,6 +335,79 @@ const FooterComponent = () => {
                     >
                       Contact Us
                     </Text>
+                  </VStack>
+                </VStack>
+              </GridItem>
+
+               {/* Social Section */}
+               <GridItem>
+                <VStack align={{ base: "center", md: "start" }} spacing={4}>
+                  <Text 
+                    fontSize="sm" 
+                    fontWeight="600" 
+                    color="black"
+                    textTransform="uppercase" 
+                    letterSpacing="0.5px"
+                    textAlign={{ base: "center", md: "left" }}
+                    w="full"
+                  >
+                    Social
+                  </Text>
+                  <VStack 
+                    align={{ base: "center", md: "start" }} 
+                    spacing={3} 
+                    w="full"
+                  >
+                    <Link href="https://www.linkedin.com/company/hushh-ai/" target="_blank">
+                      <Text 
+                        fontSize="sm" 
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black" }} 
+                        transition="color 0.2s ease"
+                        textAlign={{ base: "center", md: "left" }}
+                      >
+                        Linkedin
+                      </Text>
+                    </Link>
+                    <Link href="https://x.com/hushh_ai" target="_blank">
+                      <Text 
+                        fontSize="sm" 
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black" }} 
+                        transition="color 0.2s ease"
+                        textAlign={{ base: "center", md: "left" }}
+                      >
+                       X (Twitter)
+                      </Text>
+                    </Link>
+                    <Link href="https://github.com/hushh-labs" target="_blank">
+                      <Text 
+                        fontSize="sm" 
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black" }} 
+                        transition="color 0.2s ease"
+                        textAlign={{ base: "center", md: "left" }}
+                      >
+                       Github
+                      </Text>
+                    </Link>
+                    <ChakraLink 
+                      href=""
+                      fontSize="sm"
+                      fontWeight="400"
+                      color="gray.600"
+                      _hover={{ color: "black" }}
+                      transition="color 0.2s ease"
+                      isExternal
+                      textAlign={{ base: "center", md: "left" }}
+                    >
+                     Instagram
+                    </ChakraLink>
+                    
+                    
                   </VStack>
                 </VStack>
               </GridItem>
