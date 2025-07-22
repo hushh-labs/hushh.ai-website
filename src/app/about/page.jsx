@@ -485,7 +485,7 @@ export default function About() {
             <Heading
               as="h2"
               fontSize={{ base: "48px", md: "64px", lg: "96px" }}
-              fontWeight="extrabold"
+              fontWeight="bold"
               color="black"
               fontFamily="Inter, sans-serif"
               letterSpacing={{ base: "-0.96px", md: "-1.28px", lg: "-1.92px" }}
@@ -507,7 +507,7 @@ export default function About() {
                 <Heading
                   as="h3"
                   fontSize={{ base: "40px", md: "48px", lg: "64px" }}
-                  fontWeight="extrabold"
+                  fontWeight="bold"
                   color="black"
                   fontFamily="Inter, sans-serif"
                   letterSpacing={{ base: "-0.8px", md: "-0.96px", lg: "-1.28px" }}
@@ -517,12 +517,13 @@ export default function About() {
                   Mission
                 </Heading>
                 <Text
-                  fontSize={{ base: "20px", md: "24px", lg: "28px" }}
-                  color="black"
+                  fontSize={{ base: "18px", md: "20px", lg: "22px" }}
+                  color="#1d1d1d"
                   fontFamily="Inter, sans-serif"
-                  fontWeight="500"
-                  lineHeight={{ base: "32px", md: "40px", lg: "50px" }}
-                  textAlign="left"
+                  lineHeight={1.6}
+                  letterSpacing="-0.01em"
+                  fontWeight="400"
+                  mb={{ base: 4, md: 6 }}
                 >
                   Hushh's mission is to empower individuals to reclaim, understand, and harness the full potential of their personal data within a secure and privacy-centric ecosystem. We provide tools that centralize data, offer insights into its use, and create avenues for individuals to benefit from their own information while maintaining complete control over their privacy. Hushh aims to shift the balance of power, transforming data from a corporate tool into a catalyst for individual empowerment.
                 </Text>
@@ -533,7 +534,7 @@ export default function About() {
                 <Heading
                   as="h3"
                   fontSize={{ base: "40px", md: "48px", lg: "64px" }}
-                  fontWeight="extrabold"
+                  fontWeight="bold"
                   color="black"
                   fontFamily="Inter, sans-serif"
                   letterSpacing={{ base: "-0.8px", md: "-0.96px", lg: "-1.28px" }}
@@ -543,23 +544,24 @@ export default function About() {
                   History
                 </Heading>
                 <Text
-                  fontSize={{ base: "20px", md: "24px", lg: "28px" }}
-                  color="black"
+                  fontSize={{ base: "18px", md: "20px", lg: "22px" }}
+                  color="#1d1d1d"
                   fontFamily="Inter, sans-serif"
-                  fontWeight="500"
-                  lineHeight={{ base: "32px", md: "40px", lg: "50px" }}
-                  textAlign="left"
+                  lineHeight={1.6}
+                  letterSpacing="-0.01em"
+                  fontWeight="400"
                   mb={{ base: 4, md: 6 }}
                 >
                   Hushh arose from a deep understanding of the modern digital landscape. In a world where our data is constantly collected, analyzed, and often used without our full knowledge or consent, we recognized the urgent need for change.
                 </Text>
                 <Text
-                  fontSize={{ base: "20px", md: "24px", lg: "28px" }}
-                  color="black"
+                  fontSize={{ base: "18px", md: "20px", lg: "22px" }}
+                  color="#1d1d1d"
                   fontFamily="Inter, sans-serif"
-                  fontWeight="500"
-                  lineHeight={{ base: "32px", md: "40px", lg: "50px" }}
-                  textAlign="left"
+                  lineHeight={1.6}
+                  letterSpacing="-0.01em"
+                  fontWeight="400"
+                  mb={{ base: 4, md: 6 }}
                 >
                   Our journey began with a simple question: What if individuals weren't just data points, but active owners of their digital selves? This question sparked a movement. We set out to develop the technology and tools to make this vision a reality.
                 </Text>
@@ -571,7 +573,7 @@ export default function About() {
               <Heading
                 as="h3"
                 fontSize={{ base: "40px", md: "48px", lg: "64px" }}
-                fontWeight="extrabold"
+                fontWeight="bold"
                 color="black"
                 fontFamily="Inter, sans-serif"
                 letterSpacing={{ base: "-0.8px", md: "-0.96px", lg: "-1.28px" }}
@@ -581,13 +583,13 @@ export default function About() {
                 Vision
               </Heading>
               <Text
-                fontSize={{ base: "20px", md: "24px", lg: "28px" }}
-                color="black"
+                fontSize={{ base: "18px", md: "20px", lg: "22px" }}
+                color="#1d1d1d"
                 fontFamily="Inter, sans-serif"
-                fontWeight="500"
-                lineHeight={{ base: "32px", md: "40px", lg: "50px" }}
-                textAlign="left"
-                maxW={{ base: "100%", lg: "90%" }}
+                lineHeight={1.6}
+                letterSpacing="-0.01em"
+                fontWeight="400"
+                mb={{ base: 4, md: 6 }}
               >
                 We envision a future where the responsible and ethical use of personal data leads to unprecedented levels of personalization, convenience, and self-driven opportunity, all while prioritizing individual privacy.
               </Text>
