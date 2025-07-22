@@ -119,14 +119,14 @@ const FooterComponent = () => {
                       (888) 462-1726
                     </ChakraLink>
                     <ChakraLink 
-                      href="mailto:info@hush1one.com" 
+                      href="mailto:sales@hushh.ai" 
                       fontSize="md"
                       fontWeight="400"
                       color="gray.700"
                       _hover={{ color: "black" }}
                       transition="color 0.2s ease"
                     >
-                      info@hush1one.com
+                      sales@hushh.ai
                     </ChakraLink>
                   </VStack>
                 </VStack>
@@ -537,7 +537,7 @@ const FooterComponent = () => {
                     (888) 462-1726
                   </ChakraLink>
                   <ChakraLink 
-                    href="mailto:info@hush1one.com" 
+                    href="mailto:sales@hushh.ai" 
                     fontSize="sm"
                     fontWeight="400"
                     color="gray.600"

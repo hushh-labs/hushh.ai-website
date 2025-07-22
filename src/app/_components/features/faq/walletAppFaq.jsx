@@ -127,7 +127,7 @@ const faqData = {
   Contact: [
     {
       question: "How you can reach out to us ?",
-      answer: "info@hush1one.com",
+      answer: "sales@hushh.ai",
     },
     {
       question: "Contact Number",

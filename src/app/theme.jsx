@@ -30,9 +30,9 @@ const theme = {
     },
   },
   fonts: {
-    body: "Figtree",
-    heading: "Figtree", // Heading font
-    text: "Figtree",
+    body: "var(--font-figtree), -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif",
+    heading: "var(--font-figtree), -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif", // Heading font
+    text: "var(--font-figtree), -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif",
   },
   styles: {
     global: {

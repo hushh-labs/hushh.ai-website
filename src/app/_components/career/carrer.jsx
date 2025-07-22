@@ -358,7 +358,7 @@ At Hushh, we foster a fast-paced, collaborative environment where innovation thr
                 
                 justifyContent="flex-start"
                 alignItems="flex-start"
-                textAlign="left">Our <span style={{fontWeight:'700'}}>Hushh Garages</span>  in Bengaluru, Pune, and Mumbai integrate living and working spaces to promote seamless collaboration and vibrant community engagement.</Text>
+                textAlign="left">Our <span style={{fontWeight:'700'}}>Hushh Garages</span>  in Pune, and Mumbai integrate living and working spaces to promote seamless collaboration and vibrant community engagement.</Text>
             </VStack>
           </Box>
 
@@ -503,7 +503,7 @@ At Hushh, we foster a fast-paced, collaborative environment where innovation thr
                         fontWeight="bold"
                         mb={2}
                       >
-                        Bengaluru, India
+                         Palo Alto, California
                       </Text>
                     </Box>
 
@@ -514,19 +514,21 @@ At Hushh, we foster a fast-paced, collaborative environment where innovation thr
                         fontWeight="bold"
                         mb={2}
                       >
-                        Pune, India
+                         San Francisco, CA 
                       </Text>
                     </Box>
-
+                    
                     <Box>
                       <Text
                         fontSize={{ base: "md", md: "lg" }}
                         fontWeight="bold"
                         mb={2}
                       >
-                        Mumbai, India
+                        Pune, India
                       </Text>
                     </Box>
+
+                    
 
                   </SimpleGrid>
                   <Text fontSize={{ base: "sm", md: "lg" }} color={'#ccc'}>While all roles are on-site to foster our unique live-work culture, we may consider remote opportunities for exceptionally qualified candidates.

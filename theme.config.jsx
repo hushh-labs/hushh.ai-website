@@ -9,7 +9,6 @@ import { HamburgerIcon } from '@chakra-ui/icons'
 
 export default {
   logo: <span>Hushh Developer API</span>,
-  font: 'https://fonts.googleapis.com/css2?family=Figtree:wght@400;700&display=swap',
   nextThemes: {
     defaultTheme: "light", // Set the default theme to light
     forcedTheme: "light",  // Force light mode regardless of system preference

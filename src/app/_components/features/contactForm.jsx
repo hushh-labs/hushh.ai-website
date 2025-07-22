@@ -339,13 +339,13 @@ export default function ContactForm() {
                         </Box>
                         <VStack align="start" spacing={1}>
                           <Text color="rgba(255,255,255,0.8)" fontSize="sm">Email</Text>
-                          <Link href="mailto:info@hush1one.com">
+                          <Link href="mailto:sales@hushh.ai">
                             <Text 
                               color="white" 
                               fontWeight="medium"
                               _hover={{ textDecoration: "underline" }}
                             >
-                              info@hush1one.com
+                              sales@hushh.ai
                             </Text>
                           </Link>
                         </VStack>
