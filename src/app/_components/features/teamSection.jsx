@@ -12,6 +12,8 @@ import {
   ModalBody,
   Button,
   GridItem,
+  Heading,
+  HStack,
 } from "@chakra-ui/react";
 import React from "react";
 import linkedln from "../svg/icons/linkedIn.svg";
@@ -25,8 +27,6 @@ import locationIcon from "../svg/icons/locationIcon.svg";
 import jobIcon from "../svg/icons/jobIcon.svg";
 import { useMediaQuery } from "react-responsive";
 
-
-// SANI , RITU advisor, Anki friend ,Komal 
 const TeamSection = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedAdvisor, setSelectedAdvisor] = useState(null);
@@ -45,449 +45,553 @@ const TeamSection = () => {
 
   return (
     <>
-      <Box w={"100%"} h={"100%"}>
-        {/* Founder section */}
-        <div className="">
-          <VStack>
-            <div className="pb-2.5">
-              <Text
-                className="color-gradient"
-                fontWeight={600}
-                letterSpacing={"0.25rem"}
-                fontSize={"1rem"}
-              >
-                MEET THE FOUNDERS
-              </Text>
-            </div>
-            <div className="md:pb-10 pb-4">
-              <Text
-                className="gradient"
-                fontWeight={"400"}
-                fontSize={{ base: "2.5rem", md: "3.75rem" }}
-                lineHeight={"63.3px"}
-                textAlign={{ base: "center" }}
-              >
-                Our Team Leader
-              </Text>
-            </div>
-            <div className="font-medium text-fontColor4 leading-9 md:w-[30rem] text-center">
-              <p>
-                Leadership isn't a title, it's an action. Thank you for leading
-                by example.
-              </p>
-            </div>
-            <Grid
-              mt={"4rem"}
-              mx={{ base: "1rem" }}
-              gap={{ md: "6rem", base: "3rem" }}
-              templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}
+      <Box w="full" py={{ base: 16, md: 20, lg: 24 }}>
+        
+        {/* Founders Section */}
+        <VStack spacing={{ base: 12, md: 16, lg: 20 }} align="center" maxW="6xl" mx="auto">
+          
+          {/* Section Header */}
+          <VStack spacing={{ base: 6, md: 8 }} align="center">
+            <Text
+              fontSize={{ base: "14px", md: "16px" }}
+              fontWeight="600"
+              textAlign="center"
+              color="#666"
+              letterSpacing="0.08em"
+              textTransform="uppercase"
+              fontFamily="Inter, sans-serif"
             >
-              <VStack mb={"1rem"}>
-                <div className="flex flex-col gap-8 text-center items-center">
-                  <Image
-                    alt="manish"
-                    src={teamImages.Manish}
-                    width={260}
-                    height={276}
-                  />
-                  <div className="flex flex-col gap-4">
-                    <Text
-                      color={"#E5E5E5"}
-                      fontWeight={"700"}
-                      fontSize={"1.3rem"}
-                    >
-                      Manish Sainani
-                    </Text>
-                    <Text color={"#ABABAB"}>Founder and CEO</Text>
-                  </div>
-                  <Link href="https://www.linkedin.com/in/manishsainani/">
-                    <Image
-                      alt="manishLinkedIn"
-                      src={linkedln}
-                      width={24}
-                      height={24}
-                    />
-                  </Link>
-                </div>
-              </VStack>
-              <VStack>
-                <div className="flex flex-col gap-8 text-center items-center">
-                  <Image
-                    alt="justin"
-                    src={teamImages.Justin}
-                    width={260}
-                    height={276}
-                  />
-                  <div className="flex flex-col gap-4">
-                    <Text
-                      color={"#E5E5E5"}
-                      fontWeight={"700"}
-                      fontSize={"1.3rem"}
-                    >
-                      Justin Donaldson
-                    </Text>
-                    <Text color={"#ABABAB"}>
-                      Co-founder and Chief Data Scientist
-                    </Text>
-                  </div>
-                  <Link href="https://www.linkedin.com/in/jjustindonaldson/">
-                    <Image
-                      alt="manishLinkedIn"
-                      src={linkedln}
-                      width={24}
-                      height={24}
-                    />
-                  </Link>
-                </div>
-              </VStack>
-
-              <GridItem colSpan={{ base: 1, md: 2 }} display="flex" justifyContent="center">
-    <VStack>
-      <div className="flex flex-col gap-8 text-center items-center">
-        <Image
-          alt="justin"
-          src={teamImages.chaitanya}
-          width={260}
-          height={276}
-        />
-        <div className="flex flex-col gap-4">
-          <Text
-            color={"#E5E5E5"}
-            fontWeight={"700"}
-            fontSize={"1.3rem"}
-          >
-            Chaitanya Modha
-          </Text>
-          <Text color={"#ABABAB"}>
-          VP Business Development
-          </Text>
-        </div>
-        <Link href="https://www.linkedin.com/in/chaitanya-modha/">
-          <Image
-            alt="Chaitanya Modha"
-            src={linkedln}
-            width={24}
-            height={24}
-          />
-        </Link>
-      </div>
-    </VStack>
-  </GridItem>
-            </Grid>
+              Meet the Founders
+            </Text>
+            
+            <Heading
+              as="h2"
+              fontSize={{ base: "36px", md: "48px", lg: "56px" }}
+              fontWeight="bold"
+              color="black"
+              fontFamily="Inter, sans-serif"
+              letterSpacing="-0.02em"
+              lineHeight={1.2}
+              textAlign="center"
+            >
+              Our Team Leaders
+            </Heading>
+            
+            <Text
+              fontSize={{ base: "16px", md: "18px", lg: "20px" }}
+              color="#1d1d1d"
+              fontFamily="Inter, sans-serif"
+              lineHeight={1.6}
+              letterSpacing="-0.01em"
+              fontWeight="400"
+              textAlign="center"
+              maxW="500px"
+            >
+              Leadership isn't a title, it's an action. Thank you for leading by example.
+            </Text>
           </VStack>
-        </div>
 
-        {/* Team section */}
-        <div className="mt-24 md:mt-0">
-          <VStack mt={{ base: "2rem", md: "8rem" }}>
-            <div className="pb-2.5">
-              <Text
-                className="color-gradient"
-                fontWeight={600}
-                letterSpacing={"0.25rem"}
-                fontSize={"1rem"}
-              >
-                THE TEAM
-              </Text>
-            </div>
-            <div className="md:pb-4 pb-2">
-              <Text
-                className="gradient"
-                fontWeight={"400"}
-                fontSize={{ base: "2.5rem", md: "3.75rem" }}
-                lineHeight={"63.3px"}
-              >
-                Our Team
-              </Text>
-            </div>
-            <div className="font-medium text-fontColor4 leading-9 md:w-[35rem] text-center">
-              <p>
-                The Hushh team: Disrupting the status quo, one line of code at a
-                time
-              </p>
-            </div>
-          </VStack>
-        </div>
-        <div className="mt-12 md:mt-0">
+          {/* Founders Grid */}
           <Grid
-            templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(4, 1fr)" }}
+            templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}
+            gap={{ base: 8, md: 12, lg: 16 }}
+            maxW="5xl"
+            w="full"
           >
-            <VStack mb={{ md: "3rem", base: "1.5rem" }}>
-              <Image
-                alt="vivek"
-                src={teamImages.KeerthiSreeMarrapu}
-                width={260}
-                height={276}
-              />
-              <div className="-translate-y-16 flex flex-col text-center items-center gap-8">
-                <div className="flex flex-col gap-4">
-                  <Text
-                    color={"#E5E5E5"}
-                    lineHeight={"26.4px"}
-                    fontWeight={"700"}
-                    fontSize={"1.3rem"}
-                  >
-                    Keerthi Sree Marrapu
-                  </Text>
-                  <Text lineHeight={"18.75px"} color={"#ABABAB"}>
-                    Product Engineer
-                  </Text>
-                </div>
-                <Link href={"https://www.linkedin.com/in/mksree/"}>
-                  <Image
-                    alt="karthickLinkedIn"
-                    src={linkedln}
-                    width={{ base: 12, md: 24 }}
-                    height={24}
-                  />
-                </Link>
-              </div>
-            </VStack>
-            <VStack mb={{ md: "3rem", base: "1.5rem" }}>
-              <Image
-                alt="vivek"
-                src={teamImages.KavyaChauhan}
-                width={260}
-                height={276}
-              />
-              <div className="-translate-y-16 flex flex-col text-center items-center gap-8">
-                <div className="flex flex-col gap-4">
-                  <Text
-                    color={"#E5E5E5"}
-                    lineHeight={"26.4px"}
-                    fontWeight={"700"}
-                    fontSize={"1.3rem"}
-                  >
-                    Komal Naik
-                  </Text>
-                  <Text lineHeight={"18.75px"} color={"#ABABAB"}>
-                     Chief Of Staff
-                  </Text>
-                </div>
-                <Link
-                  href={"https://www.linkedin.com/in/komalsnaik/"}
+            {/* Manish Sainani */}
+            <VStack spacing={6}>
+              <Box
+                borderRadius="20px"
+                overflow="hidden"
+                boxShadow="0 4px 20px rgba(0, 0, 0, 0.08)"
+                bg="white"
+                p={3}
+                _hover={{
+                  transform: "translateY(-4px)",
+                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)"
+                }}
+                transition="all 0.3s ease"
+              >
+                <Image
+                  alt="Manish Sainani"
+                  src={teamImages.Manish}
+                  width={260}
+                  height={276}
+                  style={{ borderRadius: '16px' }}
+                />
+              </Box>
+              
+              <VStack spacing={3} textAlign="center">
+                <Heading
+                  as="h3"
+                  fontSize={{ base: "20px", md: "24px" }}
+                  fontWeight="bold"
+                  color="black"
+                  fontFamily="Inter, sans-serif"
+                  letterSpacing="-0.02em"
                 >
-                  <Image
-                    alt="komalLinnkedIn"
-                    src={linkedln}
-                    width={{ base: 12, md: 24 }}
-                    height={24}
-                  />
-                </Link>
-              </div>
-            </VStack>
-            <VStack mb={{ md: "3rem", base: "1.5rem" }}>
-              <Image
-                alt="vivek"
-                src={teamImages.RohanSidankar}
-                width={260}
-                height={276}
-              />
-              <div className="-translate-y-16 flex flex-col text-center items-center gap-8">
-                <div className="flex flex-col gap-4">
-                  <Text
-                    color={"#E5E5E5"}
-                    lineHeight={"26.4px"}
-                    fontWeight={"700"}
-                    fontSize={"1.3rem"}
-                  >
-                    Rohan Sidankar
-                  </Text>
-                  <Text lineHeight={"18.75px"} color={"#ABABAB"}>
-                    Software Engineer
-                  </Text>
-                </div>
-                <Link
-                  href={"https://www.linkedin.com/in/rohan-sidankar-017205207/"}
+                  Manish Sainani
+                </Heading>
+                <Text
+                  fontSize={{ base: "16px", md: "18px" }}
+                  color="#666"
+                  fontFamily="Inter, sans-serif"
+                  fontWeight="400"
                 >
-                  <Image
-                    alt="rohanLinkedIn"
-                    src={linkedln}
-                    width={{ base: 12, md: 24 }}
-                    height={24}
-                  />
+                  Founder and CEO
+                </Text>
+                <Link href="https://www.linkedin.com/in/manishsainani/">
+                  <Box
+                    w="40px"
+                    h="40px"
+                    borderRadius="50%"
+                    bg="#0071E3"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    _hover={{
+                      bg: "#0056B3",
+                      transform: "translateY(-2px)"
+                    }}
+                    transition="all 0.3s ease"
+                  >
+                    <Image
+                      alt="LinkedIn"
+                      src={linkedln}
+                      width={20}
+                      height={20}
+                    />
+                  </Box>
                 </Link>
-              </div>
+              </VStack>
             </VStack>
 
-            <VStack mb={{ md: "3rem", base: "1.5rem" }}>
-              <Image
-                alt="vivek"
-                src={teamImages.VasundhharaKatoch}
-                width={260}
-                height={276}
-              />
-              <div className="-translate-y-16 flex flex-col text-center items-center gap-8">
-                <div className="flex flex-col gap-4">
-                  <Text
-                    color={"#E5E5E5"}
-                    lineHeight={"26.4px"}
-                    fontWeight={"700"}
-                    fontSize={"1.3rem"}
-                  >
-                    Vasundhhara Katoch
-                  </Text>
-                  <Text lineHeight={"18.75px"} color={"#ABABAB"}>
-                    Software Engineer - AI/ML + Product Evangelist
-                  </Text>
-                </div>
-                <Link
-                  href={
-                    "https://www.linkedin.com/in/vasundhhara-katoch-a72299169/"
-                  }
+            {/* Justin Donaldson */}
+            <VStack spacing={6}>
+              <Box
+                borderRadius="20px"
+                overflow="hidden"
+                boxShadow="0 4px 20px rgba(0, 0, 0, 0.08)"
+                bg="white"
+                p={3}
+                _hover={{
+                  transform: "translateY(-4px)",
+                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)"
+                }}
+                transition="all 0.3s ease"
+              >
+                <Image
+                  alt="Justin Donaldson"
+                  src={teamImages.Justin}
+                  width={260}
+                  height={276}
+                  style={{ borderRadius: '16px' }}
+                />
+              </Box>
+              
+              <VStack spacing={3} textAlign="center">
+                <Heading
+                  as="h3"
+                  fontSize={{ base: "20px", md: "24px" }}
+                  fontWeight="bold"
+                  color="black"
+                  fontFamily="Inter, sans-serif"
+                  letterSpacing="-0.02em"
                 >
-                  <Image
-                    alt="vasundharaLinkedIn"
-                    src={linkedln}
-                    width={{ base: 12, md: 24 }}
-                    height={24}
-                  />
-                </Link>
-              </div>
-            </VStack>
-
-            <VStack mb={{ md: "3rem", base: "1.5rem" }}>
-              <Image
-                alt="vivek"
-                src={teamImages.AnkitKumarSingh}
-                width={260}
-                height={276}
-              />
-              <div className="-translate-y-16 flex flex-col text-center items-center gap-8">
-                <div className="flex flex-col gap-4">
-                  <Text
-                    color={"#E5E5E5"}
-                    lineHeight={"26.4px"}
-                    fontWeight={"700"}
-                    fontSize={"1.3rem"}
-                  >
-                    Ankit Kumar Singh
-                  </Text>
-                  <Text lineHeight={"18.75px"} color={"#ABABAB"}>
-                    Customer Engineer - Full Stack
-                  </Text>
-                </div>
-                <Link
-                  href={
-                    "https://www.linkedin.com/in/ankit-kumar-singh-69305a22a/"
-                  }
+                  Justin Donaldson
+                </Heading>
+                <Text
+                  fontSize={{ base: "16px", md: "18px" }}
+                  color="#666"
+                  fontFamily="Inter, sans-serif"
+                  fontWeight="400"
                 >
-                  <Image
-                    alt="ankitLinkedIn"
-                    src={linkedln}
-                    width={{ base: 12, md: 24 }}
-                    height={24}
-                  />
-                </Link>
-              </div>
-            </VStack>
-
-            <VStack mb={{ md: "3rem", base: "1.5rem" }}>
-              <Image
-                alt="vivek"
-                src={teamImages.YashMakan}
-                width={260}
-                height={276}
-              />
-              <div className="-translate-y-16 flex flex-col text-center items-center gap-8">
-                <div className="flex flex-col gap-4">
-                  <Text
-                    color={"#E5E5E5"}
-                    lineHeight={"26.4px"}
-                    fontWeight={"700"}
-                    fontSize={"1.3rem"}
+                  Co-founder and Chief Data Scientist
+                </Text>
+                <Link href="https://www.linkedin.com/in/jjustindonaldson/">
+                  <Box
+                    w="40px"
+                    h="40px"
+                    borderRadius="50%"
+                    bg="#0071E3"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    _hover={{
+                      bg: "#0056B3",
+                      transform: "translateY(-2px)"
+                    }}
+                    transition="all 0.3s ease"
                   >
-                    Yash Makan
-                  </Text>
-                  <Text lineHeight={"18.75px"} color={"#ABABAB"}>
-                    Software Engineer - Full Stack
-                  </Text>
-                </div>
-                <Link href={"https://www.linkedin.com/in/yashmakan/"}>
-                  <Image
-                    alt="yashLinkedIn"
-                    src={linkedln}
-                    width={{ base: 12, md: 24 }}
-                    height={24}
-                  />
+                    <Image
+                      alt="LinkedIn"
+                      src={linkedln}
+                      width={20}
+                      height={20}
+                    />
+                  </Box>
                 </Link>
-              </div>
-            </VStack>
-
-            <VStack>
-              <Image
-                alt="vivek"
-                src={teamImages.NeeleshMeena}
-                width={260}
-                height={276}
-              />
-              <div className="-translate-y-16 flex flex-col text-center items-center gap-8">
-                <div className="flex flex-col gap-4">
-                  <Text
-                    color={"#E5E5E5"}
-                    lineHeight={"26.4px"}
-                    fontWeight={"700"}
-                    fontSize={"1.3rem"}
-                  >
-                    Neelesh Meena
-                  </Text>
-                  <Text lineHeight={"18.75px"} color={"#ABABAB"}>
-                    Software Engineer - Full Stack
-                  </Text>
-                </div>
-                <Link
-                  href={"https://www.linkedin.com/in/neelesh-meena-73b07b1a0/"}
-                >
-                  <Image
-                    alt="neeleshLinkedIn"
-                    src={linkedln}
-                    width={{ base: 12, md: 24 }}
-                    height={24}
-                  />
-                </Link>
-              </div>
+              </VStack>
             </VStack>
           </Grid>
-        </div>
 
-        {/* Our Advisors Section */}
-        <div className="mt-24 md:mt-0">
-          <VStack mt={{ base: "2rem", md: "8rem" }}>
-            <div className="pb-2.5">
-              <Text
-                className="color-gradient"
-                fontWeight={600}
-                letterSpacing={"0.25rem"}
-                fontSize={"1rem"}
-              >
-                MEET OUR ADVISORS
-              </Text>
-            </div>
-            <div className="md:pb-4 pb-4">
-              <Text
-                className="gradient"
-                fontWeight={"400"}
-                fontSize={{ base: "2.5rem", md: "3.75rem" }}
-                lineHeight={"63.3px"}
-              >
-                Wisdom in Action
-              </Text>
-            </div>
-            <div className="font-medium text-fontColor4 leading-9 md:w-[30rem] text-center">
-              <p>
-                Hushh Adivsors : Leading with expertise, shaping tomorrow's
-                decisions today
-              </p>
-            </div>
+
+        </VStack>
+
+        {/* Team Section */}
+        <VStack spacing={{ base: 12, md: 16, lg: 20 }} align="center" maxW="6xl" mx="auto" mt={{ base: 20, md: 24, lg: 32 }}>
+          
+          {/* Section Header */}
+          <VStack spacing={{ base: 6, md: 8 }} align="center">
+            <Text
+              fontSize={{ base: "14px", md: "16px" }}
+              fontWeight="600"
+              textAlign="center"
+              color="#666"
+              letterSpacing="0.08em"
+              textTransform="uppercase"
+              fontFamily="Inter, sans-serif"
+            >
+              The Team
+            </Text>
+            
+            <Heading
+              as="h2"
+              fontSize={{ base: "36px", md: "48px", lg: "56px" }}
+              fontWeight="bold"
+              color="black"
+              fontFamily="Inter, sans-serif"
+              letterSpacing="-0.02em"
+              lineHeight={1.2}
+              textAlign="center"
+            >
+              Our Team
+            </Heading>
+            
+            <Text
+              fontSize={{ base: "16px", md: "18px", lg: "20px" }}
+              color="#1d1d1d"
+              fontFamily="Inter, sans-serif"
+              lineHeight={1.6}
+              letterSpacing="-0.01em"
+              fontWeight="400"
+              textAlign="center"
+              maxW="600px"
+            >
+              The Hushh team: Disrupting the status quo, one line of code at a time
+            </Text>
           </VStack>
-        </div>
-        <div className="mt-12 md:mt-0">
+
+          {/* Team Grid */}
+          <Grid
+            templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)", lg: "repeat(4, 1fr)" }}
+            gap={{ base: 8, md: 10, lg: 8 }}
+            w="full"
+          >
+        {/* Neelesh Meena */}
+        <VStack spacing={4}>
+              <Box
+                borderRadius="16px"
+                overflow="hidden"
+                boxShadow="0 4px 20px rgba(0, 0, 0, 0.08)"
+                bg="white"
+                p={2}
+                _hover={{
+                  transform: "translateY(-4px)",
+                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)"
+                }}
+                transition="all 0.3s ease"
+              >
+                <Image
+                  alt="Neelesh Meena"
+                  src={teamImages.NeeleshMeena}
+                  width={260}
+                  height={276}
+                  style={{ borderRadius: '12px' }}
+                />
+              </Box>
+              
+              <VStack spacing={2} textAlign="center">
+                <Heading
+                  as="h4"
+                  fontSize={{ base: "16px", md: "18px" }}
+                  fontWeight="600"
+                  color="black"
+                  fontFamily="Inter, sans-serif"
+                  letterSpacing="-0.01em"
+                >
+                  Neelesh Meena
+                </Heading>
+                <Text
+                  fontSize={{ base: "14px", md: "15px" }}
+                  color="#666"
+                  fontFamily="Inter, sans-serif"
+                  fontWeight="400"
+                >
+                  Software Engineer - Full Stack
+                </Text>
+                <Link href="https://www.linkedin.com/in/neelesh-meena-73b07b1a0/">
+                  <Box
+                    w="32px"
+                    h="32px"
+                    borderRadius="50%"
+                    bg="#0071E3"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    _hover={{
+                      bg: "#0056B3",
+                      transform: "translateY(-2px)"
+                    }}
+                    transition="all 0.3s ease"
+                  >
+                    <Image
+                      alt="LinkedIn"
+                      src={linkedln}
+                      width={16}
+                      height={16}
+                    />
+                  </Box>
+                </Link>
+              </VStack>
+            </VStack>
+
+            {/* Ankit Kumar Singh */}
+            <VStack spacing={4}>
+              <Box
+                borderRadius="16px"
+                overflow="hidden"
+                boxShadow="0 4px 20px rgba(0, 0, 0, 0.08)"
+                bg="white"
+                p={2}
+                _hover={{
+                  transform: "translateY(-4px)",
+                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)"
+                }}
+                transition="all 0.3s ease"
+              >
+                <Image
+                  alt="Ankit Kumar Singh"
+                  src={teamImages.AnkitKumarSingh}
+                  width={260}
+                  height={276}
+                  style={{ borderRadius: '12px' }}
+                />
+              </Box>
+              
+              <VStack spacing={2} textAlign="center">
+                <Heading
+                  as="h4"
+                  fontSize={{ base: "16px", md: "18px" }}
+                  fontWeight="600"
+                  color="black"
+                  fontFamily="Inter, sans-serif"
+                  letterSpacing="-0.01em"
+                >
+                  Ankit Kumar Singh
+                </Heading>
+                <Text
+                  fontSize={{ base: "14px", md: "15px" }}
+                  color="#666"
+                  fontFamily="Inter, sans-serif"
+                  fontWeight="400"
+                >
+                  Customer Engineer - Full Stack
+                </Text>
+                <Link href="https://www.linkedin.com/in/ankit-kumar-singh-69305a22a/">
+                  <Box
+                    w="32px"
+                    h="32px"
+                    borderRadius="50%"
+                    bg="#0071E3"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    _hover={{
+                      bg: "#0056B3",
+                      transform: "translateY(-2px)"
+                    }}
+                    transition="all 0.3s ease"
+                  >
+                    <Image
+                      alt="LinkedIn"
+                      src={linkedln}
+                      width={16}
+                      height={16}
+                    />
+                  </Box>
+                </Link>
+              </VStack>
+            </VStack>
+
+            {/* Adil Khan */}
+            <VStack spacing={4}>
+              <Box
+                borderRadius="16px"
+                overflow="hidden"
+                boxShadow="0 4px 20px rgba(0, 0, 0, 0.08)"
+                bg="white"
+                p={2}
+                _hover={{
+                  transform: "translateY(-4px)",
+                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)"
+                }}
+                transition="all 0.3s ease"
+              >
+                <Image
+                  alt="Adil Khan"
+                  src={teamImages.YashMakan}
+                  width={260}
+                  height={276}
+                  style={{ borderRadius: '12px' }}
+                />
+              </Box>
+              
+              <VStack spacing={2} textAlign="center">
+                <Heading
+                  as="h4"
+                  fontSize={{ base: "16px", md: "18px" }}
+                  fontWeight="600"
+                  color="black"
+                  fontFamily="Inter, sans-serif"
+                  letterSpacing="-0.01em"
+                >
+                  Adil Khan
+                </Heading>
+                <Text
+                  fontSize={{ base: "14px", md: "15px" }}
+                  color="#666"
+                  fontFamily="Inter, sans-serif"
+                  fontWeight="400"
+                >
+                  UI/UX Designer
+                </Text>
+                <Link href="https://www.linkedin.com/in/adil-k/">
+                  <Box
+                    w="32px"
+                    h="32px"
+                    borderRadius="50%"
+                    bg="#0071E3"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    _hover={{
+                      bg: "#0056B3",
+                      transform: "translateY(-2px)"
+                    }}
+                    transition="all 0.3s ease"
+                  >
+                    <Image
+                      alt="LinkedIn"
+                      src={linkedln}
+                      width={16}
+                      height={16}
+                    />
+                  </Box>
+                </Link>
+              </VStack>
+            </VStack>
+ {/* Adil Khan */}
+ <VStack spacing={4}>
+              <Box
+                borderRadius="16px"
+                overflow="hidden"
+                boxShadow="0 4px 20px rgba(0, 0, 0, 0.08)"
+                bg="white"
+                p={2}
+                _hover={{
+                  transform: "translateY(-4px)",
+                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)"
+                }}
+                transition="all 0.3s ease"
+              >
+                <Image
+                    alt="Sani Patel"
+                    src={teamImages.SatyamArora}
+                  width={260}
+                  height={276}
+                  style={{ borderRadius: '12px' }}
+                />
+              </Box>
+              
+              <VStack spacing={2} textAlign="center">
+                <Heading
+                  as="h4"
+                  fontSize={{ base: "16px", md: "18px" }}
+                  fontWeight="600"
+                  color="black"
+                  fontFamily="Inter, sans-serif"
+                  letterSpacing="-0.01em"
+                >
+                 Sani Patel
+                </Heading>
+                <Text
+                  fontSize={{ base: "14px", md: "15px" }}
+                  color="#666"
+                  fontFamily="Inter, sans-serif"
+                  fontWeight="400"
+                >
+                  Software Engineer - Full Stack
+                </Text>
+              </VStack>
+            </VStack>
+            
+          </Grid>
+
+        </VStack>
+
+        {/* Advisors Section */}
+        <VStack spacing={{ base: 12, md: 16, lg: 20 }} align="center" maxW="6xl" mx="auto" mt={{ base: 20, md: 24, lg: 32 }}>
+          
+          {/* Section Header */}
+          <VStack spacing={{ base: 6, md: 8 }} align="center">
+            <Text
+              fontSize={{ base: "14px", md: "16px" }}
+              fontWeight="600"
+              textAlign="center"
+              color="#666"
+              letterSpacing="0.08em"
+              textTransform="uppercase"
+              fontFamily="Inter, sans-serif"
+            >
+              Meet Our Advisors
+            </Text>
+            
+            <Heading
+              as="h2"
+              fontSize={{ base: "36px", md: "48px", lg: "56px" }}
+              fontWeight="bold"
+              color="black"
+              fontFamily="Inter, sans-serif"
+              letterSpacing="-0.02em"
+              lineHeight={1.2}
+              textAlign="center"
+            >
+              Wisdom in Action
+            </Heading>
+            
+            <Text
+              fontSize={{ base: "16px", md: "18px", lg: "20px" }}
+              color="#1d1d1d"
+              fontFamily="Inter, sans-serif"
+              lineHeight={1.6}
+              letterSpacing="-0.01em"
+              fontWeight="400"
+              textAlign="center"
+              maxW="500px"
+            >
+              Hushh Advisors: Leading with expertise, shaping tomorrow's decisions today
+            </Text>
+          </VStack>
+
+          {/* Advisors Grid */}
           <Grid
             templateColumns={{
               base: "repeat(2, 1fr)",
               md: "repeat(4, 1fr)"
             }}
-            gap={6}
+            gap={{ base: 4, md: 6, lg: 8 }}
+            w="full"
           >
             {advisorsData.map((advisor, index) => (
               <GridItem
@@ -497,198 +601,239 @@ const TeamSection = () => {
                   md: (index < 2 || index >= advisorsData.length - 2) ? 2 : 1
                 }}
               >
-                <VStack mb={{ md: "3rem", base: "1.5rem" }}>
-                  <Image
+                <VStack spacing={4}>
+                  <Box
+                    borderRadius="16px"
+                    overflow="hidden"
+                    boxShadow="0 4px 20px rgba(0, 0, 0, 0.08)"
+                    bg="white"
+                    p={2}
+                    cursor="pointer"
+                    _hover={{
+                      transform: "translateY(-4px)",
+                      boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)"
+                    }}
+                    transition="all 0.3s ease"
                     onClick={() => openModal(advisor)}
-                    alt={advisor.name}
-                    src={advisor.avatar}
-                    width={260}
-                    height={276}
-                  />
-                  <div className="-translate-y-16 flex flex-col text-center items-center gap-3 md:gap-8">
-                    <div className="flex flex-col md:gap-4">
-                      <Text
-                        color={"#E5E5E5"}
-                        fontWeight={"700"}
-                        fontSize={{ md: "1.3rem", base: "1rem" }}
-                        mt={{ base: "1rem" }}
-                      >
-                        {advisor.name}
-                      </Text>
-                      <Text
-                        color={"#ABABAB"}
-                        fontSize={{ base: "0.75rem", md: "1rem" }}
-                      >
-                        {advisor.position}
-                      </Text>
-                    </div>
-                    <Box
-                      mt={{ md: "0", base: "1rem" }}
-                      display="flex"
-                      flexDirection="row"
-                      gap="1rem"
-                      alignItems={"center"}
+                  >
+                    <Image
+                      alt={advisor.name}
+                      src={advisor.avatar}
+                      width={260}
+                      height={276}
+                      style={{ borderRadius: '12px' }}
+                    />
+                  </Box>
+                  
+                  <VStack spacing={2} textAlign="center">
+                    <Heading
+                      as="h4"
+                      fontSize={{ base: "14px", md: "16px", lg: "18px" }}
+                      fontWeight="600"
+                      color="black"
+                      fontFamily="Inter, sans-serif"
+                      letterSpacing="-0.01em"
                     >
+                      {advisor.name}
+                    </Heading>
+                    <Text
+                      fontSize={{ base: "12px", md: "14px", lg: "15px" }}
+                      color="#666"
+                      fontFamily="Inter, sans-serif"
+                      fontWeight="400"
+                      textAlign="center"
+                    >
+                      {advisor.position}
+                    </Text>
+                    <HStack spacing={3} justify="center">
                       <Link href={advisor.linkedin}>
-                        {!isTabletOrMobile && (
+                        <Box
+                          w="28px"
+                          h="28px"
+                          borderRadius="50%"
+                          bg="#0071E3"
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="center"
+                          _hover={{
+                            bg: "#0056B3",
+                            transform: "translateY(-2px)"
+                          }}
+                          transition="all 0.3s ease"
+                        >
                           <Image
-                            alt="sureshLinkedIn"
+                            alt="LinkedIn"
                             src={linkedln}
-                            width={{ base: 12, md: 24 }}
-                            height={24}
+                            width={14}
+                            height={14}
                           />
-                        )}
-                        {isTabletOrMobile && (
-                          <Image
-                            alt="sureshLinkedIn"
-                            src={linkedln}
-                            width={12}
-                            height={12}
-                          />
-                        )}
+                        </Box>
                       </Link>
                       <Button
-                        h={{ md: "1.75rem", base: "1rem" }}
-                        fontSize={{ md: "0.75rem", base: "0.5rem" }}
+                        size="sm"
+                        bg="#0071E3"
+                        color="white"
+                        borderRadius="full"
+                        fontSize={{ base: "10px", md: "12px" }}
+                        fontWeight="500"
+                        px={4}
+                        py={2}
+                        h="auto"
+                        _hover={{
+                          bg: "#0056B3",
+                          transform: "translateY(-1px)"
+                        }}
+                        transition="all 0.3s ease"
                         onClick={() => openModal(advisor)}
                       >
                         Know More
                       </Button>
-                    </Box>
-                  </div>
+                    </HStack>
+                  </VStack>
                 </VStack>
               </GridItem>
             ))}
           </Grid>
-        </div>
+
+        </VStack>
+
       </Box>
 
-      <Modal isOpen={isOpen} onClose={closeModal}>
-        <ModalOverlay />
+      {/* Modal */}
+      <Modal 
+        isOpen={isOpen} 
+        onClose={closeModal} 
+        isCentered
+        motionPreset="slideInBottom"
+      >
+        <ModalOverlay bg="blackAlpha.600" />
         <ModalContent
-          minW={{ md: "30rem", base: "10rem" }}
-          borderRadius={"2rem"}
-          p={{ md: "1rem", base: "0" }}
+          minW={{ md: "30rem", base: "90vw" }}
+          maxW={{ base: "90vw", md: "35rem" }}
+          borderRadius="2rem"
+          p={{ md: "1rem", base: "1rem" }}
+          bg="white"
+          mx={{ base: 4, md: 0 }}
+          my={{ base: 4, md: 0 }}
         >
           {selectedAdvisor && (
             <>
               <ModalCloseButton />
-              <ModalBody background={"transparent"}>
+              <ModalBody bg="transparent">
                 <Box
-                  display={"flex"}
-                  justifyContent={"center"}
-                  alignItems={"center"}
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
                 >
-                  {!isTabletOrMobile && (
-                    <Image
-                      alignContent={"center"}
-                      src={selectedAdvisor.imageSrc}
-                      alt={selectedAdvisor.name}
-                      style={{
-                        width: "200px",
-                        display: "flex",
-                        alignContent: "center",
-                        height: "200px",
-                      }}
-                    />
-                  )}
-                  {isTabletOrMobile && (
-                    <Image
-                      alignContent={"center"}
-                      src={selectedAdvisor.imageSrc}
-                      alt={selectedAdvisor.name}
-                      style={{
-                        width: "100px",
-                        display: "flex",
-                        alignContent: "center",
-                        height: "100px",
-                      }}
-                    />
-                  )}
+                  <Image
+                    src={selectedAdvisor.imageSrc}
+                    alt={selectedAdvisor.name}
+                    style={{
+                      width: isTabletOrMobile ? "100px" : "200px",
+                      height: isTabletOrMobile ? "100px" : "200px",
+                      borderRadius: "50%"
+                    }}
+                  />
                 </Box>
-                <Text
-                  display={"flex"}
-                  gap={"1rem"}
+                <HStack
+                  spacing={4}
                   my={{ md: "0.75rem", base: "0.5rem" }}
-                  fontSize={{ md: "2rem", base: "1rem" }}
+                  justify="center"
+                  align="center"
                 >
-                  {selectedAdvisor.name}
+                  <Heading
+                    as="h3"
+                    fontSize={{ md: "2rem", base: "1rem" }}
+                    color="black"
+                    fontFamily="Inter, sans-serif"
+                  >
+                    {selectedAdvisor.name}
+                  </Heading>
                   <Link href={selectedAdvisor.linkedin} target="_blank">
-                    {!isTabletOrMobile && (
+                    <Box
+                      w={{ base: "20px", md: "28px" }}
+                      h={{ base: "20px", md: "28px" }}
+                      borderRadius="50%"
+                      bg="#0071E3"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      _hover={{
+                        bg: "#0056B3"
+                      }}
+                    >
                       <Image
                         alt="linkedin"
                         src={LinkedinIcon}
-                        width={{ base: 12, md: 24 }}
-                        height={24}
-                        style={{ marginTop: "0.5rem" }}
+                        width={isTabletOrMobile ? 12 : 16}
+                        height={isTabletOrMobile ? 12 : 16}
                       />
-                    )}
-                    {isTabletOrMobile && (
-                      <Image
-                        alt="linkedin"
-                        src={LinkedinIcon}
-                        width={15}
-                        height={15}
-                        style={{ marginTop: "0.2rem" }}
-                      />
-                    )}
+                    </Box>
                   </Link>
-                </Text>
-                <Box
-                  display={"flex"}
-                  gap={"0.5rem"}
-                  fontSize={{ md: "1rem", base: "0.75rem" }}
-                >
-                  <Text
-                    mb={{ md: "0.75rem", base: "0.5rem" }}
-                    fontSize={{ md: "1rem", base: "0.75rem" }}
-                  >
-                    🤫 <b>Role at Hushh: </b>
-                  </Text>
-                  {selectedAdvisor.position}
-                </Box>
-                <Box
-                  display={"flex"}
-                  gap={"0.5rem"}
-                  fontSize={{ md: "1rem", base: "0.75rem" }}
-                >
-                  <Image
-                    src={jobIcon}
-                    alt="jobIcon"
-                    style={{
-                      alignSelf: "flex-start",
-                      alignItems: "flex-start",
-                    }}
-                  />
-                  <Text
-                    mb={{ md: "0.75rem", base: "0.5rem" }}
-                    gap={"0.5rem"}
-                    display={"flex"}
-                    flexDirection={"row"}
-                  >
-                    <b>Working:</b>
-                  </Text>
-                  {selectedAdvisor.currentWork}
-                </Box>
-                <Text
-                  gap={"0.5rem"}
-                  fontSize={{ md: "1rem", base: "0.75rem" }}
-                  display={"flex"}
-                >
-                  <Image
-                    src={locationIcon}
-                    alt="locationIcon"
-                    boxSize={6}
-                    style={{
-                      display: "flex",
-                      alignSelf: "flex-start",
-                      marginRight: "0.25rem",
-                    }}
-                  />
-
-                  <b>Locality: </b>
-                  {selectedAdvisor.currentLocation}
-                </Text>
+                </HStack>
+                <VStack spacing={3} align="flex-start">
+                  <HStack spacing={2}>
+                    <Text
+                      fontSize={{ md: "1rem", base: "0.75rem" }}
+                      color="black"
+                      fontWeight="600"
+                      fontFamily="Inter, sans-serif"
+                    >
+                      🤫 Role at Hushh:
+                    </Text>
+                    <Text
+                      fontSize={{ md: "1rem", base: "0.75rem" }}
+                      color="#666"
+                      fontFamily="Inter, sans-serif"
+                    >
+                      {selectedAdvisor.position}
+                    </Text>
+                  </HStack>
+                  <HStack spacing={2} align="flex-start">
+                    <Image
+                      src={jobIcon}
+                      alt="jobIcon"
+                      style={{ marginTop: "2px" }}
+                    />
+                    <Text
+                      fontSize={{ md: "1rem", base: "0.75rem" }}
+                      color="black"
+                      fontWeight="600"
+                      fontFamily="Inter, sans-serif"
+                    >
+                      Working:
+                    </Text>
+                    <Text
+                      fontSize={{ md: "1rem", base: "0.75rem" }}
+                      color="#666"
+                      fontFamily="Inter, sans-serif"
+                    >
+                      {selectedAdvisor.currentWork}
+                    </Text>
+                  </HStack>
+                  <HStack spacing={2} align="flex-start">
+                    <Image
+                      src={locationIcon}
+                      alt="locationIcon"
+                      style={{ marginTop: "2px" }}
+                    />
+                    <Text
+                      fontSize={{ md: "1rem", base: "0.75rem" }}
+                      color="black"
+                      fontWeight="600"
+                      fontFamily="Inter, sans-serif"
+                    >
+                      Locality:
+                    </Text>
+                    <Text
+                      fontSize={{ md: "1rem", base: "0.75rem" }}
+                      color="#666"
+                      fontFamily="Inter, sans-serif"
+                    >
+                      {selectedAdvisor.currentLocation}
+                    </Text>
+                  </HStack>
+                </VStack>
               </ModalBody>
             </>
           )}

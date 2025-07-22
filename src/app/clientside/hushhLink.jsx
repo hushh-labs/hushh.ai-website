@@ -28,6 +28,7 @@ import { HiOutlineCog, HiOutlineEye, HiOutlineClipboardList, HiOutlineShieldChec
 import HushhLinkBox from '../_components/svg/hushhLink/hushhLinkBox.svg'
 import Image from 'next/image';
 import HushhTrail from '../_components/svg/hushhLink/audit-trail.svg'
+import ContactForm from '../_components/features/contactForm';
 
 const MotionBox = motion(Box);
 const MotionHeading = motion(Heading);
@@ -171,6 +172,9 @@ const HushhLink = () => {
                     fontWeight="500"
                     fontFamily="Inter, sans-serif"
                     letterSpacing="-0.02em"
+                    onClick={() => {
+                        router.push("https://github.com/hushh-labs/consent-protocol");
+                      }}
                     minW={{ base: "250px", md: "300px" }}
                     h={{ base: "50px", md: "70px" }}
                     _hover={{
@@ -188,7 +192,7 @@ const HushhLink = () => {
                     Explore Link API
                   </MotionButton>
 
-                  <MotionButton
+                  {/* <MotionButton
                     size="lg"
                     bg="transparent"
                     color="#0071E3"
@@ -216,7 +220,7 @@ const HushhLink = () => {
                     whileTap={{ scale: 0.98 }}
                   >
                     View Consent Logs
-                  </MotionButton>
+                  </MotionButton> */}
                 </HStack>
               </MotionBox>
 
@@ -1871,6 +1875,9 @@ const HushhLink = () => {
                       fontFamily="Inter, sans-serif"
                       h={{ base: "44px", md: "48px", lg: "52px" }}
                       minW={{ base: "180px", md: "200px", lg: "220px" }}
+                      onClick={() => {
+                        router.push("/contact-us");
+                      }}
                       _hover={{
                         bg: "#0056B3",
                         transform: "translateY(-1px)",
@@ -1886,7 +1893,7 @@ const HushhLink = () => {
                       Use Link in your Agent
                     </MotionButton>
 
-                    <MotionButton
+                    {/* <MotionButton
                       size="lg"
                       bg="transparent"
                       color="#0071E3"
@@ -1913,7 +1920,7 @@ const HushhLink = () => {
                       whileTap={{ scale: 0.98 }}
                     >
                       Audit Sample Logs
-                    </MotionButton>
+                    </MotionButton> */}
                   </HStack>
                 </VStack>
               </MotionBox>
@@ -2032,6 +2039,8 @@ const HushhLink = () => {
           </Grid>
         </Container>
       </Box>
+
+      <ContactForm/>
     </>
   )
 }

@@ -2,62 +2,41 @@
 import React, { useRef, useState, useEffect } from "react";
 import HushhHeaderLogo from "./svg/hushhHeaderLogo";
 import Link from "next/link";
-import { Link as ScrollLink } from "react-scroll";
-import { Box, Button, Container,VStack, Flex, Text, Badge, Divider, HStack } from "@chakra-ui/react";
+import { Box, Button, VStack, Flex, Text, Divider, HStack } from "@chakra-ui/react";
 import { useResponsiveSizes } from "../context/responsive";
-import { Bars3Icon } from "./svg/icons/hamburgerMenuIcon";
-import { CloseMenuIcon } from "./svg/icons/closeMenuIcon";
 import SearchBar from "./features/searchBar";
 import { ChevronArrowIcon } from "./svg/icons/chevronArrowIcon";
 import HushhWalletIcon from "./svg/hushhWalletIcon";
 import HushhButtonIcon from "./svg/hushhButton";
 import VibeSearchIcon from "./svg/vibeSearch";
 import ChromeExtentionLogo from "./svg/ChromeExtensionLogo";
-import ConciergeApp from "./svg/conciergeApp";
 import { usePathname, useRouter } from 'next/navigation'
-import ValetChat from "./svg/valetChat";
 import VibeSearchApi from "./svg/vibeSearchApi";
-import { headerAssets } from "./svg/icons/HeaderIcons/headerAssets";
-import { animateScroll as scroll } from "react-scroll";
-import { FiUser, FiYoutube } from 'react-icons/fi';
-import { useMediaQuery } from "react-responsive";
-import SmallVibeSearch from "./svg/smallVibeSearch.svg";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useToast } from '@chakra-ui/react';
 import Image from "next/image";
-import { ChevronRightIcon, CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
-import UnicodeQR from "./svg/onelinkQrdownload.svg"
+import { ChevronRightIcon, CloseIcon, HamburgerIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { isMobile, isAndroid, isIOS } from 'react-device-detect';
 import { useAuth } from "../context/AuthContext";
 import UserAvatar from "./auth/UserAvatar";
 import HushhNewLogo from "../../../public/svgs/hushh_new_logo.svg"
 import { useHushhIdFlow } from "../hooks/useHushhIdFlow";
-
+import HushhFlow from '../_components/svg/icons/flowLogo.svg'
+import HushhGrid from '../_components/svg/icons/girdLogo.svg';  
+import HushhLink from '../_components/svg/icons/linkLogo.svg';
+import HushhVault from '../_components/svg/icons/vaultLogo.svg';
+import HushhPDA from '../_components/svg/icons/pdaLogo.svg';
 
 export default function Header({backgroundColor, textColor, borderBottom}) {
-
   const { isTablet, isDesktop } = useResponsiveSizes();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [productsSubmenu, setProductsSubmenu] = useState(false);
-  const [productsSubmenuMobile, setProductsSubmenuMobile] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null);
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [headerBackground, setHeaderBackground] = useState("transparent");
   const pathname = usePathname()
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // For the dropdown
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
   const overlayRef = useRef(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentQRLink, setCurrentQRLink] = useState("");
 
   const noHeaderPaths = ['/vivaConnect', '/viva-connect', '/viva-connect/qrPage', '/qrCodePage'];
-  const isCareerPage = pathname === '/career';
   const shouldShowHeader = !noHeaderPaths.includes(pathname);
-  const notify = () => toast("This Product is Coming Soon!");
-  const isJobDetailPage = pathname ===  "/job/";
-  const isMobileScreen = useMediaQuery({ maxWidth: 768 });
   
   // Auth context
   const { isAuthenticated, user, loading, signOut } = useAuth();
@@ -67,22 +46,16 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
   const { 
     navigateToProfile, 
     navigateToRegistration,
-    userExists // Use centralized user existence state
+    userExists
   } = useHushhIdFlow();
 
   // Handle sign out for mobile
   const handleSignOut = async () => {
     try {
-      // Close mobile menu immediately
       setIsMenuOpen(false);
-      
-      // Sign out (user existence state will be reset automatically by the hook)
       await signOut();
-      
-      // Navigate to home page immediately
       router.push('/');
       
-      // Show success toast after navigation
       setTimeout(() => {
         toast({
           title: "✅ Signed out successfully",
@@ -107,92 +80,47 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
     }
   };
 
-  // useEffect(() => {
-  //   const checkLoginStatus = async () => {
-  //     const { data } = await supabase.auth.getSession(); // Get the session data
-
-  //     console.log('data:',data);
-  //     console.log('user email: ',data?.session?.user?.email);
-
-  //     if (data.session) {
-  //       setIsLoggedIn(true); 
-  //       const { data: userIdentities } = await supabase.auth.getUserIdentities();
-  //       if (userIdentities) {
-  //         const userIdentity = userIdentities.identities[0]; 
-  //         const email = userIdentity.email; 
-  //         setUserEmail(email); 
-  //       }
-  //     } else {
-  //       setIsLoggedIn(false); 
-  //     }
-  //    console.log('Is LoggedIn: ',isLoggedIn)
-  //   };
-  //   checkLoginStatus(); 
-  // }, [supabase]);
-
-  const handleDropdownClick = () => {
-    setIsDropdownOpen(!isDropdownOpen); 
-  };
-  
-  const handleOpenModal = (link) => {
-    setCurrentQRLink(link);
-    setIsModalOpen(true);
-  };
-  
-  const scrollToContactForm = () => {
-    window.scrollTo({
-      top: document.getElementById("contact-form").offsetTop,
-      behavior: "smooth",
-    });
-  };
-
   const handleDownloadClick = () => {
-    console.log('Download clicked')
     window.location.href = "https://apps.apple.com/in/app/hushh-app/id6498471189";
   };
 
-  useEffect(() => {
-    // Set header background based on props or default to black
-    setHeaderBackground(backgroundColor || "black");
-  }, [backgroundColor]);
-
-  const scrollTo = () => {
-    scroll.scrollTo(7500);
-  };
-
-  const scrollInMobile = () => {
-    scroll.scrollTo(3350);
-  };
-
-  const handleMenuIconToggle = () => {
+  const handleMenuIconToggle = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     setIsMenuOpen(!isMenuOpen);
   };
   
   useEffect(() => {
     if (isMenuOpen) {
-      document.body.style.overflow = 'hidden';  // Disable scroll
+      document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = '';  // Reset scroll
+      document.body.style.overflow = '';
     }
 
-    // Cleanup on component unmount
     return () => {
-      document.body.style.overflow = '';  // Reset scroll when the component is unmounted
+      document.body.style.overflow = '';
     };
   }, [isMenuOpen]);
 
-  const handleMenuClick = (url) => {
-    router.push(url);
-    setIsOpen(false);
-    setProductsSubmenu(false);
-  };
-
   let menuRef = useRef();
+  let hamburgerRef = useRef();
 
   useEffect(() => {
     let handler = (e) => {
-      if (!menuRef.current?.contains(e.target)) {
+      // Check if click is on a dropdown item (Link)
+      const isDropdownLink = e.target.closest('a[href]');
+      const isDropdownMenu = e.target.closest('.dropdown-menu');
+      
+      // Don't close if clicking on:
+      // 1. Hamburger button or inside mobile menu
+      // 2. Dropdown link (let navigation happen first)
+      // 3. Inside dropdown menu
+      if (!menuRef.current?.contains(e.target) && 
+          !hamburgerRef.current?.contains(e.target) && 
+          !isDropdownLink && 
+          !isDropdownMenu) {
         setIsMenuOpen(false);
+        setActiveDropdown(null);
       }
     };
     document.addEventListener("mousedown", handler);
@@ -202,642 +130,1072 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
     };
   });
   
-  const handleSubmenuClick = () => {
-    setProductsSubmenuMobile(false);
-    setIsMenuOpen(false);
+  // Dropdown menu data
+  const menuItems = {
+    products: {
+      title: "Products",
+      items: [
+        {
+          name: "Personal Data Agent (PDA)",
+          description: "Your AI-powered personal data assistant",
+          href: "/products/personal-data-agent",
+          icon:HushhPDA
+        },
+        {
+          name: "Hushh Vault",
+          description: "Secure personal data storage and management",
+          href: "/hushh-vault",
+          icon:HushhVault
+        },
+        {
+          name: "Hushh Link",
+          description: "Connect and share data seamlessly",
+          href: "/hushh-link",
+          icon:HushhLink
+        },
+        {
+          name: "Hushh Flow",
+          description: "Streamline your data workflows",
+          href: "/products/hushh-flow",
+          icon:HushhFlow
+        },
+        {
+          name: "Hushh Grid",
+          description: "Visualize and organize your data",
+          href: "/products/hushh-grid",
+          icon: HushhGrid
+        }
+      ]
+    },
+    developers: {
+      title: "Developers",
+      items: [
+        {
+          name: "GitHub Protocol",
+          description: "Open source development framework",
+          href: "/agent-kit-cli#github-protocol"
+        },
+        {
+          name: "Agentkit CLI",
+          description: "Command line tools for developers",
+          href: "/agent-kit-cli#agentkit-cli"  
+        },
+        {
+          name: "Build an Operon",
+          description: "Create custom data operations",
+          href: "/agent-kit-cli#build-operon"
+        },
+        {
+          name: "Submit to Marketplace",
+          description: "Publish your creations",
+          href: "/agent-kit-cli#submit-marketplace"
+        }
+      ]
+    },
+    whyHushh: {
+      title: "Why Hushh?",
+      items: [
+        {
+          name: "Our Philosophy",
+          description: "Understanding our core beliefs",
+          href: "/why-hushh"
+        },
+        {
+          name: "Privacy Manifesto",
+          description: "Our commitment to your privacy",
+          href: "/legal/privacypolicy"
+        },
+        {
+          name: "Consent Protocol",
+          description: "How we handle your consent",
+          href: "/consent-ai-protocol"
+        }
+      ]
+    },
+    docs: {
+      title: "Docs",
+      items: [
+        {
+          name: "Getting Started",
+          description: "Begin your journey with Hushh",
+          href: "/getting-started"
+        },
+        {
+          name: "API Reference",
+          description: "Complete API documentation",
+          href: "/developerApi"
+        },
+        {
+          name: "FAQ",
+          description: "Frequently asked questions",
+          href: "https://github.com/hushh-labs/consent-protocol/blob/main/docs/faq.md"
+        },
+        // {
+        //   name: "Blueprint Recipes",
+        //   description: "Pre-built solutions and templates",
+        //   href: "/docs/blueprints"
+        // }
+      ]
+    },
+    community: {
+      title: "Community",
+      items: [
+        {
+          name: "Agent Builders Club",
+          description: "Join our developer community",
+          href: "/hushh-community"
+        },
+        {
+          name: "Solutions",
+          description: "Delivering tailored IT services that meets the rigorous demands of modern business",
+          href: "/solutions"
+        },
+        {
+          name: "Hackathons",
+          description: "Build the future with us",
+          href: "/pda/iithackathon"
+        },
+        {
+          name: "Blog",
+          description: "Latest news and insights",
+          href: "/hushhBlogs"
+        }
+      ]
+    },
+    company: {
+      title: "Company",
+      items: [
+        {
+          name: "About",
+          description: "Learn about our mission",
+          href: "/about"
+        },
+        {
+          name: "Contact",
+          description: "Get in touch with us",
+          href: "/contact-us"
+        },
+        {
+          name: "Hushh Labs",
+          description: "Advanced AI research and development",
+          href: "/labs"
+        },
+        {
+          name: "Careers",
+          description: "Join our team",
+          href: "/career"
+        }
+      ]
+    }
   };
 
-  const handleLoginClick = () => {
-    window.open("https://hushh-button.vercel.app/user/login", "_blank");
+  const renderDropdownMenu = (menuKey, menuData) => {
+    return (
+      <div
+        className="dropdown-menu absolute top-full left-0 bg-white shadow-2xl border border-gray-100 z-50 rounded-2xl mt-2"
+        style={{
+          animation: "fadeInDown 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+          minWidth: "280px",
+          maxWidth: "380px",
+          boxShadow: "0 20px 60px rgba(0, 0, 0, 0.12), 0 8px 25px rgba(0, 0, 0, 0.08)",
+          backdropFilter: "blur(20px)",
+        }}
+        onMouseEnter={() => setActiveDropdown(menuKey)}
+        onMouseLeave={() => {
+          // Add small delay to prevent accidental closes when clicking
+          setTimeout(() => setActiveDropdown(null), 150);
+        }}
+      >
+        {/* Dropdown Arrow */}
+        <div 
+          className="absolute -top-2 left-6 w-4 h-4 bg-white border-t border-l border-gray-100 transform rotate-45"
+          style={{
+            filter: "drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.02))"
+          }}
+        ></div>
+        
+        <div className="relative bg-white rounded-2xl overflow-hidden">
+          <div className="px-4 py-4">
+            <div className="space-y-1">
+              {menuData.items.map((item, index) => (
+                <div
+                  key={index}
+                  className="group block p-3 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200 hover:shadow-sm dropdown-item cursor-pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    // Close dropdown immediately
+                    setActiveDropdown(null);
+                    // Navigate using router
+                    router.push(item.href);
+                  }}
+                >
+                  <div className="flex items-center space-x-3">
+                    {item.icon && (
+                    <div className="flex-shrink-0">
+                      <div 
+                        className="w-8 h-8 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center group-hover:from-blue-100 group-hover:to-indigo-100 transition-all duration-200"
+                      >
+                        {typeof item.icon === 'string' ? (
+                          <Image 
+                            src={item.icon} 
+                            alt={item.name} 
+                            width={16} 
+                            height={16} 
+                            className="w-4 h-4"
+                            style={{borderRadius:'20%'}}
+                          />
+                        ) : (
+                            <Image 
+                              src={item.icon} 
+                              alt={item.name} 
+                              width={16} 
+                              height={16} 
+                              className="w-4 h-4"
+                            />
+                        )}
+                      </div>
+                    </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-semibold text-gray-900 group-hover:text-blue-700 transition-colors duration-200">
+                        {item.name}
+                      </div>
+                      <div className="text-xs text-gray-500 mt-0.5 leading-relaxed group-hover:text-gray-600 transition-colors duration-200">
+                        {item.description}
+                      </div>
+                    </div>
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                      <ChevronRightIcon className="w-4 h-4 text-blue-500" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   };
-
-  const handleLinkClick = () => {
-    // Close menu when any link is clicked
-    setIsMenuOpen(false);
-  };
-
-  useEffect(() => {
-    // Log mobile detection values for debugging
-    console.log("Mobile detection values:", { 
-      isMobile, 
-      isTablet, 
-      isTabletOrMobile, 
-      isMobileScreen,
-      innerWidth: typeof window !== 'undefined' ? window.innerWidth : null
-    });
-  }, [isMobile, isTablet, isTabletOrMobile, isMobileScreen]);
 
   return (
     <>
       {shouldShowHeader && (
-        <div
-          className="w-full z-1000 transition-all duration-300"
-          style={{
-            background: isJobDetailPage ? "black" : headerBackground,
-            position: "fixed",
-            top: 0,
-            width: "100%",
-            zIndex: 1000,
-            borderBottom: borderBottom || "none",
-            backdropFilter: backgroundColor && backgroundColor.includes("rgba") ? "blur(10px)" : "none",
-          }}
-        >
-          <div className="flex items-center justify-between w-full px-3 py-2 z-1000 md:px-16 md:py-5">
-            <div className="flex items-center justify-between w-full">
-              {/* Logo */}
-              <div className="flex-shrink-0">
-                <Link href="/">
-                  {pathname === '/' || pathname === '/consent-ai-protocol' || pathname === '/hushh-link' || pathname === '/hushh-vault' || pathname === '/products/hushh-flow' || pathname === '/products/hushh-grid' ? (
-                    <Image src={HushhNewLogo} alt="Hushh Logo" width={120} height={40} priority />
-                  ) : (
-                    <HushhHeaderLogo />
-                  )}
-                </Link>
-              </div>
-
-              {/* Desktop Menu & Auth */}
-              <div className="hidden md:flex items-center justify-end flex-1">
-                <div 
-                  className="flex gap-12 px-7 md:gap-10 text-md"
-                  style={{ color: textColor || "white" }}
-                >
-                  <Link
-                    href="/about"
-                    className={`flex items-center gap-2 group link ${pathname === '/about' ? 'gradient-text' : ''}`}
-                    onMouseEnter={() => setProductsSubmenu(false)}
-                  >
-                    ABOUT US
-                  </Link>
-                  <Link
-                    href="#"
-                    className="flex items-center gap-2 group"
-                    onMouseEnter={() => setProductsSubmenu(true)}
-                  >
-                    PRODUCTS
-                    <ChevronArrowIcon className="group-hover:rotate-0 rotate-180 transition-all duration-300" />
-                  </Link>
-                  <Link
-                    href="/career"
-                    className={`flex items-center gap-2 group link ${pathname === '/career' ? 'gradient-text' : ''}`}
-                    onMouseEnter={() => setProductsSubmenu(false)}
-                  >
-                    CAREERS
-                  </Link>
-                  <Link
-                    href="/hushhBlogs"
-                    className={`flex items-center gap-2 group link ${pathname === '/hushhBlogs' ? 'gradient-text' : ''}`}
-                    onMouseEnter={() => setProductsSubmenu(false)}
-                  >
-                    BLOGS
-                  </Link>
-                  <Link
-                    href="/contact-us"
-                    onMouseEnter={() => setProductsSubmenu(false)}
-                    className={`flex items-center gap-2 group link ${pathname === '/contact-us' ? 'gradient-text' : ''}`}
-                  >
-                    CONTACT US
-                  </Link>
-                  <Link
-                    href="/solutions"
-                    onMouseEnter={() => setProductsSubmenu(false)}
-                    className={`flex items-center gap-2 group link ${pathname === '/solutions' ? 'gradient-text' : ''}`}
-                  >
-                    SOLUTIONS
-                  </Link>
-                  <Link
-                    href="/hushh-press"
-                    onMouseEnter={() => setProductsSubmenu(false)}
-                    className={`flex items-center gap-2 group link ${pathname === '/hushh-press' ? 'gradient-text' : ''}`}
-                  >
-                    HUSHH PR
+        <div>
+          {/* Apple-style Header */}
+          <header 
+            className="bg-white bg-opacity-95 backdrop-blur-xl border-b border-gray-200 sticky top-0 left-0 right-0 z-50"
+            style={{
+              height: "70px",
+              background: "rgba(255, 255, 255, 0.98)",
+              backdropFilter: "saturate(180%) blur(20px)",
+              zIndex: 1000,
+              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08)",
+              borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center justify-between" style={{ height: "70px" }}>
+                {/* Logo */}
+                <div className="flex-shrink-0">
+                  <Link href="/" className="flex items-center">
+                    <Image 
+                      src={HushhNewLogo} 
+                      alt="Hushh Logo" 
+                      width={140} 
+                      height={45} 
+                      priority 
+                      className="h-8 w-auto sm:h-10 lg:h-12"
+                    />
                   </Link>
                 </div>
 
-                {/* Auth Section - Rightmost Desktop */}
-                <div className="flex items-center ml-10">
-                  {loading ? (
-                    <div className="w-8 h-8 animate-pulse bg-gray-600 rounded-full"></div>
-                  ) : isAuthenticated ? (
-                    <UserAvatar />
-                  ) : (
-                    <Button
-                      onClick={() => router.push('/login')}
-                      bg={textColor ? "rgba(0, 0, 0, 0.1)" : "rgba(255, 255, 255, 0.1)"}
-                      color={textColor || "white"}
-                      border={`1px solid ${textColor ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.2)"}`}
-                      borderRadius="8px"
-                      px={6}
-                      py={2}
-                      fontSize="sm"
-                      fontWeight={600}
-                      _hover={{
-                        bg: textColor ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.2)",
-                        transform: "translateY(-1px)",
-                      }}
-                      _active={{
-                        transform: "translateY(0)",
-                      }}
-                      transition="all 0.2s"
+                {/* Desktop Navigation */}
+                <nav className="hidden lg:flex items-center space-x-8">
+                  {/* Products Dropdown */}
+                  <div className="relative group">
+                    <button
+                      className="text-gray-800 text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-3 nav-button"
+                      onMouseEnter={() => setActiveDropdown('products')}
                     >
-                      Sign In
-                    </Button>
-                  )}
-                </div>
-              </div>
-
-              {/* Mobile Menu Trigger */}
-              <div className="md:hidden flex items-center mt-5">
-                {!isMenuOpen && (
-                  <div
-                    className="text-white hamburger-icon-container cursor-pointer"
-                    onClick={handleMenuIconToggle}
-                    style={{
-                      padding: "8px",
-                      // background: "rgba(0, 0, 0, 0.6)",
-                      // borderRadius: "6px",
-                      // boxShadow: "0 2px 10px rgba(0, 0, 0, 0.3)",
-                    }}
-                  >
-                    <svg
-                      fill="none"
-                      strokeWidth={2.5}
-                      stroke={textColor || "#FFFFFF"}
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                      aria-hidden="true"
-                      width="32"
-                      height="32"
-                      style={{
-                        filter: `drop-shadow(0px 0px 1px ${textColor ? "rgba(0, 0, 0, 0.3)" : "rgba(255, 255, 255, 0.5)"})`
-                      }}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                      />
-                    </svg>
+                      <span>Products</span>
+                      <ChevronDownIcon className={`w-3 h-3 transition-transform duration-200 ${activeDropdown === 'products' ? 'rotate-180' : ''}`} />
+                    </button>
+                    {activeDropdown === 'products' && renderDropdownMenu('products', menuItems.products)}
                   </div>
-                )}
-              </div>
-            </div>
 
-            {productsSubmenu && (
-              <div
-                className="bg-white z-100 flex flex-col gap-4 absolute pl-8 pr-8 mt-4 pt-5 pb-7 rounded-2xl shadow-lg shadow-[#A7AEBA1F]"
-                onMouseEnter={() => setProductsSubmenu(true)}
-                onMouseLeave={() => setProductsSubmenu(false)}
-                // Position adjustment might be needed
-                style={{top: '60px', right: '150px'}}
-              >
-                <p className="text-xs text-fontColor2 font-semibold">
-                  HUSHH PRODUCTS
-                </p>
-                <div className="flex gap-2 z-1000">
-                  <div className="flex-1 flex flex-col gap-2">
-                    <Link
-                      href={"/products/personal-data-agent"}
-                      onClick={() => setProductsSubmenu(false)}
-                      className="flex gap-4 items-start hover:text-white hover:bg-black px-5 py-2.5 rounded-xl"
+                  {/* Developers Dropdown */}
+                  <div className="relative group">
+                    <button
+                      className="text-gray-800 text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-3 nav-button"
+                      onMouseEnter={() => setActiveDropdown('developers')}
                     >
-                      <div className="">
-                        <Image 
-                          src="/svgs/pdaLogo.svg" 
-                          alt="PDA Logo" 
-                          width={24} 
-                          height={24} 
-                          className="w-6 h-6"
-                          style={{borderRadius:'30%'}}
-                        />
-                      </div>
-                      <div className="">
-                        <h1 className="font-semibold">Hushh PDA</h1>
-                        <p className="text-sm font-medium text-fontColor3">
-                        Your Personal Data Agent, <br/> Under Your Control</p>
-                      </div>
-                    </Link>
-                    <Link
-                      href={"/products/hushh-wallet-app"}
-                      onClick={() => setProductsSubmenu(false)}
-                      className="flex gap-4 items-start hover:text-white hover:bg-black px-5 py-2.5 rounded-xl"
-                    >
-                      <div className="">
-                        <HushhWalletIcon className="w-6 h-6" />
-                      </div>
-                      <div className="">
-                        <h1 className="font-semibold">Hushh Wallet App</h1>
-                        <p className="text-sm font-medium text-fontColor3">
-                          Your personal data vault. Organize, control,<br/> and monetize your information
-                        </p>
-                      </div>
-                    </Link>
-                    <Link
-                      href={"/products/hushh-button"}
-                      onClick={() => setProductsSubmenu(false)}
-                      className="flex gap-4 items-start hover:text-white hover:bg-black  px-5 py-2.5 rounded-xl"
-                    >
-                      <div className="">
-                        <HushhButtonIcon size={24} />
-                      </div>
-                      <div className="">
-                        <h1 className="font-semibold">Hushh Button</h1>
-                        <p className="text-sm font-medium text-fontColor3">
-                          Seamlessly share your preferences with  <br /> brands for personalized experiences
-                        </p>
-                      </div>
-                    </Link>    
+                      <span>Developers</span>
+                      <ChevronDownIcon className={`w-3 h-3 transition-transform duration-200 ${activeDropdown === 'developers' ? 'rotate-180' : ''}`} />
+                    </button>
+                    {activeDropdown === 'developers' && renderDropdownMenu('developers', menuItems.developers)}
                   </div>
-                  
-                  <div className="flex-1 flex flex-col gap-2">
-                    <Link
-                      href={"/products/hushh-vibe-search"}
-                      onClick={() => setProductsSubmenu(false)}
-                      className="flex gap-4 items-start hover:text-white hover:bg-black px-5 py-2.5 rounded-xl"
+
+                  {/* Why Hushh Dropdown */}
+                  <div className="relative group">
+                    <button
+                      className="text-gray-800 text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-3 nav-button"
+                      onMouseEnter={() => setActiveDropdown('whyHushh')}
                     >
-                      <div className="">
-                        <VibeSearchIcon className="w-6 h-6" />
-                      </div>
-                      <div className="">
-                        <h1 className="font-semibold">VIBE Search App</h1>
-                        <p className="text-sm font-medium text-fontColor3">
-                          Discover products you love with image-based search and AI recommendations
-                        </p>
-                      </div>
-                    </Link>
-                    <Link
-                      href={"/developerApi"}
-                      onClick={() => setProductsSubmenu(false)}
-                      className="flex gap-4 items-start hover:text-white hover:bg-black px-5 py-2.5 rounded-xl"
-                    >
-                      <div className="">
-                        <VibeSearchApi className="w-6 h-6" />
-                      </div>
-                      <div className="">
-                        <h1 className="font-semibold">Developer API</h1>
-                        <p className="text-sm font-medium text-fontColor3">
-                          Tools for businesses to integrate <br/> Hushh data into their applications
-                        </p>
-                      </div>
-                    </Link>
-                    <Link
-                      href={"/products/browser-companion"}
-                      onClick={() => setProductsSubmenu(false)}
-                      className="flex gap-4 hover:text-white hover:bg-black px-5 py-2.5 rounded-xl"
-                    >
-                      <div className="">
-                        <ChromeExtentionLogo className="w-6 h-6" />
-                      </div>
-                      <div className="">
-                        <h1 className="font-semibold">
-                          Hushh Browser Companion
-                        </h1>
-                        <p className="text-sm font-medium text-fontColor3">
-                          Track and manage your online browsing data <br/>, building a complete digital profile
-                        </p>
-                      </div>
-                    </Link>
+                      <span>Why Hushh?</span>
+                      <ChevronDownIcon className={`w-3 h-3 transition-transform duration-200 ${activeDropdown === 'whyHushh' ? 'rotate-180' : ''}`} />
+                    </button>
+                    {activeDropdown === 'whyHushh' && renderDropdownMenu('whyHushh', menuItems.whyHushh)}
                   </div>
-                </div>
-              </div>
-            )}
-          </div>
 
-          {/* Mobile Menu Overlay */}
-          {isMenuOpen && (
-            <div 
-              style={{
-                zIndex: 1000,
-                position: 'fixed',
-                width: '100%',
-                height: '100vh',
-                top: 0,
-                left: 0,
-                overflowY: 'auto'
-              }} 
-              className="bg-black flex flex-col justify-between" 
-              ref={menuRef}
-            >
-              {/* Header */}
-              <div className="px-6 pt-4 pb-2 flex items-center justify-between sticky top-0 bg-black z-10">
-                    <div className="flex-1">
-                      <HushhHeaderLogo />
-                    </div>
-                <div className="flex items-center">
-                  <button
-                    onClick={() => setIsMenuOpen(false)}
-                    className="text-white"
-                    style={{ marginLeft: "auto", display: "flex", alignItems: "center" }}
-                  >
-                    <CloseIcon />
-                  </button>
-                </div>
-              </div>
-
-              {/* Menu Items */}
-              <div className="flex-1 bg-black overflow-visible">
-                <ul style={{listStyle:'none'}} className="flex flex-col px-6 space-y-4 bg-black py-4">
-                  <li>
-                    <Link href="/about" onClick={() => setIsMenuOpen(false)} style={{fontWeight:'700'}} className="text-lg text-white">
-                      About Us
-                    </Link>
-                  </li>
-                  <Divider borderStyle={'solid'} borderWidth={"1px"} borderColor={"#5A5A5A"} />  
-                  <li>
-                    <Link
-                      style={{fontWeight:'700'}}
-                      href="#"
-                      className="flex justify-between items-center text-lg text-white"
-                      onClick={() => setProductsSubmenuMobile(!productsSubmenuMobile)}
+                  {/* Docs Dropdown */}
+                  <div className="relative group">
+                    <button
+                      className="text-gray-800 text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-3 nav-button"
+                      onMouseEnter={() => setActiveDropdown('docs')}
                     >
-                      Products
-                      <ChevronArrowIcon
-                        className={`${productsSubmenuMobile ? "rotate-180" : ""} transition-all`}
-                      />
-                    </Link>
-          
-                    {productsSubmenuMobile && (
-                      <ul style={{listStyle:'none'}} className="mt-2 space-y-3 bg-black pl-6 text-base text-white">
-                        <li>
-                          <Link style={{fontWeight:'500'}}  onClick={() => setIsMenuOpen(false)} href="/products/personal-data-agent" className="block text-white">
-                            <span style={{display:'flex',flexDirection:'row', gap:'1rem'}}>
-                              <Image 
-                                src="/svgs/pdaLogo.svg" 
-                                alt="PDA Logo" 
-                                width={24} 
-                                height={24} 
-                                style={{borderRadius:'30%'}}
-                                className="w-6 h-6"
-                              />
-                              Hushh PDA
-                            </span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link style={{fontWeight:'500'}} onClick={() => setIsMenuOpen(false)} href="/products/hushh-wallet-app" className="block">
-                            <span style={{display:'flex',flexDirection:'row', gap:'1rem'}}>
-                              <HushhWalletIcon className="w-6 h-6" />
-                              Hushh Wallet App
-                            </span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link style={{fontWeight:'500'}}  onClick={() => setIsMenuOpen(false)} href="/products/browser-companion" className="block text-white ">
-                            <span style={{display:'flex',flexDirection:'row', gap:'1rem'}}>
-                              <ChromeExtentionLogo className="w-6 h-6"/>
-                              Browser Companion
-                            </span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link style={{fontWeight:'500'}}  onClick={() => setIsMenuOpen(false)} href="/products/vibe-search" className="block text-white">
-                            <span style={{display:'flex',flexDirection:'row', gap:'1rem'}}>
-                              <VibeSearchIcon className="w-6 h-6"/>
-                              Vibe Search
-                            </span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link style={{fontWeight:'500'}}  onClick={() => setIsMenuOpen(false)} href="/products/hushh-button" className="block text-white">
-                            <span style={{display:'flex',flexDirection:'row', gap:'1rem'}}>
-                              <HushhButtonIcon size={24} />
-                              Hushh Button
-                            </span> 
-                          </Link>
-                        </li>
-                        
-                        <li>
-                          <Link style={{fontWeight:'500'}}  onClick={() => setIsMenuOpen(false)} href="/developerApi" className="block text-white">
-                            <span style={{display:'flex',flexDirection:'row', gap:'1rem'}}>
-                              <VibeSearchApi className="w-6 h-6" />
-                              Developer API
-                            </span>
-                          </Link>
-                        </li>
-                        {/* <li>
-                          <Link style={{fontWeight:'500'}}  onClick={() => setIsMenuOpen(false)} href="/products/hushh-for-students" className="block text-white">
-                            <span style={{display:'flex',flexDirection:'row', gap:'1rem'}}>
-                              <headerAssets.VibeSearchMarketplace className="w-6 h-6" />
-                              Hushh For Students
-                            </span>
-                          </Link>
-                        </li> */}
-                      </ul>
-                    )}
-                  </li>
-                  <Divider borderStyle={'solid'} borderWidth={"1px"} borderColor={"#5A5A5A"} />  
-                  <li>
-                    <Link style={{fontWeight:'700'}}  onClick={() => setIsMenuOpen(false)} href="/solutions" className="text-lg text-white">
-                      Solutions
-                    </Link>
-                  </li>
-                  <Divider borderStyle={'solid'} borderWidth={"1px"} borderColor={"#5A5A5A"} />  
-                  <li>
-                    <Link style={{fontWeight:'700'}}  onClick={() => setIsMenuOpen(false)} href="/contact-us" className="text-lg text-white">
-                      Contact Us
-                    </Link>
-                  </li>
-                  <Divider borderStyle={'solid'} borderWidth={"1px"} borderColor={"#5A5A5A"} />  
-                  <li>
-                    <Link style={{fontWeight:'700'}}  onClick={() => setIsMenuOpen(false)} href="/career" className="text-lg text-white">
-                      Careers
-                    </Link>
-                  </li>
-                  <Divider borderStyle={'solid'} borderWidth={"1px"} borderColor={"#5A5A5A"} />  
-                  <li>
-                    <Link style={{fontWeight:'700'}} onClick={() => setIsMenuOpen(false)} href="/hushh-press" className="text-lg text-white">
-                     Hushh PR
-                    </Link>
-                  </li>
-                  <Divider borderStyle={'solid'} borderWidth={"1px"} borderColor={"#5A5A5A"} />  
-                  <li>
-                    <Link style={{fontWeight:'700'}} onClick={() => setIsMenuOpen(false)} href="/hushhBlogs" className="text-lg text-white">
-                      Blogs
-                    </Link>
-                  </li>
-                  <Divider borderStyle={'solid'} borderWidth={"1px"} borderColor={"#5A5A5A"} />  
-                  
-                  {/* Auth Section - Mobile */}
-                  <li className="mt-4">
+                      <span>Docs</span>
+                      <ChevronDownIcon className={`w-3 h-3 transition-transform duration-200 ${activeDropdown === 'docs' ? 'rotate-180' : ''}`} />
+                    </button>
+                    {activeDropdown === 'docs' && renderDropdownMenu('docs', menuItems.docs)}
+                  </div>
+
+                  {/* Community Dropdown */}
+                  <div className="relative group">
+                    <button
+                      className="text-gray-800 text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-3 nav-button"
+                      onMouseEnter={() => setActiveDropdown('community')}
+                    >
+                      <span>Community</span>
+                      <ChevronDownIcon className={`w-3 h-3 transition-transform duration-200 ${activeDropdown === 'community' ? 'rotate-180' : ''}`} />
+                    </button>
+                    {activeDropdown === 'community' && renderDropdownMenu('community', menuItems.community)}
+                  </div>
+
+                  {/* Company Dropdown */}
+                  <div className="relative group">
+                    <button
+                      className="text-gray-800 text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-3 nav-button"
+                      onMouseEnter={() => setActiveDropdown('company')}
+                    >
+                      <span>Company</span>
+                      <ChevronDownIcon className={`w-3 h-3 transition-transform duration-200 ${activeDropdown === 'company' ? 'rotate-180' : ''}`} />
+                    </button>
+                    {activeDropdown === 'company' && renderDropdownMenu('company', menuItems.company)}
+                  </div>
+
+                </nav>
+
+                {/* Right side - Auth & CTA */}
+                <div className="flex items-center space-x-4">
+                  {/* Desktop Auth */}
+                  <div className="hidden lg:flex items-center space-x-4">
                     {loading ? (
-                      <div className="flex items-center justify-center py-4">
-                        <div className="w-8 h-8 animate-pulse bg-gray-600 rounded-full"></div>
-                        <Text className="text-gray-400 ml-3">Loading...</Text>
-                      </div>
+                      <div className="w-6 h-6 animate-pulse bg-gray-300 rounded-full"></div>
                     ) : isAuthenticated ? (
-                      <div 
-                        className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-6 border border-gray-700"
-                        style={{
-                          backdropFilter: "blur(20px) saturate(180%)",
-                          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.2)"
-                        }}
-                      >
-                        <VStack spacing={5} align="start" w="full">
-                          {/* User Info Header */}
-                          <HStack spacing={4} w="full">
-                            <div 
-                              className="w-16 h-16 rounded-full flex items-center justify-center text-white font-semibold text-xl relative"
-                              style={{
-                                background: "linear-gradient(135deg, #007AFF, #5E5CE6)",
-                                boxShadow: "0 4px 12px rgba(0, 122, 255, 0.3)"
-                              }}
-                            >
-                              {user?.user_metadata?.avatar_url ? (
-                                <img 
-                                  src={user.user_metadata.avatar_url} 
-                                  alt="Avatar" 
-                                  className="w-full h-full rounded-full object-cover"
-                                />
-                              ) : (
-                                (user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'U').charAt(0).toUpperCase()
-                              )}
-                            </div>
-                            <VStack align="start" spacing={1} flex={1}>
-                              <Text 
-                                className="text-white font-semibold"
-                                style={{
-                                  fontSize: "18px",
-                                  lineHeight: "1.2",
-                                  fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-                                }}
-                              >
-                                {user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'}
-                              </Text>
-                              <Text 
-                                className="text-white"
-                                style={{
-                                  fontSize: "14px",
-                                  fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-                                }}
-                              >
-                                {user?.email}
-                              </Text>
-                            </VStack>
-                          </HStack>
-                          
-                          {/* Divider */}
-                          <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent"></div>
-                          
-                          {/* Action Buttons */}
-                          <VStack spacing={3} w="full">
-                            <Button
-                              onClick={() => {
-                                setIsMenuOpen(false);
-                                if (userExists) {
-                                  navigateToProfile();
-                                } else {
-                                  navigateToRegistration();
-                                }
-                              }}
-                              bg="rgba(255, 255, 255, 0.12)"
-                              color="white"
-                              border="1px solid rgba(255, 255, 255, 0.18)"
-                              borderRadius="12px"
-                              w="full"
-                              h="48px"
-                              py={3}
-                              px={5}
-                              fontSize="16px"
-                              fontWeight={600}
-                              _hover={{
-                                bg: "rgba(255, 255, 255, 0.18)",
-                                transform: "translateY(-1px)",
-                                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)"
-                              }}
-                              _active={{
-                                transform: "translateY(0)",
-                                bg: "rgba(255, 255, 255, 0.08)"
-                              }}
-                              transition="all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)"
-                              isDisabled={userExists === null}
-                              style={{
-                                fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-                              }}
-                            >
-                              {userExists === null 
-                                ? "Loading..." 
-                                : userExists 
-                                  ? "View Profile" 
-                                  : "Setup Your Profile"
-                              }
-                            </Button>
-                            
-                            <Button
-                              onClick={handleSignOut}
-                              bg="rgba(255, 59, 48, 0.12)"
-                              color="#FF453A"
-                              border="1px solid rgba(255, 59, 48, 0.25)"
-                              borderRadius="12px"
-                              w="full"
-                              h="48px"
-                              fontSize="16px"
-                              fontWeight={600}
-                              _hover={{
-                                bg: "rgba(255, 59, 48, 0.18)",
-                                transform: "translateY(-1px)",
-                                boxShadow: "0 4px 12px rgba(255, 59, 48, 0.2)"
-                              }}
-                              _active={{
-                                transform: "translateY(0)",
-                                bg: "rgba(255, 59, 48, 0.08)"
-                              }}
-                              transition="all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)"
-                              style={{
-                                fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-                              }}
-                            >
-                              Sign Out
-                            </Button>
-                          </VStack>
-                        </VStack>
-                      </div>
+                      <UserAvatar />
                     ) : (
                       <Button
-                        onClick={() => {
-                          setIsMenuOpen(false);
-                          router.push('/login');
-                        }}
-                        bg="rgba(255, 255, 255, 0.1)"
-                        color="white"
-                        border="1px solid rgba(255, 255, 255, 0.2)"
+                        onClick={() => router.push('/login')}
+                        bg="transparent"
+                        color="gray.800"
+                        border="1px solid"
+                        borderColor="gray.300"
                         borderRadius="8px"
-                        w="full"
-                        py={3}
-                        fontSize="lg"
-                        fontWeight={600}
+                        px={5}
+                        py={2}
+                        fontSize="sm"
+                        fontWeight={500}
+                        height="44px"
                         _hover={{
-                          bg: "rgba(255, 255, 255, 0.2)",
+                          bg: "gray.50",
+                          borderColor: "gray.400",
                         }}
                         _active={{
-                          transform: "translateY(0)",
+                          transform: "scale(0.98)",
                         }}
                         transition="all 0.2s"
                       >
                         Sign In
                       </Button>
                     )}
-                  </li>
-                </ul>
+                  </div>
+
+                  {/* Get Early Access Button - Desktop */}
+                  <Button
+                    onClick={() => router.push('https://apps.apple.com/in/app/hushh-app/id6498471189')}
+                    bg="linear-gradient(135deg, #007AFF, #5E5CE6, #7C3AED)"
+                    color="white"
+                    borderRadius="10px"
+                    px={4}
+                    py={1}
+                    fontSize="sm"
+                    fontWeight={700}
+                    // height="48px"
+                    position="relative"
+                    overflow="hidden"
+                    _hover={{
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 8px 25px rgba(0, 122, 255, 0.4), 0 4px 12px rgba(126, 58, 237, 0.3)",
+                    }}
+                    _active={{
+                      transform: "scale(0.98)",
+                    }}
+                    _before={{
+                      content: '""',
+                      position: "absolute",
+                      top: 0,
+                      left: "-100%",
+                      width: "100%",
+                      height: "100%",
+                      background: "linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)",
+                      transition: "left 0.6s ease",
+                    }}
+                    _groupHover={{
+                      _before: {
+                        left: "100%",
+                      }
+                    }}
+                    transition="all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)"
+                    className="hidden lg:block group"
+                    display={{ base: "none", lg: "flex" }}
+                  >
+                    🚀 Get Early Access
+                  </Button>
+                  
+
+
+                  {/* Mobile menu button */}
+                  <button
+                    ref={hamburgerRef}
+                    onClick={handleMenuIconToggle}
+                    className="lg:hidden relative p-3 rounded-xl border  hover:border-gray-300 transition-all duration-200 hover:shadow-lg active:scale-95"
+                    style={{
+                      backdropFilter: "blur(10px)",
+                    }}
+                    type="button"
+                    aria-label="Toggle mobile menu"
+                  >
+                    {isMenuOpen ? (
+                      <CloseIcon className="w-6 h-6 text-gray-700" />
+                    ) : (
+                    <HamburgerIcon className="w-6 h-6 text-gray-700" />
+                    )}
+                  </button>
+                </div>
               </div>
-          
-              {/* Download Button */}
-              <div className="px-6 pb-6 border-t border-gray-800 pt-4 sticky bottom-0 bg-black">
-                <button 
-                  onClick={handleDownloadClick} 
-                  style={{background:'linear-gradient(265.3deg, #E54D60 8.81%, #A342FF 94.26%)'}} 
-                  className="w-full text-white py-2 rounded-full text-lg"
-                >
-                  Download Our App
-                </button>
+            </div>
+          </header>
+
+          {/* Mobile Menu Overlay */}
+          {isMenuOpen && (
+            <div 
+              className="lg:hidden fixed"
+              style={{
+                position: "fixed",
+                top: "70px",
+                left: "0",
+                right: "0",
+                bottom: "0",
+                width: "100vw",
+                height: "calc(100vh - 70px)",
+                zIndex: 9999,
+                background: "rgba(255, 255, 255, 0.98)",
+                backdropFilter: "blur(20px) saturate(180%)",
+                animation: "slideInUp 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                overflow: "auto"
+              }} 
+              ref={menuRef}
+            >
+              <div className="h-full overflow-y-auto custom-scrollbar">
+                {/* Mobile Menu Content */}
+                <div className="px-6 py-6">
+                    {/* Close button for mobile menu */}
+                    <div className="flex justify-end mb-4 lg:hidden">
+                      <button
+                        onClick={() => setIsMenuOpen(false)}
+                        className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
+                        aria-label="Close menu"
+                      >
+                        <CloseIcon className="w-5 h-5 text-gray-600" />
+                      </button>
+                  </div>
+                  {/* Authentication Section */}
+                  {!loading && (
+                    <div className="mb-6 pb-4 border-b border-gray-200">
+                      {isAuthenticated && user ? (
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <UserAvatar 
+                              user={user} 
+                              size="sm"
+                              className="w-10 h-10"
+                            />
+                            <div>
+                              <p className="text-sm font-medium text-gray-900">
+                                {user.user_metadata?.name || user.email || 'User'}
+                              </p>
+                              {/* <p className="text-xs text-gray-500">
+                                {user.email}
+                              </p> */}
+                  </div>
+                  </div>
+                          <button
+                            onClick={handleSignOut}
+                            className="text-sm text-red-600 hover:text-red-700 font-medium"
+                          >
+                            Sign Out
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex space-x-3">
+                          <button
+                            onClick={() => {
+                              setIsMenuOpen(false);
+                              navigateToRegistration();
+                            }}
+                            className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+                          >
+                            Sign Up
+                          </button>
+                          <button
+                            onClick={() => {
+                              setIsMenuOpen(false);
+                              navigateToProfile();
+                            }}
+                            className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
+                          >
+                            Sign In
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Navigation Menu */}
+                  <div className="space-y-6">
+                    {/* Products Section */}
+                    <div className="mobile-menu-section">
+                  <button 
+                        onClick={() => setActiveDropdown(activeDropdown === 'products' ? null : 'products')}
+                        className="flex items-center justify-between w-full text-left text-lg font-semibold text-gray-900 py-2"
+                      >
+                        <span>Products</span>
+                        <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${activeDropdown === 'products' ? 'rotate-180' : ''}`} />
+                      </button>
+                      {activeDropdown === 'products' && (
+                        <div className="mt-3 space-y-3 pl-4">
+                                                    {menuItems.products.items.map((item, index) => (
+                            <div
+                              key={index}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setIsMenuOpen(false);
+                                router.push(item.href);
+                              }}
+                              className="block mobile-menu-item cursor-pointer"
+                            >
+                              <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                {item.icon && (
+                                  <div className="flex-shrink-0 mt-1">
+                                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                      {typeof item.icon === 'string' ? (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                          style={{borderRadius:'20%'}}
+                                        />
+                                      ) : (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+                                <div>
+                                  <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
+                                  <p className="text-xs text-gray-500 mt-1">{item.description}</p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Developers Section */}
+                    <div className="mobile-menu-section">
+                      <button
+                        onClick={() => setActiveDropdown(activeDropdown === 'developers' ? null : 'developers')}
+                        className="flex items-center justify-between w-full text-left text-lg font-semibold text-gray-900 py-2"
+                      >
+                        <span>Developers</span>
+                        <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${activeDropdown === 'developers' ? 'rotate-180' : ''}`} />
+                      </button>
+                      {activeDropdown === 'developers' && (
+                        <div className="mt-3 space-y-3 pl-4">
+                          {menuItems.developers.items.map((item, index) => (
+                            <div
+                              key={index}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setIsMenuOpen(false);
+                                router.push(item.href);
+                              }}
+                              className="block mobile-menu-item cursor-pointer"
+                            >
+                              <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                {item.icon && (
+                                  <div className="flex-shrink-0 mt-1">
+                                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                      {typeof item.icon === 'string' ? (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                          style={{borderRadius:'20%'}}
+                                        />
+                                      ) : (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+                                <div>
+                                  <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
+                                  <p className="text-xs text-gray-500 mt-1">{item.description}</p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Why Hushh Section */}
+                    <div className="mobile-menu-section">
+                      <button
+                        onClick={() => setActiveDropdown(activeDropdown === 'whyHushh' ? null : 'whyHushh')}
+                        className="flex items-center justify-between w-full text-left text-lg font-semibold text-gray-900 py-2"
+                      >
+                        <span>Why Hushh?</span>
+                        <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${activeDropdown === 'whyHushh' ? 'rotate-180' : ''}`} />
+                      </button>
+                      {activeDropdown === 'whyHushh' && (
+                        <div className="mt-3 space-y-3 pl-4">
+                          {menuItems.whyHushh.items.map((item, index) => (
+                            <div
+                              key={index}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setIsMenuOpen(false);
+                                router.push(item.href);
+                              }}
+                              className="block mobile-menu-item cursor-pointer"
+                            >
+                              <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                {item.icon && (
+                                  <div className="flex-shrink-0 mt-1">
+                                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                      {typeof item.icon === 'string' ? (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                          style={{borderRadius:'20%'}}
+                                        />
+                                      ) : (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+                                <div>
+                                  <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
+                                  <p className="text-xs text-gray-500 mt-1">{item.description}</p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Docs Section */}
+                    <div className="mobile-menu-section">
+                      <button
+                        onClick={() => setActiveDropdown(activeDropdown === 'docs' ? null : 'docs')}
+                        className="flex items-center justify-between w-full text-left text-lg font-semibold text-gray-900 py-2"
+                      >
+                        <span>Docs</span>
+                        <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${activeDropdown === 'docs' ? 'rotate-180' : ''}`} />
+                      </button>
+                      {activeDropdown === 'docs' && (
+                        <div className="mt-3 space-y-3 pl-4">
+                          {menuItems.docs.items.map((item, index) => (
+                            <div
+                              key={index}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setIsMenuOpen(false);
+                                router.push(item.href);
+                              }}
+                              className="block mobile-menu-item cursor-pointer"
+                            >
+                              <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                {item.icon && (
+                                  <div className="flex-shrink-0 mt-1">
+                                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                      {typeof item.icon === 'string' ? (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                          style={{borderRadius:'20%'}}
+                                        />
+                                      ) : (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+                                <div>
+                                  <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
+                                  <p className="text-xs text-gray-500 mt-1">{item.description}</p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Community Section */}
+                    <div className="mobile-menu-section">
+                      <button
+                        onClick={() => setActiveDropdown(activeDropdown === 'community' ? null : 'community')}
+                        className="flex items-center justify-between w-full text-left text-lg font-semibold text-gray-900 py-2"
+                      >
+                        <span>Community</span>
+                        <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${activeDropdown === 'community' ? 'rotate-180' : ''}`} />
+                      </button>
+                      {activeDropdown === 'community' && (
+                        <div className="mt-3 space-y-3 pl-4">
+                          {menuItems.community.items.map((item, index) => (
+                            <div
+                              key={index}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setIsMenuOpen(false);
+                                router.push(item.href);
+                              }}
+                              className="block mobile-menu-item cursor-pointer"
+                            >
+                              <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                {item.icon && (
+                                  <div className="flex-shrink-0 mt-1">
+                                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                      {typeof item.icon === 'string' ? (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                          style={{borderRadius:'20%'}}
+                                        />
+                                      ) : (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+                                <div>
+                                  <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
+                                  <p className="text-xs text-gray-500 mt-1">{item.description}</p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Company Section */}
+                    <div className="mobile-menu-section">
+                      <button
+                        onClick={() => setActiveDropdown(activeDropdown === 'company' ? null : 'company')}
+                        className="flex items-center justify-between w-full text-left text-lg font-semibold text-gray-900 py-2"
+                      >
+                        <span>Company</span>
+                        <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${activeDropdown === 'company' ? 'rotate-180' : ''}`} />
+                      </button>
+                      {activeDropdown === 'company' && (
+                        <div className="mt-3 space-y-3 pl-4">
+                          {menuItems.company.items.map((item, index) => (
+                            <div
+                              key={index}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setIsMenuOpen(false);
+                                router.push(item.href);
+                              }}
+                              className="block mobile-menu-item cursor-pointer"
+                            >
+                              <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                {item.icon && (
+                                  <div className="flex-shrink-0 mt-1">
+                                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                      {typeof item.icon === 'string' ? (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                          style={{borderRadius:'20%'}}
+                                        />
+                                      ) : (
+                                        <Image 
+                                          src={item.icon} 
+                                          alt={item.name} 
+                                          width={16} 
+                                          height={16} 
+                                          className="w-4 h-4"
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+                                <div>
+                                  <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
+                                  <p className="text-xs text-gray-500 mt-1">{item.description}</p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Hushh Labs Direct Link for Mobile */}
+                    <div className="mobile-menu-section">
+                      <div
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setIsMenuOpen(false);
+                          router.push('/labs');
+                        }}
+                        className="cursor-pointer py-2"
+                      >
+                        <div className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors">
+                          Hushh Labs
+                        </div>
+                        <div className="text-sm text-gray-500 mt-1">
+                          Advanced AI research and development
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                                    {/* Bottom Action Buttons */}
+                  <div className="mt-8 pt-6 border-t border-gray-200 space-y-4">
+                    <button
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        router.push('https://apps.apple.com/in/app/hushh-app/id6498471189');
+                      }}
+                      className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg text-base font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-lg"
+                    style={{ 
+                        background: "linear-gradient(135deg, #007AFF, #5E5CE6, #7C3AED)",
+                      }}
+                    >
+                      🚀 Get Early Access
+                  </button>
+                    
+                    <button
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        handleDownloadClick();
+                      }}
+                      className="w-full bg-gray-100 text-gray-800 px-6 py-3 rounded-lg text-base font-medium hover:bg-gray-200 transition-colors"
+                    >
+                      Download App
+                    </button>
+                    
+                    <div className="text-center">
+                      <p className="text-xs text-gray-500">
+                        © 2024 Hushh. All rights reserved.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
+
+          {/* No header spacer needed with sticky positioning */}
         </div>
       )}
-      
-      {/* This is the spacer that compensates for the fixed header */}
-      {shouldShowHeader && (
-        <div style={{ height: "70px" }} className="w-full"></div>
-      )}
+
+      <style jsx>{`
+        @keyframes fadeInDown {
+          from {
+            opacity: 0;
+            transform: translateY(-12px) scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+        
+        @keyframes slideInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateX(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        .dropdown-item:hover {
+          transform: translateX(2px);
+        }
+        
+        .animate-item {
+          opacity: 0;
+          animation-fill-mode: both;
+        }
+        
+        /* Enhanced mobile menu animations */
+        .mobile-menu-item {
+          transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .mobile-menu-item:hover {
+          transform: translateY(-2px) scale(1.02);
+        }
+        
+        .mobile-menu-item:active {
+          transform: translateY(0) scale(0.98);
+        }
+        
+        .mobile-menu-section {
+          border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+          padding-bottom: 1rem;
+        }
+        
+        .mobile-menu-section:last-child {
+          border-bottom: none;
+        }
+        
+        /* Custom smooth scrollbar for mobile menu */
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0.05);
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: linear-gradient(135deg, #007AFF, #5E5CE6);
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(135deg, #0056CC, #4A47A3);
+        }
+        
+        /* Enhanced button hover effects */
+        .nav-button {
+          position: relative;
+          overflow: hidden;
+        }
+        .nav-button::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+          transition: left 0.5s ease;
+        }
+        .nav-button:hover::before {
+          left: 100%;
+        }
+        
+        /* Mobile touch feedback */
+        @media (max-width: 1024px) {
+          .touch-feedback {
+            transition: all 0.2s ease;
+          }
+          .touch-feedback:active {
+            transform: scale(0.95);
+            opacity: 0.8;
+          }
+        }
+        
+
+      `}</style>
     </>
   );
 }

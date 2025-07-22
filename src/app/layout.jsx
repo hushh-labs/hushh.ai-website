@@ -91,7 +91,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${figtree.variable} `}>
+    <html lang="en" className={`${figtree.variable} ${figtree.className}`}>
       <Script
         async
         src="https://www.googletagmanager.com/gtag/js?id=G-1PDGMHH7CL"
@@ -109,22 +109,21 @@ export default function RootLayout({ children }) {
         content="2yMPgnyqy54zZFkGkUxbtKD_9R60gWhe5Hk-DTYff9M"
       />
       <head>
-        {/* Preconnect to essential domains */}
+        {/* Font Preloading for instant loading */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Figtree:ital,wght@0,300..900;1,300..900&family=Inter:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Figtree:ital,wght@0,300..900;1,300..900&family=Inter:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-          rel="stylesheet"
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link 
+          rel="preload" 
+          href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" 
+          as="style" 
+          onLoad="this.onload=null;this.rel='stylesheet'"
         />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Figtree:ital,wght@0,300..900;1,300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-          rel="stylesheet"
-        />
+        <noscript>
+          <link 
+            href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" 
+            rel="stylesheet"
+          />
+        </noscript>
       </head>
 
       <body
@@ -134,43 +133,28 @@ export default function RootLayout({ children }) {
           paddingInlineStart: "0px !important",
           paddingInlineEnd: "0px !important",
         }}
+        className={figtree.className}
       >
         <NextTopLoader
-            color="red"
+            color="#007AFF"
             initialPosition={0.08}
-            crawlSpeed={200}
+            crawlSpeed={300}
             height={3}
             crawl={true}
-            showSpinner={true}
+            showSpinner={false}
             easing="ease"
-            speed={200}
-            shadow="0 0 10px #2299DD,0 0 5px #2299DD"
+            speed={500}
+            shadow="0 0 20px rgba(0, 122, 255, 0.6), 0 0 40px rgba(94, 92, 230, 0.4)"
             template='
-                      <div class="bar" role="bar">
-                        <div class="peg">
-                        </div>
-                      </div>
-                      <div class="spinner" role="spinner">
-                        <div class="spinner-icon">
+                      <div class="bar" role="bar" style="background: linear-gradient(135deg, #007AFF 0%, #5E5CE6 50%, #7C3AED 100%); box-shadow: 0 0 20px rgba(0, 122, 255, 0.6), 0 0 40px rgba(94, 92, 230, 0.4);">
+                        <div class="peg" style="background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.8) 100%); box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.4);">
                         </div>
                       </div>
                       '
-            zIndex={1600}
+            zIndex={99999}
             showAtBottom={false}
           />
         <link rel="icon" href="./favicon.ico" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Figtree:ital,wght@0,300..900;1,300..900&display=swap"
-          rel="stylesheet"
-        />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap"
-          rel="stylesheet"
-        />
         
         {/* <div className="relative z-50">
           <HushhButtonFromLib />

@@ -3,13 +3,19 @@
 @tailwind utilities;
 
 body {
-  font-family: "Figtree" !important;
+  font-family: var(--font-figtree), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif !important;
   padding: 0 !important;
   width: 100% !important;
+  font-display: swap;
 }
 
 body, input, button, textarea, select {
-  font-family: 'Figtree', sans-serif;
+  font-family: var(--font-figtree), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+}
+
+/* Ensure immediate font rendering with fallback */
+* {
+  font-family: var(--font-figtree), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }
 
 /* Code block styling for syntax highlighting */

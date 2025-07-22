@@ -1,5 +1,4 @@
-import { Box, Heading, Link, Text, VStack } from "@chakra-ui/react";
-import extendedTheme from "../theme";
+import { Box, Heading, Link, Text, VStack, HStack, Grid } from "@chakra-ui/react";
 import React from "react";
 import TeamSection from "../_components/features/teamSection";
 import AboutGroupPhoto from "../_components/svg/aboutImages/AboutGroupPhoto.svg";
@@ -10,7 +9,6 @@ import AboutMission from "../_components/svg/aboutImages/AboutMission.svg";
 import AboutVision from "../_components/svg/aboutImages/AboutVision.svg";
 import ContactForm from "../_components/features/contactForm";
 import AboutFaq from "../_components/features/faq/aboutFaq";
-import Head from "next/head";
 import ImageGrid from "../_components/features/dynamicImageGrid";
 import { siteMetadata } from "../sitemetadata";
 import ContentWrapper from "../_components/layout/ContentWrapper";
@@ -90,266 +88,530 @@ const organizationJsonLd = {
 };
 
 export default function About() {
-  const gradient = "linear(63.68deg, #ADA785, #D6D3C2)";
-
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
       />
-      <div className="w-full">
-        <ContentWrapper includeHeaderSpacing={true}>  
-          <Box
-            w={"100%"}
-            h={"100%"}
-            minW={'100%'}
-            px={{ base: "1.5rem", md: "6.25rem" }}
-            background={"black"}
-            fontFamily={"Figtree"}
-            mb={{ base: "2rem", md: "10.5rem" }}
-          >
-          <div className="md:flex md:justify-between md:gap-36">
-            <div className="md:flex-1 w-full">
-              <Heading
-                as={"h1"}
-                fontWeight={"300"}
-                fontSize={"6rem"}
-                lineHeight={"6rem"}
-                letterSpacing={"-6%"}
+      <ContentWrapper>
+      <Box bg="#f5f5f7" w="full">
+        {/* Hero Section */}
+        <Box py={{ base: 20, md: 24, lg: 32 }}>
+          <Box maxW="container.xl" mx="auto" px={{ base: 4, md: 6, lg: 8 }}>
+            
+            {/* About Badge */}
+            <Box textAlign="center" mb={{ base: 8, md: 12, lg: 16 }}>
+              <Text
+                fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
+                fontWeight="700"
+                bgGradient="linear(to-r, #0071E3, #BB62FC, #DA4B7A, #F44F22)"
+                bgClip="text"
+                letterSpacing="-0.02em"
+                fontFamily="Inter, sans-serif"
               >
-                <Text color={"#ADA785"}>About</Text>
-                <Text color={extendedTheme.colors.white}>hushh</Text>
-              </Heading>
-              <div className="pt-24 text-fontColor4 pb-8 leading-9">
-                At Hushh, we believe your data is your most valuable asset.
-                That's why we're building the tools to put you back in the
-                driver's seat. We envision a world where you have complete
-                control over your digital identity, choosing how your data is
-                used and deriving true benefit from it.
-              </div>
-              <div className="flex flex-col gap-16">
-                <div className="">
-                  <div className="pb-5 flex items-center gap-10">
-                    <Text
-                      bgGradient={gradient}
-                      bgClip={"text"}
-                      fontSize={"6xl"}
-                      width={"11.25rem"}
+                About Hushh
+              </Text>
+            </Box>
+
+            <VStack spacing={{ base: 12, md: 16, lg: 20 }} align="center" maxW="6xl" mx="auto">
+              
+              {/* Main Headline */}
+              <VStack spacing={6} align="center" textAlign="center">
+              <Heading
+                  as="h1"
+                  fontSize={{ base: "40px", md: "64px", lg: "80px", xl: "96px" }}
+                  fontWeight="bold"
+                  lineHeight={{ base: 1.1, md: 1.0, lg: 0.95 }}
+                  letterSpacing={{ base: "-1px", md: "-2px", lg: "-3px" }}
+                  color="black"
+                  fontFamily="Inter, sans-serif"
+                  maxW={{ base: "100%", md: "90%", lg: "85%", xl: "80%" }}
+                >
+                  Building the future of{" "}
+                  <Text as="span" bgGradient="linear(to-r, #0071E3, #BB62FC)" bgClip="text">
+                    data sovereignty
+                  </Text>
+                </Heading>
+              </VStack>
+
+              {/* Description */}
+              <Text
+                fontSize={{ base: "18px", md: "20px", lg: "24px" }}
+                textAlign="center"
+                lineHeight={{ base: 1.6, md: 1.5, lg: 1.4 }}
+                color="#1d1d1d"
+                fontWeight="400"
+                maxW={{ base: "100%", md: "85%", lg: "75%", xl: "70%" }}
+                fontFamily="Inter, sans-serif"
+                letterSpacing="-0.01em"
+              >
+                At Hushh, we believe your data is your most valuable asset. That's why we're building the tools to put you back in the driver's seat. We envision a world where you have complete control over your digital identity, choosing how your data is used and deriving true benefit from it.
+              </Text>
+
+            </VStack>
+          </Box>
+        </Box>
+        {/* Stats & Images Section */}
+        <Box bg="white">
+          <Box maxW="container.xl" mx="auto" px={{ base: 4, md: 6, lg: 8 }} py={{ base: 16, md: 20, lg: 24 }}>
+            <Box display={{ base: "block", lg: "flex" }} gap={{ lg: 16, xl: 20 }} alignItems="flex-start">
+              
+              {/* Stats Column */}
+              <Box flex="1" mb={{ base: 12, lg: 0 }}>
+                <VStack spacing={{ base: 8, md: 10, lg: 12 }} align="flex-start">
+                  
+                  {/* LinkedIn Followers */}
+                  <Box w="full">
+                    <HStack spacing={{ base: 6, md: 8 }} align="center" mb={4}>
+                      <Heading
+                        fontSize={{ base: "48px", md: "64px", lg: "72px" }}
+                        fontWeight="bold"
+                        bgGradient="linear(to-r, #0071E3, #BB62FC)"
+                        bgClip="text"
+                        fontFamily="Inter, sans-serif"
+                        lineHeight={1}
+                        minW={{ base: "120px", md: "180px", lg: "200px" }}
                     >
                       86k+
-                    </Text>
-                    <p className="text-fontColor4">LinkedIn Followers</p>
-                  </div>
-                  <hr className="h-[1px] bg-gradient-to-r from-lineGradient1 via-lineGradient2 to-lineGradient3" />
-                </div>
-                <div className="">
-                  <div className="pb-5 flex items-center gap-10">
-                    <Text
-                      bgGradient={gradient}
-                      bgClip={"text"}
-                      fontSize={"6xl"}
-                      width={"11.25rem"}
-                    >
-                      8+
-                    </Text>
-                    <p className="text-fontColor4">Products</p>
-                  </div>
-                  <hr className="h-[1px] bg-gradient-to-r from-lineGradient1 to-opacity-0 via-lineGradient2 to-opacity-87 via-opacity-100 to-lineGradient3" />
-                </div>
-                <div className="">
-                  <div className="pb-5 flex items-center gap-10">
-                    <div className="flex items-center gap-2.5 w-[11.25rem]">
+                      </Heading>
                       <Text
-                        bgGradient={gradient}
-                        bgClip={"text"}
-                        fontSize={"6xl"}
+                        fontSize={{ base: "16px", md: "18px", lg: "20px" }}
+                        color="#1d1d1d"
+                        fontFamily="Inter, sans-serif"
+                        fontWeight="400"
                       >
-                        20
+                        LinkedIn Followers
+                    </Text>
+                    </HStack>
+                    <Box h="1px" bg="linear-gradient(90deg, #0071E3 0%, #BB62FC 50%, transparent 100%)" />
+                  </Box>
+
+                  {/* Products */}
+                  <Box w="full">
+                    <HStack spacing={{ base: 6, md: 8 }} align="center" mb={4}>
+                      <Heading
+                        fontSize={{ base: "48px", md: "64px", lg: "72px" }}
+                        fontWeight="bold"
+                        bgGradient="linear(to-r, #0071E3, #BB62FC)"
+                        bgClip="text"
+                        fontFamily="Inter, sans-serif"
+                        lineHeight={1}
+                        minW={{ base: "120px", md: "180px", lg: "200px" }}
+                      >
+                        8+
+                      </Heading>
+                      <Text
+                        fontSize={{ base: "16px", md: "18px", lg: "20px" }}
+                        color="#1d1d1d"
+                        fontFamily="Inter, sans-serif"
+                        fontWeight="400"
+                      >
+                        Products
                       </Text>
-                      <div className=" text-fontColor4">
-                        <p>(Q4)</p>
-                        <p>2021</p>
-                      </div>
-                    </div>
-                    <p className="text-fontColor4">
-                      Team
-                      <br />
-                      Member and Growing
-                    </p>
-                  </div>
-                  <hr className="h-[1px] bg-gradient-to-r from-lineGradient1 to-opacity-0 via-lineGradient2 to-opacity-87 via-opacity-100 to-lineGradient3" />
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col gap-10 mt-12 md:mt-0">
-              <div className="">
-                <Image src={AboutGroupPhoto} alt="Group Photo" />
-              </div>
-              <div className="flex flex-col md:flex-row gap-10 md:items-start items-center">
-                <div className="">
-                  <Image src={AboutOfficePhoto} alt="Office Photo" />
-                </div>
-                <div className="">
-                  <Image src={AboutDockPhoto} alt="Dock Photo" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="md:flex-row flex flex-col gap-12 pt-12 md:pt-0 md:gap-36 md:-translate-y-40">
-            <div className="md:w-[25rem] flex flex-col gap-5 ">
-              <p className=" text-fontColor5 font-bold text-[22px]">History</p>
-              <p className=" text-fontColor4 font-medium leading-9">
-                Hushh arose from a deep understanding of the modern digital
-                landscape. In a world where our data is constantly collected,
-                analyzed, and often used without our full knowledge or consent,
-                we recognized the urgent need for change. <br />
-                Our journey began with a simple question: What if individuals
-                weren't just data points, but active owners of their digital
-                selves? This question sparked a movement. We set out to develop
-                the technology and tools to make this vision a reality. <br />
-                Hushh is not just about software; it's about a shift in power
-                dynamics. We're dedicated to a future where everyone has the
-                tools to reclaim their data, using it for their own empowerment
-                and benefit. Our history is still being written, and we invite
-                you to be part of the next chapter.
-              </p>
-            </div>
-            <div className="md:w-[25rem] flex flex-col gap-5 ">
-              <p className=" text-fontColor5 font-bold text-[22px]">
-                Growing team
-              </p>
-              <p className=" text-fontColor4 font-medium leading-9">
-                Hushh isn't just about technology; it's about the passionate
-                people behind it. Our team is a dynamic mix of privacy
-                champions, skilled engineers, creative designers, and visionary
-                thinkers. We're united by a shared belief in the power of
-                individual data control and a relentless drive to innovate.
-                We're constantly seeking out bright minds and diverse
-                perspectives to join our mission. If you're passionate about
-                data privacy and empowerment, cutting-edge technology,
-                disrupting established industries, and making a real-world
-                impact, then Hushh might be the perfect place for you. Explore
-                our current openings {" "}
-                <Link href="/career" passHref>
-                  <a className="text-fontColor5 font-bold underline">here</a>
-                </Link>{" "}
-                 and
-                become part of the team that's changing the data landscape, one
-                user at a time.
-              </p>
-            </div>
-          </div>
+                    </HStack>
+                    <Box h="1px" bg="linear-gradient(90deg, #0071E3 0%, #BB62FC 50%, transparent 100%)" />
+                  </Box>
 
-          <VStack
-            mt={{ md: "10rem", base: "6rem" }}
-            display={"flex"}
-            textAlign={"center"}
-            alignItems={"center"}
-            justifyContent={"center"}
-          >
+                  {/* Team Members */}
+                  <Box w="full">
+                    <HStack spacing={{ base: 6, md: 8 }} align="center" mb={4}>
+                      <HStack spacing={2} minW={{ base: "120px", md: "180px", lg: "200px" }}>
+                        <Heading
+                          fontSize={{ base: "48px", md: "64px", lg: "72px" }}
+                          fontWeight="bold"
+                          bgGradient="linear(to-r, #0071E3, #BB62FC)"
+                          bgClip="text"
+                          fontFamily="Inter, sans-serif"
+                          lineHeight={1}
+                        >
+                          20
+                        </Heading>
+                        <VStack spacing={0} align="flex-start">
             <Text
-              className="hushh-gradient"
-              fontWeight={"600"}
-              fontSize={{ md: "1rem", base: "0.75rem" }}
-              lineHeight={"16px"}
-              letterSpacing={"0.255rem"}
-            >
-              HUSHH
+                            fontSize={{ base: "12px", md: "14px" }}
+                            color="#666"
+                            fontFamily="Inter, sans-serif"
+                            fontWeight="400"
+                          >
+                            (Q4)
             </Text>
             <Text
-              className="gradient"
-              fontWeight={"600"}
-              lineHeight={{ md: "63.3px", base: "40px" }}
-              fontSize={{ md: "3.75rem", base: "2rem" }}
-            >
-              #VIVATECH 2024
-            </Text>
-            <Text
-              mx={{ md: "20%", base: "5%" }}
-              color={"#ABABAB"}
-              fontWeight={"500"}
-              fontSize={{ md: "1rem", base: "0.75rem" }}
-              lineHeight={{ md: "30px", base: "24px" }}
-            >
-              VivaTech 2024 was a record-breaking Paris tech conference with
-              165,000+ attendees from 120+ countries. The event highlighted AI
-              advancements, sustainable tech, and diversity in the industry.
-              With global participation, VivaTech fostered business connections
-              and showcased innovations shaping the future of technology
-            </Text>
-          </VStack>
-          {<ImageGrid />}
+                            fontSize={{ base: "12px", md: "14px" }}
+                            color="#666"
+                            fontFamily="Inter, sans-serif"
+                            fontWeight="400"
+                          >
+                            2021
+                          </Text>
+                        </VStack>
+                      </HStack>
+                      <Text
+                        fontSize={{ base: "16px", md: "18px", lg: "20px" }}
+                        color="#1d1d1d"
+                        fontFamily="Inter, sans-serif"
+                        fontWeight="400"
+                      >
+                        Team Members and Growing
+                      </Text>
+                    </HStack>
+                    <Box h="1px" bg="linear-gradient(90deg, #0071E3 0%, #BB62FC 50%, transparent 100%)" />
+                  </Box>
 
-          <div className="text-center md:mt-0 mt-24">
-            <VStack>
+                  
+                  {/* Growing Team Content - Below Stats */}
+                  <VStack spacing={{ base: 6, md: 8 }} align="flex-start" w="full" mt={{ base: 12, md: 16, lg: 20 }}>
+                    <Heading
+                      as="h3"
+                      fontSize={{ base: "32px", md: "40px", lg: "48px" }}
+                      fontWeight="bold"
+                      color="black"
+                      fontFamily="Inter, sans-serif"
+                      letterSpacing="-0.02em"
+                      lineHeight={1.2}
+                    >
+                      Growing Team
+                    </Heading>
+                    <Text
+                      fontSize={{ base: "18px", md: "20px", lg: "22px" }}
+                      color="#1d1d1d"
+                      fontFamily="Inter, sans-serif"
+                      lineHeight={1.6}
+                      letterSpacing="-0.01em"
+                      fontWeight="400"
+                      mb={{ base: 4, md: 6 }}
+                    >
+                      Hushh isn't just about technology; it's about the passionate people behind it. Our team is a dynamic mix of privacy champions, skilled engineers, creative designers, and visionary thinkers. We're united by a shared belief in the power of individual data control and a relentless drive to innovate.
+                    </Text>
+                    <Text
+                      fontSize={{ base: "18px", md: "20px", lg: "22px" }}
+                      color="#1d1d1d"
+                      fontFamily="Inter, sans-serif"
+                      lineHeight={1.6}
+                      letterSpacing="-0.01em"
+                      fontWeight="400"
+                    >
+                      We're constantly seeking out bright minds and diverse perspectives to join our mission. If you're passionate about data privacy and empowerment, cutting-edge technology, disrupting established industries, and making a real-world impact, then Hushh might be the perfect place for you. Explore our current openings{" "}
+                      <Text as="span" color="#0071E3" fontWeight="600" fontFamily="Inter, sans-serif">
+                        <Link href="/career">here</Link>
+                      </Text>{" "}
+                      and become part of the team that's changing the data landscape, one user at a time.
+                    </Text>
+                  </VStack>
+
+                </VStack>
+              </Box>
+
+              {/* Images Column */}
+              <Box flex="1">
+                <VStack spacing={{ base: 6, md: 8 }} align="center" w="full">
+                  {/* Main Group Photo */}
+                  <Box
+                    position="relative"
+                    width="100%"
+                    height={{ base: "250px", md: "400px", lg: "500px", xl: "550px" }}
+                    borderRadius="20px"
+                    overflow="hidden"
+                    boxShadow="0 8px 32px rgba(0, 0, 0, 0.12)"
+                    bg="white"
+                    p={3}
+                    _hover={{
+                      transform: "translateY(-4px)",
+                      boxShadow: "0 12px 40px rgba(0, 0, 0, 0.15)"
+                    }}
+                    transition="all 0.3s ease"
+                  >
+                    <Box
+                      position="relative"
+                      width="100%"
+                      height="100%"
+                      borderRadius="16px"
+                      overflow="hidden"
+                    >
+                      <Image 
+                        src={AboutGroupPhoto} 
+                        alt="Hushh Team Group Photo" 
+                        fill
+                        priority
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        style={{ 
+                          objectFit: 'cover',
+                          objectPosition: 'center'
+                        }} 
+                      />
+                    </Box>
+                  </Box>
+                  
+                  {/* Bottom Two Photos Grid */}
+                  <Grid
+                    templateColumns="1fr 1fr"
+                    gap={{ base: 4, md: 6 }}
+                    w="full"
+                  >
+                    {/* Office Photo */}
+                    <Box
+                      position="relative"
+                      width="100%"
+                      height={{ base: "140px", md: "200px", lg: "240px", xl: "260px" }}
+                      borderRadius="16px"
+                      overflow="hidden"
+                      boxShadow="0 6px 24px rgba(0, 0, 0, 0.1)"
+                      bg="white"
+                      p={2}
+                      _hover={{
+                        transform: "translateY(-2px)",
+                        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)"
+                      }}
+                      transition="all 0.3s ease"
+                    >
+                      <Box
+                        position="relative"
+                        width="100%"
+                        height="100%"
+                        borderRadius="12px"
+                        overflow="hidden"
+                      >
+                        <Image 
+                          src={AboutOfficePhoto} 
+                          alt="Hushh Office Photo" 
+                          fill
+                          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
+                          style={{ 
+                            objectFit: 'cover',
+                            objectPosition: 'center'
+                          }} 
+                        />
+                      </Box>
+                    </Box>
+
+                    {/* Dock Photo */}
+                    <Box
+                      position="relative"
+                      width="100%"
+                      height={{ base: "140px", md: "200px", lg: "240px", xl: "260px" }}
+                      borderRadius="16px"
+                      overflow="hidden"
+                      boxShadow="0 6px 24px rgba(0, 0, 0, 0.1)"
+                      bg="white"
+                      p={2}
+                      _hover={{
+                        transform: "translateY(-2px)",
+                        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)"
+                      }}
+                      transition="all 0.3s ease"
+                    >
+                      <Box
+                        position="relative"
+                        width="100%"
+                        height="100%"
+                        borderRadius="12px"
+                        overflow="hidden"
+                      >
+                        <Image 
+                          src={AboutDockPhoto} 
+                          alt="Hushh Dock Photo" 
+                          fill
+                          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
+                          style={{ 
+                            objectFit: 'cover',
+                            objectPosition: 'center'
+                          }} 
+                        />
+                      </Box>
+                    </Box>
+                  </Grid>
+                </VStack>
+              </Box>
+
+            </Box>
+          </Box>
+        </Box>
+
+        {/* VivaTech 2024 Section */}
+        <Box bg="white">
+          <Box maxW="container.xl" mx="auto" px={{ base: 4, md: 6, lg: 8 }} py={{ base: 16, md: 20, lg: 24 }}>
+            
+            {/* Section Header */}
+            <VStack spacing={{ base: 6, md: 8 }} align="center" mb={{ base: 12, md: 16 }}>
               <Text
-                as={"h2"}
-                className="color-gradient"
-                fontWeight={600}
-                letterSpacing={"0.25rem"}
-                fontSize={"1rem"}
+                fontSize={{ base: "14px", md: "16px" }}
+                fontWeight="600"
+                textAlign="center"
+                color="#666"
+                letterSpacing="0.08em"
+                textTransform="uppercase"
+                fontFamily="Inter, sans-serif"
               >
-                CORE VALUE COMPANY
+                Hushh
               </Text>
-              <Text
-                className="gradient"
-                fontWeight={"400"}
-                fontSize={{ base: "2.5rem", md: "3.75rem" }}
-                lineHeight={"63.3px"}
+              
+              <Heading
+                as="h2"
+                fontSize={{ base: "36px", md: "48px", lg: "56px" }}
+                fontWeight="bold"
+                color="black"
+                fontFamily="Inter, sans-serif"
+                letterSpacing="-0.02em"
+                lineHeight={1.2}
+                textAlign="center"
               >
-                Our Mission and Vision
-              </Text>
+                #VIVATECH 2024
+              </Heading>
+              
               <Text
-                mt={"2rem"}
-                textAlign={"center"}
-                color={extendedTheme.colors.secondary}
+                fontSize={{ base: "16px", md: "18px", lg: "20px" }}
+                color="#1d1d1d"
+                fontFamily="Inter, sans-serif"
+                lineHeight={1.6}
+                letterSpacing="-0.01em"
+                fontWeight="400"
+                textAlign="center"
+                maxW="4xl"
               >
-                Building a world where data works for you, not against you.
+                VivaTech 2024 was a record-breaking Paris tech conference with 165,000+ attendees from 120+ countries. The event highlighted AI advancements, sustainable tech, and diversity in the industry. With global participation, VivaTech fostered business connections and showcased innovations shaping the future of technology.
               </Text>
             </VStack>
-            <div className="flex flex-col md:flex-row gap-12 md:gap-36 mt-20 md:mt-40 mb-24 md:mb-36">
-              <div className="flex flex-col gap-10">
-                <Image src={AboutMission} alt="aboutMission" />
-                <div className="md:w-[25rem] text-left">
-                  <p className=" text-fontColor5 font-bold text-[22px]">
-                    Our Mission
-                  </p>
-                  <p className=" text-fontColor4 font-medium leading-9">
-                    Hushh's mission is to empower individuals to reclaim,
-                    understand, and harness the full potential of their personal
-                    data within a secure and privacy-centric ecosystem. We
-                    provide tools that centralize data, offer insights into its
-                    use, and create avenues for individuals to benefit from
-                    their own information while maintaining complete control
-                    over their privacy. Hushh aims to shift the balance of
-                    power, transforming data from a corporate tool into a
-                    catalyst for individual empowerment.
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col gap-10">
-                <Image src={AboutVision} alt="aboutVision" />
-                <div className="text-left">
-                  <p className=" text-fontColor5 font-bold text-[22px]">
-                    Our Vision
-                  </p>
-                  <p className=" text-fontColor4 font-medium leading-9">
-                    We envision a future where the responsible and ethical use
-                    of personal data leads to unprecedented levels of
-                    personalization, convenience, and self-driven opportunity,
-                    all while prioritizing individual privacy.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+
+            {/* Image Grid */}
+            <ImageGrid />
+          </Box>
+        </Box>
+
+        {/* Core Values and Origin Section */}
+        <Box bg="#f5f5f7" py={{ base: 16, md: 20, lg: 24 }}>
+          <Box maxW="container.xl" mx="auto" px={{ base: 4, md: 6, lg: 8 }}>
+            
+            {/* Main Title */}
+            <Heading
+              as="h2"
+              fontSize={{ base: "48px", md: "64px", lg: "96px" }}
+              fontWeight="bold"
+              color="black"
+              fontFamily="Inter, sans-serif"
+              letterSpacing={{ base: "-0.96px", md: "-1.28px", lg: "-1.92px" }}
+              lineHeight={{ base: "60px", md: "80px", lg: "120px" }}
+              textAlign="center"
+              mb={{ base: 12, md: 16, lg: 20 }}
+            >
+              Core Values and Origin
+            </Heading>
+
+            {/* Content Grid */}
+            <Grid
+              templateColumns={{ base: "1fr", lg: "1fr 1fr" }}
+              gap={{ base: 12, md: 16, lg: 20 }}
+              mb={{ base: 12, md: 16, lg: 20 }}
+            >
+              {/* Mission Section */}
+              <Box>
+                <Heading
+                  as="h3"
+                  fontSize={{ base: "40px", md: "48px", lg: "64px" }}
+                  fontWeight="bold"
+                  color="black"
+                  fontFamily="Inter, sans-serif"
+                  letterSpacing={{ base: "-0.8px", md: "-0.96px", lg: "-1.28px" }}
+                  lineHeight={{ base: "50px", md: "60px", lg: "120px" }}
+                  mb={{ base: 4, md: 6 }}
+                >
+                  Mission
+                </Heading>
+                <Text
+                  fontSize={{ base: "18px", md: "20px", lg: "22px" }}
+                  color="#1d1d1d"
+                  fontFamily="Inter, sans-serif"
+                  lineHeight={1.6}
+                  letterSpacing="-0.01em"
+                  fontWeight="400"
+                  mb={{ base: 4, md: 6 }}
+                >
+                  Hushh's mission is to empower individuals to reclaim, understand, and harness the full potential of their personal data within a secure and privacy-centric ecosystem. We provide tools that centralize data, offer insights into its use, and create avenues for individuals to benefit from their own information while maintaining complete control over their privacy. Hushh aims to shift the balance of power, transforming data from a corporate tool into a catalyst for individual empowerment.
+                </Text>
+              </Box>
+
+              {/* History Section */}
+              <Box>
+                <Heading
+                  as="h3"
+                  fontSize={{ base: "40px", md: "48px", lg: "64px" }}
+                  fontWeight="bold"
+                  color="black"
+                  fontFamily="Inter, sans-serif"
+                  letterSpacing={{ base: "-0.8px", md: "-0.96px", lg: "-1.28px" }}
+                  lineHeight={{ base: "50px", md: "60px", lg: "120px" }}
+                  mb={{ base: 4, md: 6 }}
+                >
+                  History
+                </Heading>
+                <Text
+                  fontSize={{ base: "18px", md: "20px", lg: "22px" }}
+                  color="#1d1d1d"
+                  fontFamily="Inter, sans-serif"
+                  lineHeight={1.6}
+                  letterSpacing="-0.01em"
+                  fontWeight="400"
+                  mb={{ base: 4, md: 6 }}
+                >
+                  Hushh arose from a deep understanding of the modern digital landscape. In a world where our data is constantly collected, analyzed, and often used without our full knowledge or consent, we recognized the urgent need for change.
+                </Text>
+                <Text
+                  fontSize={{ base: "18px", md: "20px", lg: "22px" }}
+                  color="#1d1d1d"
+                  fontFamily="Inter, sans-serif"
+                  lineHeight={1.6}
+                  letterSpacing="-0.01em"
+                  fontWeight="400"
+                  mb={{ base: 4, md: 6 }}
+                >
+                  Our journey began with a simple question: What if individuals weren't just data points, but active owners of their digital selves? This question sparked a movement. We set out to develop the technology and tools to make this vision a reality.
+                </Text>
+              </Box>
+            </Grid>
+
+            {/* Vision Section - Full Width */}
+            <Box>
+              <Heading
+                as="h3"
+                fontSize={{ base: "40px", md: "48px", lg: "64px" }}
+                fontWeight="bold"
+                color="black"
+                fontFamily="Inter, sans-serif"
+                letterSpacing={{ base: "-0.8px", md: "-0.96px", lg: "-1.28px" }}
+                lineHeight={{ base: "50px", md: "60px", lg: "120px" }}
+                mb={{ base: 4, md: 6 }}
+              >
+                Vision
+              </Heading>
+              <Text
+                fontSize={{ base: "18px", md: "20px", lg: "22px" }}
+                color="#1d1d1d"
+                fontFamily="Inter, sans-serif"
+                lineHeight={1.6}
+                letterSpacing="-0.01em"
+                fontWeight="400"
+                mb={{ base: 4, md: 6 }}
+              >
+                We envision a future where the responsible and ethical use of personal data leads to unprecedented levels of personalization, convenience, and self-driven opportunity, all while prioritizing individual privacy.
+              </Text>
+            </Box>
+
+          </Box>
+        </Box>
+
+        {/* Team Section */}
+        <Box bg="white">
+          <Box maxW="container.xl" mx="auto" px={{ base: 4, md: 6, lg: 8 }} py={{ base: 16, md: 20, lg: 24 }}>
           <TeamSection />
           </Box>
-        </ContentWrapper>
+        </Box>
+
+        {/* FAQ Section */}
         <AboutFaq />
+
+        {/* Contact Form */}
         <ContactForm />
-      </div>
+      </Box>
+      </ContentWrapper>
     </>
   );
 }

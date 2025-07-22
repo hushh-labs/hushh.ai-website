@@ -1,5 +1,5 @@
 body, h1, h2, h3, h4, h5, h6, p {
-  font-family: 'Figtree','sans-serif' !important;
+  font-family: var(--font-figtree), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif !important;
     padding: 0 !important;
     width: 100% !important;
 }

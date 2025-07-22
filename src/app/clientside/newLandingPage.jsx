@@ -45,6 +45,7 @@ import HuggingFaceIcon from '../_components/svg/newLandingsvg/icons/huggingfaceI
 import SalesforceIcon from '../_components/svg/newLandingsvg/icons/salesforceIcon.svg';
 import { useRouter } from 'next/navigation';
 import ContentWrapper from '../_components/layout/ContentWrapper';
+import ContactForm from '../_components/features/contactForm'
 
 
 const NewLandingPage = () => {
@@ -622,10 +623,14 @@ const NewLandingPage = () => {
             <GridItem>
               <Box
                 borderRadius="xl"
-                h={{ base: "500px", md: "600px", lg: "830px" }}
+                h={{ base: "500px", md: "100%", lg: "100%" }}
                 w={{ base: "full", md: "400px" }}
                 maxW="400px"
                 position="relative"
+                onClick={() => {
+                  router.push("/products/personal-data-agent");
+                }}
+                cursor={"pointer"}
                 border="1px solid"
                 borderColor="#eaecf0"
                 _hover={{ transform: "translateY(-2px)", transition: "all 0.3s ease" }}
@@ -669,6 +674,36 @@ const NewLandingPage = () => {
 
                   {/* Spacer */}
                   <Box flex="1" />
+                  
+                  {/* Explore Now Button */}
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      router.push("/products/personal-data-agent");
+                    }}
+                    size="md"
+                    px={6}
+                    py={3}
+                    fontSize="sm"
+                    fontWeight="600"
+                    borderRadius="8px"
+                    bg="white"
+                    color="black"
+                    border="1px solid rgba(255, 255, 255, 0.2)"
+                    backdropFilter="blur(10px)"
+                    _hover={{
+                      bg: "#0071E3",
+                      color: "white",
+                      borderColor: "rgba(255, 255, 255, 0.3)",
+                      transform: "translateY(-1px)",
+                    }}
+                    _active={{
+                      transform: "scale(0.98)",
+                    }}
+                    transition="all 0.2s ease"
+                  >
+                    Explore now
+                  </Button>
                 </VStack>
 
                 {/* Arrow Icon */}
@@ -703,6 +738,10 @@ const NewLandingPage = () => {
                   borderColor="#eaecf0"
                   _hover={{ transform: "translateY(-2px)", transition: "all 0.3s ease" }}
                   overflow="hidden"
+                  onClick={() => {
+                    router.push("/hushh-vault");
+                  }}  
+                  cursor={"pointer"}
                 >
                   {/* Background Image filling entire box */}
                   <NextImage
@@ -742,6 +781,36 @@ const NewLandingPage = () => {
 
                     {/* Spacer */}
                     <Box flex="1" />
+                    
+                    {/* Explore Now Button */}
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        router.push("/hushh-vault");
+                      }}
+                      size="sm"
+                      px={5}
+                      py={2}
+                      fontSize="xs"
+                      fontWeight="600"
+                      borderRadius="6px"
+                      bg="white"
+                      color="black"
+                      border="1px solid rgba(255, 255, 255, 0.2)"
+                      backdropFilter="blur(10px)"
+                      _hover={{
+                        bg: "#0071E3",
+                        color: "white",
+                        borderColor: "rgba(255, 255, 255, 0.3)",
+                        transform: "translateY(-1px)",
+                      }}
+                      _active={{
+                        transform: "scale(0.98)",
+                      }}
+                      transition="all 0.2s ease"
+                    >
+                      Explore now
+                    </Button>
                   </VStack>
 
                   <Box
@@ -767,6 +836,10 @@ const NewLandingPage = () => {
                   borderColor="#eaecf0"
                   _hover={{ transform: "translateY(-2px)", transition: "all 0.3s ease" }}
                   overflow="hidden"
+                  onClick={() => {
+                    router.push("/hushh-link");
+                  }}
+                  cursor={"pointer"}
                 >
                   {/* Background Image filling entire box */}
                   <NextImage
@@ -806,6 +879,36 @@ const NewLandingPage = () => {
 
                     {/* Spacer */}
                     <Box flex="1" />
+                    
+                    {/* Explore Now Button */}
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        router.push("/hushh-link");
+                      }}
+                      size="sm"
+                      px={5}
+                      py={2}
+                      fontSize="xs"
+                      fontWeight="600"
+                      borderRadius="6px"
+                      bg="white"
+                      color="black"
+                      border="1px solid rgba(255, 255, 255, 0.2)"
+                      backdropFilter="blur(10px)"
+                      _hover={{
+                        bg: "#0071E3",
+                        color: "white",
+                        borderColor: "rgba(255, 255, 255, 0.3)",
+                        transform: "translateY(-1px)",
+                      }}
+                      _active={{
+                        transform: "scale(0.98)",
+                      }}
+                      transition="all 0.2s ease"
+                    >
+                      Explore now
+                    </Button>
                   </VStack>
 
                   <Box
@@ -831,6 +934,10 @@ const NewLandingPage = () => {
                   borderColor="#eaecf0"
                   _hover={{ transform: "translateY(-2px)", transition: "all 0.3s ease" }}
                   overflow="hidden"
+                  onClick={() => {
+                    router.push("/products/hushh-flow");
+                  }}
+                  cursor={"pointer"}
                 >
                   {/* Background Image filling entire box */}
                   <NextImage
@@ -870,6 +977,36 @@ const NewLandingPage = () => {
 
                     {/* Spacer */}
                     <Box flex="1" />
+                    
+                    {/* Explore Now Button */}
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        router.push("/products/hushh-flow");
+                      }}
+                      size="sm"
+                      px={5}
+                      py={2}
+                      fontSize="xs"
+                      fontWeight="600"
+                      borderRadius="6px"
+                      bg="white"
+                      color="black"
+                      border="1px solid rgba(255, 255, 255, 0.2)"
+                      backdropFilter="blur(10px)"
+                      _hover={{
+                        bg: "#0071E3",
+                        color: "white",
+                        borderColor: "rgba(255, 255, 255, 0.3)",
+                        transform: "translateY(-1px)",
+                      }}
+                      _active={{
+                        transform: "scale(0.98)",
+                      }}
+                      transition="all 0.2s ease"
+                    >
+                      Explore now
+                    </Button>
                   </VStack>
 
                   <Box
@@ -895,7 +1032,11 @@ const NewLandingPage = () => {
                   borderColor="#eaecf0"
                   _hover={{ transform: "translateY(-2px)", transition: "all 0.3s ease" }}
                   overflow="hidden"
-                >
+                  onClick={() => {
+                    router.push("/products/hushh-grid");
+                  }}
+                  cursor={"pointer"}
+                  >
                   {/* Background Image filling entire box */}
                   <NextImage
                     src={HushhGridBgSvg}
@@ -934,6 +1075,36 @@ const NewLandingPage = () => {
 
                     {/* Spacer */}
                     <Box flex="1" />
+                    
+                    {/* Explore Now Button */}
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        router.push("/products/hushh-grid");
+                      }}
+                      size="sm"
+                      px={5}
+                      py={2}
+                      fontSize="xs"
+                      fontWeight="600"
+                      borderRadius="6px"
+                      bg="white"
+                      color="black"
+                      border="1px solid rgba(255, 255, 255, 0.2)"
+                      backdropFilter="blur(10px)"
+                      _hover={{
+                        bg: "#0071E3",
+                        color: "white",
+                        borderColor: "rgba(255, 255, 255, 0.3)",
+                        transform: "translateY(-1px)",
+                      }}
+                      _active={{
+                        transform: "scale(0.98)",
+                      }}
+                      transition="all 0.2s ease"
+                    >
+                      Explore now
+                    </Button>
                   </VStack>
 
                   <Box
@@ -1514,7 +1685,7 @@ const NewLandingPage = () => {
       </Container>
       </ContentWrapper>
 
-          <FooterComponent/>
+         <ContactForm/>
     </Box>
   )
 }
