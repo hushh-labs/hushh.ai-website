@@ -276,6 +276,11 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
           href: "/contact-us"
         },
         {
+          name: "Hushh Labs",
+          description: "Advanced AI research and development",
+          href: "/labs"
+        },
+        {
           name: "Careers",
           description: "Join our team",
           href: "/career"
@@ -478,6 +483,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                     </button>
                     {activeDropdown === 'company' && renderDropdownMenu('company', menuItems.company)}
                   </div>
+
                 </nav>
 
                 {/* Right side - Auth & CTA */}
@@ -1014,6 +1020,26 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                           ))}
                         </div>
                       )}
+                    </div>
+
+                    {/* Hushh Labs Direct Link for Mobile */}
+                    <div className="mobile-menu-section">
+                      <div
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setIsMenuOpen(false);
+                          router.push('/labs');
+                        }}
+                        className="cursor-pointer py-2"
+                      >
+                        <div className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors">
+                          Hushh Labs
+                        </div>
+                        <div className="text-sm text-gray-500 mt-1">
+                          Advanced AI research and development
+                        </div>
+                      </div>
                     </div>
                   </div>
 
