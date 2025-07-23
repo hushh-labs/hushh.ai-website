@@ -600,9 +600,10 @@ import { useRouter } from 'next/navigation';
                   />
                 </Box>
                 <Text
-                  fontSize={{ base: "sm", md: "md" }}
-                  fontWeight="500"
+                  fontSize={{ base: "sm", md: "lg" }}
+                  fontWeight="600"
                   color="#374151"
+                  letterSpacing="0%"
                   lineHeight="1.5"
                   textAlign="left"
                 >
