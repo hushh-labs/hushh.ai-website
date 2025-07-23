@@ -61,7 +61,7 @@ import { useRouter } from 'next/navigation';
       }
     }, []);
 
-      return (
+  return (
       <ContentWrapper>
       <Box bg="white" minH="100vh" overflowX="hidden" w="100%" maxW="100vw" style={{ scrollBehavior: 'smooth' }}>
         {/* Background Pattern */}

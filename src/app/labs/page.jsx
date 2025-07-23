@@ -60,7 +60,7 @@ const HushhLabsHome = () => {
     {
       title: "Advanced AI Models",
       description: "Large-scale neural networks, multimodal systems, and foundation models",
-      roles: "Principal AI Research Scientist, AI Research Scientist"
+      roles: "Principal AI Research Scientist"
     },
     {
       title: "AI Safety & Ethics",
@@ -70,7 +70,7 @@ const HushhLabsHome = () => {
     {
       title: "Applied AI Systems",
       description: "Production-ready AI infrastructure and machine learning operations",
-      roles: "ML Engineer, MLOps Engineer, Data Engineer"
+      roles: "ML Engineer, MLOps & Data Engineer"
     },
     {
       title: "AI Products",
@@ -81,78 +81,92 @@ const HushhLabsHome = () => {
 
   return (
     <ContentWrapper>   
-      <Box minH="100vh" bg="white">
+      <Box minH="100vh" bg="white" overflowX="hidden">
         {/* Hero Section */}
-        <Container maxW="7xl" pt={{ base: 15, md: 26 }} pb={{ base: 16, md: 24 }}>
+        <Container maxW="7xl" pt={{ base: 15, md: 26 }} pb={{ base: 16, md: 24 }} px={{ base: 1, sm: 2, md: 8 }}>
           <VStack spacing={{ base: 8, md: 12 }} textAlign="center" mb={{ base: 16, md: 24 }}>
-            <Badge 
-              fontSize={{ base: "24px", md: "32px", lg: "32px" }}
-              fontWeight="bold"
-              bgGradient="linear(90deg, hsla(210, 100%, 45%, 1) 0%, hsla(275, 96%, 69%, 1) 25%, hsla(354, 88%, 61%, 1) 50%, hsla(13, 91%, 55%, 1) 100%)"
-              bgClip="text"
-              letterSpacing="-0.02em"
-              fontFamily="Inter, sans-serif"
-              mb={{ base: 4, md: 6 }}
-            >
-              Super Supreme Intelligence Lab
-            </Badge>
+            <Box w="full" maxW={{ base: "100%", md: "none" }} px={{ base: 1, md: 0 }}>
+              <Text 
+                fontSize={{ base: "10px", xs: "12px", sm: "14px", md: "32px", lg: "32px" }}
+                fontWeight="bold"
+                bgGradient="linear(90deg, hsla(210, 100%, 45%, 1) 0%, hsla(275, 96%, 69%, 1) 25%, hsla(354, 88%, 61%, 1) 50%, hsla(13, 91%, 55%, 1) 100%)"
+                bgClip="text"
+                letterSpacing="-0.02em"
+                fontFamily="Inter, sans-serif"
+                mb={{ base: 4, md: 6 }}
+                textAlign="center"
+                maxW="100%"
+                wordBreak="break-word"
+                whiteSpace="normal"
+                lineHeight={{ base: "1.2", md: "1" }}
+                overflowWrap="break-word"
+                hyphens="auto"
+              >
+                Super Supreme Intelligence Lab
+              </Text>
+            </Box>
             
             <VStack spacing={6}>
               <Heading 
-                fontSize={{ base: "4xl", md: "6xl", lg: "7xl" }} 
+                fontSize={{ base: "2xl", xs: "3xl", sm: "4xl", md: "6xl", lg: "7xl" }} 
                 fontWeight="700"
                 color="gray.900"
                 lineHeight="0.9"
                 letterSpacing="-0.02em"
                 fontFamily="'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+                px={{ base: 1, md: 0 }}
+                maxW="100%"
+                wordBreak="break-word"
               >
                 Hushh Labs
               </Heading>
               
               <Text 
-                fontSize={{ base: "xl", md: "2xl" }} 
+                fontSize={{ base: "md", xs: "lg", sm: "xl", md: "2xl" }} 
                 color="gray.600"
                 maxW="4xl"
                 lineHeight="1.4"
                 fontWeight="400"
                 fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+                px={{ base: 1, md: 0 }}
               >
                 Building superintelligent AI systems that advance humanity's understanding of the universe 
                 and unlock unprecedented possibilities for knowledge and discovery.
               </Text>
             </VStack>
 
-            <VStack spacing={6} pt={8}>
-              <HStack spacing={{ base: 6, md: 12 }} flexWrap="wrap" justify="center">
-                <HStack spacing={3}>
+            <VStack spacing={6} pt={8} w="full">
+              <VStack spacing={{ base: 3, md: 6 }} w="full">
+                <HStack spacing={3} flexWrap="wrap" justify="center">
                   <Box w={2} h={2} bg="blue.500" borderRadius="full" />
-                  <Text color="gray.700" fontWeight="500" fontSize="lg">Stanford Partnership</Text>
+                  <Text color="gray.700" fontWeight="500" fontSize={{ base: "sm", md: "lg" }}>Stanford Partnership</Text>
                 </HStack>
-                <HStack spacing={3}>
+                <HStack spacing={3} flexWrap="wrap" justify="center">
                   <Box w={2} h={2} bg="blue.500" borderRadius="full" />
-                  <Text color="gray.700" fontWeight="500" fontSize="lg">Purdue Collaboration</Text>
+                  <Text color="gray.700" fontWeight="500" fontSize={{ base: "sm", md: "lg" }}>Purdue Collaboration</Text>
                 </HStack>
-                <HStack spacing={3}>
+                <HStack spacing={3} flexWrap="wrap" justify="center">
                   <Box w={2} h={2} bg="blue.500" borderRadius="full" />
-                  <Text color="gray.700" fontWeight="500" fontSize="lg">IIT Research</Text>
+                  <Text color="gray.700" fontWeight="500" fontSize={{ base: "sm", md: "lg" }}>IIT Research</Text>
                 </HStack>
-              </HStack>
+              </VStack>
               
-              <Flex gap={4} pt={6} flexWrap="wrap" justify="center">
+              <Flex gap={4} pt={6} flexWrap="wrap" justify="center" w="full" px={{ base: 2, md: 0 }}>
                 <Link href="/labs/career">
                   <Button
                     size="lg"
                     bg="#0071E3"
                     color="white"
-                    px={{ base: 8, md: 10 }}
-                    py={{ base: 6, md: 6 }}
+                    px={{ base: 4, sm: 6, md: 10 }}
+                    py={{ base: 3, sm: 4, md: 6 }}
                     borderRadius="60px"
-                    fontSize={{ base: "18px", md: "20px", lg: "32px" }}
+                    fontSize={{ base: "14px", sm: "16px", md: "20px", lg: "32px" }}
                     fontWeight="500"
                     fontFamily="Inter, sans-serif"
                     letterSpacing="-0.02em"
-                    minW={{ base: "250px", md: "300px" }}
-                    h={{ base: "50px", md: "70px" }}
+                    minW={{ base: "180px", sm: "200px", md: "300px" }}
+                    h={{ base: "40px", sm: "45px", md: "70px" }}
+                    maxW="95%"
                     _hover={{
                       bg: "#0056B3",
                       transform: "translateY(-2px)",
@@ -168,27 +182,6 @@ const HushhLabsHome = () => {
                     View Open Positions
                   </Button>
                 </Link>
-                {/* <Button
-                  variant="outline"
-                  borderColor="gray.300"
-                  color="gray.700"
-                  size="lg"
-                  borderRadius="12px"
-                  px={8}
-                  py={6}
-                  fontSize="lg"
-                  fontWeight="600"
-                  h="56px"
-                  _hover={{
-                    bg: "gray.50",
-                    borderColor: "gray.400",
-                    transform: "translateY(-1px)"
-                  }}
-                  transition="all 0.2s ease"
-                  fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-                >
-                  Research Publications
-                </Button> */}
               </Flex>
             </VStack>
           </VStack>
@@ -198,13 +191,16 @@ const HushhLabsHome = () => {
             mb={24} 
             bg="gray.50" 
             borderRadius="24px"
-            p={{ base: 8, md: 12 }}
+            p={{ base: 4, sm: 6, md: 12 }}
             border="1px solid"
             borderColor="gray.200"
+            mx={{ base: 1, sm: 2, md: 0 }}
+            maxW="100%"
+            overflow="hidden"
           >
             <VStack spacing={6} textAlign="center">
               <Heading 
-                size="xl" 
+                size={{ base: "lg", md: "xl" }}
                 color="gray.900"
                 fontWeight="600"
                 fontFamily="'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
@@ -212,7 +208,7 @@ const HushhLabsHome = () => {
                 Our Mission
               </Heading>
               <Text 
-                fontSize={{ base: "lg", md: "xl" }} 
+                fontSize={{ base: "md", sm: "lg", md: "xl" }} 
                 color="gray.600" 
                 lineHeight="1.6" 
                 maxW="4xl"
@@ -227,10 +223,10 @@ const HushhLabsHome = () => {
           </Box>
 
           {/* Lab Values */}
-          <VStack spacing={12} mb={24}>
+          <VStack spacing={12} mb={24} px={{ base: 1, sm: 2, md: 0 }}>
             <VStack spacing={4} textAlign="center">
               <Heading 
-                size="xl" 
+                size={{ base: "lg", md: "xl" }}
                 color="gray.900"
                 fontWeight="600"
                 fontFamily="'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
@@ -238,7 +234,7 @@ const HushhLabsHome = () => {
                 What Drives Us
               </Heading>
               <Text 
-                fontSize="lg" 
+                fontSize={{ base: "md", md: "lg" }}
                 color="gray.600"
                 fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
               >
@@ -246,7 +242,7 @@ const HushhLabsHome = () => {
               </Text>
             </VStack>
             
-            <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} w="full">
+            <SimpleGrid columns={{ base: 1, sm: 2, lg: 4 }} spacing={{ base: 4, md: 6 }} w="full">
               {labValues.map((value, index) => (
                 <Box 
                   key={index} 
@@ -259,7 +255,7 @@ const HushhLabsHome = () => {
                   }}
                   transition="all 0.2s ease"
                   borderRadius="16px"
-                  p={6}
+                  p={{ base: 4, md: 6 }}
                   textAlign="center"
                 >
                   <VStack spacing={4}>
@@ -274,7 +270,7 @@ const HushhLabsHome = () => {
                       <Icon as={value.icon} boxSize={6} color="gray.700" />
                     </Box>
                     <Heading 
-                      size="md" 
+                      size={{ base: "sm", md: "md" }}
                       color="gray.900"
                       fontWeight="600"
                       fontFamily="'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
@@ -284,7 +280,7 @@ const HushhLabsHome = () => {
                     <Text 
                       color="gray.600" 
                       lineHeight="1.5"
-                      fontSize="sm"
+                      fontSize={{ base: "xs", md: "sm" }}
                       fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
                     >
                       {value.description}
@@ -296,10 +292,10 @@ const HushhLabsHome = () => {
           </VStack>
 
           {/* Research Areas */}
-          <VStack spacing={12} mb={24}>
+          <VStack spacing={12} mb={24} px={{ base: 1, sm: 2, md: 0 }}>
             <VStack spacing={4} textAlign="center">
               <Heading 
-                size="xl" 
+                size={{ base: "lg", md: "xl" }}
                 color="gray.900"
                 fontWeight="600"
                 fontFamily="'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
@@ -307,7 +303,7 @@ const HushhLabsHome = () => {
                 Research Areas
               </Heading>
               <Text 
-                fontSize="lg" 
+                fontSize={{ base: "md", md: "lg" }}
                 color="gray.600"
                 fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
               >
@@ -315,7 +311,7 @@ const HushhLabsHome = () => {
               </Text>
             </VStack>
             
-            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6} w="full">
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, md: 6 }} w="full">
               {researchAreas.map((area, index) => (
                 <Box 
                   key={index} 
@@ -323,40 +319,54 @@ const HushhLabsHome = () => {
                   border="1px solid"
                   borderColor="gray.200"
                   borderRadius="16px"
-                  p={6}
+                  p={{ base: 3, sm: 4, md: 6 }}
                   _hover={{
                     borderColor: "gray.300",
                     shadow: "sm"
                   }}
                   transition="all 0.2s ease"
+                  maxW="100%"
+                  overflow="hidden"
                 >
-                  <VStack align="start" spacing={4}>
+                  <VStack align="start" spacing={4} w="full">
                     <Heading 
-                      size="md" 
+                      size={{ base: "sm", md: "md" }}
                       color="gray.900"
                       fontWeight="600"
                       fontFamily="'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+                      wordBreak="break-word"
                     >
                       {area.title}
                     </Heading>
                     <Text 
                       color="gray.600" 
                       lineHeight="1.6"
+                      fontSize={{ base: "sm", md: "md" }}
                       fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+                      wordBreak="break-word"
                     >
                       {area.description}
                     </Text>
-                    <Badge 
-                      bg="blue.50" 
-                      color="blue.700" 
-                      borderRadius="full" 
-                      px={3} 
-                      py={1}
-                      fontSize="xs"
-                      fontWeight="500"
-                    >
-                      {area.roles}
-                    </Badge>
+                    <Box w="full" maxW="100%">
+                      <Text
+                        bg="blue.50" 
+                        color="blue.700" 
+                        borderRadius="full" 
+                        px={{ base: 2, md: 3 }}
+                        py={1}
+                        fontSize={{ base: "9px", xs: "10px", sm: "11px", md: "xs" }}
+                        fontWeight="500"
+                        // display="inline-block"
+                        maxW="100%"
+                        // wordBreak="break-word"
+                        // whiteSpace="normal"
+                        lineHeight="1.3"
+                        // overflowWrap="break-word"
+                        // hyphens="auto"
+                      >
+                        {area.roles}
+                      </Text>
+                    </Box>
                   </VStack>
                 </Box>
               ))}
@@ -369,12 +379,15 @@ const HushhLabsHome = () => {
             border="1px solid"
             borderColor="gray.200"
             borderRadius="24px"
-            p={{ base: 8, md: 12 }}
+            p={{ base: 4, sm: 6, md: 12 }}
+            mx={{ base: 1, sm: 2, md: 0 }}
+            maxW="100%"
+            overflow="hidden"
           >
             <VStack spacing={10} textAlign="center">
               <VStack spacing={4}>
                 <Heading 
-                  size="xl" 
+                  size={{ base: "lg", md: "xl" }}
                   color="gray.900"
                   fontWeight="600"
                   fontFamily="'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
@@ -383,7 +396,7 @@ const HushhLabsHome = () => {
                 </Heading>
                 
                 <Text 
-                  fontSize={{ base: "lg", md: "xl" }} 
+                  fontSize={{ base: "md", sm: "lg", md: "xl" }} 
                   color="gray.600" 
                   lineHeight="1.6" 
                   maxW="4xl"
@@ -395,7 +408,7 @@ const HushhLabsHome = () => {
                 </Text>
               </VStack>
 
-              <SimpleGrid columns={{ base: 1, md: 3 }} spacing={8} pt={6}>
+              <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={{ base: 6, md: 8 }} pt={6} w="full">
                 <VStack spacing={4}>
                   <Box
                     bg="white"
@@ -410,7 +423,7 @@ const HushhLabsHome = () => {
                     <Icon as={FiBriefcase} boxSize={8} color="gray.700" />
                   </Box>
                   <Heading 
-                    size="md" 
+                    size={{ base: "sm", md: "md" }}
                     color="gray.900"
                     fontWeight="600"
                     fontFamily="'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
@@ -420,6 +433,7 @@ const HushhLabsHome = () => {
                   <Text 
                     color="gray.600" 
                     textAlign="center"
+                    fontSize={{ base: "sm", md: "md" }}
                     fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
                   >
                     Research Scientists, Engineers, Product Managers, and more
@@ -440,7 +454,7 @@ const HushhLabsHome = () => {
                     <Icon as={FiUsers} boxSize={8} color="gray.700" />
                   </Box>
                   <Heading 
-                    size="md" 
+                    size={{ base: "sm", md: "md" }}
                     color="gray.900"
                     fontWeight="600"
                     fontFamily="'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
@@ -450,6 +464,7 @@ const HushhLabsHome = () => {
                   <Text 
                     color="gray.600" 
                     textAlign="center"
+                    fontSize={{ base: "sm", md: "md" }}
                     fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
                   >
                     Competitive salary, equity, comprehensive health coverage, and more
@@ -470,7 +485,7 @@ const HushhLabsHome = () => {
                     <Icon as={FiZap} boxSize={8} color="gray.700" />
                   </Box>
                   <Heading 
-                    size="md" 
+                    size={{ base: "sm", md: "md" }}
                     color="gray.900"
                     fontWeight="600"
                     fontFamily="'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
@@ -480,6 +495,7 @@ const HushhLabsHome = () => {
                   <Text 
                     color="gray.600" 
                     textAlign="center"
+                    fontSize={{ base: "sm", md: "md" }}
                     fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
                   >
                     State-of-the-art compute clusters, research budget, and collaboration tools
@@ -489,9 +505,9 @@ const HushhLabsHome = () => {
 
               <Divider borderColor="gray.300" />
 
-              <VStack spacing={6}>
+              <VStack spacing={6} w="full">
                 <Text 
-                  fontSize="lg" 
+                  fontSize={{ base: "md", md: "lg" }}
                   color="gray.700" 
                   fontWeight="500"
                   fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
@@ -499,41 +515,45 @@ const HushhLabsHome = () => {
                   Ready to advance the frontiers of artificial intelligence?
                 </Text>
                 
-                <Link href="/labs/career">
-                  <Button
-                    bg="#0071E3"
-                    color="white"
-                    px={{ base: 8, md: 10 }}
-                    py={{ base: 6, md: 6 }}
-                    borderRadius="60px"
-                    fontSize={{ base: "18px", md: "20px", lg: "32px" }}
-                    fontWeight="500"
-                    fontFamily="Inter, sans-serif"
-                    letterSpacing="-0.02em"
-                    minW={{ base: "250px", md: "300px" }}
-                    h={{ base: "50px", md: "70px" }}
-                    _hover={{
-                      bg: "#0056B3",
-                      transform: "translateY(-2px)",
-                      boxShadow: "0 8px 25px rgba(0, 113, 227, 0.3)"
-                    }}
-                    _active={{
-                      transform: "translateY(0)"
-                    }}
-                    transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    Explore Career Opportunities
-                  </Button>
-                </Link>
+                <Box px={{ base: 2, md: 0 }} w="full" display="flex" justifyContent="center">
+                  <Link href="/labs/career">
+                    <Button
+                      bg="#0071E3"
+                      color="white"
+                      px={{ base: 4, sm: 6, md: 10 }}
+                      py={{ base: 3, sm: 4, md: 6 }}
+                      borderRadius="60px"
+                      fontSize={{ base: "14px", sm: "16px", md: "20px", lg: "32px" }}
+                      fontWeight="500"
+                      fontFamily="Inter, sans-serif"
+                      letterSpacing="-0.02em"
+                      minW={{ base: "180px", sm: "200px", md: "300px" }}
+                      h={{ base: "40px", sm: "45px", md: "70px" }}
+                      maxW="95%"
+                      _hover={{
+                        bg: "#0056B3",
+                        transform: "translateY(-2px)",
+                        boxShadow: "0 8px 25px rgba(0, 113, 227, 0.3)"
+                      }}
+                      _active={{
+                        transform: "translateY(0)"
+                      }}
+                      transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      Explore Career Opportunities
+                    </Button>
+                  </Link>
+                </Box>
                 
                 <Text 
-                  fontSize="sm" 
+                  fontSize={{ base: "xs", md: "sm" }}
                   color="gray.500" 
                   fontStyle="italic" 
                   maxW="2xl"
                   fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+                  px={{ base: 2, md: 0 }}
                 >
                   Hushh's Super Supreme Intelligence Lab is an equal opportunity employer. 
                   All employment is decided on the basis of qualifications, merit, and business need.
