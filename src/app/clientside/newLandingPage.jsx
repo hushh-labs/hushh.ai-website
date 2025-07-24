@@ -145,7 +145,7 @@ const NewLandingPage = () => {
               px="28px"
               py="15px"
               justifyContent="center"
-              onClick={() => router.push("https://apps.apple.com/in/app/hushh-app/id6498471189")}
+              onClick={() => window.open("https://apps.apple.com/in/app/hushh-app/id6498471189", '_blank')}
               alignItems="center"
               fontSize={{ base: "lg", md: "xl" }}
               fontWeight="semibold"

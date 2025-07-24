@@ -374,7 +374,7 @@ const BrandWalletSection = () => {
             color={theme.colors._white}
             lineHeight="28px"
             background="transparent"
-            onClick={() => router.push("https://apps.apple.com/in/app/hushh-app/id6498471189")}
+            onClick={() => window.open("https://apps.apple.com/in/app/hushh-app/id6498471189", '_blank')}
             px="21px"
             py="15px"
             fontSize={{ md: "1rem", base: "0.75rem" }}

@@ -311,7 +311,7 @@ const VerifiediOSUserSection = () => {
                 <Text fontSize={{ base: "lg", md: "xl" }} color="black">
                   You initiate a smart request; your personal agent then privately checks your data, not algorithms. Trusted brand agents respond through your agent, enabling you to choose products securely and effortlessly from curated options.
                 </Text>
-                <Button bg="black" color="white" borderRadius="full" px={8} h="60px" _hover={{ bg: "#333" }} onClick={() => router.push("https://docs.google.com/document/d/1eh6MF182bQgFo7AxWlKVhcBEvrpbMjiU8-cWRsS4oSg/edit?usp=sharing")}>
+                <Button bg="black" color="white" borderRadius="full" px={8} h="60px" _hover={{ bg: "#333" }} onClick={() => window.open("https://docs.google.com/document/d/1eh6MF182bQgFo7AxWlKVhcBEvrpbMjiU8-cWRsS4oSg/edit?usp=sharing", '_blank')}>
                   Learn More
                 </Button>
               </VStack>

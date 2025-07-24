@@ -120,7 +120,7 @@ const EukaryoticBackbone = () => {
           </Box>
 
           {/* Learn More Button */}
-          <Button
+          {/* <Button
             bg="linear-gradient(135deg, #667EEA 0%, #764BA2 100%)"
             color="white"
             fontSize={{ base: "sm", md: "md", lg: "lg" }}
@@ -141,7 +141,7 @@ const EukaryoticBackbone = () => {
             onClick={() => router.push("/about")}
           >
             Learn More
-          </Button>
+          </Button> */}
         </VStack>
       </CardBody>
     </Card>

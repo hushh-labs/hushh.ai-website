@@ -265,7 +265,7 @@ const HushhPDA = () => {
                       boxShadow: "0 0.375rem 1.5rem rgba(0, 113, 227, 0.4)",
                     }}
                     transition="all 0.3s ease"
-                    onClick={() => router.push("https://apps.apple.com/in/app/hushh-app/id6498471189")}
+                    onClick={() => window.open("https://apps.apple.com/in/app/hushh-app/id6498471189", '_blank')}
                   >
                     Get Early Access
                   </Button>

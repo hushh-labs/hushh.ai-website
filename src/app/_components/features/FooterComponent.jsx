@@ -614,7 +614,7 @@ const FooterComponent = () => {
                     w="full"
                   >
                     <Button
-                      onClick={() => router.push("https://apps.apple.com/in/app/hushh-app/id6498471189")}
+                      onClick={() => window.open("https://apps.apple.com/in/app/hushh-app/id6498471189", '_blank')}
                       size={{ base: "md", md: "sm" }}
                       bg="black"
                       color="white"

@@ -166,7 +166,7 @@ import { useRouter } from 'next/navigation';
               px={{ base: 6, md: 8 }}
               py={{ base: 6, md: 7 }}
               rounded="full"
-              onClick={() => router.push("https://apps.apple.com/in/app/hushh-app/id6498471189", target="_blank")}
+              onClick={() => window.open("https://apps.apple.com/in/app/hushh-app/id6498471189", '_blank')}
               fontSize={{ base: "lg", md: "xl" }}
               fontWeight="semibold"
               _hover={{ bg: "#333333" }}
@@ -277,7 +277,7 @@ import { useRouter } from 'next/navigation';
                 bg="gray.800"
                 color="white"
                 size="lg"
-                onClick={() => router.push("https://github.com/hushh-labs/consent-protocol", target="_blank")}
+                onClick={() => router.push("https://github.com/hushh-labs/consent-protocol", '_blank')}
                 px={8}
                 py={6}
                 rounded="full"
@@ -367,7 +367,7 @@ import { useRouter } from 'next/navigation';
                 size="lg"
                 px={8}
                 py={6}
-                onClick={() => router.push("https://github.com/hushh-labs/consent-protocol/blob/main/docs/agentcli.md", target="_blank")}
+                onClick={() => router.push("https://github.com/hushh-labs/consent-protocol/blob/main/docs/agentcli.md", '_blank')}
                 rounded="full"
                 fontSize="xl"
                 fontWeight="semibold"
@@ -486,7 +486,7 @@ import { useRouter } from 'next/navigation';
                   bg="transparent"
                   color="white"
                   size="lg"
-                  onClick={() => router.push("https://github.com/hushh-labs/consent-protocol/blob/main/docs/operons.md", target="_blank")}
+                  onClick={() => router.push("https://github.com/hushh-labs/consent-protocol/blob/main/docs/operons.md", '_blank')}
                   px={8}
                   py={6}
                   rounded="40px"
