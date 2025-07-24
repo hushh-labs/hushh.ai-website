@@ -1,8 +1,9 @@
 'use client'
 import { SessionProvider } from "next-auth/react"
-import FooterComponent from "../src/app/_components/features/FooterComponent"
+  
 import { ChakraProvider } from "@chakra-ui/react"
 import { ApiKeyProvider } from "../src/app/context/apiKeyContext"
+import ContactForm from "../src/app/_components/features/contactForm"
 
 export default function ClientSideLayout({
   children,
@@ -14,10 +15,11 @@ export default function ClientSideLayout({
     <SessionProvider session={session}>
       <ApiKeyProvider>
       {children}
+      <ContactForm/>
       </ApiKeyProvider>
     </SessionProvider>
     </ChakraProvider>
-    <FooterComponent></FooterComponent>
+    
     </>
   )
 }

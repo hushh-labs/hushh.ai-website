@@ -707,11 +707,12 @@ const FooterComponent = () => {
                 </Text>
               </VStack>
               
-              <VStack 
-                spacing={{ base: 3, md: 6 }}
-                align={{ base: "start", md: "center" }}
+              <Flex
                 direction={{ base: "column", md: "row" }}
+                align={{ base: "start", md: "center" }}
+                gap={{ base: 3, md: 4 }}
                 w={{ base: "full", md: "auto" }}
+                flexWrap="nowrap"
               >
                 <Link href="/legal/termsofuse">
                   <Text 
@@ -721,10 +722,14 @@ const FooterComponent = () => {
                     transition="all 0.2s ease"
                     fontWeight="400"
                     py={{ base: 1, md: 0 }}
+                    whiteSpace="nowrap"
                   >
                     Terms of Service
                   </Text>
                 </Link>
+                <Text fontSize={{ base: "sm", md: "xs" }} color="gray.400" fontWeight="400" display={{ base: "none", md: "block" }}>
+                  |
+                </Text>
                 <Link href="/legal/privacypolicy">
                   <Text 
                     fontSize={{ base: "sm", md: "xs" }}
@@ -733,14 +738,18 @@ const FooterComponent = () => {
                     transition="all 0.2s ease"
                     fontWeight="400"
                     py={{ base: 1, md: 0 }}
+                    whiteSpace="nowrap"
                   >
                     Privacy Policy
                   </Text>
                 </Link>
-                <Text fontSize={{ base: "sm", md: "xs" }} color="gray.400" fontWeight="400">
+                <Text fontSize={{ base: "sm", md: "xs" }} color="gray.400" fontWeight="400" display={{ base: "none", md: "block" }}>
+                  |
+                </Text>
+                <Text fontSize={{ base: "sm", md: "xs" }} color="gray.400" fontWeight="400" whiteSpace="nowrap">
                   Duns # 119019629
                 </Text>
-              </VStack>
+              </Flex>
             </Flex>
           </Box>
         </Box>
