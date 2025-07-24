@@ -129,6 +129,24 @@ const FooterComponent = () => {
                       sales@hushh.ai
                     </ChakraLink>
                   </VStack>
+
+                  <VStack align="start" spacing={3}>
+                    <Text fontSize="sm" color="gray.400" fontWeight="500" textTransform="uppercase" letterSpacing="0.5px">
+                      Address 
+                    </Text>
+                    
+                   <VStack spacing={1} textAlign={'left'} alignItems={'flex-start'}>
+                   <Text fontSize="sm" color="gray.500" fontWeight="400">
+                      Hushh.ai
+                    </Text>
+                    <Text fontSize="sm" color="gray.500" fontWeight="400" >
+                      1021 5th St W
+                    </Text>
+                    <Text fontSize="sm" color="gray.500" fontWeight="400" >
+                      Kirkland, WA 98033
+                    </Text>
+                   </VStack>
+                  </VStack>
                 </VStack>
               </GridItem>
 
@@ -157,7 +175,7 @@ const FooterComponent = () => {
                   </Box>
                   <VStack 
                     align="start"
-                    spacing={{ base: 4, md: 3 }}
+                    spacing={{ base: 1, md: 3 }}
                     w="full"
                   >
                     <Link href="/products/personal-data-agent">
@@ -282,7 +300,7 @@ const FooterComponent = () => {
                   </Box>
                   <VStack 
                     align="start"
-                    spacing={{ base: 4, md: 3 }}
+                    spacing={{ base: 1, md: 3 }}
                     w="full"
                   >
                     <Link href="/about-us">
@@ -436,7 +454,7 @@ const FooterComponent = () => {
                   </Box>
                   <VStack 
                     align="start"
-                    spacing={{ base: 4, md: 3 }}
+                    spacing={{ base: 1, md: 3 }}
                     w="full"
                   >
                     <Link href="https://www.linkedin.com/company/hushh-ai/" target="_blank">
@@ -530,7 +548,7 @@ const FooterComponent = () => {
                   </Box>
                   <VStack 
                     align="start"
-                    spacing={{ base: 4, md: 3 }}
+                    spacing={{ base: 1, md: 3 }}
                     w="full"
                   >
                     <Link href="/demoBookingPage">
@@ -592,7 +610,7 @@ const FooterComponent = () => {
                   </Box>
                   <VStack 
                     align="start"
-                    spacing={{ base: 4, md: 3 }}
+                    spacing={{ base: 1, md: 3 }}
                     w="full"
                   >
                     <Button
