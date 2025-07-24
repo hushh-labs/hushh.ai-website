@@ -170,7 +170,7 @@ const UserProfile = () => {
           setCountry(profileData.country || "");
           setCity(profileData.city || "");
           setDateOfBirth(profileData.dob || "");
-          setReasonForUsingHushh(profileData.reason_for_using_hushhTech || profileData.selected_reason_for_using_hushh || "");
+          setReasonForUsingHushh(profileData.reason_for_using_hushhTech);
           
           console.log('✅ Profile loaded successfully');
         } else {
@@ -461,7 +461,7 @@ const UserProfile = () => {
               <HStack spacing={3}>
                 {!isEditing ? (
                   <>
-                    <Button
+                    {/* <Button
                       onClick={() => setIsEditing(true)}
                       bg="linear-gradient(135deg, #0071E3, #BB62FC)"
                       color="white"
@@ -478,7 +478,7 @@ const UserProfile = () => {
                       transition="all 0.3s ease"
                     >
                       Edit Profile
-                    </Button>
+                    </Button> */}
                     <Button
                       onClick={() => router.push('/')}
                       variant="outline"
@@ -622,7 +622,7 @@ const UserProfile = () => {
               <VStack spacing={3} w="full">
                 {!isEditing ? (
                   <>
-                    <Button
+                    {/* <Button
                       onClick={() => setIsEditing(true)}
                       bg="linear-gradient(135deg, #0071E3, #BB62FC)"
                       color="white"
@@ -640,7 +640,7 @@ const UserProfile = () => {
                       transition="all 0.3s ease"
                     >
                       Edit Profile
-                    </Button>
+                    </Button> */}
                     <Button
                       onClick={() => router.push('/')}
                       variant="outline"
