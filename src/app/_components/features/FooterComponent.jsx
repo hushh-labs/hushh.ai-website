@@ -105,7 +105,7 @@ const FooterComponent = () => {
                   </Box>
                   
                   <VStack align="start" spacing={3}>
-                    <Text fontSize="sm" color="gray.400" fontWeight="500" textTransform="uppercase" letterSpacing="0.5px">
+                    <Text fontSize="sm" color="black" fontWeight="500" textTransform="uppercase" letterSpacing="0.5px">
                       Contact
                     </Text>
                     <ChakraLink 
@@ -131,7 +131,7 @@ const FooterComponent = () => {
                   </VStack>
 
                   <VStack align="start" spacing={3}>
-                    <Text fontSize="sm" color="gray.400" fontWeight="500" textTransform="uppercase" letterSpacing="0.5px">
+                    <Text fontSize="sm" color="black" fontWeight="500" textTransform="uppercase" letterSpacing="0.5px">
                       Address 
                     </Text>
                     
