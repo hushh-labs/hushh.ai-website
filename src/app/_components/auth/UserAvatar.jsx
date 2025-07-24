@@ -98,6 +98,35 @@ const UserAvatar = () => {
     }
   }, [user?.email]);
 
+  // Function to force refresh user status (bypass cache)
+  const refreshUserStatus = async () => {
+    if (user?.email) {
+      console.log('🔄 Force refreshing user status for:', user.email);
+      setLastCheckedEmail(null); // Clear cache
+      setUserExists(null); // Reset state
+      await checkUserRegistrationStatus(user.email);
+    }
+  };
+
+  // Listen for user registration complete event
+  useEffect(() => {
+    const handleRegistrationComplete = (event) => {
+      console.log('🔥 Registration complete event received:', event.detail);
+      if (user?.email && event.detail?.email === user.email) {
+        console.log('✅ Email matches, refreshing user status immediately...');
+        setTimeout(() => {
+          refreshUserStatus();
+        }, 1000); // Small delay to ensure API is updated
+      }
+    };
+
+    window.addEventListener('userRegistrationComplete', handleRegistrationComplete);
+    
+    return () => {
+      window.removeEventListener('userRegistrationComplete', handleRegistrationComplete);
+    };
+  }, [user?.email]);
+
   // Navigation helpers
   const navigateToProfile = () => {
     toast({
