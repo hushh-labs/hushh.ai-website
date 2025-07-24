@@ -19,20 +19,109 @@ import { FiUser, FiLogOut, FiMail, FiSettings, FiChevronRight } from 'react-icon
 import { useAuth } from '../../context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useHushhIdFlow } from '../../hooks/useHushhIdFlow';
 
 const UserAvatar = () => {
   const { user, signOut } = useAuth();
   const toast = useToast();
   const router = useRouter();
   
-  // Use our reusable authentication flow hook
-  const { 
-    navigateToProfile, 
-    navigateToRegistration,
-    isCheckingUser,
-    userExists // Use centralized user existence state
-  } = useHushhIdFlow();
+  // Direct state management for user existence checking
+  const [isCheckingUser, setIsCheckingUser] = useState(false);
+  const [userExists, setUserExists] = useState(null); // null = loading, true = exists, false = doesn't exist
+  const [lastCheckedEmail, setLastCheckedEmail] = useState(null);
+
+  // API configuration
+  const API_BASE_URL = "https://hushh-api-53407187172.us-central1.run.app/api";
+  const API_HEADERS = {
+    'Content-Type': 'application/json'
+  };
+
+  // Direct API call to check user registration status
+  const checkUserRegistrationStatus = async (email) => {
+    try {
+      // If we're checking the same email and already have a result, return cached result
+      if (email === lastCheckedEmail && userExists !== null) {
+        console.log('Using cached user existence result:', userExists);
+        return userExists;
+      }
+
+      console.log('🔍 Checking if user is registered:', email);
+      setIsCheckingUser(true);
+      
+      const response = await fetch(
+        `${API_BASE_URL}/check-user?email=${email}`,
+        { 
+          method: 'GET',
+          headers: API_HEADERS 
+        }
+      );
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('✅ User registration check response:', data);
+        
+        // Check if user exists and is registered
+        // API returns { "message": "User exists" } when user is found
+        const exists = data && (data.exists === true || data.message === "User exists");
+        
+        setUserExists(exists);
+        setLastCheckedEmail(email);
+        console.log('📝 Updated userExists state to:', exists);
+        
+        return exists;
+      } else {
+        console.error('❌ Failed to check user registration status:', response.status);
+        setUserExists(false);
+        setLastCheckedEmail(email);
+        return false;
+      }
+    } catch (error) {
+      console.error('💥 Error checking user registration status:', error);
+      setUserExists(false);
+      setLastCheckedEmail(email);
+      return false;
+    } finally {
+      setIsCheckingUser(false);
+    }
+  };
+
+  // Check user existence when user changes
+  useEffect(() => {
+    if (user?.email && user.email !== lastCheckedEmail) {
+      console.log('👤 User changed, checking registration status for:', user.email);
+      checkUserRegistrationStatus(user.email);
+    } else if (!user?.email) {
+      // Reset state when user logs out
+      setUserExists(null);
+      setLastCheckedEmail(null);
+      console.log('🚪 User logged out, resetting state');
+    }
+  }, [user?.email]);
+
+  // Navigation helpers
+  const navigateToProfile = () => {
+    toast({
+      title: "👤 Redirecting to Profile",
+      description: "Taking you to your profile page...",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+      position: "top",
+    });
+    setTimeout(() => router.push('/user-profile'), 500);
+  };
+
+  const navigateToRegistration = () => {
+    toast({
+      title: "📝 Redirecting to Registration",
+      description: "Complete your profile to get your Hushh ID...",
+      status: "info",
+      duration: 2000,
+      isClosable: true,
+      position: "top",
+    });
+    setTimeout(() => router.push('/user-registration'), 500);
+  };
 
   // Apple-inspired color values
   const menuBg = useColorModeValue('rgba(255, 255, 255, 0.95)', 'rgba(30, 30, 30, 0.95)');
@@ -44,7 +133,7 @@ const UserAvatar = () => {
 
   const handleSignOut = async () => {
     try {
-      // Sign out and redirect immediately (user existence state will be reset automatically by the hook)
+      // Sign out and redirect immediately (user existence state will be reset automatically)
       await signOut();
       
       // Navigate to home page immediately
@@ -196,16 +285,16 @@ const UserAvatar = () => {
             transition="all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)"
             fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
             justifyContent="space-between"
-            isDisabled={userExists === null} // Disable while loading
+            isDisabled={userExists === null || isCheckingUser} // Disable while loading
           >
             <HStack spacing={3}>
               <Icon as={FiUser} size="16px" />
               <Text>
-                {userExists === null 
-                  ? "Loading..." 
+                {(userExists === null || isCheckingUser)
+                  ? "Checking..." 
                   : userExists 
                     ? "View Profile" 
-                    : "Setup Your Profile"
+                    : "Setup Profile"
                 }
               </Text>
             </HStack>

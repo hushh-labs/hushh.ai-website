@@ -448,6 +448,12 @@ const UserRegistrationContent = () => {
           isClosable: true,
         });
         
+        // Dispatch custom event to trigger UserAvatar refresh
+        console.log('🔥 Dispatching user registration complete event');
+        window.dispatchEvent(new CustomEvent('userRegistrationComplete', {
+          detail: { email: userEmail }
+        }));
+        
         // Redirect to home page after successful registration
         setTimeout(() => {
           router.push("/");
