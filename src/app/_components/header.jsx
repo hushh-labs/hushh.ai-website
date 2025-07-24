@@ -613,7 +613,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                 {/* Mobile Menu Content */}
                 <div className="px-6 py-6">
                     {/* Close button for mobile menu */}
-                    <div className="flex justify-end mb-4 lg:hidden">
+                    {/* <div className="flex justify-end mb-4 lg:hidden">
                       <button
                         onClick={() => setIsMenuOpen(false)}
                         className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
@@ -621,7 +621,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                       >
                         <CloseIcon className="w-5 h-5 text-gray-600" />
                       </button>
-                  </div>
+                  </div> */}
                   {/* Authentication Section */}
                   {!loading && (
                     <div className="mb-6 pb-4 border-b border-gray-200">
@@ -642,16 +642,26 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                               </p> */}
                   </div>
                   </div>
+                  <button
+                            onClick={() => {
+                              setIsMenuOpen(false);
+                              navigateToProfile();
+                            }}
+                            className="text-sm text-black-600 hover:text-black-700 font-medium"
+                          >
+                            View Profile
+                          </button>
                           <button
                             onClick={handleSignOut}
                             className="text-sm text-red-600 hover:text-red-700 font-medium"
                           >
                             Sign Out
                           </button>
+                          
                         </div>
                       ) : (
                         <div className="flex space-x-3">
-                          <button
+                          {/* <button
                             onClick={() => {
                               setIsMenuOpen(false);
                               navigateToRegistration();
@@ -659,7 +669,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                             className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
                           >
                             Sign Up
-                          </button>
+                          </button> */}
                           <button
                             onClick={() => {
                               setIsMenuOpen(false);

@@ -247,8 +247,8 @@ const UserAvatar = () => {
         mt={3}
         overflow="hidden"
       >
-        {/* User Info Header */}
-        <Box px={5} py={4} bg="transparent">
+        {/* User Info Header - Hidden on mobile */}
+        <Box px={5} py={4} bg="transparent" display={{ base: "none", md: "block" }}>
           <VStack spacing={3} align="start">
             <HStack spacing={4} w="full">
               <Avatar
@@ -292,7 +292,7 @@ const UserAvatar = () => {
           </VStack>
         </Box>
         
-        <MenuDivider borderColor={menuBorder} opacity={0.6} />
+        <MenuDivider borderColor={menuBorder} opacity={0.6} display={{ base: "none", md: "block" }} />
         
         {/* Menu Items */}
         <Box py={1}>
