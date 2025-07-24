@@ -67,7 +67,7 @@ const HushhLabsCareers = () => {
       aboutRole: "As a Principal AI Research Scientist, you will spearhead research into next-generation AI models (e.g. large-scale neural networks, multimodal systems, foundation models). You will set research directions and work alongside a world-class team to invent and implement new algorithms that expand our AI's capabilities. This role is both strategic and technical – you will mentor other scientists, shape our research roadmap, and still dive into coding/prototyping to turn ideas into reality. Your work will directly influence Hushh's mission to create transformative AI.",
       responsibilities: [
         "Lead cutting-edge research projects in AI/ML, from ideation to prototyping to publication, focusing on high-impact areas (such as advanced deep learning architectures, unsupervised/self-supervised learning, or reinforcement learning breakthroughs)",
-        "Invent and optimize novel algorithms and model architectures to improve performance, efficiency, and capabilities of our Super Supreme Intelligence systems",
+        "Invent and optimize novel algorithms and model architectures to improve performance, efficiency, and capabilities of our Super  Intelligence systems",
         "Collaborate closely with engineering teams to transition research innovations into production – you'll help bridge the gap between theory and practice, ensuring our most advanced models are deployable in real-world scenarios",
         "Mentor and guide a small team of researchers and engineers, fostering a culture of curiosity, rigorous experimentation, and exceptional quality of work",
         "Stay abreast of the latest scientific developments (papers, conferences, etc.) and forge external collaborations with academia or industry as needed to accelerate our research"
@@ -117,8 +117,8 @@ const HushhLabsCareers = () => {
       type: "Full-time",
       salary: "$170,000 – $400,000 USD",
       experience: "PhD or equivalent",
-      description: "Focus on cutting-edge AI safety research, helping ensure our Super Supreme Intelligence is robust, controllable, and aligned with human ethical principles.",
-      aboutRole: "As an AI Alignment Research Scientist, you will focus on the cutting-edge of AI safety research, helping ensure our Super Supreme Intelligence is robust, controllable, and aligned with human ethical principles. You will study and mitigate issues like model bias, unintended behavior, interpretability, and decision-making transparency. This role involves both theoretical work and practical experimentation – you might be proving theoretical guarantees one day and designing novel safety evaluation frameworks or user feedback loops the next.",
+      description: "Focus on cutting-edge AI safety research, helping ensure our Super  Intelligence is robust, controllable, and aligned with human ethical principles.",
+      aboutRole: "As an AI Alignment Research Scientist, you will focus on the cutting-edge of AI safety research, helping ensure our Super  Intelligence is robust, controllable, and aligned with human ethical principles. You will study and mitigate issues like model bias, unintended behavior, interpretability, and decision-making transparency. This role involves both theoretical work and practical experimentation – you might be proving theoretical guarantees one day and designing novel safety evaluation frameworks or user feedback loops the next.",
       responsibilities: [
         "Conduct research on AI alignment and safety techniques, such as reinforcement learning from human feedback (RLHF), adversarial robustness, interpretability methods, and fail-safe mechanisms for advanced AI",
         "Develop evaluation metrics and stress tests to probe our AI models for biases, value misalignment, or unsafe behaviors",
@@ -145,7 +145,7 @@ const HushhLabsCareers = () => {
       salary: "$160,000 – $300,000 USD",
       experience: "5+ years",
       description: "Design, implement, and optimize the pipelines that power our AI models in production. Build robust production-grade AI services and integrate our core AI intelligence into products.",
-      aboutRole: "As a Machine Learning Engineer, you will design, implement, and optimize the pipelines that power our AI models in production. This is a highly impactful role: you'll be integrating our 'Super Supreme' intelligence into various products and ensuring it performs reliably for end-users. From developing training workflows for large datasets to deploying model inference services that handle millions of requests, you will be at the core of bringing AI research to life.",
+      aboutRole: "As a Machine Learning Engineer, you will design, implement, and optimize the pipelines that power our AI models in production. This is a highly impactful role: you'll be integrating our 'Super ' intelligence into various products and ensuring it performs reliably for end-users. From developing training workflows for large datasets to deploying model inference services that handle millions of requests, you will be at the core of bringing AI research to life.",
       responsibilities: [
         "Build and maintain machine learning pipelines – including data preprocessing, model training, hyperparameter tuning, evaluation, and deployment",
         "Develop robust production-grade AI services",
@@ -252,8 +252,8 @@ const HushhLabsCareers = () => {
       type: "Full-time",
       salary: "$140,000 – $250,000 USD",
       experience: "4+ years",
-      description: "Develop end-to-end features for applications that showcase our Super Supreme Intelligence. Build user-facing web applications and backend APIs that seamlessly integrate AI functionalities.",
-      aboutRole: "As a Full-Stack AI Product Engineer, you will develop end-to-end features for applications that showcase our Super Supreme Intelligence. One week, you might be building a slick web interface that allows users to interact with our AI agent; the next, you might be optimizing a backend service to handle complex queries efficiently. You will take ownership of product features from concept to deployment.",
+      description: "Develop end-to-end features for applications that showcase our Super  Intelligence. Build user-facing web applications and backend APIs that seamlessly integrate AI functionalities.",
+      aboutRole: "As a Full-Stack AI Product Engineer, you will develop end-to-end features for applications that showcase our Super  Intelligence. One week, you might be building a slick web interface that allows users to interact with our AI agent; the next, you might be optimizing a backend service to handle complex queries efficiently. You will take ownership of product features from concept to deployment.",
       responsibilities: [
         "Develop user-facing web applications that seamlessly integrate AI functionalities",
         "Build and maintain backend APIs and services that power these applications",
@@ -279,8 +279,8 @@ const HushhLabsCareers = () => {
       type: "Full-time",
       salary: "$150,000 – $250,000 USD",
       experience: "5+ years",
-      description: "Own one or more product lines that incorporate our Super Supreme Intelligence. Define product strategy, gather requirements, and coordinate execution across multidisciplinary teams.",
-      aboutRole: "As a Product Manager for AI-Powered Products, you will own one or more product lines that incorporate our Super Supreme Intelligence. This could range from an AI-driven knowledge assistant, to a predictive analytics tool, to a platform enabling other developers to use our AI. Your role is to define the product strategy, gather requirements, and coordinate execution across multidisciplinary teams.",
+      description: "Own one or more product lines that incorporate our Super  Intelligence. Define product strategy, gather requirements, and coordinate execution across multidisciplinary teams.",
+      aboutRole: "As a Product Manager for AI-Powered Products, you will own one or more product lines that incorporate our Super  Intelligence. This could range from an AI-driven knowledge assistant, to a predictive analytics tool, to a platform enabling other developers to use our AI. Your role is to define the product strategy, gather requirements, and coordinate execution across multidisciplinary teams.",
       responsibilities: [
         "Define product vision and roadmap",
         "Gather and prioritize requirements",
@@ -805,7 +805,7 @@ const HushhLabsCareers = () => {
                 fontWeight="600"
                 fontFamily="'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
               >
-                About Hushh's Super Supreme Intelligence Lab
+                About Hushh's Super  Intelligence Lab
               </Heading>
               
               <Text 
@@ -815,7 +815,7 @@ const HushhLabsCareers = () => {
                 maxW="4xl"
                 fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
               >
-                Hushh's Super Supreme Intelligence Lab is on a mission to develop superintelligent AI 
+                Hushh's Super  Intelligence Lab is on a mission to develop superintelligent AI 
                 systems that drive monumental breakthroughs for humanity. We are a highly driven, elite team of 
                 researchers and engineers committed to pushing the boundaries of AI in a fast-paced, collaborative 
                 environment.
@@ -955,7 +955,7 @@ const HushhLabsCareers = () => {
                 fontStyle="italic"
                 fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
               >
-                Hushh's Super Supreme Intelligence Lab is an equal opportunity employer and celebrates diversity.
+                Hushh's Super  Intelligence Lab is an equal opportunity employer and celebrates diversity.
               </Text>
             </VStack>
           </Box>

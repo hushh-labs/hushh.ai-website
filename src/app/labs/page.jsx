@@ -102,7 +102,7 @@ const HushhLabsHome = () => {
                 overflowWrap="break-word"
                 hyphens="auto"
               >
-                Super Supreme Intelligence Lab
+                Super Intelligent Lab
               </Text>
             </Box>
             
@@ -214,7 +214,7 @@ const HushhLabsHome = () => {
                 maxW="4xl"
                 fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
               >
-                Hushh's Super Supreme Intelligence Lab is on a mission to develop superintelligent AI 
+                Hushh's Super  Intelligence Lab is on a mission to develop superintelligent AI 
                 systems that drive monumental breakthroughs for humanity. We are a highly driven, elite team of 
                 researchers and engineers committed to pushing the boundaries of AI in a fast-paced, collaborative 
                 environment where innovation and excellence are rewarded with trust and responsibility.
@@ -555,7 +555,7 @@ const HushhLabsHome = () => {
                   fontFamily="'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
                   px={{ base: 2, md: 0 }}
                 >
-                  Hushh's Super Supreme Intelligence Lab is an equal opportunity employer. 
+                  Hushh's Super  Intelligence Lab is an equal opportunity employer. 
                   All employment is decided on the basis of qualifications, merit, and business need.
                 </Text>
               </VStack>
