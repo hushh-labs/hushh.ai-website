@@ -225,11 +225,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
           description: "Complete API documentation",
           href: "/developerApi"
         },
-        {
-          name: "FAQ",
-          description: "Frequently asked questions",
-          href: "https://github.com/hushh-labs/consent-protocol/blob/main/docs/faq.md"
-        },
+       
         // {
         //   name: "Blueprint Recipes",
         //   description: "Pre-built solutions and templates",
@@ -255,11 +251,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
           description: "Build the future with us",
           href: "/pda/iithackathon"
         },
-        {
-          name: "Blog",
-          description: "Latest news and insights",
-          href: "/hushhBlogs"
-        }
+        
       ]
     },
     company: {
@@ -284,7 +276,17 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
           name: "Careers",
           description: "Join our team",
           href: "/career"
-        }
+        },
+        {
+          name: "Blogs",
+          description: "Latest news and insights",
+          href: "/hushhBlogs"
+        },
+        {
+          name: "FAQ",
+          description: "Frequently asked questions",
+          href: "https://github.com/hushh-labs/consent-protocol/blob/main/docs/faq.md"
+        },
       ]
     }
   };
