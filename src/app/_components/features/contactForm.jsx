@@ -366,13 +366,13 @@ export default function ContactForm() {
                         </Box>
                         <VStack align="start" spacing={1}>
                           <Text color="rgba(255,255,255,0.8)" fontSize="sm">Phone</Text>
-                          <Link href="tel:+14252969050">
+                          <Link href="tel:+18884621726">
                             <Text 
                               color="white" 
                               fontWeight="medium"
                               _hover={{ textDecoration: "underline" }}
                             >
-                              +1 (425) 296-9050
+                              +1 (888) 462-1726
                             </Text>
                           </Link>
                         </VStack>
