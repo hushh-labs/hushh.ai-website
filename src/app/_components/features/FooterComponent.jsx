@@ -77,11 +77,11 @@ const FooterComponent = () => {
             <Grid
               templateColumns={{ 
                 base: "1fr", 
-                sm: "1fr",
-                md: "repeat(4, 1fr)",
-                lg: "2fr repeat(4, 1fr)" 
+                sm: "repeat(2, 1fr)",
+                md: "repeat(3, 1fr)",
+                lg: "2fr repeat(6, 1fr)" 
               }}
-              gap={{ base: 8, sm: 10, md: 12, lg: 8 }}
+              gap={{ base: 8, sm: 6, md: 8, lg: 6 }}
               alignItems="start"
               fontFamily={'Inter'}
             >
@@ -194,22 +194,6 @@ const FooterComponent = () => {
                       </Text>
                     </Link>
 
-                    <Link href="/consent-ai-protocol">
-                      <Text 
-                        fontSize={{ base: "sm", md: "sm" }}
-                        fontWeight="400" 
-                        color="gray.600" 
-                        _hover={{ color: "black", transform: "translateX(4px)" }} 
-                        transition="all 0.2s ease"
-                        textAlign="left"
-                        py={{ base: 1, md: 0 }}
-                        display="block"
-                        w="full"
-                      >
-                        Consent AI Protocol
-                      </Text>
-                    </Link>
-
                     <Link href="/hushh-vault">
                       <Text 
                         fontSize={{ base: "sm", md: "sm" }}
@@ -225,21 +209,7 @@ const FooterComponent = () => {
                         Hushh Vault
                       </Text>
                     </Link>
-                    <Link href="/products/hushh-grid">
-                      <Text 
-                        fontSize={{ base: "sm", md: "sm" }}
-                        fontWeight="400" 
-                        color="gray.600" 
-                        _hover={{ color: "black", transform: "translateX(4px)" }} 
-                        transition="all 0.2s ease"
-                        textAlign="left"
-                        py={{ base: 1, md: 0 }}
-                        display="block"
-                        w="full"
-                      >
-                        Hushh Grid
-                      </Text>
-                    </Link>
+
                     <Link href="/hushh-link">
                       <Text 
                         fontSize={{ base: "sm", md: "sm" }}
@@ -255,6 +225,199 @@ const FooterComponent = () => {
                        Hushh Link
                       </Text>
                     </Link>
+
+                    <Link href="/products/hushh-flow">
+                      <Text 
+                        fontSize={{ base: "sm", md: "sm" }}
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
+                      >
+                        Hushh Flow
+                      </Text>
+                    </Link>
+
+                    <Link href="/products/hushh-grid">
+                      <Text 
+                        fontSize={{ base: "sm", md: "sm" }}
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
+                      >
+                        Hushh Grid
+                      </Text>
+                    </Link>
+                    
+                  </VStack>
+                </VStack>
+              </GridItem>
+
+              {/* Solutions Section */}
+              <GridItem>
+                <VStack align="start" spacing={{ base: 5, md: 4 }}>
+                  <Box w="full" pb={{ base: 2, md: 0 }}>
+                    <Text 
+                      fontSize={{ base: "md", md: "sm" }}
+                      fontWeight="600" 
+                      color="black"
+                      textTransform="uppercase" 
+                      letterSpacing="0.5px"
+                      textAlign="left"
+                      mb={{ base: 1, md: 0 }}
+                    >
+                      Solutions
+                    </Text>
+                    <Box 
+                      w="40px" 
+                      h="2px" 
+                      bg="black" 
+                      display={{ base: "block", md: "none" }}
+                      mt={2}
+                    />
+                  </Box>
+                  <VStack 
+                    align="start"
+                    spacing={{ base: 1, md: 3 }}
+                    w="full"
+                  >
+                    <Link href="/products/hushh-wallet-app">
+                      <Text 
+                        fontSize={{ base: "sm", md: "sm" }}
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
+                      >
+                        Hushh Wallet App
+                      </Text>
+                    </Link>
+
+                    <Link href="/products/hushh-button">
+                      <Text 
+                        fontSize={{ base: "sm", md: "sm" }}
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
+                      >
+                        Hushh Button
+                      </Text>
+                    </Link>
+
+                    <Link href="/products/browser-companion">
+                      <Text 
+                        fontSize={{ base: "sm", md: "sm" }}
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
+                      >
+                        Hushh Browser Companion
+                      </Text>
+                    </Link>
+
+                    <Link href="/products/hushh-vibe-search">
+                      <Text 
+                        fontSize={{ base: "sm", md: "sm" }}
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
+                      >
+                        VIBE Search App
+                      </Text>
+                    </Link>
+
+                    <Link href="/products/hushh-for-students">
+                      <Text 
+                        fontSize={{ base: "sm", md: "sm" }}
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
+                      >
+                        Hushh For Students
+                      </Text>
+                    </Link>
+                    
+                  </VStack>
+                </VStack>
+              </GridItem>
+
+              {/* Developers Section */}
+              <GridItem>
+                <VStack align="start" spacing={{ base: 5, md: 4 }}>
+                  <Box w="full" pb={{ base: 2, md: 0 }}>
+                    <Text 
+                      fontSize={{ base: "md", md: "sm" }}
+                      fontWeight="600" 
+                      color="black"
+                      textTransform="uppercase" 
+                      letterSpacing="0.5px"
+                      textAlign="left"
+                      mb={{ base: 1, md: 0 }}
+                    >
+                      Developers
+                    </Text>
+                    <Box 
+                      w="40px" 
+                      h="2px" 
+                      bg="black" 
+                      display={{ base: "block", md: "none" }}
+                      mt={2}
+                    />
+                  </Box>
+                  <VStack 
+                    align="start"
+                    spacing={{ base: 1, md: 3 }}
+                    w="full"
+                  >
+                    <Link href="/getting-started">
+                      <Text 
+                        fontSize={{ base: "sm", md: "sm" }}
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
+                      >
+                        Getting Started
+                      </Text>
+                    </Link>
+
                     <Link href="/developerApi">
                       <Text 
                         fontSize={{ base: "sm", md: "sm" }}
@@ -267,7 +430,39 @@ const FooterComponent = () => {
                         display="block"
                         w="full"
                       >
-                        Developer API
+                        API Reference
+                      </Text>
+                    </Link>
+
+                    <Link href="/agent-kit-cli#github-protocol">
+                      <Text 
+                        fontSize={{ base: "sm", md: "sm" }}
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
+                      >
+                        GitHub Protocol
+                      </Text>
+                    </Link>
+
+                    <Link href="/agent-kit-cli#agentkit-cli">
+                      <Text 
+                        fontSize={{ base: "sm", md: "sm" }}
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
+                      >
+                        Agentkit CLI
                       </Text>
                     </Link>
                     
@@ -315,99 +510,10 @@ const FooterComponent = () => {
                         display="block"
                         w="full"
                       >
-                        About Us
+                        About
                       </Text>
                     </Link>
-                    <Link href="/solutions">
-                      <Text 
-                        fontSize={{ base: "sm", md: "sm" }}
-                        fontWeight="400" 
-                        color="gray.600" 
-                        _hover={{ color: "black", transform: "translateX(4px)" }} 
-                        transition="all 0.2s ease"
-                        textAlign="left"
-                        py={{ base: 1, md: 0 }}
-                        display="block"
-                        w="full"
-                      >
-                       Solutions
-                      </Text>
-                    </Link>
-                    <Link href="https://hushhtech.com" target="_blank">
-                      <Text 
-                        fontSize={{ base: "sm", md: "sm" }}
-                        fontWeight="400" 
-                        color="gray.600" 
-                        _hover={{ color: "black", transform: "translateX(4px)" }} 
-                        transition="all 0.2s ease"
-                        textAlign="left"
-                        py={{ base: 1, md: 0 }}
-                        display="block"
-                        w="full"
-                      >
-                       Hushh Tech (Investor Relations)
-                      </Text>
-                    </Link>
-                    <Link href="/why-hushh">
-                      <Text 
-                        fontSize={{ base: "sm", md: "sm" }}
-                        fontWeight="400" 
-                        color="gray.600" 
-                        _hover={{ color: "black", transform: "translateX(4px)" }} 
-                        transition="all 0.2s ease"
-                        textAlign="left"
-                        py={{ base: 1, md: 0 }}
-                        display="block"
-                        w="full"
-                      >
-                       Our Philosophy (Why Hushh ?)
-                      </Text>
-                    </Link>
-                    <ChakraLink 
-                      href="/hushhBlogs"
-                      fontSize={{ base: "sm", md: "sm" }}
-                      fontWeight="400"
-                      color="gray.600"
-                      _hover={{ color: "black", transform: "translateX(4px)" }}
-                      transition="all 0.2s ease"
-                      isExternal
-                      textAlign="left"
-                      py={{ base: 1, md: 0 }}
-                      display="block"
-                      w="full"
-                    >
-                      Blog
-                    </ChakraLink>
-                    <ChakraLink 
-                      href="/career"
-                      fontSize={{ base: "sm", md: "sm" }}
-                      fontWeight="400"
-                      color="gray.600"
-                      _hover={{ color: "black", transform: "translateX(4px)" }}
-                      transition="all 0.2s ease"
-                      isExternal
-                      textAlign="left"
-                      py={{ base: 1, md: 0 }}
-                      display="block"
-                      w="full"
-                    >
-                      Careers
-                    </ChakraLink>
-                    <ChakraLink 
-                      href="https://github.com/hushh-labs/consent-protocol/blob/main/docs/faq.md"
-                      fontSize={{ base: "sm", md: "sm" }}
-                      fontWeight="400"
-                      color="gray.600"
-                      _hover={{ color: "black", transform: "translateX(4px)" }}
-                      transition="all 0.2s ease"
-                      isExternal
-                      textAlign="left"
-                      py={{ base: 1, md: 0 }}
-                      display="block"
-                      w="full"
-                    >
-                      FAQ
-                    </ChakraLink>
+
                     <Text
                       fontSize={{ base: "sm", md: "sm" }}
                       fontWeight="400"
@@ -423,13 +529,62 @@ const FooterComponent = () => {
                       display="block"
                       w="full"
                     >
-                      Contact Us
+                      Contact
                     </Text>
+
+                    <Link href="/career">
+                      <Text 
+                        fontSize={{ base: "sm", md: "sm" }}
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
+                      >
+                        Careers
+                      </Text>
+                    </Link>
+
+                    <Link href="/hushhBlogs">
+                      <Text 
+                        fontSize={{ base: "sm", md: "sm" }}
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
+                      >
+                        Blogs
+                      </Text>
+                    </Link>
+
+                    <ChakraLink 
+                      href="https://github.com/hushh-labs/consent-protocol/blob/main/docs/faq.md"
+                      fontSize={{ base: "sm", md: "sm" }}
+                      fontWeight="400"
+                      color="gray.600"
+                      _hover={{ color: "black", transform: "translateX(4px)" }}
+                      transition="all 0.2s ease"
+                      isExternal
+                      textAlign="left"
+                      py={{ base: 1, md: 0 }}
+                      display="block"
+                      w="full"
+                    >
+                      FAQ
+                    </ChakraLink>
+                    
                   </VStack>
                 </VStack>
               </GridItem>
 
-               {/* Social Section */}
+               {/* Community Section */}
                <GridItem>
                 <VStack align="start" spacing={{ base: 5, md: 4 }}>
                   <Box w="full" pb={{ base: 2, md: 0 }}>
@@ -442,7 +597,7 @@ const FooterComponent = () => {
                       textAlign="left"
                       mb={{ base: 1, md: 0 }}
                     >
-                      Social
+                      Community
                     </Text>
                     <Box 
                       w="40px" 
@@ -457,7 +612,7 @@ const FooterComponent = () => {
                     spacing={{ base: 1, md: 3 }}
                     w="full"
                   >
-                    <Link href="https://www.linkedin.com/company/hushh-ai/" target="_blank">
+                    <Link href="/hushh-community">
                       <Text 
                         fontSize={{ base: "sm", md: "sm" }}
                         fontWeight="400" 
@@ -469,10 +624,11 @@ const FooterComponent = () => {
                         display="block"
                         w="full"
                       >
-                        Linkedin
+                        Agent Builders Club
                       </Text>
                     </Link>
-                    <Link href="https://x.com/hushh_ai" target="_blank">
+
+                    <Link href="/labs">
                       <Text 
                         fontSize={{ base: "sm", md: "sm" }}
                         fontWeight="400" 
@@ -484,10 +640,11 @@ const FooterComponent = () => {
                         display="block"
                         w="full"
                       >
-                       X (Twitter)
+                        Hushh Labs
                       </Text>
                     </Link>
-                    <Link href="https://github.com/hushh-labs" target="_blank">
+
+                    <Link href="/solutions">
                       <Text 
                         fontSize={{ base: "sm", md: "sm" }}
                         fontWeight="400" 
@@ -499,31 +656,63 @@ const FooterComponent = () => {
                         display="block"
                         w="full"
                       >
-                       Github
+                       Solutions
                       </Text>
                     </Link>
-                    <ChakraLink 
-                      href=""
-                      fontSize={{ base: "sm", md: "sm" }}
-                      fontWeight="400"
-                      color="gray.600"
-                      _hover={{ color: "black", transform: "translateX(4px)" }}
-                      transition="all 0.2s ease"
-                      isExternal
-                      textAlign="left"
-                      py={{ base: 1, md: 0 }}
-                      display="block"
-                      w="full"
-                    >
-                     Instagram
-                    </ChakraLink>
-                    
+
+                    <Link href="/pda/iithackathon">
+                      <Text 
+                        fontSize={{ base: "sm", md: "sm" }}
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
+                      >
+                        Hackathons
+                      </Text>
+                    </Link>
+
+                    <Link href="/why-hushh">
+                      <Text 
+                        fontSize={{ base: "sm", md: "sm" }}
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
+                      >
+                       Our Philosophy
+                      </Text>
+                    </Link>
+
+                    <Link href="/consent-ai-protocol">
+                      <Text 
+                        fontSize={{ base: "sm", md: "sm" }}
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
+                      >
+                        Consent Protocol
+                      </Text>
+                    </Link>
                     
                   </VStack>
                 </VStack>
               </GridItem>
 
-              {/* Support Section */}
+              {/* Support & Download Section */}
               <GridItem>
                 <VStack align="start" spacing={{ base: 5, md: 4 }}>
                   <Box w="full" pb={{ base: 2, md: 0 }}>
@@ -566,53 +755,55 @@ const FooterComponent = () => {
                         Live Demo
                       </Text>
                     </Link>
-                    {/* <ChakraLink 
-                      href="https://hushh-labs.github.io/hushh-labs-blog/"
-                      fontSize={{ base: "sm", md: "sm" }}
-                      fontWeight="400"
-                      color="gray.600"
-                      _hover={{ color: "black", transform: "translateX(4px)" }}
-                      transition="all 0.2s ease"
-                      isExternal
-                      textAlign="left"
-                      py={{ base: 1, md: 0 }}
-                      display="block"
-                      w="full"
-                    >
-                      Documentation
-                    </ChakraLink> */}
-                  </VStack>
-                </VStack>
-              </GridItem>
 
-              {/* Download Section */}
-              <GridItem>
-                <VStack align="start" spacing={{ base: 5, md: 4 }}>
-                  <Box w="full" pb={{ base: 2, md: 0 }}>
-                    <Text 
-                      fontSize={{ base: "md", md: "sm" }}
-                      fontWeight="600" 
-                      color="black"
-                      textTransform="uppercase" 
-                      letterSpacing="0.5px"
-                      textAlign="left"
-                      mb={{ base: 1, md: 0 }}
-                    >
-                      Download
-                    </Text>
-                    <Box 
-                      w="40px" 
-                      h="2px" 
-                      bg="black" 
-                      display={{ base: "block", md: "none" }}
-                      mt={2}
-                    />
-                  </Box>
-                  <VStack 
-                    align="start"
-                    spacing={{ base: 1, md: 3 }}
-                    w="full"
-                  >
+                    <Link href="https://www.linkedin.com/company/hushh-ai/" target="_blank">
+                      <Text 
+                        fontSize={{ base: "sm", md: "sm" }}
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
+                      >
+                        Linkedin
+                      </Text>
+                    </Link>
+
+                    <Link href="https://x.com/hushh_ai" target="_blank">
+                      <Text 
+                        fontSize={{ base: "sm", md: "sm" }}
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
+                      >
+                       X (Twitter)
+                      </Text>
+                    </Link>
+
+                    <Link href="https://github.com/hushh-labs" target="_blank">
+                      <Text 
+                        fontSize={{ base: "sm", md: "sm" }}
+                        fontWeight="400" 
+                        color="gray.600" 
+                        _hover={{ color: "black", transform: "translateX(4px)" }} 
+                        transition="all 0.2s ease"
+                        textAlign="left"
+                        py={{ base: 1, md: 0 }}
+                        display="block"
+                        w="full"
+                      >
+                       Github
+                      </Text>
+                    </Link>
+
                     <Button
                       onClick={() => window.open("https://apps.apple.com/in/app/hushh-app/id6498471189", '_blank')}
                       size={{ base: "md", md: "sm" }}
@@ -636,9 +827,11 @@ const FooterComponent = () => {
                       minW={{ base: "160px", md: "120px" }}
                       w={{ base: "100%", sm: "auto", md: "auto" }}
                       maxW={{ base: "200px", md: "none" }}
+                      mt={2}
                     >
                       Download App
                     </Button>
+                    
                   </VStack>
                 </VStack>
               </GridItem>
