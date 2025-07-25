@@ -849,6 +849,26 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                       )}
                     </div>
 
+                    {/* Hushh Labs Section */}
+                    <div className="mobile-menu-section">
+                      <div
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setIsMenuOpen(false);
+                          router.push('/labs');
+                        }}
+                        className="cursor-pointer py-2"
+                      >
+                        <div className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors">
+                          Hushh Labs
+                        </div>
+                        <div className="text-sm text-gray-500 mt-1">
+                          Advanced AI research and development
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Developers Section */}
                     <div className="mobile-menu-section">
                       <button
@@ -1041,25 +1061,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                       )}
                     </div>
 
-                    {/* Hushh Labs Section */}
-                    <div className="mobile-menu-section">
-                      <div
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setIsMenuOpen(false);
-                          router.push('/labs');
-                        }}
-                        className="cursor-pointer py-2"
-                      >
-                        <div className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors">
-                          Hushh Labs
-                        </div>
-                        <div className="text-sm text-gray-500 mt-1">
-                          Advanced AI research and development
-                        </div>
-                      </div>
-                    </div>
+                    
                   </div>
 
                                     {/* Bottom Action Buttons */}
