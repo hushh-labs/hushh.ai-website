@@ -299,11 +299,6 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
           href: "/contact-us"
         },
         {
-          name: "Hushh Labs",
-          description: "Advanced AI research and development",
-          href: "/labs"
-        },
-        {
           name: "Careers",
           description: "Join our team",
           href: "/career"
@@ -322,96 +317,92 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
     }
   };
 
-  const renderDropdownMenu = (menuKey, menuData) => {
-    // Check if this is the solutions dropdown to apply grid layout
-    const isSolutionsDropdown = menuKey === 'solutions';
-    
-    return (
-      <div
-        className="dropdown-menu absolute top-full left-0 bg-white shadow-2xl border border-gray-100 z-50 rounded-2xl mt-2"
-        style={{
-          animation: "fadeInDown 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-          minWidth: isSolutionsDropdown ? "800px" : "280px",
-          maxWidth: isSolutionsDropdown ? "900px" : "380px",
-          boxShadow: "0 20px 60px rgba(0, 0, 0, 0.12), 0 8px 25px rgba(0, 0, 0, 0.08)",
-          backdropFilter: "blur(20px)",
-        }}
-        onMouseEnter={() => setActiveDropdown(menuKey)}
-        onMouseLeave={() => {
-          // Add small delay to prevent accidental closes when clicking
-          setTimeout(() => setActiveDropdown(null), 150);
-        }}
-      >
-        {/* Dropdown Arrow */}
-        <div 
-          className="absolute -top-2 left-6 w-4 h-4 bg-white border-t border-l border-gray-100 transform rotate-45"
+           const renderDropdownMenu = (menuKey, menuData) => {
+      // Check if this is the solutions dropdown to apply grid layout
+      const isSolutionsDropdown = menuKey === 'solutions';
+      
+      return (
+        <div
+          className="dropdown-menu absolute top-full left-0 bg-white shadow-2xl border border-gray-100 z-50 rounded-2xl mt-2"
           style={{
-            filter: "drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.02))"
+            animation: "fadeInDown 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+            minWidth: isSolutionsDropdown ? "800px" : "280px",
+            maxWidth: isSolutionsDropdown ? "900px" : "380px",
+            boxShadow: "0 20px 60px rgba(0, 0, 0, 0.12), 0 8px 25px rgba(0, 0, 0, 0.08)",
+            backdropFilter: "blur(20px)",
           }}
-        ></div>
-        
-        <div className="relative bg-white rounded-2xl overflow-hidden">
-          <div className="px-4 py-4">
-            <div className={isSolutionsDropdown ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" : "space-y-1"}>
-              {menuData.items.map((item, index) => (
-                <div
-                  key={index}
-                  className="group block p-3 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200 hover:shadow-sm dropdown-item cursor-pointer"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    // Close dropdown immediately
-                    setActiveDropdown(null);
-                    // Navigate using router
-                    router.push(item.href);
-                  }}
-                >
-                  <div className={isSolutionsDropdown ? "flex flex-col items-center text-center space-y-2" : "flex items-center space-x-3"}>
-                    {item.icon && (
-                    <div className="flex-shrink-0">
-                      <div 
-                        className={`${isSolutionsDropdown ? 'w-10 h-10' : 'w-8 h-8'} rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center group-hover:from-blue-100 group-hover:to-indigo-100 transition-all duration-200`}
-                      >
-                        {typeof item.icon === 'string' ? (
-                          <Image 
-                            src={item.icon} 
-                            alt={item.name} 
-                            width={isSolutionsDropdown ? 20 : 16} 
-                            height={isSolutionsDropdown ? 20 : 16} 
-                            className={isSolutionsDropdown ? "w-5 h-5" : "w-4 h-4"}
-                            style={{borderRadius:'20%'}}
-                          />
-                        ) : (
-                          React.createElement(item.icon, { 
-                            className: isSolutionsDropdown ? "w-5 h-5" : "w-4 h-4",
-                            size: isSolutionsDropdown ? 20 : 16
-                          })
-                        )}
+          onMouseEnter={() => setActiveDropdown(menuKey)}
+          onMouseLeave={() => {
+            // Add small delay to prevent accidental closes when clicking
+            setTimeout(() => setActiveDropdown(null), 100);
+          }}
+        >
+          {/* Dropdown Arrow */}
+          <div 
+            className="absolute -top-2 left-6 w-4 h-4 bg-white border-t border-l border-gray-100 transform rotate-45"
+            style={{
+              filter: "drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.02))"
+            }}
+          ></div>
+          
+          <div className="relative bg-white rounded-2xl overflow-hidden">
+            <div className="px-4 py-4">
+              <div className={isSolutionsDropdown ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" : "space-y-1"}>
+                {menuData.items.map((item, index) => (
+                  <div
+                    key={index}
+                    className="group block p-3 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200 hover:shadow-sm dropdown-item cursor-pointer"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      // Close dropdown immediately
+                      setActiveDropdown(null);
+                      // Navigate using router
+                      router.push(item.href);
+                    }}
+                  >
+                    <div className={isSolutionsDropdown ? "flex flex-col items-start text-left space-y-2" : "flex items-center space-x-3"}>
+                      {/* Only show icons for non-solutions dropdowns */}
+                      {item.icon && menuKey !== 'solutions' && (
+                        <div className="flex-shrink-0">
+                          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center group-hover:from-blue-100 group-hover:to-indigo-100 transition-all duration-200">
+                            <Image 
+                              src={item.icon} 
+                              alt={item.name} 
+                              width={16} 
+                              height={16} 
+                              className="w-4 h-4"
+                              style={{borderRadius:'20%'}}
+                              onError={(e) => {
+                                console.log('Image load error:', item.name, item.icon);
+                                e.target.style.display = 'none';
+                              }}
+                            />
+                          </div>
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-semibold text-gray-900 group-hover:text-blue-700 transition-colors duration-200">
+                          {item.name}
+                        </div>
+                        <div className="text-xs text-gray-500 mt-0.5 leading-relaxed group-hover:text-gray-600 transition-colors duration-200">
+                          {item.description}
+                        </div>
                       </div>
+                      {!isSolutionsDropdown && (
+                        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                          <ChevronRightIcon className="w-4 h-4 text-blue-500" />
+                        </div>
+                      )}
                     </div>
-                    )}
-                    <div className={isSolutionsDropdown ? "flex-1" : "flex-1 min-w-0"}>
-                      <div className={`${isSolutionsDropdown ? 'text-sm' : 'text-sm'} font-semibold text-gray-900 group-hover:text-blue-700 transition-colors duration-200`}>
-                        {item.name}
-                      </div>
-                      <div className={`text-xs text-gray-500 ${isSolutionsDropdown ? 'mt-1' : 'mt-0.5'} leading-relaxed group-hover:text-gray-600 transition-colors duration-200`}>
-                        {item.description}
-                      </div>
-                    </div>
-                    {!isSolutionsDropdown && (
-                      <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                        <ChevronRightIcon className="w-4 h-4 text-blue-500" />
-                      </div>
-                    )}
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    );
-  };
+      );
+    };
 
   return (
     <>
@@ -429,10 +420,10 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
               borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
             }}
           >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="w-full mx-auto px-3 sm:px-4 lg:px-6 xl:px-8 2xl:px-12">
               <div className="flex items-center justify-between" style={{ height: "70px" }}>
                 {/* Logo */}
-                <div className="flex-shrink-0">
+                <div className="flex-shrink-0 mr-4">
                   <Link href="/" className="flex items-center">
                     <Image 
                       src={HushhNewLogo} 
@@ -440,18 +431,23 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                       width={140} 
                       height={45} 
                       priority 
-                      className="h-8 w-auto sm:h-10 lg:h-12"
+                      className="h-8 w-auto sm:h-10 lg:h-11"
                     />
                   </Link>
                 </div>
 
                 {/* Desktop Navigation */}
-                <nav className="hidden lg:flex items-center space-x-8">
+                <nav className="hidden lg:flex items-center space-x-3 xl:space-x-5 2xl:space-x-6 flex-1 justify-center max-w-5xl mx-auto">
                   {/* Products Dropdown */}
-                  <div className="relative group">
+                  <div 
+                    className="relative group"
+                    onMouseEnter={() => setActiveDropdown('products')}
+                    onMouseLeave={() => {
+                      setTimeout(() => setActiveDropdown(null), 50);
+                    }}
+                  >
                     <button
-                      className="text-gray-800 text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-3 nav-button"
-                      onMouseEnter={() => setActiveDropdown('products')}
+                      className="text-gray-800 text-xs lg:text-sm xl:text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-2 xl:px-3 nav-button whitespace-nowrap"
                     >
                       <span>Products</span>
                       <ChevronDownIcon className={`w-3 h-3 transition-transform duration-200 ${activeDropdown === 'products' ? 'rotate-180' : ''}`} />
@@ -460,10 +456,15 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                   </div>
 
                   {/* Solutions Dropdown */}
-                  <div className="relative group">
+                  <div 
+                    className="relative group"
+                    onMouseEnter={() => setActiveDropdown('solutions')}
+                    onMouseLeave={() => {
+                      setTimeout(() => setActiveDropdown(null), 50);
+                    }}
+                  >
                     <button
-                      className="text-gray-800 text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-3 nav-button"
-                      onMouseEnter={() => setActiveDropdown('solutions')}
+                      className="text-gray-800 text-xs lg:text-sm xl:text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-2 xl:px-3 nav-button whitespace-nowrap"
                     >
                       <span>Solutions</span>
                       <ChevronDownIcon className={`w-3 h-3 transition-transform duration-200 ${activeDropdown === 'solutions' ? 'rotate-180' : ''}`} />
@@ -472,10 +473,15 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                   </div>
 
                   {/* Developers Dropdown */}
-                  <div className="relative group">
+                  <div 
+                    className="relative group"
+                    onMouseEnter={() => setActiveDropdown('developers')}
+                    onMouseLeave={() => {
+                      setTimeout(() => setActiveDropdown(null), 50);
+                    }}
+                  >
                     <button
-                      className="text-gray-800 text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-3 nav-button"
-                      onMouseEnter={() => setActiveDropdown('developers')}
+                      className="text-gray-800 text-xs lg:text-sm xl:text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-2 xl:px-3 nav-button whitespace-nowrap"
                     >
                       <span>Developers</span>
                       <ChevronDownIcon className={`w-3 h-3 transition-transform duration-200 ${activeDropdown === 'developers' ? 'rotate-180' : ''}`} />
@@ -484,10 +490,15 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                   </div>
 
                   {/* Why Hushh Dropdown */}
-                  <div className="relative group">
+                  <div 
+                    className="relative group"
+                    onMouseEnter={() => setActiveDropdown('whyHushh')}
+                    onMouseLeave={() => {
+                      setTimeout(() => setActiveDropdown(null), 50);
+                    }}
+                  >
                     <button
-                      className="text-gray-800 text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-3 nav-button"
-                      onMouseEnter={() => setActiveDropdown('whyHushh')}
+                      className="text-gray-800 text-xs lg:text-sm xl:text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-2 xl:px-3 nav-button whitespace-nowrap"
                     >
                       <span>Why Hushh?</span>
                       <ChevronDownIcon className={`w-3 h-3 transition-transform duration-200 ${activeDropdown === 'whyHushh' ? 'rotate-180' : ''}`} />
@@ -496,10 +507,15 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                   </div>
 
                   {/* Community Dropdown */}
-                  <div className="relative group">
+                  <div 
+                    className="relative group"
+                    onMouseEnter={() => setActiveDropdown('community')}
+                    onMouseLeave={() => {
+                      setTimeout(() => setActiveDropdown(null), 50);
+                    }}
+                  >
                     <button
-                      className="text-gray-800 text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-3 nav-button"
-                      onMouseEnter={() => setActiveDropdown('community')}
+                      className="text-gray-800 text-xs lg:text-sm xl:text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-2 xl:px-3 nav-button whitespace-nowrap"
                     >
                       <span>Community</span>
                       <ChevronDownIcon className={`w-3 h-3 transition-transform duration-200 ${activeDropdown === 'community' ? 'rotate-180' : ''}`} />
@@ -508,10 +524,15 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                   </div>
 
                   {/* Company Dropdown */}
-                  <div className="relative group">
+                  <div 
+                    className="relative group"
+                    onMouseEnter={() => setActiveDropdown('company')}
+                    onMouseLeave={() => {
+                      setTimeout(() => setActiveDropdown(null), 50);
+                    }}
+                  >
                     <button
-                      className="text-gray-800 text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-3 nav-button"
-                      onMouseEnter={() => setActiveDropdown('company')}
+                      className="text-gray-800 text-xs lg:text-sm xl:text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-2 xl:px-3 nav-button whitespace-nowrap"
                     >
                       <span>Company</span>
                       <ChevronDownIcon className={`w-3 h-3 transition-transform duration-200 ${activeDropdown === 'company' ? 'rotate-180' : ''}`} />
@@ -519,12 +540,22 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                     {activeDropdown === 'company' && renderDropdownMenu('company', menuItems.company)}
                   </div>
 
+                  {/* Hushh Labs Direct Link */}
+                  <div className="relative group">
+                    <button
+                      className="text-gray-800 text-xs lg:text-sm xl:text-sm font-medium hover:text-blue-600 transition-colors duration-200 py-4 px-2 xl:px-3 nav-button whitespace-nowrap"
+                      onClick={() => router.push('/labs')}
+                    >
+                      <span>Hushh Labs</span>
+                    </button>
+                  </div>
+
                 </nav>
 
                 {/* Right side - Auth & CTA */}
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2 lg:space-x-3 xl:space-x-4 ml-4">
                   {/* Desktop Auth */}
-                  <div className="hidden lg:flex items-center space-x-4">
+                  <div className="hidden lg:flex items-center space-x-2 xl:space-x-3">
                     {loading ? (
                       <div className="w-6 h-6 animate-pulse bg-gray-300 rounded-full"></div>
                     ) : isAuthenticated ? (
@@ -537,11 +568,11 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                         border="1px solid"
                         borderColor="gray.300"
                         borderRadius="8px"
-                        px={5}
+                        px={{ base: 3, xl: 5 }}
                         py={2}
-                        fontSize="sm"
+                        fontSize={{ base: "xs", xl: "sm" }}
                         fontWeight={500}
-                        height="44px"
+                        height="40px"
                         _hover={{
                           bg: "gray.50",
                           borderColor: "gray.400",
@@ -562,11 +593,11 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
               bg="linear-gradient(135deg, #007AFF, #5E5CE6, #7C3AED)"
                     color="white"
                     borderRadius="10px"
-                    px={4}
+                    px={{ base: 3, xl: 4 }}
                     py={1}
-                    fontSize="sm"
+                    fontSize={{ base: "xs", xl: "sm" }}
                     fontWeight={700}
-                    // height="48px"
+                    height="40px"
                     position="relative"
                     overflow="hidden"
                     _hover={{
@@ -594,6 +625,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                     transition="all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)"
                     className="hidden lg:block group"
                     display={{ base: "none", lg: "flex" }}
+                    whiteSpace="nowrap"
                   >
                     🚀 Get Early Access
                   </Button>
@@ -604,7 +636,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                   <button
                     ref={hamburgerRef}
                     onClick={handleMenuIconToggle}
-                    className="lg:hidden relative p-3 rounded-xl border  hover:border-gray-300 transition-all duration-200 hover:shadow-lg active:scale-95"
+                    className="lg:hidden relative p-3 rounded-xl border hover:border-gray-300 transition-all duration-200 hover:shadow-lg active:scale-95"
                     style={{
                       backdropFilter: "blur(10px)",
                     }}
@@ -729,51 +761,41 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                         <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${activeDropdown === 'products' ? 'rotate-180' : ''}`} />
                       </button>
                       {activeDropdown === 'products' && (
-                        <div className="mt-3 space-y-3 pl-4">
-                                                    {menuItems.products.items.map((item, index) => (
-                            <div
-                              key={index}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                setIsMenuOpen(false);
-                                router.push(item.href);
-                              }}
-                              className="block mobile-menu-item cursor-pointer"
-                            >
-                              <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                                {item.icon && (
-                                  <div className="flex-shrink-0 mt-1">
-                                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                                      {typeof item.icon === 'string' ? (
-                                        <Image 
-                                          src={item.icon} 
-                                          alt={item.name} 
-                                          width={16} 
-                                          height={16} 
-                                          className="w-4 h-4"
-                                          style={{borderRadius:'20%'}}
-                                        />
-                                      ) : (
-                                        <Image 
-                                          src={item.icon} 
-                                          alt={item.name} 
-                                          width={16} 
-                                          height={16} 
-                                          className="w-4 h-4"
-                                        />
-                                      )}
-                                    </div>
-                                  </div>
-                                )}
-                                <div>
-                                  <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
-                                  <p className="text-xs text-gray-500 mt-1">{item.description}</p>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
+                                                 <div className="mt-3 space-y-3 pl-4">
+                                                     {menuItems.products.items.map((item, index) => (
+                             <div
+                               key={index}
+                               onClick={(e) => {
+                                 e.preventDefault();
+                                 e.stopPropagation();
+                                 setIsMenuOpen(false);
+                                 router.push(item.href);
+                               }}
+                               className="block mobile-menu-item cursor-pointer"
+                             >
+                               <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                 {item.icon && (
+                                   <div className="flex-shrink-0 mt-1">
+                                     <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                       <Image 
+                                         src={item.icon} 
+                                         alt={item.name} 
+                                         width={16} 
+                                         height={16} 
+                                         className="w-4 h-4"
+                                         style={{borderRadius:'20%'}}
+                                       />
+                                     </div>
+                                   </div>
+                                 )}
+                                 <div>
+                                   <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
+                                   <p className="text-xs text-gray-500 mt-1">{item.description}</p>
+                                 </div>
+                               </div>
+                             </div>
+                           ))}
+                         </div>
                       )}
                     </div>
 
@@ -787,37 +809,41 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                         <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${activeDropdown === 'solutions' ? 'rotate-180' : ''}`} />
                       </button>
                       {activeDropdown === 'solutions' && (
-                        <div className="mt-3 space-y-3 pl-4">
-                          {menuItems.solutions.items.map((item, index) => (
-                            <div
-                              key={index}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                setIsMenuOpen(false);
-                                router.push(item.href);
-                              }}
-                              className="block mobile-menu-item cursor-pointer"
-                            >
-                              <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                                {item.icon && (
-                                  <div className="flex-shrink-0 mt-1">
-                                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                                      {React.createElement(item.icon, { 
-                                        className: "w-4 h-4",
-                                        size: 16 
-                                      })}
-                                    </div>
-                                  </div>
-                                )}
-                                <div>
-                                  <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
-                                  <p className="text-xs text-gray-500 mt-1">{item.description}</p>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
+                                                 <div className="mt-3 space-y-3 pl-4">
+                           {menuItems.solutions.items.map((item, index) => (
+                             <div
+                               key={index}
+                               onClick={(e) => {
+                                 e.preventDefault();
+                                 e.stopPropagation();
+                                 setIsMenuOpen(false);
+                                 router.push(item.href);
+                               }}
+                               className="block mobile-menu-item cursor-pointer"
+                             >
+                               <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                 {item.icon && (
+                                   <div className="flex-shrink-0 mt-1">
+                                     <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                       <Image 
+                                         src={item.icon} 
+                                         alt={item.name} 
+                                         width={16} 
+                                         height={16} 
+                                         className="w-4 h-4"
+                                         style={{borderRadius:'20%'}}
+                                       />
+                                     </div>
+                                   </div>
+                                 )}
+                                 <div>
+                                   <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
+                                   <p className="text-xs text-gray-500 mt-1">{item.description}</p>
+                                 </div>
+                               </div>
+                             </div>
+                           ))}
+                         </div>
                       )}
                     </div>
 
@@ -831,51 +857,41 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                         <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${activeDropdown === 'developers' ? 'rotate-180' : ''}`} />
                       </button>
                       {activeDropdown === 'developers' && (
-                        <div className="mt-3 space-y-3 pl-4">
-                          {menuItems.developers.items.map((item, index) => (
-                            <div
-                              key={index}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                setIsMenuOpen(false);
-                                router.push(item.href);
-                              }}
-                              className="block mobile-menu-item cursor-pointer"
-                            >
-                              <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                                {item.icon && (
-                                  <div className="flex-shrink-0 mt-1">
-                                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                                      {typeof item.icon === 'string' ? (
-                                        <Image 
-                                          src={item.icon} 
-                                          alt={item.name} 
-                                          width={16} 
-                                          height={16} 
-                                          className="w-4 h-4"
-                                          style={{borderRadius:'20%'}}
-                                        />
-                                      ) : (
-                                        <Image 
-                                          src={item.icon} 
-                                          alt={item.name} 
-                                          width={16} 
-                                          height={16} 
-                                          className="w-4 h-4"
-                                        />
-                                      )}
-                                    </div>
-                                  </div>
-                                )}
-                                <div>
-                                  <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
-                                  <p className="text-xs text-gray-500 mt-1">{item.description}</p>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
+                                                 <div className="mt-3 space-y-3 pl-4">
+                           {menuItems.developers.items.map((item, index) => (
+                             <div
+                               key={index}
+                               onClick={(e) => {
+                                 e.preventDefault();
+                                 e.stopPropagation();
+                                 setIsMenuOpen(false);
+                                 router.push(item.href);
+                               }}
+                               className="block mobile-menu-item cursor-pointer"
+                             >
+                               <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                 {item.icon && (
+                                   <div className="flex-shrink-0 mt-1">
+                                     <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                       <Image 
+                                         src={item.icon} 
+                                         alt={item.name} 
+                                         width={16} 
+                                         height={16} 
+                                         className="w-4 h-4"
+                                         style={{borderRadius:'20%'}}
+                                       />
+                                     </div>
+                                   </div>
+                                 )}
+                                 <div>
+                                   <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
+                                   <p className="text-xs text-gray-500 mt-1">{item.description}</p>
+                                 </div>
+                               </div>
+                             </div>
+                           ))}
+                         </div>
                       )}
                     </div>
 
@@ -889,51 +905,41 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                         <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${activeDropdown === 'whyHushh' ? 'rotate-180' : ''}`} />
                       </button>
                       {activeDropdown === 'whyHushh' && (
-                        <div className="mt-3 space-y-3 pl-4">
-                          {menuItems.whyHushh.items.map((item, index) => (
-                            <div
-                              key={index}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                setIsMenuOpen(false);
-                                router.push(item.href);
-                              }}
-                              className="block mobile-menu-item cursor-pointer"
-                            >
-                              <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                                {item.icon && (
-                                  <div className="flex-shrink-0 mt-1">
-                                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                                      {typeof item.icon === 'string' ? (
-                                        <Image 
-                                          src={item.icon} 
-                                          alt={item.name} 
-                                          width={16} 
-                                          height={16} 
-                                          className="w-4 h-4"
-                                          style={{borderRadius:'20%'}}
-                                        />
-                                      ) : (
-                                        <Image 
-                                          src={item.icon} 
-                                          alt={item.name} 
-                                          width={16} 
-                                          height={16} 
-                                          className="w-4 h-4"
-                                        />
-                                      )}
-                                    </div>
-                                  </div>
-                                )}
-                                <div>
-                                  <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
-                                  <p className="text-xs text-gray-500 mt-1">{item.description}</p>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
+                                                 <div className="mt-3 space-y-3 pl-4">
+                           {menuItems.whyHushh.items.map((item, index) => (
+                             <div
+                               key={index}
+                               onClick={(e) => {
+                                 e.preventDefault();
+                                 e.stopPropagation();
+                                 setIsMenuOpen(false);
+                                 router.push(item.href);
+                               }}
+                               className="block mobile-menu-item cursor-pointer"
+                             >
+                               <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                 {item.icon && (
+                                   <div className="flex-shrink-0 mt-1">
+                                     <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                       <Image 
+                                         src={item.icon} 
+                                         alt={item.name} 
+                                         width={16} 
+                                         height={16} 
+                                         className="w-4 h-4"
+                                         style={{borderRadius:'20%'}}
+                                       />
+                                     </div>
+                                   </div>
+                                 )}
+                                 <div>
+                                   <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
+                                   <p className="text-xs text-gray-500 mt-1">{item.description}</p>
+                                 </div>
+                               </div>
+                             </div>
+                           ))}
+                         </div>
                       )}
                     </div>
 
@@ -947,51 +953,41 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                         <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${activeDropdown === 'community' ? 'rotate-180' : ''}`} />
                       </button>
                       {activeDropdown === 'community' && (
-                        <div className="mt-3 space-y-3 pl-4">
-                          {menuItems.community.items.map((item, index) => (
-                            <div
-                              key={index}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                setIsMenuOpen(false);
-                                router.push(item.href);
-                              }}
-                              className="block mobile-menu-item cursor-pointer"
-                            >
-                              <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                                {item.icon && (
-                                  <div className="flex-shrink-0 mt-1">
-                                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                                      {typeof item.icon === 'string' ? (
-                                        <Image 
-                                          src={item.icon} 
-                                          alt={item.name} 
-                                          width={16} 
-                                          height={16} 
-                                          className="w-4 h-4"
-                                          style={{borderRadius:'20%'}}
-                                        />
-                                      ) : (
-                                        <Image 
-                                          src={item.icon} 
-                                          alt={item.name} 
-                                          width={16} 
-                                          height={16} 
-                                          className="w-4 h-4"
-                                        />
-                                      )}
-                                    </div>
-                                  </div>
-                                )}
-                                <div>
-                                  <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
-                                  <p className="text-xs text-gray-500 mt-1">{item.description}</p>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
+                                                 <div className="mt-3 space-y-3 pl-4">
+                           {menuItems.community.items.map((item, index) => (
+                             <div
+                               key={index}
+                               onClick={(e) => {
+                                 e.preventDefault();
+                                 e.stopPropagation();
+                                 setIsMenuOpen(false);
+                                 router.push(item.href);
+                               }}
+                               className="block mobile-menu-item cursor-pointer"
+                             >
+                               <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                 {item.icon && (
+                                   <div className="flex-shrink-0 mt-1">
+                                     <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                       <Image 
+                                         src={item.icon} 
+                                         alt={item.name} 
+                                         width={16} 
+                                         height={16} 
+                                         className="w-4 h-4"
+                                         style={{borderRadius:'20%'}}
+                                       />
+                                     </div>
+                                   </div>
+                                 )}
+                                 <div>
+                                   <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
+                                   <p className="text-xs text-gray-500 mt-1">{item.description}</p>
+                                 </div>
+                               </div>
+                             </div>
+                           ))}
+                         </div>
                       )}
                     </div>
 
@@ -1005,55 +1001,45 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                         <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${activeDropdown === 'company' ? 'rotate-180' : ''}`} />
                       </button>
                       {activeDropdown === 'company' && (
-                        <div className="mt-3 space-y-3 pl-4">
-                          {menuItems.company.items.map((item, index) => (
-                            <div
-                              key={index}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                setIsMenuOpen(false);
-                                router.push(item.href);
-                              }}
-                              className="block mobile-menu-item cursor-pointer"
-                            >
-                              <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                                {item.icon && (
-                                  <div className="flex-shrink-0 mt-1">
-                                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                                      {typeof item.icon === 'string' ? (
-                                        <Image 
-                                          src={item.icon} 
-                                          alt={item.name} 
-                                          width={16} 
-                                          height={16} 
-                                          className="w-4 h-4"
-                                          style={{borderRadius:'20%'}}
-                                        />
-                                      ) : (
-                                        <Image 
-                                          src={item.icon} 
-                                          alt={item.name} 
-                                          width={16} 
-                                          height={16} 
-                                          className="w-4 h-4"
-                                        />
-                                      )}
-                                    </div>
-                                  </div>
-                                )}
-                                <div>
-                                  <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
-                                  <p className="text-xs text-gray-500 mt-1">{item.description}</p>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
+                                                 <div className="mt-3 space-y-3 pl-4">
+                           {menuItems.company.items.map((item, index) => (
+                             <div
+                               key={index}
+                               onClick={(e) => {
+                                 e.preventDefault();
+                                 e.stopPropagation();
+                                 setIsMenuOpen(false);
+                                 router.push(item.href);
+                               }}
+                               className="block mobile-menu-item cursor-pointer"
+                             >
+                               <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                 {item.icon && (
+                                   <div className="flex-shrink-0 mt-1">
+                                     <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                       <Image 
+                                         src={item.icon} 
+                                         alt={item.name} 
+                                         width={16} 
+                                         height={16} 
+                                         className="w-4 h-4"
+                                         style={{borderRadius:'20%'}}
+                                       />
+                                     </div>
+                                   </div>
+                                 )}
+                                 <div>
+                                   <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
+                                   <p className="text-xs text-gray-500 mt-1">{item.description}</p>
+                                 </div>
+                               </div>
+                             </div>
+                           ))}
+                         </div>
                       )}
                     </div>
 
-                    {/* Hushh Labs Direct Link for Mobile */}
+                    {/* Hushh Labs Section */}
                     <div className="mobile-menu-section">
                       <div
                         onClick={(e) => {
@@ -1193,24 +1179,45 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
           background: linear-gradient(135deg, #0056CC, #4A47A3);
         }
         
-        /* Enhanced button hover effects */
-        .nav-button {
-          position: relative;
-          overflow: hidden;
-        }
-        .nav-button::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
-          transition: left 0.5s ease;
-        }
-        .nav-button:hover::before {
-          left: 100%;
-        }
+                 /* Enhanced button hover effects */
+         .nav-button {
+           position: relative;
+           overflow: hidden;
+         }
+         .nav-button::before {
+           content: '';
+           position: absolute;
+           top: 0;
+           left: -100%;
+           width: 100%;
+           height: 100%;
+           background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+           transition: left 0.5s ease;
+         }
+         .nav-button:hover::before {
+           left: 100%;
+         }
+         
+         /* Responsive navigation optimizations */
+         @media (max-width: 1280px) {
+           .nav-button {
+             font-size: 0.875rem;
+           }
+         }
+         
+         @media (min-width: 1440px) {
+           .nav-button {
+             padding-left: 1rem;
+             padding-right: 1rem;
+           }
+         }
+         
+         /* Header layout optimizations */
+         @media (min-width: 1024px) and (max-width: 1279px) {
+           nav {
+             max-width: 60rem;
+           }
+         }
         
         /* Mobile touch feedback */
         @media (max-width: 1024px) {
