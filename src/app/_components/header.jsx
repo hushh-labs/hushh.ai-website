@@ -454,7 +454,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                     </button>
                     {activeDropdown === 'products' && renderDropdownMenu('products', menuItems.products)}
                   </div>
-
+ 
                   {/* Solutions Dropdown */}
                   <div 
                     className="relative group"
@@ -470,6 +470,16 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                       <ChevronDownIcon className={`w-3 h-3 transition-transform duration-200 ${activeDropdown === 'solutions' ? 'rotate-180' : ''}`} />
                     </button>
                     {activeDropdown === 'solutions' && renderDropdownMenu('solutions', menuItems.solutions)}
+                  </div>
+
+                  {/* Hushh Labs Direct Link */}
+ <div className="relative group">
+                    <button
+                      className="text-gray-800 text-xs lg:text-sm xl:text-sm font-medium hover:text-blue-600 transition-colors duration-200 py-4 px-2 xl:px-3 nav-button whitespace-nowrap"
+                      onClick={() => router.push('/labs')}
+                    >
+                      <span>Hushh Labs</span>
+                    </button>
                   </div>
 
                   {/* Developers Dropdown */}
@@ -540,15 +550,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                     {activeDropdown === 'company' && renderDropdownMenu('company', menuItems.company)}
                   </div>
 
-                  {/* Hushh Labs Direct Link */}
-                  <div className="relative group">
-                    <button
-                      className="text-gray-800 text-xs lg:text-sm xl:text-sm font-medium hover:text-blue-600 transition-colors duration-200 py-4 px-2 xl:px-3 nav-button whitespace-nowrap"
-                      onClick={() => router.push('/labs')}
-                    >
-                      <span>Hushh Labs</span>
-                    </button>
-                  </div>
+                 
 
                 </nav>
 
