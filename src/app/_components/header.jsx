@@ -10,8 +10,9 @@ import HushhWalletIcon from "./svg/hushhWalletIcon";
 import HushhButtonIcon from "./svg/hushhButton";
 import VibeSearchIcon from "./svg/vibeSearch";
 import ChromeExtentionLogo from "./svg/ChromeExtensionLogo";
-import { usePathname, useRouter } from 'next/navigation'
 import VibeSearchApi from "./svg/vibeSearchApi";
+import ValetChat from "./svg/valetChat";
+import { usePathname, useRouter } from 'next/navigation'
 import { useToast } from '@chakra-ui/react';
 import Image from "next/image";
 import { ChevronRightIcon, CloseIcon, HamburgerIcon, ChevronDownIcon } from "@chakra-ui/icons";
@@ -167,9 +168,60 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
         }
       ]
     },
+    solutions: {
+      title: "Solutions",
+      items: [
+        {
+          name: "Hushh Wallet App",
+          description: "Your personal data vault. Organize, control, and monetize your information",
+          href: "/products/hushh-wallet-app",
+          icon: HushhWalletIcon
+        },
+        {
+          name: "Hushh Button",
+          description: "Seamlessly share your preferences with brands for personalized experiences",
+          href: "/products/hushh-button",
+          icon: HushhButtonIcon
+        },
+        {
+          name: "Hushh Browser Companion",
+          description: "Track and manage your online browsing data, building a complete digital profile",
+          href: "/products/browser-companion",
+          icon: ChromeExtentionLogo
+        },
+        {
+          name: "VIBE Search App",
+          description: "Discover products you love with image-based search and AI recommendations",
+          href: "/products/hushh-vibe-search",
+          icon: VibeSearchIcon
+        },
+        {
+          name: "Developer API",
+          description: "Tools for businesses to integrate Hushh data into their applications",
+          href: "/developerApi",
+          icon: VibeSearchApi
+        },
+        {
+          name: "Hushh For Students",
+          description: "Rewards & empowers students with data control (safe & secure)",
+          href: "/products/hushh-for-students",
+          icon: ValetChat
+        }
+      ]
+    },
     developers: {
       title: "Developers",
       items: [
+        {
+          name: "Getting Started",
+          description: "Begin your journey with Hushh",
+          href: "/getting-started"
+        },
+        {
+          name: "API Reference",
+          description: "Complete API documentation",
+          href: "/developerApi"
+        },
         {
           name: "GitHub Protocol",
           description: "Open source development framework",
@@ -210,27 +262,6 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
           description: "How we handle your consent",
           href: "/consent-ai-protocol"
         }
-      ]
-    },
-    docs: {
-      title: "Docs",
-      items: [
-        {
-          name: "Getting Started",
-          description: "Begin your journey with Hushh",
-          href: "/getting-started"
-        },
-        {
-          name: "API Reference",
-          description: "Complete API documentation",
-          href: "/developerApi"
-        },
-       
-        // {
-        //   name: "Blueprint Recipes",
-        //   description: "Pre-built solutions and templates",
-        //   href: "/docs/blueprints"
-        // }
       ]
     },
     community: {
@@ -292,13 +323,16 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
   };
 
   const renderDropdownMenu = (menuKey, menuData) => {
+    // Check if this is the solutions dropdown to apply grid layout
+    const isSolutionsDropdown = menuKey === 'solutions';
+    
     return (
       <div
         className="dropdown-menu absolute top-full left-0 bg-white shadow-2xl border border-gray-100 z-50 rounded-2xl mt-2"
         style={{
           animation: "fadeInDown 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-          minWidth: "280px",
-          maxWidth: "380px",
+          minWidth: isSolutionsDropdown ? "800px" : "280px",
+          maxWidth: isSolutionsDropdown ? "900px" : "380px",
           boxShadow: "0 20px 60px rgba(0, 0, 0, 0.12), 0 8px 25px rgba(0, 0, 0, 0.08)",
           backdropFilter: "blur(20px)",
         }}
@@ -318,7 +352,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
         
         <div className="relative bg-white rounded-2xl overflow-hidden">
           <div className="px-4 py-4">
-            <div className="space-y-1">
+            <div className={isSolutionsDropdown ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" : "space-y-1"}>
               {menuData.items.map((item, index) => (
                 <div
                   key={index}
@@ -332,44 +366,43 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                     router.push(item.href);
                   }}
                 >
-                  <div className="flex items-center space-x-3">
+                  <div className={isSolutionsDropdown ? "flex flex-col items-center text-center space-y-2" : "flex items-center space-x-3"}>
                     {item.icon && (
                     <div className="flex-shrink-0">
                       <div 
-                        className="w-8 h-8 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center group-hover:from-blue-100 group-hover:to-indigo-100 transition-all duration-200"
+                        className={`${isSolutionsDropdown ? 'w-10 h-10' : 'w-8 h-8'} rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center group-hover:from-blue-100 group-hover:to-indigo-100 transition-all duration-200`}
                       >
                         {typeof item.icon === 'string' ? (
                           <Image 
                             src={item.icon} 
                             alt={item.name} 
-                            width={16} 
-                            height={16} 
-                            className="w-4 h-4"
+                            width={isSolutionsDropdown ? 20 : 16} 
+                            height={isSolutionsDropdown ? 20 : 16} 
+                            className={isSolutionsDropdown ? "w-5 h-5" : "w-4 h-4"}
                             style={{borderRadius:'20%'}}
                           />
                         ) : (
-                            <Image 
-                              src={item.icon} 
-                              alt={item.name} 
-                              width={16} 
-                              height={16} 
-                              className="w-4 h-4"
-                            />
+                          React.createElement(item.icon, { 
+                            className: isSolutionsDropdown ? "w-5 h-5" : "w-4 h-4",
+                            size: isSolutionsDropdown ? 20 : 16
+                          })
                         )}
                       </div>
                     </div>
                     )}
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-semibold text-gray-900 group-hover:text-blue-700 transition-colors duration-200">
+                    <div className={isSolutionsDropdown ? "flex-1" : "flex-1 min-w-0"}>
+                      <div className={`${isSolutionsDropdown ? 'text-sm' : 'text-sm'} font-semibold text-gray-900 group-hover:text-blue-700 transition-colors duration-200`}>
                         {item.name}
                       </div>
-                      <div className="text-xs text-gray-500 mt-0.5 leading-relaxed group-hover:text-gray-600 transition-colors duration-200">
+                      <div className={`text-xs text-gray-500 ${isSolutionsDropdown ? 'mt-1' : 'mt-0.5'} leading-relaxed group-hover:text-gray-600 transition-colors duration-200`}>
                         {item.description}
                       </div>
                     </div>
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      <ChevronRightIcon className="w-4 h-4 text-blue-500" />
-                    </div>
+                    {!isSolutionsDropdown && (
+                      <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        <ChevronRightIcon className="w-4 h-4 text-blue-500" />
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
@@ -426,6 +459,18 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                     {activeDropdown === 'products' && renderDropdownMenu('products', menuItems.products)}
                   </div>
 
+                  {/* Solutions Dropdown */}
+                  <div className="relative group">
+                    <button
+                      className="text-gray-800 text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-3 nav-button"
+                      onMouseEnter={() => setActiveDropdown('solutions')}
+                    >
+                      <span>Solutions</span>
+                      <ChevronDownIcon className={`w-3 h-3 transition-transform duration-200 ${activeDropdown === 'solutions' ? 'rotate-180' : ''}`} />
+                    </button>
+                    {activeDropdown === 'solutions' && renderDropdownMenu('solutions', menuItems.solutions)}
+                  </div>
+
                   {/* Developers Dropdown */}
                   <div className="relative group">
                     <button
@@ -448,18 +493,6 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                       <ChevronDownIcon className={`w-3 h-3 transition-transform duration-200 ${activeDropdown === 'whyHushh' ? 'rotate-180' : ''}`} />
                     </button>
                     {activeDropdown === 'whyHushh' && renderDropdownMenu('whyHushh', menuItems.whyHushh)}
-                  </div>
-
-                  {/* Docs Dropdown */}
-                  <div className="relative group">
-                    <button
-                      className="text-gray-800 text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-3 nav-button"
-                      onMouseEnter={() => setActiveDropdown('docs')}
-                    >
-                      <span>Docs</span>
-                      <ChevronDownIcon className={`w-3 h-3 transition-transform duration-200 ${activeDropdown === 'docs' ? 'rotate-180' : ''}`} />
-                    </button>
-                    {activeDropdown === 'docs' && renderDropdownMenu('docs', menuItems.docs)}
                   </div>
 
                   {/* Community Dropdown */}
@@ -744,6 +777,50 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                       )}
                     </div>
 
+                    {/* Solutions Section */}
+                    <div className="mobile-menu-section">
+                      <button
+                        onClick={() => setActiveDropdown(activeDropdown === 'solutions' ? null : 'solutions')}
+                        className="flex items-center justify-between w-full text-left text-lg font-semibold text-gray-900 py-2"
+                      >
+                        <span>Solutions</span>
+                        <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${activeDropdown === 'solutions' ? 'rotate-180' : ''}`} />
+                      </button>
+                      {activeDropdown === 'solutions' && (
+                        <div className="mt-3 space-y-3 pl-4">
+                          {menuItems.solutions.items.map((item, index) => (
+                            <div
+                              key={index}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setIsMenuOpen(false);
+                                router.push(item.href);
+                              }}
+                              className="block mobile-menu-item cursor-pointer"
+                            >
+                              <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                {item.icon && (
+                                  <div className="flex-shrink-0 mt-1">
+                                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                      {React.createElement(item.icon, { 
+                                        className: "w-4 h-4",
+                                        size: 16 
+                                      })}
+                                    </div>
+                                  </div>
+                                )}
+                                <div>
+                                  <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
+                                  <p className="text-xs text-gray-500 mt-1">{item.description}</p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
                     {/* Developers Section */}
                     <div className="mobile-menu-section">
                       <button
@@ -814,64 +891,6 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                       {activeDropdown === 'whyHushh' && (
                         <div className="mt-3 space-y-3 pl-4">
                           {menuItems.whyHushh.items.map((item, index) => (
-                            <div
-                              key={index}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                setIsMenuOpen(false);
-                                router.push(item.href);
-                              }}
-                              className="block mobile-menu-item cursor-pointer"
-                            >
-                              <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                                {item.icon && (
-                                  <div className="flex-shrink-0 mt-1">
-                                    <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                                      {typeof item.icon === 'string' ? (
-                                        <Image 
-                                          src={item.icon} 
-                                          alt={item.name} 
-                                          width={16} 
-                                          height={16} 
-                                          className="w-4 h-4"
-                                          style={{borderRadius:'20%'}}
-                                        />
-                                      ) : (
-                                        <Image 
-                                          src={item.icon} 
-                                          alt={item.name} 
-                                          width={16} 
-                                          height={16} 
-                                          className="w-4 h-4"
-                                        />
-                                      )}
-                                    </div>
-                                  </div>
-                                )}
-                                <div>
-                                  <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
-                                  <p className="text-xs text-gray-500 mt-1">{item.description}</p>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Docs Section */}
-                    <div className="mobile-menu-section">
-                      <button
-                        onClick={() => setActiveDropdown(activeDropdown === 'docs' ? null : 'docs')}
-                        className="flex items-center justify-between w-full text-left text-lg font-semibold text-gray-900 py-2"
-                      >
-                        <span>Docs</span>
-                        <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${activeDropdown === 'docs' ? 'rotate-180' : ''}`} />
-                      </button>
-                      {activeDropdown === 'docs' && (
-                        <div className="mt-3 space-y-3 pl-4">
-                          {menuItems.docs.items.map((item, index) => (
                             <div
                               key={index}
                               onClick={(e) => {
