@@ -303,7 +303,7 @@ const FooterComponent = () => {
                     spacing={{ base: 1, md: 3 }}
                     w="full"
                   >
-                    <Link href="/about-us">
+                    <Link href="/about">
                       <Text 
                         fontSize={{ base: "sm", md: "sm" }}
                         fontWeight="400" 

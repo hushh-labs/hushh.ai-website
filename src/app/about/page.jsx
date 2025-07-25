@@ -7,7 +7,7 @@ import AboutDockPhoto from "../_components/svg/aboutImages/AboutDockPhoto.svg";
 import Image from "next/image";
 import AboutMission from "../_components/svg/aboutImages/AboutMission.svg";
 import AboutVision from "../_components/svg/aboutImages/AboutVision.svg";
-import ContactForm from "../_components/features/contactForm";
+import ContactUsClient from "../contact-us/ContactUsClient";
 import AboutFaq from "../_components/features/faq/aboutFaq";
 import ImageGrid from "../_components/features/dynamicImageGrid";
 import { siteMetadata } from "../sitemetadata";
@@ -609,7 +609,7 @@ export default function About() {
         <AboutFaq />
 
         {/* Contact Form */}
-        <ContactForm />
+        <ContactUsClient />
       </Box>
       </ContentWrapper>
     </>

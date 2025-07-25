@@ -1131,7 +1131,7 @@ const UserProfile = () => {
                         variant="outline"
                         size="sm"
                         w="full"
-                        onClick={() => router.push('/about-us')}
+                        onClick={() => router.push('/about')}
                       >
                         🤫 Know About Hushh
                       </Button>

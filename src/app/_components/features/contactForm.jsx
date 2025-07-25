@@ -1,600 +1,496 @@
-"use client";
-import React, { useRef, useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+'use client'
+import React, { useState } from "react";
 import {
   Box,
   Button,
-  Container,
-  HStack,
-  Heading,
+  FormControl,
+  FormLabel,
   Input,
-  Radio,
-  RadioGroup,
-  Stack,
-  Text,
   Textarea,
   VStack,
+  HStack,
+  Heading,
+  Text,
+  Grid,
+  GridItem,
+  useToast,
+  Select,
+  Link as ChakraLink,
+  Container,
+  Icon,
+  Flex,
   Alert,
   AlertIcon,
   AlertTitle,
   AlertDescription,
-  Grid,
-  GridItem,
-  Link,
 } from "@chakra-ui/react";
+import { FiMail, FiPhone, FiMapPin, FiClock } from "react-icons/fi";
+import { motion } from "framer-motion";
+import emailjs from '@emailjs/browser';
 import FooterComponent from "./FooterComponent";
-import CircelFormShadow from "../../_components/svg/circleFormShadow.svg";
-import Image from "next/image";
-import BigCircleFormShadow from "../../_components/svg/BigCircleFormShadow.svg";
-import emailjs from "@emailjs/browser";
-import { useToast } from "@chakra-ui/react";
-import { useAuth } from "../../context/AuthContext";
-import { useRouter } from 'next/navigation';
+const MotionBox = motion(Box);
 
-emailjs.init("_TMzDc8Bfy6riSfzq");
-
-export default function ContactForm() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
-  const [formErrors, setFormErrors] = useState({});
-  const [firstName, setFirstName] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [number, setNumber] = useState("");
-  const [subject, setSubject] = useState(null);
-  const [message, setMessage] = useState("");
-  const [showAuthAlert, setShowAuthAlert] = useState(false);
-  const form = useRef();
+const ContactForm = () => {
   const toast = useToast();
-  const businessEmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const router = useRouter();
-  
-  // Auth context
-  const { isAuthenticated, user, loading } = useAuth();
-  
-  // Auto-populate email if user is authenticated
-  useEffect(() => {
-    if (isAuthenticated && user?.email && !email) {
-      setEmail(user.email);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    company: '',
+    phone: '',
+    subject: '',
+    message: '',
+    reason: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
     }
-  }, [isAuthenticated, user, email]);
-
-  const freeEmailProviders = [
-    "gmail.com",
-    "yahoo.com",
-    "hotmail.com",
-    "outlook.com",
-    "aol.com",
-    // Add more free email providers if needed
-  ];
-
-  const isBusinessEmail = (email) => {
-    if (!businessEmailRegex.test(email)) {
-      return false;
-    }
-    const domain = email.split("@")[1];
-    return !freeEmailProviders.includes(domain);
-  };
-
-  const validateEmail = () => {
-    const newErrors = { email: "" };
-    let isValid = true;
-
-    if (!email.trim()) {
-      newErrors.email = "Email is required";
-      isValid = false;
-    } else if (!isBusinessEmail(email)) {
-      newErrors.email = "Please use a business email address";
-      isValid = false;
-    }
-
-    setFormErrors(newErrors);
-    return isValid;
   };
 
   const validateForm = () => {
-    let isValid = true;
-    let newErrors = {};
-
-    if (!fullName.trim()) {
-      newErrors.fullName = "Full name is required";
-    }
-
-    if (!email.trim()) {
-      newErrors.email = "Email is required";
-      isValid = false;
-    } else if (!isBusinessEmail(email)) {
-      newErrors.email = "Please use a business email address";
-      isValid = false;
-    }
-
-    if (!email.trim()) {
-      newErrors.email = "Email is required";
-      isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = "Invalid email format";
-      isValid = false;
-    }
-
-    // if (!number.trim()) {
-    //   newErrors.number = "Phone number is required";
-    //   isValid = false;
-    // }
-
-    setFormErrors(newErrors);
-    return isValid;
-  };
-
-  const onSubmit = async (data, e) => {
-    e.preventDefault();
-    await sendEmail(data);
-    reset(); // This will reset the form fields after submission
-  };
-
-  const sendEmail = async (e) => {
-    e.preventDefault();
+    const newErrors = {};
     
-    // Check if user is authenticated
-    if (!isAuthenticated) {
-      setShowAuthAlert(true);
-      // Redirect to login page with current page as redirect parameter
-      router.push('/login?redirect=' + encodeURIComponent(window.location.pathname));
-      return;
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
     }
     
-    // Use authenticated user's email instead of form email
-    const emailToUse = user?.email || email;
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Email is invalid';
+    }
+    
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     
     if (!validateForm()) {
+      toast({
+        title: "Please fix the errors",
+        description: "Please fill in all required fields correctly.",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
       return;
     }
-    const previousSubmissionTime = localStorage.getItem(
-      `${emailToUse}_${firstName}`
-    );
 
-    if (previousSubmissionTime) {
-      const currentTime = new Date().getTime();
-      const timeDifference =
-        (currentTime - new Date(previousSubmissionTime).getTime()) /
-        (1000 * 3600);
+    setIsSubmitting(true);
 
-      if (timeDifference < 2) {
-        toast({
-          title: "Please try again later!",
-          description:
-            "You have already submitted the form. Please try again after 2-3 hours",
-          status: "warning",
-          duration: 3000,
-          isClosable: true,
-        });
-        return;
-      }
-    }
-    localStorage.setItem(`${emailToUse}_${fullName}`, new Date().toISOString());
-    console.log("local Storage", localStorage);
-    const serviceId = "service_kwvlp08";
-    const templateId = "template_nc0x47v";
-    const user_Id = "9KjZ-7TNPYvuqx3as";
-
-    const templateParams = {
-      from_name: firstName,
-      from_lname: lastName,
-      from_fullName: fullName,
-      from_email: emailToUse, // Use authenticated user's email
-      to_name: "Manish Sainani",
-      message: message,
-      subject: subject,
-      number: number,
-    };
     try {
-      const response = await emailjs.send(
-        serviceId,
-        templateId,
-        templateParams,
-        user_Id
-      );
+      // EmailJS configuration
+      const serviceId = "service_tsuapx9";
+      const templateId = "template_50ujflf";
+      const userId = "DtG13YmoZDccI-GgA";
 
+      const templateParams = {
+        name: formData.name,
+        email: formData.email,
+        company: formData.company || 'Not provided',
+        phone: formData.phone || 'Not provided',
+        subject: formData.subject || 'General Inquiry',
+        message: formData.message,
+        reason: formData.reason || 'General Contact'
+      };
+
+      await emailjs.send(serviceId, templateId, templateParams, userId);
+      
       toast({
-        title: "Form Submitted.",
-        description: "Thank you for reaching out to us",
+        title: "Message sent successfully!",
+        description: "We'll get back to you as soon as possible.",
         status: "success",
-        duration: 3000,
+        duration: 5000,
         isClosable: true,
       });
 
-      setFirstName("");
-      setLastName("");
-      setEmail("");
-      setNumber("");
-      setFullName("");
-      setMessage("");
-      setSubject("");
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        company: '',
+        phone: '',
+        subject: '',
+        message: '',
+        reason: ''
+      });
+
     } catch (error) {
-      console.error("Sending mail FAILED...", error.text);
+      console.error('Error sending email:', error);
+      toast({
+        title: "Failed to send message",
+        description: "Please try again later or contact us directly.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <>
-      {/* Contact Form Section */}
-      <Box 
-        bg="#f5f5f7" 
-        w="100%" 
-        m={0} 
-        p={0}
-        sx={{
-          '& .chakra-container': {
-            paddingInlineStart: '0 !important',
-            paddingInlineEnd: '0 !important',
-            paddingLeft: '0 !important',
-            paddingRight: '0 !important',
-          }
-        }}
-      >
-        <VStack spacing={8} align="center" textAlign="center" py={{ base: 12, md: 16 }} px={{ base: 4, md: 8 }}>
+    <Box bg="white" w="100%" py={{ base: 16, md: 24 }}>
+      <Container maxW="7xl" px={{ base: 4, md: 8 }}>
+        {/* Header Section */}
+        <MotionBox
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          textAlign="center"
+          mb={{ base: 12, md: 16 }}
+        >
           <Heading
-            as="h2"
-            fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
-            fontWeight="bold"
-            color="black"
-            lineHeight={{ base: 1.2, md: 1.25 }}
-            letterSpacing={{ base: "-0.5px", md: "-1.3px" }}
+            as="h1"
+            size={{ base: "xl", md: "2xl" }}
+            fontWeight="700"
+            bgGradient="linear(to-r, #0071E3, #BB62FC, #DA4B7A, #F44F22)"
+            bgClip="text"
+            letterSpacing="-0.02em"
+            fontFamily="Inter, sans-serif"
+            mb={4}
           >
-            Reach out to us
+            Get in Touch
           </Heading>
           <Text
             fontSize={{ base: "lg", md: "xl" }}
-            color="black"
-            maxW={{ base: "full", md: "2xl" }}
-          >
-            Have questions about Hushh? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
-          </Text>
-        </VStack>
-
-        <Box w="100%" px={{ base: 4, md: 8 }} pb={{ base: 12, md: 16 }}>
-          <Box
-            bg="white"
-            borderRadius="2xl"
-            shadow="xl"
-            border="1px solid"
-            borderColor="#e2e8f0"
-            overflow="hidden"
-            maxW="container.xl"
+            color="gray.600"
+            maxW="2xl"
             mx="auto"
+            lineHeight={1.6}
           >
-            <Grid
-              templateColumns={{ base: "1fr", lg: "1fr 1.5fr" }}
-              minH={{ base: "auto", lg: "600px" }}
-            >
-              {/* Left Side - Contact Info */}
-              <GridItem>
-                <Box
-                  p={{ base: 8, md: 12 }}
-                  bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
-                  h="full"
-                  display="flex"
-                  flexDirection="column"
-                  justifyContent="space-between"
-                  position="relative"
-                  overflow="hidden"
-                >
-                  {/* Background decoration */}
-                  <Box
-                    position="absolute"
-                    top="-50px"
-                    right="-50px"
-                    w="200px"
-                    h="200px"
-                    bg="rgba(255,255,255,0.1)"
-                    borderRadius="full"
-                  />
-                  <Box
-                    position="absolute"
-                    bottom="-100px"
-                    left="-50px"
-                    w="300px"
-                    h="300px"
-                    bg="rgba(255,255,255,0.05)"
-                    borderRadius="full"
-                  />
+            Ready to take control of your data? Let's start a conversation about how Hushh can empower your digital journey.
+          </Text>
+        </MotionBox>
 
-                  <VStack align="start" spacing={8} position="relative" zIndex={1}>
-                    <VStack align="start" spacing={4}>
-                      <Heading
-                        as="h3"
-                        fontSize={{ base: "2xl", md: "3xl" }}
-                        fontWeight="bold"
-                        color="white"
-                        lineHeight={1.2}
-                      >
-                        Connect with Hushh
-                      </Heading>
-                      <Text
-                        fontSize={{ base: "md", md: "lg" }}
-                        color="rgba(255,255,255,0.9)"
-                        lineHeight={1.6}
-                      >
-                        Say something to reach out to us
+        <Grid
+          templateColumns={{ base: "1fr", lg: "1fr 1fr" }}
+          gap={{ base: 12, lg: 16 }}
+          alignItems="start"
+        >
+          {/* Contact Form */}
+          <MotionBox
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <Box
+              bg="white"
+              p={{ base: 6, md: 8 }}
+              borderRadius="2xl"
+              boxShadow="0 20px 60px rgba(0, 0, 0, 0.1)"
+              border="1px solid"
+              borderColor="gray.100"
+            >
+              <Heading size="lg" mb={6} color="gray.800" fontFamily="Inter, sans-serif">
+                Send us a Message
+              </Heading>
+              
+              <form onSubmit={handleSubmit}>
+                <VStack spacing={6} align="stretch">
+                  <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
+                    <FormControl isRequired isInvalid={errors.name}>
+                      <FormLabel fontWeight="600" color="gray.700">Full Name</FormLabel>
+                      <Input
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        placeholder="Enter your full name"
+                        size="lg"
+                        borderColor="gray.300"
+                        _hover={{ borderColor: "gray.400" }}
+                        _focus={{ borderColor: "#0071E3", boxShadow: "0 0 0 1px #0071E3" }}
+                        borderRadius="lg"
+                      />
+                      {errors.name && (
+                        <Text color="red.500" fontSize="sm" mt={1}>{errors.name}</Text>
+                      )}
+                    </FormControl>
+
+                    <FormControl isRequired isInvalid={errors.email}>
+                      <FormLabel fontWeight="600" color="gray.700">Email Address</FormLabel>
+                      <Input
+                        name="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="Enter your email"
+                        size="lg"
+                        borderColor="gray.300"
+                        _hover={{ borderColor: "gray.400" }}
+                        _focus={{ borderColor: "#0071E3", boxShadow: "0 0 0 1px #0071E3" }}
+                        borderRadius="lg"
+                      />
+                      {errors.email && (
+                        <Text color="red.500" fontSize="sm" mt={1}>{errors.email}</Text>
+                      )}
+                    </FormControl>
+                  </Grid>
+
+                  <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
+                    <FormControl>
+                      <FormLabel fontWeight="600" color="gray.700">Company</FormLabel>
+                      <Input
+                        name="company"
+                        value={formData.company}
+                        onChange={handleChange}
+                        placeholder="Your company (optional)"
+                        size="lg"
+                        borderColor="gray.300"
+                        _hover={{ borderColor: "gray.400" }}
+                        _focus={{ borderColor: "#0071E3", boxShadow: "0 0 0 1px #0071E3" }}
+                        borderRadius="lg"
+                      />
+                    </FormControl>
+
+                    <FormControl>
+                      <FormLabel fontWeight="600" color="gray.700">Phone Number</FormLabel>
+                      <Input
+                        name="phone"
+                        type="tel"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        placeholder="Your phone number (optional)"
+                        size="lg"
+                        borderColor="gray.300"
+                        _hover={{ borderColor: "gray.400" }}
+                        _focus={{ borderColor: "#0071E3", boxShadow: "0 0 0 1px #0071E3" }}
+                        borderRadius="lg"
+                      />
+                    </FormControl>
+                  </Grid>
+
+                  <FormControl>
+                    <FormLabel fontWeight="600" color="gray.700">Subject</FormLabel>
+                    <Select
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleChange}
+                      placeholder="Select a subject"
+                      size="lg"
+                      borderColor="gray.300"
+                      _hover={{ borderColor: "gray.400" }}
+                      _focus={{ borderColor: "#0071E3", boxShadow: "0 0 0 1px #0071E3" }}
+                      borderRadius="lg"
+                    >
+                      <option value="General Inquiry">General Inquiry</option>
+                      <option value="Product Demo">Product Demo</option>
+                      <option value="Partnership">Partnership</option>
+                      <option value="Support">Support</option>
+                      <option value="Investment">Investment</option>
+                      <option value="Media">Media</option>
+                    </Select>
+                  </FormControl>
+
+                  <FormControl isRequired isInvalid={errors.message}>
+                    <FormLabel fontWeight="600" color="gray.700">Message</FormLabel>
+                    <Textarea
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      placeholder="Tell us about your project or how we can help..."
+                      size="lg"
+                      rows={5}
+                      borderColor="gray.300"
+                      _hover={{ borderColor: "gray.400" }}
+                      _focus={{ borderColor: "#0071E3", boxShadow: "0 0 0 1px #0071E3" }}
+                      borderRadius="lg"
+                    />
+                    {errors.message && (
+                      <Text color="red.500" fontSize="sm" mt={1}>{errors.message}</Text>
+                    )}
+                  </FormControl>
+
+                  <Button
+                    type="submit"
+                    size="lg"
+                    w="full"
+                    bg="linear-gradient(135deg, #0071E3, #BB62FC)"
+                    color="white"
+                    fontWeight="600"
+                    borderRadius="lg"
+                    isLoading={isSubmitting}
+                    loadingText="Sending..."
+                    _hover={{
+                      bg: "linear-gradient(135deg, #005bb5, #9a4fd1)",
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 8px 25px rgba(0, 113, 227, 0.4)"
+                    }}
+                    _active={{
+                      transform: "translateY(0)"
+                    }}
+                    transition="all 0.3s ease"
+                  >
+                    Send Message
+                  </Button>
+                </VStack>
+              </form>
+            </Box>
+          </MotionBox>
+
+          {/* Contact Information */}
+          <MotionBox
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <VStack spacing={8} align="stretch">
+              {/* Contact Details */}
+              <Box
+                bg="linear-gradient(135deg, #0071E3, #BB62FC)"
+                p={{ base: 6, md: 8 }}
+                borderRadius="2xl"
+                color="white"
+              >
+                <Heading size="lg" mb={6} fontFamily="Inter, sans-serif">
+                  Contact Information
+                </Heading>
+                
+                <VStack spacing={6} align="stretch">
+                  <HStack spacing={4}>
+                    <Box
+                      bg="rgba(255, 255, 255, 0.2)"
+                      p={3}
+                      borderRadius="lg"
+                      backdropFilter="blur(10px)"
+                    >
+                      <Icon as={FiMail} boxSize={5} />
+                    </Box>
+                    <VStack align="start" spacing={1}>
+                      <Text fontWeight="medium" color="rgba(255,255,255,0.8)" fontSize="sm">Email</Text>
+                      <ChakraLink href="mailto:sales@hushh.ai">
+                        <Text 
+                          fontWeight="medium"
+                          _hover={{ textDecoration: "underline" }}
+                        >
+                          sales@hushh.ai
+                        </Text>
+                      </ChakraLink>
+                    </VStack>
+                  </HStack>
+
+                  <HStack spacing={4}>
+                    <Box
+                      bg="rgba(255, 255, 255, 0.2)"
+                      p={3}
+                      borderRadius="lg"
+                      backdropFilter="blur(10px)"
+                    >
+                      <Icon as={FiPhone} boxSize={5} />
+                    </Box>
+                    <VStack align="start" spacing={1}>
+                      <Text fontWeight="medium" color="rgba(255,255,255,0.8)" fontSize="sm">Phone</Text>
+                      <ChakraLink href="tel:+18884621726">
+                        <Text 
+                          fontWeight="medium"
+                          _hover={{ textDecoration: "underline" }}
+                        >
+                          +1 (888) 462-1726
+                        </Text>
+                      </ChakraLink>
+                    </VStack>
+                  </HStack>
+
+                  <HStack spacing={4}>
+                    <Box
+                      bg="rgba(255, 255, 255, 0.2)"
+                      p={3}
+                      borderRadius="lg"
+                      backdropFilter="blur(10px)"
+                    >
+                      <Icon as={FiMapPin} boxSize={5} />
+                    </Box>
+                    <VStack align="start" spacing={1}>
+                      <Text fontWeight="medium" color="rgba(255,255,255,0.8)" fontSize="sm">Address</Text>
+                      <Text fontWeight="medium">
+                        1021 5th St W<br />
+                        Kirkland, WA 98033<br />
+                        United States
                       </Text>
                     </VStack>
+                  </HStack>
 
-                    <VStack align="start" spacing={6} w="full">
-                      <HStack spacing={4} align="start">
-                        <Box
-                          w={6}
-                          h={6}
-                          bg="rgba(255,255,255,0.2)"
-                          borderRadius="full"
-                          display="flex"
-                          alignItems="center"
-                          justifyContent="center"
-                          mt={1}
-                        >
-                          <Text color="white" fontSize="sm">✉</Text>
-                        </Box>
-                        <VStack align="start" spacing={1}>
-                          <Text color="rgba(255,255,255,0.8)" fontSize="sm">Email</Text>
-                          <Link href="mailto:sales@hushh.ai">
-                            <Text 
-                              color="white" 
-                              fontWeight="medium"
-                              _hover={{ textDecoration: "underline" }}
-                            >
-                              sales@hushh.ai
-                            </Text>
-                          </Link>
-                        </VStack>
-                      </HStack>
-
-                      <HStack spacing={4} align="start">
-                        <Box
-                          w={6}
-                          h={6}
-                          bg="rgba(255,255,255,0.2)"
-                          borderRadius="full"
-                          display="flex"
-                          alignItems="center"
-                          justifyContent="center"
-                          mt={1}
-                        >
-                          <Text color="white" fontSize="sm">📞</Text>
-                        </Box>
-                        <VStack align="start" spacing={1}>
-                          <Text color="rgba(255,255,255,0.8)" fontSize="sm">Phone</Text>
-                          <Link href="tel:+18884621726">
-                            <Text 
-                              color="white" 
-                              fontWeight="medium"
-                              _hover={{ textDecoration: "underline" }}
-                            >
-                              +1 (888) 462-1726
-                            </Text>
-                          </Link>
-                        </VStack>
-                      </HStack>
-
-                      <HStack spacing={4} align="start">
-                        <Box
-                          w={6}
-                          h={6}
-                          bg="rgba(255,255,255,0.2)"
-                          borderRadius="full"
-                          display="flex"
-                          alignItems="center"
-                          justifyContent="center"
-                          mt={1}
-                        >
-                          <Text color="white" fontSize="sm">📍</Text>
-                        </Box>
-                        <VStack align="start" spacing={1}>
-                          <Text color="rgba(255,255,255,0.8)" fontSize="sm">Address</Text>
-                          <Text color="white" fontWeight="medium" lineHeight={1.5}>
-                            Hushh.ai<br />
-                            1021 5th St W<br />
-                            Kirkland, WA 98033
-                          </Text>
-                        </VStack>
-                      </HStack>
-                    </VStack>
-                  </VStack>
-                </Box>
-              </GridItem>
-
-              {/* Right Side - Contact Form */}
-              <GridItem>
-                <Box p={{ base: 8, md: 12 }}>
-                  {/* Authentication Alert */}
-                  {showAuthAlert && !isAuthenticated && (
-                    <Alert 
-                      status="info" 
-                      bg="rgba(0, 113, 227, 0.1)" 
-                      border="1px solid rgba(0, 113, 227, 0.3)"
+                  <HStack spacing={4}>
+                    <Box
+                      bg="rgba(255, 255, 255, 0.2)"
+                      p={3}
                       borderRadius="lg"
-                      mb={6}
+                      backdropFilter="blur(10px)"
                     >
-                      <AlertIcon color="#0071e3" />
-                      <Box>
-                        <AlertTitle color="#0071e3" fontSize="sm">Sign in required!</AlertTitle>
-                        <AlertDescription color="black" fontSize="xs">
-                          Please sign in to submit the contact form. Your email will be automatically filled.
-                        </AlertDescription>
-                      </Box>
-                    </Alert>
-                  )}
-                  
-                  <form onSubmit={sendEmail}>
-                    <VStack spacing={6} align="stretch">
-                      {/* Full Name */}
-                      <VStack align="start" spacing={2}>
-                        <Text 
-                          fontSize="sm" 
-                          fontWeight="medium" 
-                          color="gray.700"
-                        >
-                          Full Name *
-                        </Text>
-                        <Input
-                          placeholder="Enter your full name"
-                          value={fullName}
-                          onChange={(e) => setFullName(e.target.value)}
-                          bg="gray.50"
-                          border="1px solid"
-                          borderColor="gray.200"
-                          borderRadius="lg"
-                          h={12}
-                          _placeholder={{ color: "gray.400" }}
-                          _focus={{
-                            borderColor: "#0071e3",
-                            boxShadow: "0 0 0 3px rgba(0, 113, 227, 0.1)",
-                            bg: "white"
-                          }}
-                        />
-                        {formErrors.fullName && (
-                          <Text color="red.500" fontSize="xs">
-                            {formErrors.fullName}
-                          </Text>
-                        )}
-                      </VStack>
-
-                      {/* Email */}
-                      <VStack align="start" spacing={2}>
-                        <Text 
-                          fontSize="sm" 
-                          fontWeight="medium" 
-                          color="gray.700"
-                        >
-                          Email Address *
-                        </Text>
-                        <Input
-                          type="email"
-                          placeholder="Enter your email address"
-                          value={isAuthenticated && user?.email ? user.email : email}
-                          onChange={(e) => !isAuthenticated && setEmail(e.target.value)}
-                          readOnly={isAuthenticated}
-                          bg={isAuthenticated ? "gray.100" : "gray.50"}
-                          border="1px solid"
-                          borderColor="gray.200"
-                          borderRadius="lg"
-                          h={12}
-                          _placeholder={{ color: "gray.400" }}
-                          _focus={{
-                            borderColor: "#0071e3",
-                            boxShadow: "0 0 0 3px rgba(0, 113, 227, 0.1)",
-                            bg: "white"
-                          }}
-                          opacity={isAuthenticated ? 0.8 : 1}
-                        />
-                        {formErrors.email && (
-                          <Text color="red.500" fontSize="xs">
-                            {formErrors.email}
-                          </Text>
-                        )}
-                      </VStack>
-
-                      {/* Subject Selection */}
-                      <VStack align="start" spacing={3}>
-                        <Text 
-                          fontSize="sm" 
-                          fontWeight="medium" 
-                          color="gray.700"
-                        >
-                          Select Subject
-                        </Text>
-                        <RadioGroup
-                          value={subject}
-                          onChange={(value) => setSubject(value)}
-                        >
-                          <VStack align="start" spacing={3}>
-                            <Radio value="Explore Hushh Products" colorScheme="blue">
-                              <Text fontSize="sm" color="gray.700">Explore Hushh Products</Text>
-                            </Radio>
-                            <Radio value="Partner with Hushh" colorScheme="blue">
-                              <Text fontSize="sm" color="gray.700">Partner with Hushh</Text>
-                            </Radio>
-                            <Radio value="Get Support" colorScheme="blue">
-                              <Text fontSize="sm" color="gray.700">Get Support</Text>
-                            </Radio>
-                          </VStack>
-                        </RadioGroup>
-                        {formErrors.subject && (
-                          <Text color="red.500" fontSize="xs">
-                            {formErrors.subject}
-                          </Text>
-                        )}
-                      </VStack>
-
-                      {/* Message */}
-                      <VStack align="start" spacing={2}>
-                        <Text 
-                          fontSize="sm" 
-                          fontWeight="medium" 
-                          color="gray.700"
-                        >
-                          Message
-                        </Text>
-                        <Textarea
-                          placeholder="Type your message here..."
-                          value={message}
-                          onChange={(e) => setMessage(e.target.value)}
-                          bg="gray.50"
-                          border="1px solid"
-                          borderColor="gray.200"
-                          borderRadius="lg"
-                          minH={32}
-                          resize="vertical"
-                          _placeholder={{ color: "gray.400" }}
-                          _focus={{
-                            borderColor: "#0071e3",
-                            boxShadow: "0 0 0 3px rgba(0, 113, 227, 0.1)",
-                            bg: "white"
-                          }}
-                        />
-                        {formErrors.message && (
-                          <Text color="red.500" fontSize="xs">
-                            {formErrors.message}
-                          </Text>
-                        )}
-                      </VStack>
-
-                      {/* Submit Button */}
-                      <Button
-                        type="submit"
-                        bg="#0071e3"
-                        color="white"
-                        size="lg"
-                        h={12}
-                        borderRadius="lg"
-                        fontWeight="semibold"
-                        _hover={{
-                          bg: "#005bb5",
-                          transform: "translateY(-1px)",
-                          shadow: "lg"
-                        }}
-                        _active={{
-                          bg: "#004494",
-                          transform: "translateY(0)"
-                        }}
-                        transition="all 0.2s"
-                        onClick={sendEmail}
-                      >
-                        Send Message
-                      </Button>
+                      <Icon as={FiClock} boxSize={5} />
+                    </Box>
+                    <VStack align="start" spacing={1}>
+                      <Text fontWeight="medium" color="rgba(255,255,255,0.8)" fontSize="sm">Business Hours</Text>
+                      <Text fontWeight="medium">
+                        Monday - Friday<br />
+                        9:00 AM - 6:00 PM PST
+                      </Text>
                     </VStack>
-                  </form>
-                </Box>
-              </GridItem>
-            </Grid>
-          </Box>
-        </Box>
-      </Box>
+                  </HStack>
+                </VStack>
+              </Box>
 
-      {/* Footer */}
-      <FooterComponent />
+              {/* Additional Info */}
+              <Box
+                bg="gray.50"
+                p={{ base: 6, md: 8 }}
+                borderRadius="2xl"
+                border="1px solid"
+                borderColor="gray.200"
+              >
+                <Heading size="md" mb={4} color="gray.800" fontFamily="Inter, sans-serif">
+                  Ready to Get Started?
+                </Heading>
+                <Text color="gray.600" mb={4} lineHeight={1.6}>
+                  Schedule a personalized demo to see how Hushh can transform your data strategy and empower your digital experiences.
+                </Text>
+                <Button
+                  as={ChakraLink}
+                  href="/demoBookingPage"
+                  size="md"
+                  variant="outline"
+                  borderColor="gray.300"
+                  color="gray.700"
+                  _hover={{
+                    borderColor: "#0071E3",
+                    color: "#0071E3",
+                    transform: "translateY(-1px)"
+                  }}
+                  borderRadius="lg"
+                  fontWeight="600"
+                  w="full"
+                  textDecoration="none !important"
+                >
+                  Schedule a Demo
+                </Button>
+              </Box>
+            </VStack>
+          </MotionBox>
+        </Grid>
+      </Container>
+    </Box>
+    <FooterComponent />
     </>
   );
-}
+};
+
+export default ContactForm; 
