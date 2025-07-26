@@ -9,8 +9,8 @@ import {
   Text,
   VStack,
   TabPanels,
-  TabPanel,
   SimpleGrid,
+  TabPanel,
   HStack,
   Icon,
 } from '@chakra-ui/react';
@@ -249,7 +249,7 @@ const FrequentlyAskedQuestions = () => {
             </Text>
           </VStack>
           <Flex justify="center" px={{ base: 4, md: 8 }}>
-            <Tabs variant="unstyled" defaultIndex={1} align="center">
+            <Tabs variant="unstyled" defaultIndex={1} w="full">
               <TabList
                 bg="white"
                 borderRadius="full"
@@ -257,6 +257,8 @@ const FrequentlyAskedQuestions = () => {
                 boxShadow="lg"
                 border="1px solid"
                 borderColor="gray.200"
+                width="fit-content"
+                mx="auto"
               >
                 <Tab
                   fontSize={{ base: 'sm', md: 'md', lg: 'xl' }}
@@ -329,13 +331,13 @@ const FrequentlyAskedQuestions = () => {
                   <Text>General Content will be added here.</Text>
                 </TabPanel>
                 <TabPanel>
-                  <SimpleGrid
-                    columns={{ base: 1, md: 2, lg: 3 }}
-                    spacing={{ base: 6, md: 10 }}
+                  <Flex
+                    wrap="wrap"
+                    justify="center"
+                    gap={{ base: 6, md: 10 }}
                     maxW={{ base: 'full', md: 'container.xl' }}
                     mx="auto"
                     px={{ base: 4, md: 0 }}
-                    placeItems="center"
                   >
                     {products.map(product => (
                       <HStack
@@ -363,7 +365,7 @@ const FrequentlyAskedQuestions = () => {
                         />
                       </HStack>
                     ))}
-                  </SimpleGrid>
+                  </Flex>
                   {selectedProduct === 'Personal Data Agent' && (
                     <Box mt={12} px={{ base: 4, md: 8 }}>
                       <Heading
