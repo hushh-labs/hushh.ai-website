@@ -241,9 +241,9 @@ const FrequentlyAskedQuestions = () => {
             </Heading>
             <Text
               fontSize={{ base: '3xl', md: '4xl' }}
-              fontWeight="bold"
-              bgGradient="linear(to-r, gray.600, gray.800)"
-              bgClip="text"
+              fontWeight="700"
+            bgGradient="linear(to-r, #0071E3, #BB62FC, #DA4B7A, #F44F22)"
+            bgClip="text"
             >
               FAQs
             </Text>
@@ -371,10 +371,12 @@ const FrequentlyAskedQuestions = () => {
                       <Heading
                         as="h3"
                         fontSize={{ base: '2xl', md: '3xl' }}
-                        fontWeight="bold"
+                        // fontWeight="bold"
                         textAlign="center"
                         mb={8}
-                        color="#363636"
+                        fontWeight="700"
+            bgGradient="linear(to-r, #0071E3, #BB62FC, #DA4B7A, #F44F22)"
+            bgClip="text"
                       >
                         Personal Data Agent (PDA)
                       </Heading>
@@ -412,7 +414,9 @@ const FrequentlyAskedQuestions = () => {
                         fontWeight="bold"
                         textAlign="center"
                         mb={8}
-                        color="#363636"
+                        fontWeight="700"
+            bgGradient="linear(to-r, #0071E3, #BB62FC, #DA4B7A, #F44F22)"
+            bgClip="text"
                       >
                         Hushh Vault
                       </Heading>
@@ -447,10 +451,12 @@ const FrequentlyAskedQuestions = () => {
                       <Heading
                         as="h3"
                         fontSize={{ base: '2xl', md: '3xl' }}
-                        fontWeight="bold"
+                        // fontWeight="bold"
                         textAlign="center"
                         mb={8}
-                        color="#363636"
+                        fontWeight="700"
+            bgGradient="linear(to-r, #0071E3, #BB62FC, #DA4B7A, #F44F22)"
+            bgClip="text"
                       >
                         Hushh Link
                       </Heading>
@@ -485,10 +491,12 @@ const FrequentlyAskedQuestions = () => {
                       <Heading
                         as="h3"
                         fontSize={{ base: '2xl', md: '3xl' }}
-                        fontWeight="bold"
+                        // fontWeight="bold"
                         textAlign="center"
                         mb={8}
-                        color="#363636"
+                        fontWeight="700"
+            bgGradient="linear(to-r, #0071E3, #BB62FC, #DA4B7A, #F44F22)"
+            bgClip="text"
                       >
                         Hushh Flow
                       </Heading>
@@ -523,10 +531,12 @@ const FrequentlyAskedQuestions = () => {
                       <Heading
                         as="h3"
                         fontSize={{ base: '2xl', md: '3xl' }}
-                        fontWeight="bold"
+                        //  fontWeight="bold"
                         textAlign="center"
                         mb={8}
-                        color="#363636"
+                        fontWeight="700"
+            bgGradient="linear(to-r, #0071E3, #BB62FC, #DA4B7A, #F44F22)"
+            bgClip="text"
                       >
                         Hushh Grid
                       </Heading>
