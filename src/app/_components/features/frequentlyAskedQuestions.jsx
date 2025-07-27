@@ -286,19 +286,7 @@ const FrequentlyAskedQuestions = () => {
                 >
                   Products
                 </Tab>
-                <Tab
-                  fontSize={{ base: 'sm', md: 'md', lg: 'xl' }}
-                  color="gray.500"
-                  fontWeight="medium"
-                  py={{ base: 2, md: 3 }}
-                  px={{ base: 3, md: 6 }}
-                  _selected={{
-                    color: 'black',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  Pricing Plans
-                </Tab>
+               
                 <Tab
                   fontSize={{ base: 'sm', md: 'md', lg: 'xl' }}
                   color="gray.500"
@@ -567,9 +555,7 @@ const FrequentlyAskedQuestions = () => {
                     </Box>
                   )}
                 </TabPanel>
-                <TabPanel>
-                  <Text>Pricing Plans Content will be added here.</Text>
-                </TabPanel>
+
                 <TabPanel>
                   <Text>Services Content will be added here.</Text>
                 </TabPanel>
