@@ -558,7 +558,73 @@ const FrequentlyAskedQuestions = () => {
                   <Text>Services Content will be added here.</Text>
                 </TabPanel>
                 <TabPanel>
-                  <Text>Contact Us Content will be added here.</Text>
+                  <Box mt={12} px={{ base: 4, md: 8 }}>
+                    <Heading
+                      as="h3"
+                      fontSize={{ base: '2xl', md: '3xl' }}
+                      textAlign="center"
+                      mb={8}
+                      fontWeight="700"
+                      bgGradient="linear(to-r, #0071E3, #BB62FC, #DA4B7A, #F44F22)"
+                      bgClip="text"
+                    >
+                      Contact Information
+                    </Heading>
+                    <SimpleGrid
+                      columns={{ base: 1, md: 2 }}
+                      spacingX={12}
+                      spacingY={8}
+                    >
+                      <Box>
+                        <Text
+                          fontSize={{ base: 'lg', md: 'xl' }}
+                          fontWeight="semibold"
+                          color="black"
+                        >
+                          How you can reach out to us ?
+                        </Text>
+                        <Text
+                          fontSize={{ base: 'md', md: 'lg' }}
+                          color="gray.600"
+                          mt={2}
+                        >
+                          sales@hushh.ai
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Text
+                          fontSize={{ base: 'lg', md: 'xl' }}
+                          fontWeight="semibold"
+                          color="black"
+                        >
+                          Contact Number
+                        </Text>
+                        <Text
+                          fontSize={{ base: 'md', md: 'lg' }}
+                          color="gray.600"
+                          mt={2}
+                        >
+                          call (888) 462-1726
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Text
+                          fontSize={{ base: 'lg', md: 'xl' }}
+                          fontWeight="semibold"
+                          color="black"
+                        >
+                          Headquarters
+                        </Text>
+                        <Text
+                          fontSize={{ base: 'md', md: 'lg' }}
+                          color="gray.600"
+                          mt={2}
+                        >
+                          Kirkland, WA
+                        </Text>
+                      </Box>
+                    </SimpleGrid>
+                  </Box>
                 </TabPanel>
               </TabPanels>
             </Tabs>
