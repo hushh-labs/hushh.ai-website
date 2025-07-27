@@ -402,7 +402,6 @@ const FrequentlyAskedQuestions = () => {
                         fontWeight="bold"
                         textAlign="center"
                         mb={8}
-                        fontWeight="700"
             bgGradient="linear(to-r, #0071E3, #BB62FC, #DA4B7A, #F44F22)"
             bgClip="text"
                       >
@@ -439,7 +438,6 @@ const FrequentlyAskedQuestions = () => {
                       <Heading
                         as="h3"
                         fontSize={{ base: '2xl', md: '3xl' }}
-                        // fontWeight="bold"
                         textAlign="center"
                         mb={8}
                         fontWeight="700"
