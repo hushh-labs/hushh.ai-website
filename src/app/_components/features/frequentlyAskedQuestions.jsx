@@ -30,6 +30,24 @@ const FrequentlyAskedQuestions = () => {
 
   const [selectedProduct, setSelectedProduct] = useState(null);
 
+  const generalFaqs = [
+    {
+      question: 'Q: What core products and experiences does Hushh offer?',
+      answer:
+        'A: Hushh offers four core products: Vault (your encrypted personal data core), Link (cryptographic consent engine), Flow (monetization and rewards with consent), and Grid (secure agent execution). Together, they power experiences like Personal Data Agents (PDAs), trust-based data sharing, AI-powered assistants, and private data monetization — all consent-first by design.',
+    },
+    {
+      question: 'Q. What is the mission of your company',
+      answer:
+        'A: Our company, focused on user data API (Visa for Data), aims to empower users to organize, manage, and extract meaningful value from their data. We prioritize ownership, observability, and control of user data and privacy preferences. Our mission is to help users understand the power of their personal data and turn it into a personal asset',
+    },
+    {
+      question: 'Q. How does Hushh prioritise data privacy and user control?',
+      answer:
+        'A: Our company, focused on user data API (Visa for Data), aims to empower users to organize, manage, and extract meaningful value from their data. We prioritize ownership, observability, and control of user data and privacy preferences. Our mission is to help users understand the power of their personal data and turn it into a personal asset',
+    },
+  ];
+
   const pdaFaqs = [
     {
       question: 'Q1: What exactly is a Personal Data Agent (PDA)?',
@@ -81,6 +99,44 @@ const FrequentlyAskedQuestions = () => {
         'Q4: How is this different from a password manager or cloud backup?',
       answer:
         'A: The Vault is not just secure storage — it’s a programmable, consent-native data core. It stores agent memories, user preferences, identity tokens, and enforces logic-based access boundaries.',
+    },
+  ];
+
+  const servicesFaqs = [
+    {
+      question:
+        'Q1: How does the Hushh Vault ensure encrypted, zero-trust data storage?',
+      answer:
+        'A: Hushh Vault uses AES-256 encryption, user-specific keys, and signed consent tokens. No access is allowed without your explicit approval, and every read/write is logged for full transparency.',
+    },
+    {
+      question:
+        'Q2: What makes Hushh Link different from traditional consent frameworks?',
+      answer:
+        "A: Hushh Link turns consent into code — using cryptographic tokens, real-time revocation, and detailed logs. It ensures agents and apps act only when you've explicitly agreed.",
+    },
+    {
+      question:
+        'Q3: How do agents use the Hushh Grid to run securely on any device?',
+      answer:
+        'A: Agents run in isolated environments — on-device, in-browser, or in the cloud. Each action passes through consent checks, ensuring secure, purpose-limited execution with full audit trails.',
+    },
+    {
+      question: 'Q4: What can I earn by sharing data through Hushh Flow?',
+      answer:
+        'A: Earn rewards, credits, or cash when brands access your approved data. Every transaction is transparent, opt-in, and split fairly between you and the agent that facilitated it.',
+    },
+    {
+      question:
+        'Q5: How do Personal Data Agents customize my digital experiences?',
+      answer:
+        'A: PDAs learn your preferences, schedule, and interests. They help automate tasks, make recommendations, and interact with brands — always using your data with consent and keeping memory in your Vault.',
+    },
+    {
+      question:
+        'Q6: What is an MCP token, and why is it important for agent-to-agent sharing?',
+      answer:
+        "A: An MCP token is a signed, time-bound proof of consent. It enables agents to share specific data with one another securely — without exposing more than you've allowed.",
     },
   ];
 
@@ -316,7 +372,32 @@ const FrequentlyAskedQuestions = () => {
               </TabList>
               <TabPanels mt={12}>
                 <TabPanel>
-                  <Text>General Content will be added here.</Text>
+                  <Box mt={12} px={{ base: 4, md: 8 }}>
+                    <SimpleGrid
+                      columns={{ base: 1, md: 2 }}
+                      spacingX={12}
+                      spacingY={8}
+                    >
+                      {generalFaqs.map(faq => (
+                        <Box key={faq.question}>
+                          <Text
+                            fontSize={{ base: 'lg', md: 'xl' }}
+                            fontWeight="semibold"
+                            color="black"
+                          >
+                            {faq.question}
+                          </Text>
+                          <Text
+                            fontSize={{ base: 'md', md: 'lg' }}
+                            color="gray.600"
+                            mt={2}
+                          >
+                            {faq.answer}
+                          </Text>
+                        </Box>
+                      ))}
+                    </SimpleGrid>
+                  </Box>
                 </TabPanel>
                 <TabPanel>
                   <Flex
@@ -555,7 +636,32 @@ const FrequentlyAskedQuestions = () => {
                 </TabPanel>
 
                 <TabPanel>
-                  <Text>Services Content will be added here.</Text>
+                  <Box mt={12} px={{ base: 4, md: 8 }}>
+                    <SimpleGrid
+                      columns={{ base: 1, md: 2 }}
+                      spacingX={12}
+                      spacingY={8}
+                    >
+                      {servicesFaqs.map(faq => (
+                        <Box key={faq.question}>
+                          <Text
+                            fontSize={{ base: 'lg', md: 'xl' }}
+                            fontWeight="semibold"
+                            color="black"
+                          >
+                            {faq.question}
+                          </Text>
+                          <Text
+                            fontSize={{ base: 'md', md: 'lg' }}
+                            color="gray.600"
+                            mt={2}
+                          >
+                            {faq.answer}
+                          </Text>
+                        </Box>
+                      ))}
+                    </SimpleGrid>
+                  </Box>
                 </TabPanel>
                 <TabPanel>
                   <Box mt={12} px={{ base: 4, md: 8 }}>
