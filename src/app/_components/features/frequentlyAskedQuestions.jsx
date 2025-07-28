@@ -315,13 +315,24 @@ const FrequentlyAskedQuestions = () => {
                 borderColor="gray.200"
                 width="fit-content"
                 mx="auto"
+                overflowX="auto"
+                scrollBehavior="smooth"
+                sx={{
+                  '&::-webkit-scrollbar': {
+                    display: 'none'
+                  },
+                  scrollbarWidth: 'none',
+                  msOverflowStyle: 'none'
+                }}
               >
                 <Tab
-                  fontSize={{ base: 'sm', md: 'md', lg: 'xl' }}
+                  fontSize={{ base: 'xs', sm: 'sm', md: 'md', lg: 'xl' }}
                   color="gray.500"
                   fontWeight="medium"
                   py={{ base: 2, md: 3 }}
-                  px={{ base: 3, md: 6 }}
+                  px={{ base: 2, sm: 3, md: 6 }}
+                  whiteSpace="nowrap"
+                  minW="fit-content"
                   _selected={{
                     color: 'black',
                     fontWeight: 'bold',
@@ -330,11 +341,13 @@ const FrequentlyAskedQuestions = () => {
                   General
                 </Tab>
                 <Tab
-                  fontSize={{ base: 'sm', md: 'md', lg: 'xl' }}
+                  fontSize={{ base: 'xs', sm: 'sm', md: 'md', lg: 'xl' }}
                   color="gray.500"
                   fontWeight="medium"
                   py={{ base: 2, md: 3 }}
-                  px={{ base: 3, md: 6 }}
+                  px={{ base: 2, sm: 3, md: 6 }}
+                  whiteSpace="nowrap"
+                  minW="fit-content"
                   _selected={{
                     color: 'black',
                     fontWeight: 'bold',
@@ -344,11 +357,13 @@ const FrequentlyAskedQuestions = () => {
                 </Tab>
                
                 <Tab
-                  fontSize={{ base: 'sm', md: 'md', lg: 'xl' }}
+                  fontSize={{ base: 'xs', sm: 'sm', md: 'md', lg: 'xl' }}
                   color="gray.500"
                   fontWeight="medium"
                   py={{ base: 2, md: 3 }}
-                  px={{ base: 3, md: 6 }}
+                  px={{ base: 2, sm: 3, md: 6 }}
+                  whiteSpace="nowrap"
+                  minW="fit-content"
                   _selected={{
                     color: 'black',
                     fontWeight: 'bold',
@@ -357,11 +372,13 @@ const FrequentlyAskedQuestions = () => {
                   Services
                 </Tab>
                 <Tab
-                  fontSize={{ base: 'sm', md: 'md', lg: 'xl' }}
+                  fontSize={{ base: 'xs', sm: 'sm', md: 'md', lg: 'xl' }}
                   color="gray.500"
                   fontWeight="medium"
                   py={{ base: 2, md: 3 }}
-                  px={{ base: 3, md: 6 }}
+                  px={{ base: 2, sm: 3, md: 6 }}
+                  whiteSpace="nowrap"
+                  minW="fit-content"
                   _selected={{
                     color: 'black',
                     fontWeight: 'bold',
