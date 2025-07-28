@@ -9,8 +9,8 @@ import {
   Text,
   VStack,
   TabPanels,
-  TabPanel,
   SimpleGrid,
+  TabPanel,
   HStack,
   Icon,
 } from '@chakra-ui/react';
@@ -29,6 +29,24 @@ const FrequentlyAskedQuestions = () => {
   ];
 
   const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const generalFaqs = [
+    {
+      question: 'Q: What core products and experiences does Hushh offer?',
+      answer:
+        'A: Hushh offers four core products: Vault (your encrypted personal data core), Link (cryptographic consent engine), Flow (monetization and rewards with consent), and Grid (secure agent execution). Together, they power experiences like Personal Data Agents (PDAs), trust-based data sharing, AI-powered assistants, and private data monetization — all consent-first by design.',
+    },
+    {
+      question: 'Q. What is the mission of your company',
+      answer:
+        'A: Our company, focused on user data API (Visa for Data), aims to empower users to organize, manage, and extract meaningful value from their data. We prioritize ownership, observability, and control of user data and privacy preferences. Our mission is to help users understand the power of their personal data and turn it into a personal asset',
+    },
+    {
+      question: 'Q. How does Hushh prioritise data privacy and user control?',
+      answer:
+        'A: Our company, focused on user data API (Visa for Data), aims to empower users to organize, manage, and extract meaningful value from their data. We prioritize ownership, observability, and control of user data and privacy preferences. Our mission is to help users understand the power of their personal data and turn it into a personal asset',
+    },
+  ];
 
   const pdaFaqs = [
     {
@@ -81,6 +99,44 @@ const FrequentlyAskedQuestions = () => {
         'Q4: How is this different from a password manager or cloud backup?',
       answer:
         'A: The Vault is not just secure storage — it’s a programmable, consent-native data core. It stores agent memories, user preferences, identity tokens, and enforces logic-based access boundaries.',
+    },
+  ];
+
+  const servicesFaqs = [
+    {
+      question:
+        'Q1: How does the Hushh Vault ensure encrypted, zero-trust data storage?',
+      answer:
+        'A: Hushh Vault uses AES-256 encryption, user-specific keys, and signed consent tokens. No access is allowed without your explicit approval, and every read/write is logged for full transparency.',
+    },
+    {
+      question:
+        'Q2: What makes Hushh Link different from traditional consent frameworks?',
+      answer:
+        "A: Hushh Link turns consent into code — using cryptographic tokens, real-time revocation, and detailed logs. It ensures agents and apps act only when you've explicitly agreed.",
+    },
+    {
+      question:
+        'Q3: How do agents use the Hushh Grid to run securely on any device?',
+      answer:
+        'A: Agents run in isolated environments — on-device, in-browser, or in the cloud. Each action passes through consent checks, ensuring secure, purpose-limited execution with full audit trails.',
+    },
+    {
+      question: 'Q4: What can I earn by sharing data through Hushh Flow?',
+      answer:
+        'A: Earn rewards, credits, or cash when brands access your approved data. Every transaction is transparent, opt-in, and split fairly between you and the agent that facilitated it.',
+    },
+    {
+      question:
+        'Q5: How do Personal Data Agents customize my digital experiences?',
+      answer:
+        'A: PDAs learn your preferences, schedule, and interests. They help automate tasks, make recommendations, and interact with brands — always using your data with consent and keeping memory in your Vault.',
+    },
+    {
+      question:
+        'Q6: What is an MCP token, and why is it important for agent-to-agent sharing?',
+      answer:
+        "A: An MCP token is a signed, time-bound proof of consent. It enables agents to share specific data with one another securely — without exposing more than you've allowed.",
     },
   ];
 
@@ -241,15 +297,15 @@ const FrequentlyAskedQuestions = () => {
             </Heading>
             <Text
               fontSize={{ base: '3xl', md: '4xl' }}
-              fontWeight="bold"
-              bgGradient="linear(to-r, gray.600, gray.800)"
-              bgClip="text"
+              fontWeight="700"
+            bgGradient="linear(to-r, #0071E3, #BB62FC, #DA4B7A, #F44F22)"
+            bgClip="text"
             >
               FAQs
             </Text>
           </VStack>
           <Flex justify="center" px={{ base: 4, md: 8 }}>
-            <Tabs variant="unstyled" defaultIndex={1} align="center">
+            <Tabs variant="unstyled" defaultIndex={1} w="full">
               <TabList
                 bg="white"
                 borderRadius="full"
@@ -257,13 +313,26 @@ const FrequentlyAskedQuestions = () => {
                 boxShadow="lg"
                 border="1px solid"
                 borderColor="gray.200"
+                width="fit-content"
+                mx="auto"
+                overflowX="auto"
+                scrollBehavior="smooth"
+                sx={{
+                  '&::-webkit-scrollbar': {
+                    display: 'none'
+                  },
+                  scrollbarWidth: 'none',
+                  msOverflowStyle: 'none'
+                }}
               >
                 <Tab
-                  fontSize={{ base: 'sm', md: 'md', lg: 'xl' }}
+                  fontSize={{ base: 'xs', sm: 'sm', md: 'md', lg: 'xl' }}
                   color="gray.500"
                   fontWeight="medium"
                   py={{ base: 2, md: 3 }}
-                  px={{ base: 3, md: 6 }}
+                  px={{ base: 2, sm: 3, md: 6 }}
+                  whiteSpace="nowrap"
+                  minW="fit-content"
                   _selected={{
                     color: 'black',
                     fontWeight: 'bold',
@@ -272,11 +341,13 @@ const FrequentlyAskedQuestions = () => {
                   General
                 </Tab>
                 <Tab
-                  fontSize={{ base: 'sm', md: 'md', lg: 'xl' }}
+                  fontSize={{ base: 'xs', sm: 'sm', md: 'md', lg: 'xl' }}
                   color="gray.500"
                   fontWeight="medium"
                   py={{ base: 2, md: 3 }}
-                  px={{ base: 3, md: 6 }}
+                  px={{ base: 2, sm: 3, md: 6 }}
+                  whiteSpace="nowrap"
+                  minW="fit-content"
                   _selected={{
                     color: 'black',
                     fontWeight: 'bold',
@@ -284,25 +355,15 @@ const FrequentlyAskedQuestions = () => {
                 >
                   Products
                 </Tab>
+               
                 <Tab
-                  fontSize={{ base: 'sm', md: 'md', lg: 'xl' }}
+                  fontSize={{ base: 'xs', sm: 'sm', md: 'md', lg: 'xl' }}
                   color="gray.500"
                   fontWeight="medium"
                   py={{ base: 2, md: 3 }}
-                  px={{ base: 3, md: 6 }}
-                  _selected={{
-                    color: 'black',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  Pricing Plans
-                </Tab>
-                <Tab
-                  fontSize={{ base: 'sm', md: 'md', lg: 'xl' }}
-                  color="gray.500"
-                  fontWeight="medium"
-                  py={{ base: 2, md: 3 }}
-                  px={{ base: 3, md: 6 }}
+                  px={{ base: 2, sm: 3, md: 6 }}
+                  whiteSpace="nowrap"
+                  minW="fit-content"
                   _selected={{
                     color: 'black',
                     fontWeight: 'bold',
@@ -311,11 +372,13 @@ const FrequentlyAskedQuestions = () => {
                   Services
                 </Tab>
                 <Tab
-                  fontSize={{ base: 'sm', md: 'md', lg: 'xl' }}
+                  fontSize={{ base: 'xs', sm: 'sm', md: 'md', lg: 'xl' }}
                   color="gray.500"
                   fontWeight="medium"
                   py={{ base: 2, md: 3 }}
-                  px={{ base: 3, md: 6 }}
+                  px={{ base: 2, sm: 3, md: 6 }}
+                  whiteSpace="nowrap"
+                  minW="fit-content"
                   _selected={{
                     color: 'black',
                     fontWeight: 'bold',
@@ -326,16 +389,41 @@ const FrequentlyAskedQuestions = () => {
               </TabList>
               <TabPanels mt={12}>
                 <TabPanel>
-                  <Text>General Content will be added here.</Text>
+                  <Box mt={12} px={{ base: 4, md: 8 }}>
+                    <SimpleGrid
+                      columns={{ base: 1, md: 2 }}
+                      spacingX={12}
+                      spacingY={8}
+                    >
+                      {generalFaqs.map(faq => (
+                        <Box key={faq.question}>
+                          <Text
+                            fontSize={{ base: 'lg', md: 'xl' }}
+                            fontWeight="semibold"
+                            color="black"
+                          >
+                            {faq.question}
+                          </Text>
+                          <Text
+                            fontSize={{ base: 'md', md: 'lg' }}
+                            color="gray.600"
+                            mt={2}
+                          >
+                            {faq.answer}
+                          </Text>
+                        </Box>
+                      ))}
+                    </SimpleGrid>
+                  </Box>
                 </TabPanel>
                 <TabPanel>
-                  <SimpleGrid
-                    columns={{ base: 1, md: 2, lg: 3 }}
-                    spacing={{ base: 6, md: 10 }}
+                  <Flex
+                    wrap="wrap"
+                    justify="center"
+                    gap={{ base: 6, md: 10 }}
                     maxW={{ base: 'full', md: 'container.xl' }}
                     mx="auto"
                     px={{ base: 4, md: 0 }}
-                    placeItems="center"
                   >
                     {products.map(product => (
                       <HStack
@@ -363,16 +451,18 @@ const FrequentlyAskedQuestions = () => {
                         />
                       </HStack>
                     ))}
-                  </SimpleGrid>
+                  </Flex>
                   {selectedProduct === 'Personal Data Agent' && (
                     <Box mt={12} px={{ base: 4, md: 8 }}>
                       <Heading
                         as="h3"
                         fontSize={{ base: '2xl', md: '3xl' }}
-                        fontWeight="bold"
+                        // fontWeight="bold"
                         textAlign="center"
                         mb={8}
-                        color="#363636"
+                        fontWeight="700"
+            bgGradient="linear(to-r, #0071E3, #BB62FC, #DA4B7A, #F44F22)"
+            bgClip="text"
                       >
                         Personal Data Agent (PDA)
                       </Heading>
@@ -410,7 +500,8 @@ const FrequentlyAskedQuestions = () => {
                         fontWeight="bold"
                         textAlign="center"
                         mb={8}
-                        color="#363636"
+            bgGradient="linear(to-r, #0071E3, #BB62FC, #DA4B7A, #F44F22)"
+            bgClip="text"
                       >
                         Hushh Vault
                       </Heading>
@@ -445,10 +536,11 @@ const FrequentlyAskedQuestions = () => {
                       <Heading
                         as="h3"
                         fontSize={{ base: '2xl', md: '3xl' }}
-                        fontWeight="bold"
                         textAlign="center"
                         mb={8}
-                        color="#363636"
+                        fontWeight="700"
+            bgGradient="linear(to-r, #0071E3, #BB62FC, #DA4B7A, #F44F22)"
+            bgClip="text"
                       >
                         Hushh Link
                       </Heading>
@@ -483,10 +575,12 @@ const FrequentlyAskedQuestions = () => {
                       <Heading
                         as="h3"
                         fontSize={{ base: '2xl', md: '3xl' }}
-                        fontWeight="bold"
+                        // fontWeight="bold"
                         textAlign="center"
                         mb={8}
-                        color="#363636"
+                        fontWeight="700"
+            bgGradient="linear(to-r, #0071E3, #BB62FC, #DA4B7A, #F44F22)"
+            bgClip="text"
                       >
                         Hushh Flow
                       </Heading>
@@ -521,10 +615,12 @@ const FrequentlyAskedQuestions = () => {
                       <Heading
                         as="h3"
                         fontSize={{ base: '2xl', md: '3xl' }}
-                        fontWeight="bold"
+                        //  fontWeight="bold"
                         textAlign="center"
                         mb={8}
-                        color="#363636"
+                        fontWeight="700"
+            bgGradient="linear(to-r, #0071E3, #BB62FC, #DA4B7A, #F44F22)"
+            bgClip="text"
                       >
                         Hushh Grid
                       </Heading>
@@ -555,14 +651,103 @@ const FrequentlyAskedQuestions = () => {
                     </Box>
                   )}
                 </TabPanel>
+
                 <TabPanel>
-                  <Text>Pricing Plans Content will be added here.</Text>
+                  <Box mt={12} px={{ base: 4, md: 8 }}>
+                    <SimpleGrid
+                      columns={{ base: 1, md: 2 }}
+                      spacingX={12}
+                      spacingY={8}
+                    >
+                      {servicesFaqs.map(faq => (
+                        <Box key={faq.question}>
+                          <Text
+                            fontSize={{ base: 'lg', md: 'xl' }}
+                            fontWeight="semibold"
+                            color="black"
+                          >
+                            {faq.question}
+                          </Text>
+                          <Text
+                            fontSize={{ base: 'md', md: 'lg' }}
+                            color="gray.600"
+                            mt={2}
+                          >
+                            {faq.answer}
+                          </Text>
+                        </Box>
+                      ))}
+                    </SimpleGrid>
+                  </Box>
                 </TabPanel>
                 <TabPanel>
-                  <Text>Services Content will be added here.</Text>
-                </TabPanel>
-                <TabPanel>
-                  <Text>Contact Us Content will be added here.</Text>
+                  <Box mt={12} px={{ base: 4, md: 8 }}>
+                    <Heading
+                      as="h3"
+                      fontSize={{ base: '2xl', md: '3xl' }}
+                      textAlign="center"
+                      mb={8}
+                      fontWeight="700"
+                      bgGradient="linear(to-r, #0071E3, #BB62FC, #DA4B7A, #F44F22)"
+                      bgClip="text"
+                    >
+                      Contact Information
+                    </Heading>
+                    <SimpleGrid
+                      columns={{ base: 1, md: 2 }}
+                      spacingX={12}
+                      spacingY={8}
+                    >
+                      <Box>
+                        <Text
+                          fontSize={{ base: 'lg', md: 'xl' }}
+                          fontWeight="semibold"
+                          color="black"
+                        >
+                          How you can reach out to us ?
+                        </Text>
+                        <Text
+                          fontSize={{ base: 'md', md: 'lg' }}
+                          color="gray.600"
+                          mt={2}
+                        >
+                          sales@hushh.ai
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Text
+                          fontSize={{ base: 'lg', md: 'xl' }}
+                          fontWeight="semibold"
+                          color="black"
+                        >
+                          Contact Number
+                        </Text>
+                        <Text
+                          fontSize={{ base: 'md', md: 'lg' }}
+                          color="gray.600"
+                          mt={2}
+                        >
+                          call (888) 462-1726
+                        </Text>
+                      </Box>
+                      <Box>
+                        <Text
+                          fontSize={{ base: 'lg', md: 'xl' }}
+                          fontWeight="semibold"
+                          color="black"
+                        >
+                          Headquarters
+                        </Text>
+                        <Text
+                          fontSize={{ base: 'md', md: 'lg' }}
+                          color="gray.600"
+                          mt={2}
+                        >
+                          Kirkland, WA
+                        </Text>
+                      </Box>
+                    </SimpleGrid>
+                  </Box>
                 </TabPanel>
               </TabPanels>
             </Tabs>
