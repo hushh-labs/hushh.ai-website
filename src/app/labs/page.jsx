@@ -85,9 +85,9 @@ const HushhLabsHome = () => {
         {/* Hero Section */}
         <Container maxW="7xl" pt={{ base: 15, md: 26 }} pb={{ base: 16, md: 24 }} px={{ base: 1, sm: 2, md: 8 }}>
           <VStack spacing={{ base: 8, md: 12 }} textAlign="center" mb={{ base: 16, md: 24 }}>
-            <Box w="full" maxW={{ base: "100%", md: "none" }} px={{ base: 1, md: 0 }}>
+            <Box w="full" maxW={{ base: "100%", md: "100%" }} px={{ base: 1, md: 0 }}>
               <Text 
-                fontSize={{ base: "10px", xs: "12px", sm: "14px", md: "32px", lg: "32px" }}
+                fontSize={{ base: "xl", md: "2xl", lg: "3xl" }}
                 fontWeight="bold"
                 bgGradient="linear(90deg, hsla(210, 100%, 45%, 1) 0%, hsla(275, 96%, 69%, 1) 25%, hsla(354, 88%, 61%, 1) 50%, hsla(13, 91%, 55%, 1) 100%)"
                 bgClip="text"
@@ -108,7 +108,7 @@ const HushhLabsHome = () => {
             
             <VStack spacing={6}>
               <Heading 
-                fontSize={{ base: "2xl", xs: "3xl", sm: "4xl", md: "6xl", lg: "7xl" }} 
+                fontSize={{ base: "2xl", md: "4xl", lg: "5xl" }} 
                 fontWeight="700"
                 color="gray.900"
                 lineHeight="0.9"
@@ -122,7 +122,7 @@ const HushhLabsHome = () => {
               </Heading>
               
               <Text 
-                fontSize={{ base: "md", xs: "lg", sm: "xl", md: "2xl" }} 
+                fontSize={{ base: "lg", md: "2xl" }} 
                 color="gray.600"
                 maxW="4xl"
                 lineHeight="1.4"
@@ -157,10 +157,10 @@ const HushhLabsHome = () => {
                     size="lg"
                     bg="#0071E3"
                     color="white"
-                    px={{ base: 4, sm: 6, md: 10 }}
-                    py={{ base: 3, sm: 4, md: 6 }}
+                    px={{ base: 6, md: 10 }}
+                    py={{ base: 4, md: 6 }}
                     borderRadius="60px"
-                    fontSize={{ base: "14px", sm: "16px", md: "20px", lg: "32px" }}
+                    fontSize={{ base: "md", md: "xl", lg: "2xl" }}
                     fontWeight="500"
                     fontFamily="Inter, sans-serif"
                     letterSpacing="-0.02em"
