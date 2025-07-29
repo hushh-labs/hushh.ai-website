@@ -4,8 +4,7 @@ import {
   Box,
   Container,
   Text,
-  Flex,
-  keyframes
+  Flex
 } from '@chakra-ui/react';
 import { useBannerHeight } from '../../context/BannerHeightContext';
 
@@ -18,18 +17,6 @@ const FundingBanner = () => {
     return () => unregisterBanner('funding');
   }, [registerBanner, unregisterBanner]);
 
-  // Subtle fade-in animation
-  const fadeIn = keyframes`
-    0% { opacity: 0; transform: translateY(-10px); }
-    100% { opacity: 1; transform: translateY(0); }
-  `;
-
-  // Continuous infinite slider for mobile
-  const slideLeft = keyframes`
-    0% { transform: translateX(0%); }
-    100% { transform: translateX(-50%); }
-  `;
-
   return (
     <Box
       bg="linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)"
@@ -41,7 +28,13 @@ const FundingBanner = () => {
       right={0}
       zIndex={10000}
       boxShadow="0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)"
-      animation={`${fadeIn} 0.8s ease-out`}
+      sx={{
+        animation: 'fadeIn 0.8s ease-out',
+        '@keyframes fadeIn': {
+          '0%': { opacity: 0, transform: 'translateY(-10px)' },
+          '100%': { opacity: 1, transform: 'translateY(0)' }
+        }
+      }}
     >
       {/* Mobile Continuous Slider Version */}
       <Box
@@ -55,7 +48,13 @@ const FundingBanner = () => {
           height="100%"
           position="absolute"
           whiteSpace="nowrap"
-          animation={`${slideLeft} 25s linear infinite`}
+          sx={{
+            animation: 'slideLeft 25s linear infinite',
+            '@keyframes slideLeft': {
+              '0%': { transform: 'translateX(0%)' },
+              '100%': { transform: 'translateX(-50%)' }
+            }
+          }}
         >
           <Text
             fontSize="xs"

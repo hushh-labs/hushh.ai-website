@@ -5,8 +5,7 @@ import {
   Container,
   Text,
   Button,
-  Flex,
-  keyframes
+  Flex
 } from '@chakra-ui/react';
 import { HiExternalLink } from 'react-icons/hi';
 import { useRouter } from 'next/navigation';
@@ -21,12 +20,6 @@ const HackathonBanner = () => {
     registerBanner('hackathon');
     return () => unregisterBanner('hackathon');
   }, [registerBanner, unregisterBanner]);
-
-  // Continuous infinite slider animation for mobile
-  const slideLeft = keyframes`
-    0% { transform: translateX(0%); }
-    100% { transform: translateX(-50%); }
-  `;
 
   const handleHackathonClick = () => {
     router.push('/pda/iithackathon');
@@ -60,7 +53,13 @@ const HackathonBanner = () => {
           height="100%"
           position="absolute"
           whiteSpace="nowrap"
-          animation={`${slideLeft} 22s linear infinite`}
+          sx={{
+            animation: 'slideLeft 22s linear infinite',
+            '@keyframes slideLeft': {
+              '0%': { transform: 'translateX(0%)' },
+              '100%': { transform: 'translateX(-50%)' }
+            }
+          }}
         >
           <Text
             fontSize={{ base: 'sm', md: 'md' }}

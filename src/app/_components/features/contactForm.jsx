@@ -26,7 +26,6 @@ import {
 } from "@chakra-ui/react";
 import { FiMail, FiPhone, FiMapPin, FiClock } from "react-icons/fi";
 import { motion } from "framer-motion";
-import emailjs from '@emailjs/browser';
 import FooterComponent from "./FooterComponent";
 const MotionBox = motion(Box);
 
@@ -38,8 +37,7 @@ const ContactForm = () => {
     company: '',
     phone: '',
     subject: '',
-    message: '',
-    reason: ''
+    message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
@@ -97,22 +95,29 @@ const ContactForm = () => {
     setIsSubmitting(true);
 
     try {
-      // EmailJS configuration
-      const serviceId = "service_tsuapx9";
-      const templateId = "template_50ujflf";
-      const userId = "DtG13YmoZDccI-GgA";
-
-      const templateParams = {
-        name: formData.name,
+      const apiData = {
+        full_name: formData.name,
         email: formData.email,
-        company: formData.company || 'Not provided',
-        phone: formData.phone || 'Not provided',
+        company: formData.company || '',
+        phone: formData.phone || '',
         subject: formData.subject || 'General Inquiry',
-        message: formData.message,
-        reason: formData.reason || 'General Contact'
+        message: formData.message
       };
 
-      await emailjs.send(serviceId, templateId, templateParams, userId);
+      const response = await fetch('https://hushh-api-53407187172.us-central1.run.app/send-email', {
+        method: 'POST',
+        headers: {
+          'accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(apiData)
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
       
       toast({
         title: "Message sent successfully!",
@@ -129,8 +134,7 @@ const ContactForm = () => {
         company: '',
         phone: '',
         subject: '',
-        message: '',
-        reason: ''
+        message: ''
       });
 
     } catch (error) {
