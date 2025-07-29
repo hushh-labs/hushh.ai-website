@@ -25,6 +25,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: '/hushh-hackhathon',
+        destination: '/pda/iithackathon',
+        permanent: true,
+      },
+      {
         source: "/:path*",
         has: [
           {

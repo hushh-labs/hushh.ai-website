@@ -1,0 +1,131 @@
+---
+title: "Building Personal Data Agents on iOS — A Deep Dive into Apple’s On-Device AI"
+description: "In 2025, Apple revolutionized AI development on its platforms by introducing the Foundation Models framework. This API gives developers access to Apple’s private, on-device ~3B parameter language model that powers Siri and Apple Intelligence."
+image: "../../public/blogs/new/building-personal-data-agents-on-ios.png"
+publishedAt: "July 25, 2025"
+updatedAt: "July 25, 2025"
+author: "Manish Sainani"
+isPublished: true
+tags:
+- AI
+- iOS
+- Apple
+- Hushh
+- Swift
+---
+
+## 🧭 Introduction
+
+In 2025, Apple revolutionized AI development on its platforms by introducing the Foundation Models framework. This API gives developers access to Apple’s private, on-device ~3B parameter language model that powers Siri and Apple Intelligence. Hushh.ai builds on top of this breakthrough to offer Personal Data Agents (PDAs)—intelligent, privacy-first assistants that run completely on-device.
+
+This blog is a deep, hands-on walkthrough for iOS developers: how to set up your environment, initialize a PDA, build privacy-safe tools, and deploy an AI-powered app that aligns with Apple’s privacy-first ethos. If you’ve ever dreamed of building your own Siri—this is how to do it.
+
+## ⚙️ Step 1: Setting Up Your Environment
+
+To begin, ensure your stack is fully compatible:
+
+- Xcode 15+ with Swift 5.9+
+- macOS on Apple Silicon (M1 chip or higher)
+- Deployment target: iOS 17 or later
+- Use Apple’s built-in `FoundationModels` framework (no package needed)
+
+Devices that lack Apple Neural Engine (e.g., older iPhones or Intel Macs) will not run the on-device model and will return `.deviceNotEligible`. Always check availability before showing the PDA UI:
+
+```swift
+if SystemLanguageModel.default.availability == .available {
+   // show PDA feature
+} else {
+   // fallback or show alternate message
+}
+```
+
+To improve first-run latency, call `session.prewarm()` at app launch or before your PDA feature loads. This loads model weights into RAM and dramatically reduces startup time.
+
+## 🧠 Step 2: Defining Your Agent with Guided Generation
+
+The heart of the PDA is the `LanguageModelSession` object. You define your agent’s persona, rules, and behavior using Apple’s system instruction closure:
+
+```swift
+@State var session = LanguageModelSession {
+   """
+   You are a helpful health coach. Use personal data tools to suggest wellness advice.
+   """
+}
+```
+
+These instructions are never visible to the user but stay active throughout the session. The framework ensures all prompts pass through this system prompt, guarding against prompt injection.
+
+### 🧱 Structured Output with `@Generable`
+
+To get usable, Swift-native output, define types with the `@Generable` macro:
+
+```swift
+@Generable
+struct HealthSummary {
+   let systolic: Int
+   let diastolic: Int
+   let advice: String
+}
+```
+
+You can now ask the model to populate this object:
+
+```swift
+let result: HealthSummary = try await session.respond(
+   to: userPrompt,
+   generating: HealthSummary.self
+)
+```
+
+This is Apple’s strongest innovation—typed output directly from AI, no fragile text parsing required.
+
+## 🔧 Step 3: Building Tools — Real Data Access, Safe by Design
+
+AI without data is a parrot. With tools, your PDA can securely fetch user data (e.g., from HealthKit) to generate meaningful output.
+
+Define a Tool like this:
+
+```swift
+final class BloodPressureTool: Tool {
+   let name = "blood_pressure"
+   let description = "Fetch latest systolic and diastolic pressure from HealthKit."
+
+   @Generable struct Arguments {}
+
+   func call(arguments: Arguments) async throws -> ToolOutput {
+      let systolic = ... // HealthKit fetch
+      let diastolic = ...
+
+      let result = GeneratedContent(properties: [
+         "systolic": systolic,
+         "diastolic": diastolic
+      ])
+
+      return ToolOutput(result)
+   }
+}
+```
+
+Then register tools at session creation:
+
+```swift
+session = LanguageModelSession(tools: [BloodPressureTool()]) { ... }
+```
+
+Apple’s model was trained with tool-calling behavior, so it understands how to request tools based on instructions and user intent.
+
+## 💡 Real Example in Action
+
+When the user asks, “Check my last blood pressure and give advice,” the model:
+
+1.  Identifies the need for real data.
+2.  Calls `BloodPressureTool`, receiving `{systolic: 122, diastolic: 82}`
+3.  Replies: “Based on your latest reading, your blood pressure is in the normal range. Keep maintaining a healthy diet and exercise.”
+
+All of this happens offline, privately, and securely.
+
+## ✅ Final Thoughts
+
+Hushh’s Personal Data Agents empower users to own and use their data meaningfully. Apple’s Foundation Model makes the impossible—on-device, private LLMs—real. Together, they form the most powerful platform yet for building ethical, AI-native applications.
+
+If you believe AI should serve the user, not surveil them, this is the stack for you. 
