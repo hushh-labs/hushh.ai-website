@@ -1,0 +1,100 @@
+---
+title: "The 7 Foundational Patterns Every Agent-Based System Should Use"
+description: "Discover the 7 essential design patterns that form the backbone of every successful AI agent system. From prompt chaining to reflection, learn the fundamental building blocks for reliable, goal-oriented agents."
+image: "../../public/blogs/new/seven-foundational-patterns.png"
+publishedAt: "July 29, 2025"
+updatedAt: "July 29, 2025"
+author: "Sani Patel"
+isPublished: true
+tags:
+- Agent Systems
+- AI Architecture
+---
+
+# The 7 Foundational Patterns Every Agent-Based System Should Use
+
+In the rapidly evolving world of AI, designing reliable, goal-oriented agents requires more than just prompting a language model. Behind every successful AI assistant, customer service bot, or autonomous agent lies a core architecture based on battle-tested design patterns. If you're building an agent-based system, start with these 7 foundational patterns. These are your primitives—the fundamental building blocks that enable your system to reason, act, adapt, and recover.
+
+## 1. Prompt Chaining
+
+**Concept:** Break complex tasks into simpler, sequential prompts where the output of one becomes the input to the next.
+
+**Why it matters:** LLMs are great at small tasks but falter with complex, multi-step reasoning. Chaining breaks down the complexity and maintains context.
+
+**Example Use Case:** A travel assistant that first summarizes user preferences, then retrieves flights, then ranks them based on priorities.
+
+**Best Practice:** Use tools like LangChain's SequentialChain or LangGraph to enforce clear input-output transitions and avoid state confusion.
+
+## 2. Tool Usage
+
+**Concept:** Equip your agent with tools (APIs, databases, calculators) and teach it when and how to use them.
+
+**Why it matters:** LLMs alone can hallucinate or make fuzzy calculations. Tools allow them to anchor reasoning in reality.
+
+**Example Use Case:** An HR agent that fetches payroll data via an API before responding to a salary query.
+
+**Implementation Tip:** Define tools with strict input/output schemas and guard against prompt injection. LangChain's Tool interface makes this clean and modular.
+
+## 3. Memory Management
+
+**Concept:** Provide short-term memory for ongoing conversations and long-term memory for persistent facts.
+
+**Why it matters:** Agents need to recall past interactions, preferences, and progress—just like humans.
+
+**Example Use Case:** A sales assistant that recalls what a lead asked during a previous conversation.
+
+**Types:**
+- **Short-term:** Session memory (like a chat window)
+- **Long-term:** Vector-based memory or structured storage
+
+**Framework Tip:** Use LangChain's ConversationBufferMemory for short-term and VectorStoreRetrieverMemory for long-term context.
+
+## 4. Routing
+
+**Concept:** Dynamically select which tool, agent, or prompt to use based on the task.
+
+**Why it matters:** Not all queries are equal. Smart systems must delegate correctly.
+
+**Example Use Case:** A support agent routes billing queries to a financial tool, and product issues to an FAQ retriever.
+
+**Pattern Tip:** Implement MultiPromptChain in LangChain or use a decision router with classification models.
+
+## 5. Exception Handling
+
+**Concept:** Capture and gracefully manage tool failures, hallucinations, or API errors.
+
+**Why it matters:** Real-world systems fail. The best ones recover.
+
+**Example Use Case:** If an API call times out, the agent tries a cached response or apologizes with context.
+
+**Best Practice:** Use try/except constructs around tool calls and log failures for inspection. Design fallback paths.
+
+## 6. Goal Setting & Monitoring
+
+**Concept:** Define clear goals and track progress against them through agent reasoning steps.
+
+**Why it matters:** Without a target, agents meander. Goal setting aligns behavior with value.
+
+**Example Use Case:** A recruiting agent aims to shortlist 3 candidates who match job and culture fit criteria.
+
+**Design Tip:** Embed the goal in the system prompt and use custom validators to check if a sub-goal has been completed.
+
+## 7. Reflection
+
+**Concept:** Use the LLM to critique and improve its own prior responses or reasoning.
+
+**Why it matters:** Reflection enables self-correction and adaptive learning.
+
+**Example Use Case:** An agent explains its reasoning, spots a mistake, and retries the task with corrections.
+
+**How-To:** Create a meta-agent that reads the original task + prior output and generates a critique + revision.
+
+## Visual Overview: The Agentic Loop
+
+```
+[Goal] → [Prompt Chain] → [Routing] → [Tool Use / Memory Access] → [Result] → [Reflection / Retry / Exception Handling] → [Monitor Outcome]
+```
+
+## Conclusion: Start with Seven, Build with Confidence
+
+These seven foundational patterns are not optional—they are the spine of every functional agent. Start with them, master their usage, and you'll be ready to scale into multi-agent orchestration, complex planning, and adaptive intelligence. Whether you're building a customer-facing bot or an internal workflow optimizer, these patterns will keep your agents smart, structured, and resilient.
