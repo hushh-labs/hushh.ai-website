@@ -1,0 +1,85 @@
+---
+title: "Inside Hushh’s Consent AI Stack — From Monorepo to Micro Operons"
+description: "Hushh isn’t just a product. It’s a protocol—a living system where agents speak the language of consent, powered by open-source code and governed by user trust."
+image: "../../public/blogs/new/hushh-consent-ai-stack.png"
+publishedAt: "July 20, 2025"
+updatedAt: "July 20, 2025"
+author: "Manish Sainani"
+isPublished: true
+tags:
+- AI
+- Open Source
+- Hushh
+- Consent Protocol
+---
+
+## 🔐 Introduction
+
+Hushh isn’t just a product. It’s a protocol—a living system where agents speak the language of consent, powered by open-source code and governed by user trust. But behind this philosophy lies a smart, scalable architecture that blends biological metaphors with modern software design.
+
+In this post, we’ll walk through the structure of the Hushh Consent Protocol repo—exploring its operons, vaults, agent kits, and the micro-consent handshake layer that brings it all together.
+
+## 🏛 The Monorepo: Hushh’s Digital Genome
+
+While Hushh encourages micro-code contributions, it uses a well-organized monorepo to coordinate large-scale operations.
+
+Here's what you'll find inside:
+
+- **/vault:** Secure data schemas and encryption logic (like the DNA vault of each user-agent)
+- **/link:** Manages identity, permissions, and Apple ID verification. This is where trust begins.
+- **/flow:** Governs value exchange—reward logic, token gating, and brand interactions, always with user consent.
+- **/agentkit:** Boilerplate and scaffolding to help developers bootstrap new agents or operons quickly.
+- **/mcp:** Micro Consent Protocol handlers for secure agent-to-agent (A2A) and agent-to-cloud (A2K) data handshakes.
+
+This structure balances flexibility with safety. You can experiment locally, but the backbone ensures global coherence across the Hushh ecosystem.
+
+## 🛠 Operons in Action
+
+Each operon is a plug-and-play workflow. For example:
+
+- `summarizeEmail()` – takes a user’s inbox and returns a summary, only if consent is granted
+- `shareFitnessStats()` – allows one-time sharing of Apple Health data with a fitness app
+- `connectGmailWithOAuth()` – handles secure email sync
+
+All operons are self-contained and documented to be “yoinkable” (yes, that’s the official term).
+
+This modularity allows developers to:
+
+- Ship faster in hackathons
+- Write highly reusable code
+- Empower personal agents with new skills incrementally
+
+## 🤝 Consent as a Protocol, Not a Pop-Up
+
+The most powerful layer is `/mcp`—the Micro Consent Protocol. This is where:
+
+- Every API call is permission-checked
+- Every data flow is logged and traceable
+- Apple-native identity ensures the user is always in control
+
+Consent isn’t a checkbox. It’s the communication protocol between agents, users, and brands.
+
+## 🌐 Contribution Flow: From Fork to Ecosystem
+
+1.  **Fork the Repo**  
+    Get the latest from `hushhai/consent-protocol`
+2.  **Write a Tiny Function**  
+    Build something self-contained and portable. Can someone paste it into their app? Then it’s good.
+3.  **Test in Isolation**  
+    Don’t wait for full integration. If it works alone, it works.
+4.  **Submit a PR**  
+    Tag it clearly (e.g., `operon: summarizeEmail`) and follow the Consent Developer Covenant.
+
+**Bonus:** Join the Discord, remix other operons in the Playground, or contribute to MCP standards.
+
+## 🧬 Final Thoughts
+
+Hushh’s architecture isn’t accidental. It’s a hybrid of nature and design:
+
+- Modular like bacteria
+- Coordinated like human cells
+- Ethical by default
+
+This structure empowers a new wave of developers—not just to build apps, but to shape the consent-native internet. Whether you’re hacking a new feature or proposing a protocol change, your code is part of something alive.
+
+So build boldly. Fork freely. And remember: your next operon might just power someone’s personal AI. 

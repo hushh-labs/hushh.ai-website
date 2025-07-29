@@ -1,0 +1,72 @@
+---
+title: "Parallelism, Experts, and Vision: How Apple Built a Scalable Server Model"
+description: "Apple’s server-based language model represents the other half of its AI story. While the on-device model powers quick, personal interactions, the server model handles complex, large-scale tasks."
+image: "../../public/blogs/new/apple-scalable-server-model.png"
+publishedAt: "July 26, 2025"
+updatedAt: "July 26, 2025"
+author: "Manish Sainani"
+isPublished: true
+tags:
+- Apple
+- LLM
+- Server AI
+- Privacy
+---
+
+## 🚀 Introduction
+
+Apple’s server-based language model represents the other half of its AI story. While the on-device model powers quick, personal interactions, the server model handles complex, large-scale tasks—especially those requiring heavy computation or multimodal understanding.
+
+Backed by a privacy-respecting infrastructure called Private Cloud Compute (PCC), Apple’s server LLM blends state-of-the-art architecture with mission-critical data protections.
+
+## 🏛️ Architecture: PT-MoE
+
+The architecture underpins everything:
+
+- **Parallel Track Transformer:** Think of this as running several mini-models (tracks) in parallel. This drastically reduces the bottleneck from waiting on sequential layers.
+- **Mixture-of-Experts (MoE):** Instead of activating every neuron, only a few specialized “experts” are triggered—saving time and compute.
+- **Global + Local Attention Fusion:** Interleaving these layers helps the model handle both focused local context and broad document-scale reasoning.
+- **ASTC Compression:** Apple compresses server weights to 3.56 bits without quality loss, using GPU-accelerated decompression with zero runtime cost.
+
+## 🌟 Visual Intelligence
+
+Beyond text, this model excels in visual understanding:
+
+- **ViT-g Backbone:** A powerful vision transformer trained on over 10B high-quality image-text pairs.
+- **Register-Window Attention:** Helps the model understand fine-grained local details and high-level global context simultaneously.
+- **Multi-modal Coherence:** From charts to infographics to scanned documents, this model “reads” like a human.
+
+## 📊 Benchmarks & Accuracy
+
+The numbers speak:
+
+- **MMLU:** 80.2 | **MGSM:** 87.09
+- Outperforms comparably sized models in STEM, multilingual, and visual reasoning
+- Preferred in 56% of blind human evals
+
+## 🌐 Language Reach
+
+The server model has been rigorously evaluated for:
+
+- **Locale-Specific Fluency:** “Football” in the UK, “soccer” in the US
+- **Translation Memory:** Recalls prior terms across long documents
+- **OCR in Multilingual Contexts:** Extracts data from signs, forms, even handwriting
+
+## ⛨️ Privacy by Design
+
+Thanks to Private Cloud Compute:
+
+- All requests are encrypted in transit and at rest
+- Processing happens on ephemeral, attested servers
+- No data is stored or used for training
+
+## 🚗 Use Case Examples
+
+- Legal Document Parsing
+- Multi-image Scene Understanding (e.g., travel itineraries)
+- PDF to Knowledge Graph Conversion
+- Visual Q&A bots
+
+## 📢 CTA
+
+Apple’s server LLM proves you don’t need to compromise scale for privacy. Experience what’s possible when intelligent, multimodal reasoning lives behind encrypted walls. For developers building next-gen assistants and visual interfaces—this is your edge. 
