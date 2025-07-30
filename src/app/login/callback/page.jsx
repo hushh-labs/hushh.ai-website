@@ -10,9 +10,9 @@ import {
   Container,
   HStack,
   Button,
-  keyframes,
   Icon,
 } from '@chakra-ui/react';
+import { keyframes } from '@emotion/react';
 import { ArrowBackIcon, CheckIcon, WarningIcon } from '@chakra-ui/icons';
 import appleAuthService from '../services/appleAuthService.js';
 

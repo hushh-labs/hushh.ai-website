@@ -7,8 +7,8 @@ import {
   Icon,
   useToast,
   Box,
-  keyframes,
 } from '@chakra-ui/react';
+import { keyframes } from '@emotion/react';
 import appleAuthService from '../services/appleAuthService.js';
 
 // Apple Logo SVG Component
@@ -130,10 +130,10 @@ const AppleSignInButton = ({
     switch (variant) {
       case "minimal":
         return (
-          <HStack spacing={2}>
+          <HStack spacing={3}>
             <AppleIcon w="18px" h="18px" />
-            <Text fontSize="sm" fontWeight={600}>
-              Apple
+            <Text fontSize="md" fontWeight={500} fontFamily="system-ui, -apple-system">
+              Continue with Apple
             </Text>
           </HStack>
         );
@@ -175,43 +175,64 @@ const AppleSignInButton = ({
 
   const currentSize = sizeConfig[size] || sizeConfig.lg;
 
-  return (
-    <Button
-      onClick={handleAppleSignIn}
-      isLoading={isLoading}
-      isDisabled={isDisabled}
-      w={fullWidth ? "full" : "auto"}
-      h={currentSize.h}
-      px={currentSize.px}
-      bg="#000000"
-      color="white"
-      borderRadius="2xl"
-      fontSize={currentSize.fontSize}
-      fontWeight={700}
-      border="2px solid transparent"
-      position="relative"
-      overflow="hidden"
-      boxShadow="0 8px 24px rgba(0, 0, 0, 0.15)"
-      _hover={{
+  // Dynamic styling based on variant
+  const getButtonStyle = () => {
+    if (variant === "minimal") {
+      return {
+        bg: "white",
+        color: "black",
+        border: "1px solid rgba(0, 0, 0, 0.12)",
+        borderRadius: "12px",
+        fontWeight: 500,
+        boxShadow: "none",
+        _hover: {
+          bg: "rgba(0, 0, 0, 0.04)",
+          transform: "translateY(-1px)",
+          boxShadow: "0 4px 16px rgba(0, 0, 0, 0.12)",
+          borderColor: "rgba(0, 0, 0, 0.16)",
+        },
+        _active: {
+          transform: "translateY(0px)",
+          bg: "rgba(0, 0, 0, 0.08)",
+        },
+        _disabled: {
+          bg: "rgba(0, 0, 0, 0.04)",
+          color: "rgba(0, 0, 0, 0.3)",
+          cursor: "not-allowed",
+          transform: "none",
+          boxShadow: "none",
+        },
+      };
+    }
+    
+    // Default dark style
+    return {
+      bg: "#000000",
+      color: "white",
+      borderRadius: "2xl",
+      fontWeight: 700,
+      border: "2px solid transparent",
+      boxShadow: "0 8px 24px rgba(0, 0, 0, 0.15)",
+      _hover: {
         bg: "#1a1a1a",
         transform: "translateY(-2px)",
         boxShadow: "0 12px 32px rgba(0, 0, 0, 0.25)",
         _before: {
           opacity: 1,
         },
-      }}
-      _active={{
+      },
+      _active: {
         transform: "translateY(0px)",
         boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
-      }}
-      _disabled={{
+      },
+      _disabled: {
         bg: "#666666",
         color: "#cccccc",
         cursor: "not-allowed",
         transform: "none",
         boxShadow: "none",
-      }}
-      _before={{
+      },
+      _before: {
         content: '""',
         position: "absolute",
         top: 0,
@@ -222,15 +243,29 @@ const AppleSignInButton = ({
         opacity: 0,
         transition: "opacity 0.3s ease, left 0.6s ease",
         zIndex: 1,
-      }}
-      transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+      },
+    };
+  };
+
+  return (
+    <Button
+      onClick={handleAppleSignIn}
+      isLoading={isLoading}
+      isDisabled={isDisabled}
+      w={fullWidth ? "full" : "auto"}
+      h={currentSize.h}
+      px={currentSize.px}
+      fontSize={currentSize.fontSize}
+      position="relative"
+      overflow="hidden"
+      transition="all 0.2s ease"
+      fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif"
+      {...getButtonStyle()}
       sx={{
-        '&:hover:before': {
+        '&:hover:before': variant !== "minimal" ? {
           left: "100%",
           opacity: 1,
-        },
-        // Apple-specific styling for better brand compliance
-        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif",
+        } : {},
       }}
     >
       <Box position="relative" zIndex={2}>

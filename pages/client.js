@@ -3,6 +3,7 @@ import { SessionProvider } from "next-auth/react"
   
 import { ChakraProvider } from "@chakra-ui/react"
 import { ApiKeyProvider } from "../src/app/context/apiKeyContext"
+import { AuthProvider } from "../src/app/context/AuthContext"
 import ContactForm from "../src/app/_components/features/contactForm"
 
 export default function ClientSideLayout({
@@ -13,10 +14,12 @@ export default function ClientSideLayout({
     <>
     <ChakraProvider>
     <SessionProvider session={session}>
-      <ApiKeyProvider>
-      {children}
-      <ContactForm/>
-      </ApiKeyProvider>
+      <AuthProvider>
+        <ApiKeyProvider>
+        {children}
+        <ContactForm/>
+        </ApiKeyProvider>
+      </AuthProvider>
     </SessionProvider>
     </ChakraProvider>
     
