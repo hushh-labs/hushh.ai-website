@@ -179,7 +179,7 @@ function buildSearchIndex() {
         author: 'Hushh Team',
         tags: ['hushh link', 'consent infrastructure', 'developer tools', 'machine-readable contracts', 'agent-to-agent', 'privacy API', 'trust verification'],
         isPublished: true,
-        wordCount: 180,
+        wordCount: 280,
         readingTime: 1
       },
         {
@@ -194,7 +194,7 @@ function buildSearchIndex() {
           author: 'Hushh Team',
           tags: ['hushh grid', 'AI agent runtime', 'ephemeral sessions', 'consent boundaries', 'real-time operations', 'micro VM environments', 'agent infrastructure', 'MCP handlers', 'secure runtime'],
           isPublished: true,
-          wordCount: 200,
+          wordCount: 500,
           readingTime: 1
         },
       {
