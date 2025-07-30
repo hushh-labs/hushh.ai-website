@@ -47,6 +47,7 @@
     "github-slugger": "^2.0.0",
     "graphql": "^16.8.1",
     "graphql-request": "^6.1.0",
+    "gray-matter": "^4.0.3",
     "highlight.js": "^11.11.1",
     "hushh-button-sdk": "^0.1.12",
     "lottie-react": "^2.4.0",
