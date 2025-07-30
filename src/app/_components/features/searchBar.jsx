@@ -8,6 +8,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
+
 import { useResponsiveSizes } from "../../context/responsive";
 import contentMap from "../productData/contentMap";
 import { useRouter } from "next/navigation";

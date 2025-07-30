@@ -9,9 +9,10 @@ import { ChevronArrowIcon } from "./svg/icons/chevronArrowIcon";
 import HushhWalletIcon from "./svg/hushhWalletIcon";
 import HushhButtonIcon from "./svg/hushhButton";
 import VibeSearchIcon from "./svg/vibeSearch";
+import { SearchIcon } from "@chakra-ui/icons";
 import ChromeExtentionLogo from "./svg/ChromeExtensionLogo";
 import VibeSearchApi from "./svg/vibeSearchApi";
-import ValetChat from "./svg/valetChat";
+import ValetChat from "./svg/valetChat";  
 import { usePathname, useRouter } from 'next/navigation'
 import { useToast } from '@chakra-ui/react';
 import Image from "next/image";
@@ -26,6 +27,8 @@ import HushhGrid from '../_components/svg/icons/girdLogo.svg';
 import HushhLink from '../_components/svg/icons/linkLogo.svg';
 import HushhVault from '../_components/svg/icons/vaultLogo.svg';
 import HushhPDA from '../_components/svg/icons/pdaLogo.svg';
+import SearchModal from "./features/SearchModal";
+import { useDisclosure } from "@chakra-ui/react";
 
 export default function Header({backgroundColor, textColor, borderBottom}) {
   const { isTablet, isDesktop } = useResponsiveSizes();
@@ -35,6 +38,22 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
   const pathname = usePathname()
   const router = useRouter();
   const overlayRef = useRef(null);
+  
+  // Search modal state
+  const { isOpen: isSearchOpen, onOpen: onSearchOpen, onClose: onSearchClose } = useDisclosure();
+
+  // Keyboard shortcut for search (Cmd+K / Ctrl+K)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        onSearchOpen();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [onSearchOpen]);
 
   const noHeaderPaths = ['/vivaConnect', '/viva-connect', '/viva-connect/qrPage', '/qrCodePage'];
   const shouldShowHeader = !noHeaderPaths.includes(pathname);
@@ -556,6 +575,22 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
 
                 {/* Right side - Auth & CTA */}
                 <div className="flex items-center space-x-2 lg:space-x-3 xl:space-x-4 ml-4">
+                  {/* Search Icon */}
+                  <button
+                    onClick={onSearchOpen}
+                    className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 group relative"
+                    aria-label="Search (⌘K)"
+                    type="button"
+                    title="Search (⌘K)"
+                  >
+                    <SearchIcon className="w-5 h-5 text-gray-600 hover:text-gray-800 transition-colors duration-200" />
+                    
+                    {/* Tooltip */}
+                    <div className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                      Search ⌘K
+                    </div>
+                  </button>
+
                   {/* Desktop Auth */}
                   <div className="hidden lg:flex items-center space-x-2 xl:space-x-3">
                     {loading ? (
@@ -1236,6 +1271,9 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
         
 
       `}</style>
+      
+      {/* Search Modal */}
+      <SearchModal isOpen={isSearchOpen} onClose={onSearchClose} />
     </>
   );
 }

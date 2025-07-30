@@ -1,220 +1,88 @@
 "use client";
-import React, { useState, useContext, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useApiKey } from "../../context/apiKeyContext";
 import axios from "axios";
-import { useSession, signIn, signOut } from "next-auth/react";
-// import { getSession } from 'next-auth/react'
-import { Box, Button, Image, Text, useToast, VStack } from "@chakra-ui/react";
+import { 
+  Box, 
+  Button, 
+  Text, 
+  useToast, 
+  VStack, 
+  HStack,
+} from "@chakra-ui/react";
+import { keyframes } from '@emotion/react';
 import '../../../../pages/fonts.css'
-import authentication from "../authentication/authentication";
-import config from "../config/config";
-import AppleIcon from '../../_components/svg/icons/appleIcon.jsx'
-import NextImage from 'next/image';
-import GoogleIcon from '../../_components/svg/icons/googleIcon.jsx'
+import { useAuth } from "../../context/AuthContext";
+import AppleSignInButton from "../../login/components/AppleSignInButton.jsx";
+import { ChevronRightIcon } from '@chakra-ui/icons';
+// Clean, subtle animations for professional design
+const fadeIn = keyframes`
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+`;
+
+const subtlePulse = keyframes`
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+`;
+
+const gentleHover = keyframes`
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-2px); }
+`;
+
 const Onboarding = () => {
-  // const { apiKey } = useApiKey();
+  const { signIn, signOut, isAuthenticated, user, loading } = useAuth();
   const [apiKey, setApiKey] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  // const { data: session, token } = useSession()
+  const [isSigningIn, setIsSigningIn] = useState(false);
   const [copySuccess, setCopySuccess] = useState('Copy');
   const textAreaRef = useRef(null);
   const toast = useToast();
-  const [session, setSession] = useState(null)
-  const [userEmail, setUserEmail] = useState('');
 
   useEffect(() => {
-    // Get the current session
-    config.supabaseClient.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      if (session) {
+    if (isAuthenticated && user) {
         toast({
-          title: "Thank you for signing up!",
-          description: `Welcome back, ${session.user.email}`,
+        title: "Welcome! 🎉",
+        description: `Successfully signed in as ${user.email}`,
           status: "success",
           duration: 3000,
           isClosable: true,
-        });
-      }
-    });
-
-    // Listen for auth state changes
-    const {
-      data: { subscription },
-    } = config.supabaseClient.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-useEffect(() => {
-  async function handlePostSignIn() {
-    try {
-      console.log('Fetching the authenticated user...');
-
-      // Fetch the authenticated user's session
-      const { data, error } = await config.supabaseClient.auth.getUser();
-
-      if (error) {
-        console.error('Error fetching authenticated user:', error.message);
-        return;
-      }
-
-      const user = data.user;
-      if (user) {
-        console.log('User fetched successfully:', user);
-
-        // Extract user data to be inserted
-        const userData = {
-          user_id: user?.id || null ,
-          mail: user.user_metadata?.email || null,
-          firstname: user.user_metadata?.full_name || null,
-          lastname: user.user_metadata?.full_name || null,
-          password: user.user_metadata?.sub || null,
-        };
-        console.log('Data to be inserted:', userData);
-
-        // Insert or update the user data into the 'dev_api_userprofile' table
-        const { error: upsertError } = await config.supabaseClient
-          .from('dev_api_userprofile') 
-          .upsert([userData], { onConflict: 'mail' });
-
-        if (upsertError) {
-          console.error('Error inserting user data:', upsertError.message);
-        } else {
-          console.log('User data inserted successfully');
-        }
-      }
-    } catch (error) {
-      console.error('Unexpected error during post-sign-in handling:', error);
+        position: "top",
+      });
     }
-  }
-
-  if (session) {
-    handlePostSignIn();
-  }
-}, [session]);
-
-
-  
-  console.log('Session from GetSession Client', session?.session?.user?.email);
-  console.log('Whole Session Data: ',session)
+  }, [isAuthenticated, user, toast]);
 
   const handleGoogleSignIn = async () => {
+    if (isSigningIn) return;
+    
+    setIsSigningIn(true);
     try {
-      await authentication.googleSignIn();
-      console.log("Google sign-in successful");
+      await signIn();
+      // The OAuth process will redirect to Google, and success will be handled when user returns
     } catch (error) {
-      console.error("Google sign-in error:", error);
-    }
-  };
-
-  const handleAppleSignIn = async () => {
-    try {
-      // await config.supabaseClient.auth.signInWithOAuth({
-      //   provider: "apple",
-      //   options: {
-      //     redirectTo: config.redirect_url,
-      //   },
-      // });
-      await authentication.appleSignIn();
-
-      console.log("Apple sign-in successful");
-    } catch (error) {
-      console.error("Apple sign-in error:", error);
-    }
-  };
-
-  // useEffect(() => {
-  //   // Fetch data immediately on component mount
-  //   fetchUserData();
-
-  //   // Set up an interval to fetch data every 5 minutes (300000 milliseconds)
-  //   const intervalId = setInterval(() => {
-  //     fetchUserData();
-  //   }, 3000);
-
-  //   return () => clearInterval(intervalId);
-  // }, []);
-  
-  const generateApiKey = async (e) => {
-    console.log('button clicked upr wala')
-    setIsLoading(true)
-    if(!session?.session?.user){
+      console.error('Error signing in:', error);
       toast({
-        title: "Please Login First",
-        description:
-          "To get started with API key you need to first login/signup",
-        status: "info",
-        duration: 3000,
+        title: "Authentication Error",
+        description: "There was an error signing in. Please try again.",
+        status: "error",
+        duration: 4000,
         isClosable: true,
+        position: "top",
       });
-      setIsLoading(false)
-    }
-
-    e.preventDefault();
-      try {
-        console.log(response);
-        const response = await axios.post(
-          "https://developer-api-53407187172.us-central1.run.app/login",
-          {
-            mail: session?.token?.email,
-            first_name: session?.token?.name,
-            password: session?.token?.sub
-          },          
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const apiKey = response?.data?.data?.API_key
-
-        console.log(response);
-        console.log("API Key Generated:", response);
-        if (response?.data?.message === 'Success') {
-          console.log("API Key Generated:", response);
-
-          // Saving API key for new users 
-          const apiKey = response?.data?.data?.API_key
-          setApiKey(apiKey);
-          console.log('Api key:',apiKey);
-          toast({
-            title: "API Key Generated",
-            description:
-              "You have successfully accessed api key",
-            status: "success",
-            duration: 3000,
-            isClosable: true,
-          });
-          setIsLoading(false);
-        } 
-      } catch (error) {
-        console.log("API Key Generated:", response);
-        toast({
-          title: "Something went wrong",
-          description:
-            "Please log in or try again later",
-          status: "warning",
-          duration: 3000,
-          isClosable: true,
-        });
-        console.log('error:',error);
-        console.log('Api Key:',response?.data?.userdata?.apiKey)
+      setIsSigningIn(false);
       }
   };
 
   const handleLogout = async () => {
     try {
-      await config.supabaseClient.auth.signOut();
-      setSession(null); // Clear the session state
+      await signOut();
       toast({
         title: "Logged out",
         description: "You have been successfully logged out.",
         status: "success",
         duration: 3000,
         isClosable: true,
+        position: "top",
       });
     } catch (error) {
       console.error("Logout error:", error);
@@ -224,65 +92,269 @@ useEffect(() => {
         status: "error",
         duration: 3000,
         isClosable: true,
+        position: "top",
       });
     }
   };
 
-  function copyToClipboard(e) {
-    textAreaRef.current.select();
-    document.execCommand('copy');
-    // This is just personal preference.
-    // I prefer to not show the whole text area selected.
-    e.target.focus();
-    setCopySuccess('Copied!');
-  };
 
-  function generateRandomString(length = 16) {
-    const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let result = "";
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * charset.length);
-      result += charset[randomIndex];
-    }
-    return result;
+
+  if (loading) {
+    return (
+      <Box
+        p={12}
+        borderRadius="24px"
+        bg="white"
+        border="1px solid rgba(0, 0, 0, 0.06)"
+        boxShadow="0 4px 24px rgba(0, 0, 0, 0.04)"
+        textAlign="center"
+        maxW="500px"
+        mx="auto"
+      >
+        <VStack spacing={6}>
+          <Box
+            w="32px"
+            h="32px"
+            borderRadius="50%"
+            border="2px solid rgba(0, 0, 0, 0.1)"
+            borderTopColor="black"
+            animation={`spin 1s linear infinite`}
+            sx={{
+              '@keyframes spin': {
+                '0%': { transform: 'rotate(0deg)' },
+                '100%': { transform: 'rotate(360deg)' }
+              }
+            }}
+          />
+          <Text color="rgba(0, 0, 0, 0.8)" fontSize="lg" fontWeight={500} fontFamily="system-ui, -apple-system">
+            Loading...
+          </Text>
+        </VStack>
+      </Box>
+    );
   }
 
   return (
-    <>
-    <VStack spacing={4}>
-  {session ? (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-      <Text fontSize="lg" fontFamily={'Inter ,sans-serif'} fontWeight="500" color="green.500">
-        Thank you for signing up, {session.user.email}
+    <Box
+      p={10}
+      borderRadius="24px"
+      bg="white"
+      border="1px solid rgba(0, 0, 0, 0.06)"
+      boxShadow="0 8px 32px rgba(0, 0, 0, 0.08)"
+      position="relative"
+      maxW="540px"
+      mx="auto"
+      animation={`${fadeIn} 0.6s ease-out`}
+    >
+      <VStack spacing={8}>
+        {isAuthenticated ? (
+          <>
+            {/* Authenticated State - Clean Apple Style */}
+            <VStack spacing={6} textAlign="center" w="full">
+              <Box
+                p={6}
+                borderRadius="16px"
+                bg="rgba(0, 0, 0, 0.02)"
+                border="1px solid rgba(0, 0, 0, 0.06)"
+                w="full"
+              >
+                <VStack spacing={3}>
+                  <Box
+                    w="48px"
+                    h="48px"
+                    borderRadius="50%"
+                    bg="rgba(0, 0, 0, 0.08)"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    fontSize="24px"
+                  >
+                    ✓
+                  </Box>
+                  <Text 
+                    fontSize="xl" 
+                    fontFamily="system-ui, -apple-system"
+                    fontWeight={600} 
+                    color="black"
+                    mb={1}
+                  >
+                    Successfully Signed In
+                  </Text>
+                  <Text 
+                    fontSize="md" 
+                    color="rgba(0, 0, 0, 0.6)"
+                    fontWeight={400}
+                  >
+                    Welcome back, {user?.email}
       </Text>
-      <Button onClick={handleLogout} colorScheme="red" size="sm">
-        Logout
+                </VStack>
+              </Box>
+              
+              <Button 
+                onClick={handleLogout} 
+                size="lg"
+                h="52px"
+                px={8}
+                bg="white"
+                color="black"
+                border="1px solid rgba(0, 0, 0, 0.12)"
+                borderRadius="12px"
+                fontWeight={500}
+                fontSize="md"
+                fontFamily="system-ui, -apple-system"
+                _hover={{
+                  bg: "rgba(0, 0, 0, 0.04)",
+                  transform: "translateY(-1px)",
+                  boxShadow: "0 4px 16px rgba(0, 0, 0, 0.12)",
+                }}
+                _active={{
+                  transform: "translateY(0px)",
+                  bg: "rgba(0, 0, 0, 0.08)",
+                }}
+                transition="all 0.2s ease"
+              >
+                Sign Out
       </Button>
-    </div>
-  ) : (
-    <Box marginTop={{md:'1rem',base:'0.5rem'}} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-      <Button onClick={handleGoogleSignIn} colorScheme="blackAlpha" size="sm" display="flex" alignItems="center" gap={2}>
-        <GoogleIcon />
-        Sign in with Google
+            </VStack>
+          </>
+        ) : (
+          <>
+            {/* Unauthenticated State - Professional Apple Style */}
+            <VStack spacing={6} textAlign="center">
+              <VStack spacing={3}>
+                <Text
+                  fontSize="2xl"
+                  fontWeight={600}
+                  color="black"
+                  letterSpacing="-0.02em"
+                  fontFamily="system-ui, -apple-system"
+                  lineHeight="1.2"
+                >
+                  Sign In to Get Started
+                </Text>
+                <Text
+                  fontSize="md"
+                  color="rgba(0, 0, 0, 0.6)"
+                  lineHeight="1.5"
+                  maxW="380px"
+                  fontFamily="system-ui, -apple-system"
+                  fontWeight={400}
+                >
+                  Access your Developer API credentials and start building with Hushh
+                </Text>
+              </VStack>
+            </VStack>
+
+            <VStack spacing={3} w="full">
+              {/* Professional Google Sign In Button */}
+              <Button
+                onClick={handleGoogleSignIn}
+                isLoading={isSigningIn}
+                loadingText="Signing in..."
+                w="full"
+                h="52px"
+                bg="white"
+                color="black"
+                border="1px solid rgba(0, 0, 0, 0.12)"
+                borderRadius="12px"
+                fontSize="md"
+                fontWeight={500}
+                fontFamily="system-ui, -apple-system"
+                _hover={{
+                  bg: "rgba(0, 0, 0, 0.04)",
+                  transform: "translateY(-1px)",
+                  boxShadow: "0 4px 16px rgba(0, 0, 0, 0.12)",
+                  borderColor: "rgba(0, 0, 0, 0.16)",
+                }}
+                _active={{
+                  transform: "translateY(0px)",
+                  bg: "rgba(0, 0, 0, 0.08)",
+                }}
+                transition="all 0.2s ease"
+                leftIcon={
+                  !isSigningIn && (
+                    <Box w="18px" h="18px">
+                      <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path
+                          fill="#4285F4"
+                          d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                        />
+                        <path
+                          fill="#34A853"
+                          d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                        />
+                        <path
+                          fill="#FBBC05"
+                          d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                        />
+                        <path
+                          fill="#EA4335"
+                          d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                        />
+                      </svg>
+                    </Box>
+                  )
+                }
+              >
+                Continue with Google
       </Button>
-      <Button onClick={handleAppleSignIn} colorScheme="blackAlpha" size="sm" display="flex" alignItems="center" gap={2}>
-        <AppleIcon />
-        Sign in with Apple
-      </Button>
+
+              {/* Clean Apple Sign In Button */}
+              <Box w="full">
+                <AppleSignInButton 
+                  isDisabled={isSigningIn}
+                  size="md"
+                  variant="minimal"
+                  onSuccess={(data) => {
+                    console.log('Apple Sign-In Success:', data);
+                    toast({
+                      title: "Apple Sign-In Successful",
+                      description: "Welcome to Hushh Developer API",
+                      status: "success",
+                      duration: 3000,
+                      isClosable: true,
+                      position: "top",
+                    });
+                  }}
+                  onError={(error) => {
+                    console.error('Apple Sign-In Error:', error);
+                    toast({
+                      title: "Apple Sign-In Failed",
+                      description: error.message || "Failed to sign in with Apple. Please try again.",
+                      status: "error",
+                      duration: 5000,
+                      isClosable: true,
+                      position: "top",
+                    });
+                  }}
+                />
     </Box>
+
+              {/* Clean Divider */}
+              <Box
+                w="full"
+                h="1px"
+                bg="rgba(0, 0, 0, 0.08)"
+                my={2}
+              />
+
+              {/* Minimal Security Info */}
+              <Text
+                fontSize="sm"
+                color="rgba(0, 0, 0, 0.5)"
+                textAlign="center"
+                lineHeight="1.4"
+                fontFamily="system-ui, -apple-system"
+                fontWeight={400}
+              >
+                Secure authentication powered by the same system used across Hushh
+              </Text>
+            </VStack>
+          </>
   )}
 </VStack> 
-    
-  </>
+    </Box>
   );
 };
 
-Onboarding.getInitialProps = async (context) => {
-  const session = await getSession(context);
-
-  return {
-    session
-  }
-}
-
-export default Onboarding
+export default Onboarding;
