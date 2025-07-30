@@ -9,6 +9,7 @@ module.exports = {
         userAgent: "*",
         allow: "/",
         disallow: [
+          "/clientside/*",
           "/api/*",
           "/_next/*",
           "/*?q=*"

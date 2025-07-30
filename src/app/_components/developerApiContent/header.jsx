@@ -37,7 +37,7 @@ export default function Header() {
   return (
     <Box as="header" bg="black" color="white" p={4} display="flex" justifyContent="space-between" alignItems="center">
       <Text fontSize="xl" fontWeight="bold">Hushh Developer API</Text>
-      {session ? (
+      {/* {session ? (
         <Menu>
           <MenuButton as={Button} variant="link">
             <Avatar src={session.user.user_metadata.avatar_url} name={session.user.email} />
@@ -45,7 +45,7 @@ export default function Header() {
           <MenuList>
             <MenuItem>
               <Text fontWeight="bold">{session.user.user_metadata.full_name}</Text>
-            </MenuItem>
+            </MenuItem> 
             <MenuItem>
               <Text>{session.user.email}</Text>
             </MenuItem>
@@ -56,7 +56,7 @@ export default function Header() {
         <Button onClick={() => router.push('/developerApi/login')} colorScheme="teal">
           Log In
         </Button>
-      )}
+      )} */}
     </Box>
   );
 }
