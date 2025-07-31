@@ -5,8 +5,7 @@ import React, { createContext, useContext, useState, useEffect, useMemo, useCall
 const HEADER_HEIGHT = 70;
 const MOBILE_BREAKPOINT = 768;
 const BANNER_HEIGHTS = {
-  funding: { mobile: 32, desktop: 36 },
-  hackathon: { mobile: 40, desktop: 45 }
+  funding: { mobile: 32, desktop: 36 }
 };
 
 const BannerHeightContext = createContext();
@@ -22,7 +21,6 @@ export const useBannerHeight = () => {
 export const BannerHeightProvider = ({ children }) => {
   const [activeBanners, setActiveBanners] = useState({
     funding: true,
-    hackathon: true,
   });
 
   const [isMobile, setIsMobile] = useState(false);
@@ -50,16 +48,10 @@ export const BannerHeightProvider = ({ children }) => {
     [isMobile]
   );
 
-  const hackathonBannerHeight = useMemo(() => 
-    isMobile ? BANNER_HEIGHTS.hackathon.mobile : BANNER_HEIGHTS.hackathon.desktop,
-    [isMobile]
-  );
-
   // Memoized total calculations
   const totalBannerHeight = useMemo(() => 
-    (activeBanners.funding ? fundingBannerHeight : 0) + 
-    (activeBanners.hackathon ? hackathonBannerHeight : 0),
-    [activeBanners.funding, activeBanners.hackathon, fundingBannerHeight, hackathonBannerHeight]
+    (activeBanners.funding ? fundingBannerHeight : 0),
+    [activeBanners.funding, fundingBannerHeight]
   );
 
   const totalOffsetHeight = useMemo(() => 
@@ -80,7 +72,6 @@ export const BannerHeightProvider = ({ children }) => {
   const value = useMemo(() => ({
     activeBanners,
     fundingBannerHeight,
-    hackathonBannerHeight,
     totalBannerHeight,
     headerHeight: HEADER_HEIGHT,
     totalOffsetHeight,
@@ -95,7 +86,6 @@ export const BannerHeightProvider = ({ children }) => {
   }), [
     activeBanners,
     fundingBannerHeight,
-    hackathonBannerHeight,
     totalBannerHeight,
     totalOffsetHeight,
     registerBanner,
