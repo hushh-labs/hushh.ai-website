@@ -9,7 +9,6 @@ import { figtree } from "./_utilities/fonts";
 import { Providers } from "./provider";
 import ResponsiveSizeProvider from "./context/responsive";
 import HeaderComponent from "./_components/features/HeaderComponent";
-import HackathonBanner from "./_components/features/HackathonBanner";
 import FundingBanner from "./_components/features/FundingBanner";
 import { siteMetadata } from "./sitemetadata";
 import { AuthProvider } from "./context/AuthContext";
@@ -166,8 +165,6 @@ export default function RootLayout({ children }) {
                 <Providers>
                   {/* Funding Banner - top priority */}
                   <FundingBanner />
-                  {/* Hackathon Banner - appears below funding banner */}
-                  <HackathonBanner />
                   {/* Header positioned dynamically after banners */}
                   <HeaderComponent />
                   {children}
