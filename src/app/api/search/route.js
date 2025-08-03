@@ -8,15 +8,25 @@ let searchIndexCache = null;
 let lastCacheTime = null;
 const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
 
-// Get all MDX files recursively
+// Get all MDX files recursively (excluding developer API files)
 function getAllMdxFiles(dirPath, arrayOfFiles = []) {
   const files = fs.readdirSync(dirPath);
 
   files.forEach((file) => {
     const fullPath = path.join(dirPath, file);
     if (fs.statSync(fullPath).isDirectory()) {
+      // 🚫 SKIP DEVELOPER API DIRECTORIES
+      if (file.includes('developer-Api') || file.includes('developerApi')) {
+        console.log(`⏭️ Skipping developer API directory: ${fullPath}`);
+        return;
+      }
       arrayOfFiles = getAllMdxFiles(fullPath, arrayOfFiles);
     } else if (file.endsWith('.mdx')) {
+      // 🚫 SKIP DEVELOPER API MDX FILES
+      if (fullPath.includes('developer-Api') || fullPath.includes('developerApi')) {
+        console.log(`⏭️ Skipping developer API MDX file: ${fullPath}`);
+        return;
+      }
       arrayOfFiles.push(fullPath);
     }
   });
@@ -30,10 +40,20 @@ function parseMdxFile(filePath) {
     const fileContent = fs.readFileSync(filePath, 'utf8');
     const { data: frontmatter, content } = matter(fileContent);
     
-    // Remove MDX syntax and markdown formatting for clean text
+    // Remove MDX syntax, import statements, and markdown formatting for clean text
     const cleanContent = content
       .replace(/```[\s\S]*?```/g, '') // Remove code blocks
       .replace(/`[^`]*`/g, '') // Remove inline code
+      .replace(/import\s+.*?from\s+['"][^'"]*['"];?/gi, '') // Remove import statements
+      .replace(/export\s+.*?from\s+['"][^'"]*['"];?/gi, '') // Remove export statements
+      .replace(/import\s*\{[^}]*\}\s*from\s*['"][^'"]*['"];?/gi, '') // Remove named imports
+      .replace(/import\s+\w+\s*,?\s*\{[^}]*\}\s*from\s*['"][^'"]*['"];?/gi, '') // Remove mixed imports
+      .replace(/const\s+\w+\s*=\s*require\(['"][^'"]*['"]\);?/gi, '') // Remove require statements
+      .replace(/^\s*\/\/.*$/gm, '') // Remove single-line comments
+      .replace(/\/\*[\s\S]*?\*\//g, '') // Remove multi-line comments
+      .replace(/^\s*\*.*$/gm, '') // Remove JSDoc style comments
+      .replace(/<[^>]*>/g, '') // Remove HTML/JSX tags
+      .replace(/\{[^}]*\}/g, '') // Remove JSX expressions
       .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold
       .replace(/\*(.*?)\*/g, '$1') // Remove italic
       .replace(/#{1,6}\s/g, '') // Remove headers
@@ -42,6 +62,7 @@ function parseMdxFile(filePath) {
       .replace(/>\s/g, '') // Remove blockquotes
       .replace(/\n+/g, ' ') // Replace newlines with spaces
       .replace(/\s+/g, ' ') // Normalize whitespace
+      .replace(/^\s+/gm, '') // Remove leading whitespace
       .trim();
 
     // Determine content type and URL based on file path
@@ -56,14 +77,16 @@ function parseMdxFile(filePath) {
       url = `/hushhBlogs/${slug}`;
     } else if (filePath.includes('/pages/')) {
       type = 'documentation';
-      category = 'API Documentation';
-      // Extract path from pages/path.mdx pattern
+      category = 'Documentation';
+      // Extract path from pages/path.mdx pattern - FIXED URL GENERATION
       const relativePath = filePath.split('/pages/')[1].replace('.mdx', '');
-      url = `/pages/${relativePath}`;
+      url = `/${relativePath}`; // Remove the '/pages/' prefix
     } else {
       type = 'page';
       category = 'Pages';
-      url = '/';
+      // Generate unique URL based on file path instead of defaulting to '/'
+      const fileName = path.basename(filePath, '.mdx');
+      url = `/${fileName}`;
     }
 
     // Create searchable text combining all relevant fields
@@ -75,10 +98,44 @@ function parseMdxFile(filePath) {
       cleanContent
     ].join(' ').toLowerCase();
 
+    // Enhanced title extraction with better fallbacks
+    let title = frontmatter.title;
+    if (!title) {
+      // Extract first heading from content
+      const headingMatch = content.match(/^#\s+(.+)$/m);
+      if (headingMatch) {
+        title = headingMatch[1].trim();
+      } else {
+        // Use filename as last resort
+        const fileName = path.basename(filePath, '.mdx');
+        title = fileName.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+      }
+    }
+
+    // Enhanced description extraction
+    let description = frontmatter.description || frontmatter.excerpt;
+    if (!description && cleanContent.length > 10) {
+      // Extract first meaningful paragraph (at least 50 characters)
+      const paragraphs = cleanContent.split('\n').filter(p => p.trim().length > 50);
+      if (paragraphs.length > 0) {
+        description = paragraphs[0].substring(0, 200) + '...';
+      } else {
+        // Fallback to first sentences
+        const sentences = cleanContent.split(/[.!?]+/).filter(s => s.trim().length > 20);
+        if (sentences.length > 0) {
+          description = sentences.slice(0, 2).join('. ').substring(0, 200) + '...';
+        } else {
+          description = `${type === 'blog' ? 'Blog post' : 'Documentation'} about ${title}`;
+        }
+      }
+    } else if (!description) {
+      description = `${type === 'blog' ? 'Blog post' : 'Documentation'} about ${title}`;
+    }
+
     return {
       id: url,
-      title: frontmatter.title || 'Untitled',
-      description: frontmatter.description || cleanContent.substring(0, 200) + '...',
+      title: title,
+      description: description,
       content: cleanContent,
       searchableText,
       url,
@@ -387,6 +444,81 @@ function buildSearchIndex() {
         isPublished: true,
         wordCount: 90,
         readingTime: 1
+      },
+      {
+id : 'on-boarding',
+title : 'On-Boarding',
+description : 'On-Boarding - Developer API',
+content : 'On-Boarding',
+searchableText : "Welcome to our Developer API On Boarding To access our API, you must first sign up for an account using the Google or Apple sign-in options provided below. Simply click on your preferred authentication method to get started. After successful authentication, you'll be able to generate your API key, which is essential for authenticating your API requests. Please setup your profle to get started for using our developer APIs and this is compulsory step to proceed further as you ned to setup you whole profile You need an API key. You can obtain your API key by signing up for an account on our platform. Use this API key in the Authorization header of your HTTP requests. Generate a New API Key: If you are setting up for the first time or need a new key, you can generate one. This will create a new API key that you can use immediately. Access to your API key . You need to Sign Up to access API key first to proceed further and then can access Access Token Please setup your profle to get started for using our developer APIs and this is compulsory step to proceed further as you ned to setup you whole profile Get Your API Key You need an API key. You can obtain your API key by signing up for an account on our platform. Use this API key in the Authorization header of your HTTP requests. Get Your Session Token After obtaining your API key, you'll need to generate a session token for secure API interactions. This token authenticates your requests and provides temporary access to our services. Session tokens expire after a set period for enhanced security. If you have any questions or need assistance, please contact our support team at sales@hushh.ai",
+url : '/developer-Api/on-boarding',
+type : 'page',
+category : 'Developer Resources',
+author:'Hushh Developers',
+tags : ['On-Boarding', 'Developer Resources', 'Hushh Developers'],
+isPublished : true,
+wordCount : 100,
+readingTime : 1
+      },
+      {
+        id:'root-endpoints',
+        title : 'Root Endpoints',
+        description : 'Root Endpoints',
+        content : 'Root Endpoints',
+        searchableText : "Root Endpoints developer api This section explains how to access and insert data in Hushh, ensuring each operation aligns with user consent protocols. All endpoints in these categories require a valid session token (obtained via /sessiontoken) and, where applicable, a user’s phone number or ID Here’s a quick rundown of the core API categories we offer. Each section links to a dedicated page with in-depth details on endpoints, request/response formats, and usage examples Cards & Consents List Installed Cards Description: Retrieves all the “cards” (e.g., brand cards, preference cards) installed by a user. Request Consent : Description: When a user’s consent is required for data access (e.g., brand preferences, health info), call this endpoint to prompt the user. The user is notified about the request with details of the developer and brand. List Consented Cards: Retrieves a list of cards for which the user has already granted consent. This helps you identify which data scopes are accessible without further consent prompts. Receipts: 1.Get Receipt Data : Retrieves a list of previously stored receipts for the specified user. Health : 1.Get Health Data : Retrieves the user’s stored health data, which often includes question-and-answer survey responses or other custom health metrics. Retrieves a list of previously stored health data for the specified user. Browsing: Get Browsing Data - Retrieves previously inserted browsing records for a user, enabling analytics or personalized recommendations. Fashion : Get Fashion Data - Retrieves previously inserted fashion preferences and Q&A responses for a given user. Check out the Consent Flow guidelines to understand how to handle user permissions when accessing sensitive data. Food & Insurance : Get Food Data - Retrieves any stored food-related information for the user, which may include dietary preferences, favorite cuisines, or past food survey responses. Get Insurance Data: Retrieves insurance-related information for the user, such as policy details, coverage limits, or any survey answers about insurance preferences. Consent Flow: Hushh places user consent at the heart of data sharing. Even if a user’s data exists in Hushh, your application must explicitly request user permission to access it. This ensures privacy, transparency, and compliance with regulations like GDPR. Workflow Steps - Attempt Data Retrieval If consent has already been granted, the API will return the requested data. If consent is missing, you receive a message. Request Consent Immediate 3-Minute Window: Hushh keeps the request open for 3 minutes for a potential instant response Explore the Data Insertion & Retrieval pages for detailed endpoint documentation, example requests, and response schemas.",
+        url : '/developer-Api/rootEndpoints',
+        type : 'page',
+        category : 'Developer Resources',
+        author : 'Hushh Developers',
+        tags : ['Root Endpoints', 'Developer Resources', 'Hushh Developers'],
+        isPublished : true,
+        wordCount : 100,
+        readingTime : 1
+      },
+      {
+        id:'additional-requirements',
+        title : 'Additional Requirements',
+        description: 'Additional Requirements',
+        content: 'Additional Requirements',
+        searchableText: "Additional Considerations Beyond basic endpoint usage, there are a few critical aspects to keep in mind when working with Hushh Developer APIs. These considerations help ensure that your integrations remain seamless, secure, and fully compliant with global data protection standards. 3.1 Consent Flow Overview Hushh places user consent at the heart of data sharing. Even if a user's data exists in Hushh, your application must explicitly request user permission to access it. This ensures privacy, transparency, and compliance with regulations like GDPR. Workflow Steps Attempt Data Retrieval If consent has already been granted, the API will return the requested data. If consent is missing, you receive a message: \"You don't have permission to access the data. Please request consent from the user.\" Request Consent Call the POST /api/v1/request-consent endpoint to prompt the user. The user sees your application's details (developer info, brand name, etc.) and decides whether to accept or reject. Immediate 3-Minute Window Hushh keeps the request open for 3 minutes for an instant response: ✅ Consent Granted: You can immediately access the data. ❌ Consent Rejected: You cannot access the data. 24-Hour Pending If the user does not act within the 3-minute window, the request remains pending for 24 hours. Your application will receive a message: \"Consent request sent and awaiting user acceptance. Please check again after 24 hours.\" Check Status After 24 hours (or anytime in between), check if the user has responded. Once consent is granted, subsequent data retrieval calls should succeed. Best Practices ✅ Request Consent Only When Needed: Avoid overwhelming the user with multiple consent prompts. ✅ Provide Context: Clarify why the data is needed and how it benefits the user. ✅ Handle Pending Status Gracefully: If consent is pending, inform the user that data will be available once they respond. 3.2 Security & Privacy Data Protection 🔐 Encryption in Transit: All requests and responses with Hushh APIs occur over HTTPS (TLS/SSL) to prevent interception. 🔐 Storage Encryption: Sensitive data at rest is encrypted to mitigate unauthorized access within Hushh's infrastructure. Key & Token Management 🔑 API Key Security: Never expose your API key in public repositories or client-side code. Treat it as a secret. 🔑 Session Tokens: Automatically expire after a set time. Re-generate as needed to maintain secure communication. 🔑 Revocation: If your key or token is compromised, revoke and regenerate credentials promptly. Access Control ✔️ Granular Permissions: Hushh enforces user-level permissions through explicit consent checks. ✔️ Least Privilege: Request only the data your application truly needs, reducing risk in the event of unauthorized access. 3.3 GDPR & Compliance GDPR Commitment Hushh is fully committed to the principles of the General Data Protection Regulation (GDPR), ensuring that personal data is: ✅ Processed Lawfully, Fairly, and Transparently ✅ Collected for Specified, Explicit, and Legitimate Purposes ✅ Minimized to what is necessary for your application's legitimate purpose. ✅ Accurate and Up-to-Date ✅ Stored Securely with strong encryption and strict access controls. ✅ Retained Only as Necessary for the purposes authorized by the user. User Rights Under GDPR, users have the right to: 🔹 Withdraw Consent: They can revoke data sharing at any point. 🔹 Data Portability: Users can request their data in a structured, commonly used format. 🔹 Data Erasure: They can ask to have their data removed or anonymized. Developer Responsibilities 🛡️ Transparent Usage: Clearly communicate to users how and why their data is being processed in your app. 🛡️ Honoring Requests: If users request deletion or withdrawal of consent, ensure your application stops retrieving or storing their data. 🛡️ Data Minimization: Only request data relevant to your service or product requirements. Final Notes ✅ By following the Consent Flow, Security & Privacy, and GDPR guidelines, you ensure a safe, user-trusting environment. ✅ For compliance inquiries or security questions, reach out to sales@hushh.ai. ✅ Stay updated with evolving data protection regulations, especially if your app serves multiple regions globally. 🚀 With these considerations in mind, you're now prepared to build secure, privacy-focused, and regulation-compliant solutions on top of Hushh Developer APIs!",
+        url: '/developer-Api/additional-requirements',
+        type: 'page',
+        category: 'Developer Resources',
+        author: 'Hushh Developers',
+        tags : ['Additional Requirements', 'Developer Resources', 'Hushh Developers'],
+        isPublished : true,
+        wordCount : 100,
+        readingTime : 1
+      },
+      {
+        id:'use-cases',
+        title : 'Developer API Use Cases',
+        description : 'Use Cases',
+        content : 'Use Cases',
+        searchableText : "Use Cases 3.1 Retail Businesses Leverage Hushh’s consent-driven, user-owned data to bring next-level personalization to your retail operations—be it luxury boutiques or global e-commerce platforms. Precision Marketing Targeted Campaigns: Send bespoke marketing materials based on users’ actual purchase history and browsing patterns. Dynamic Segmentation: Segment customers by precise spend thresholds, preferred brands, or style preferences. Elevated Customer Experience Data-Backed Styling: Use real-time fashion data (color, size, brand affinity) to showcase items that perfectly match each user’s style profile. Concierge-Level Service: Offer “white glove” experiences in luxury retail, combining purchasing trends and browsing behaviors for truly VIP treatment. Personalized Upsells: Suggest complementary products and accessories based on the user’s existing fashion, food, or travel interests. Loyalty & Retention Customized Rewards: Craft loyalty programs that resonate with each user—offering perks on items they’ve shown interest in. Predictive Restocking: Anticipate a user’s product needs (e.g., favorite cosmetics or subscription items) and proactively inform them of restocks or new arrivals. Ongoing Engagement: Continually refresh recommendations using updated browsing and purchase data, keeping customers engaged over time. Example: A high-end fashion retailer uses Hushh to gather receipt data from consenting customers. By analyzing each user’s preferences—like color choices and average spend—they send targeted invites to exclusive “Style Previews” and offer personalized styling sessions. 3.2 Application Developers From indie devs to enterprise teams, Hushh’s APIs simplify data integration and compliance so you can focus on building amazing user experiences. Consent-Driven Data No Legal Headaches: Hushh handles explicit user opt-ins and data permissions, so you don’t have to build privacy frameworks from scratch. Seamless Data Flow: Pull in relevant user data (health, receipts, brand surveys) directly into your app, ensuring clarity about where and how it’s used. Personalization Hyper-Personalized Interactions: Deliver tailored chat responses, custom dashboards, or recommended content based on each user’s unique data profile. Context-Aware Chatbots: Enhance chatbot conversations with actual user preferences, allowing for more fluid, human-like interactions. In-App Recommendations: Surface the most relevant product offers or article suggestions, using real-time brand preference updates. Compliance & Privacy GDPR-Ready: All data requests come via the Hushh platform, ensuring transparent, user-approved usage. Secure & Encrypted: Robust encryption standards protect user data at rest and in transit. Innovation & Scalability Ease of Integration: Straightforward APIs and well-documented endpoints help you integrate advanced data insights into your app quickly. Agile Iterations: As user preferences shift, your application can pull the latest data. Example: A fitness app developer wants to incorporate users’ dietary preferences (from Hushh’s Food Data) and receipts from health-related purchases. By cross-referencing both datasets, the app delivers specialized meal plans, daily health tips, and integrated shopping lists—drastically improving user engagement and satisfaction. Key Takeaways Retail Businesses can use Hushh to refine marketing strategies, elevate customer journeys, and power loyalty programs with data-driven insights. Application Developers can safely tap into robust, user-consented data streams—without worrying about privacy violations—thereby creating apps that feel uniquely attuned to each user’s needs.",
+        url : '/use-cases',
+        type : 'page',
+        category : 'Developer Resources',
+        author : 'Hushh Developers',
+        tags : ['Use Cases', 'Developer Resources', 'Hushh Developers'],
+        isPublished : true,
+        wordCount : 100,
+        readingTime : 1
+      },
+      {
+        id:'data-resources',
+        title : 'Data & Resources',
+        description: 'Data & Resources',
+        content: 'Data & Resources',
+        searchableText: "Data & Sources 2.1 Where Do We Get Our Data? At Hushh, data is controlled and owned by users. Individuals decide which pieces of information they want to share with third-party apps and services. This ensures: Complete User Control: No data is synced to any cloud service without explicit consent. Security & Privacy First: Our system employs multiple AI-based models and cutting-edge techniques to process data securely and efficiently, while respecting user choices and regulatory requirements. All shared data is stored in our backend only after the user has given permission. Hushh's robust infrastructure and GDPR-compliant practices ensure that this data remains private, encrypted, and used solely for authorized purposes. 2.2 Data Categories in Hushh 1. User-Owned Data Data a user explicitly opts to share, such as receipts, health records, location information, or app usage details. Users retain absolute control—consenting to what is stored or shared. 2. Hushh-Collected Data Insights generated via the Hushh platform itself, such as: User surveys, Hushh-Button interactions, Usage metrics from our integrations. Users still retain ownership and can review or revoke data sharing at any point. In every scenario, Hushh provides clear, granular opt-in controls so users understand precisely which data points are shared and why. 2.3 How We Organize the Data Although users own the data, Hushh manages it within a secure, privacy-compliant backend. Examples of data include: Receipts & Transaction Data: Centralizes details like brand, purchase location, total cost, and currency. Useful for providing personalized recommendations or expense tracking. Health & Wellness Data: Holds health metrics or user-reported information, such as daily activity or app-synced fitness logs. User-Installed Cards & Memberships: Tracks brand cards or loyalty programs a user has installed or expressed interest in, enabling more personalized brand interactions. App Usage & Interactions: Captures data on how users engage with certain applications or integrated features, always with user consent. Locations: Stores geospatial data for location-based services. Strict opt-in policies ensure transparency around any location use. Consolidated Views & Summaries: Combines various sources to create high-level summaries or dashboards, such as receipt summaries or aggregated app usage. Through this structured approach, we ensure data is easy to manage, secure, and traceable—always anchored by the user's consent. Whether you're a developer building personalized shopping experiences or a data analyst searching for trends, Hushh provides granular, consent-driven access to the information users want to share. 2.4 Consent-Based Data Retrieval All data in Hushh is governed by explicit user consent. Even if a user's data exists in Hushh (such as receipts, browsing history, or health information), developers are not automatically granted access. When a developer attempts to retrieve data for which the user has not given consent, the API will respond: \"You don't have permission to access the data. Please request consent from the user.\" Process for Requesting Consent: Call the Request Consent Endpoint: Prompt the user to approve or reject the request. Immediate Response Window: Users have 3 minutes to provide a quick decision (accepted or rejected). Extended Window: If no response is received in 3 minutes, the request remains pending for 24 hours. Access Granted: Once consent is given, developers can retrieve the user's data from the relevant endpoints. Key Points: User-Centric Control: Data retrieval is always subject to user approval, reinforcing privacy and compliance. Request Consent: Developers must notify and request authorization from users if no prior permission exists. Time-Bound Process: A 3-minute immediate response window, plus a 24-hour extended window. Dynamic Updates: After consent is granted, subsequent retrieval calls succeed automatically. Key Takeaways User Consent is Paramount: Hushh never collects data without explicit approval. Granular Control: Users decide which categories of data (receipts, health, location, etc.) can be accessed. Structured Organization: Data is separated into relevant tables and views, ensuring clarity and compliance. Ready to integrate? Check out our Quick Start or API Reference for detailed steps on accessing, retrieving, and working with these datasets in your applications.",
+        url: '/data-resources',
+        type: 'page',
+        category: 'Developer Resources',
+        author: 'Hushh Developers',
+        tags : ['Data & Resources', 'Developer Resources', 'Hushh Developers'],
+        isPublished : true,
+        wordCount : 100,
+        readingTime : 1
       },
 {
   id: 'hushh-labs',

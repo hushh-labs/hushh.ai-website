@@ -50,17 +50,56 @@ export class ContentIndexer {
               const cleanContent = content
                 .replace(/```[\s\S]*?```/g, '') // Remove code blocks
                 .replace(/`[^`]*`/g, '') // Remove inline code
+                .replace(/import\s+.*?from\s+['"][^'"]*['"];?/gi, '') // Remove import statements
+                .replace(/export\s+.*?from\s+['"][^'"]*['"];?/gi, '') // Remove export statements
+                .replace(/import\s*\{[^}]*\}\s*from\s*['"][^'"]*['"];?/gi, '') // Remove named imports
+                .replace(/import\s+\w+\s*,?\s*\{[^}]*\}\s*from\s*['"][^'"]*['"];?/gi, '') // Remove mixed imports
+                .replace(/const\s+\w+\s*=\s*require\(['"][^'"]*['"]\);?/gi, '') // Remove require statements
                 .replace(/!\[.*?\]\(.*?\)/g, '') // Remove images
                 .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1') // Extract link text
                 .replace(/<[^>]*>/g, '') // Remove HTML tags
                 .replace(/\{[^}]*\}/g, '') // Remove JSX expressions
+                .replace(/^\s*\/\/.*$/gm, '') // Remove single-line comments
+                .replace(/\/\*[\s\S]*?\*\//g, '') // Remove multi-line comments
+                .replace(/^\s*\*.*$/gm, '') // Remove JSDoc style comments
                 .replace(/\n\s*\n/g, '\n') // Normalize line breaks
                 .replace(/[#*_`]/g, '') // Remove markdown formatting
+                .replace(/^\s+/gm, '') // Remove leading whitespace
                 .trim();
 
               const blogUrl = `/hushhBlogs/${folder}`;
-              const title = frontmatter.title || folder.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-              const description = frontmatter.description || frontmatter.excerpt || cleanContent.substring(0, 200) + '...';
+              
+              // Enhanced title extraction with better fallbacks
+              let title = frontmatter.title;
+              if (!title) {
+                // Extract first heading from content
+                const headingMatch = content.match(/^#\s+(.+)$/m);
+                if (headingMatch) {
+                  title = headingMatch[1].trim();
+                } else {
+                  title = folder.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                }
+              }
+              
+              // Enhanced description extraction
+              let description = frontmatter.description || frontmatter.excerpt;
+              if (!description && cleanContent.length > 10) {
+                // Extract first meaningful paragraph (at least 50 characters)
+                const paragraphs = cleanContent.split('\n').filter(p => p.trim().length > 50);
+                if (paragraphs.length > 0) {
+                  description = paragraphs[0].substring(0, 200) + '...';
+                } else {
+                  // Fallback to first sentences
+                  const sentences = cleanContent.split(/[.!?]+/).filter(s => s.trim().length > 20);
+                  if (sentences.length > 0) {
+                    description = sentences.slice(0, 2).join('. ').substring(0, 200) + '...';
+                  } else {
+                    description = `Blog post about ${title}`;
+                  }
+                }
+              } else if (!description) {
+                description = `Blog post about ${title}`;
+              }
               
               blogEntries.push({
                 id: `blog-${folder}`,
@@ -120,24 +159,74 @@ export class ContentIndexer {
             scanDirectory(fullPath, path.join(basePath, item));
           } else if (item.endsWith('.mdx')) {
             try {
+              const relativeFilePath = path.join(basePath, item);
+              
+              // 🚫 TEMPORARILY SKIP DEVELOPER API MDX FILES
+              // Skip any files in developer-Api directory or containing developer API content
+              if (relativeFilePath.includes('developer-Api') || 
+                  relativeFilePath.includes('developerApi') ||
+                  (relativeFilePath.toLowerCase().includes('api') && 
+                   (relativeFilePath.includes('dev') || relativeFilePath.includes('getting-started')))) {
+                console.log(`⏭️ Skipping developer API MDX file: ${relativeFilePath}`);
+                continue; // Skip this file completely
+              }
+              
               const fileContent = fs.readFileSync(fullPath, 'utf-8');
               const { data: frontmatter, content } = matter(fileContent);
               
               const cleanContent = content
-                .replace(/```[\s\S]*?```/g, '')
-                .replace(/`[^`]*`/g, '')
-                .replace(/!\[.*?\]\(.*?\)/g, '')
-                .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-                .replace(/<[^>]*>/g, '')
-                .replace(/\{[^}]*\}/g, '')
-                .replace(/\n\s*\n/g, '\n')
-                .replace(/[#*_`]/g, '')
+                .replace(/```[\s\S]*?```/g, '') // Remove code blocks
+                .replace(/`[^`]*`/g, '') // Remove inline code
+                .replace(/import\s+.*?from\s+['"][^'"]*['"];?/gi, '') // Remove import statements
+                .replace(/export\s+.*?from\s+['"][^'"]*['"];?/gi, '') // Remove export statements
+                .replace(/import\s*\{[^}]*\}\s*from\s*['"][^'"]*['"];?/gi, '') // Remove named imports
+                .replace(/import\s+\w+\s*,?\s*\{[^}]*\}\s*from\s*['"][^'"]*['"];?/gi, '') // Remove mixed imports
+                .replace(/const\s+\w+\s*=\s*require\(['"][^'"]*['"]\);?/gi, '') // Remove require statements
+                .replace(/!\[.*?\]\(.*?\)/g, '') // Remove images
+                .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1') // Extract link text
+                .replace(/<[^>]*>/g, '') // Remove HTML tags
+                .replace(/\{[^}]*\}/g, '') // Remove JSX expressions
+                .replace(/^\s*\/\/.*$/gm, '') // Remove single-line comments
+                .replace(/\/\*[\s\S]*?\*\//g, '') // Remove multi-line comments
+                .replace(/^\s*\*.*$/gm, '') // Remove JSDoc style comments
+                .replace(/\n\s*\n/g, '\n') // Normalize line breaks
+                .replace(/[#*_`]/g, '') // Remove markdown formatting
+                .replace(/^\s+/gm, '') // Remove leading whitespace
                 .trim();
 
-              const relativeFilePath = path.join(basePath, item);
               const urlPath = relativeFilePath.replace(/\.mdx$/, '').replace(/\\/g, '/');
-              const title = frontmatter.title || path.basename(item, '.mdx').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-              const description = frontmatter.description || cleanContent.substring(0, 200) + '...';
+              
+              // Enhanced title extraction with better fallbacks
+              let title = frontmatter.title;
+              if (!title) {
+                // Extract first heading from content
+                const headingMatch = content.match(/^#\s+(.+)$/m);
+                if (headingMatch) {
+                  title = headingMatch[1].trim();
+                } else {
+                  title = path.basename(item, '.mdx').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                }
+              }
+              
+              // Enhanced description extraction 
+              let description = frontmatter.description || frontmatter.excerpt;
+              if (!description && cleanContent.length > 10) {
+                // Extract first meaningful paragraph (at least 50 characters)
+                const paragraphs = cleanContent.split('\n').filter(p => p.trim().length > 50);
+                if (paragraphs.length > 0) {
+                  description = paragraphs[0].substring(0, 200) + '...';
+                } else {
+                  // Fallback to first sentences
+                  const sentences = cleanContent.split(/[.!?]+/).filter(s => s.trim().length > 20);
+                  if (sentences.length > 0) {
+                    description = sentences.slice(0, 2).join('. ').substring(0, 200) + '...';
+                  } else {
+                    description = `Documentation for ${title}`;
+                  }
+                }
+              } else if (!description) {
+                description = `Documentation for ${title}`;
+              }
               
               pagesEntries.push({
                 id: `page-${urlPath.replace(/[^a-z0-9]/gi, '-')}`,
