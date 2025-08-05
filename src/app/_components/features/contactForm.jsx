@@ -334,7 +334,7 @@ const ContactForm = () => {
     setIsSubmitting(true);
 
     try {
-      // Prepare form data including files
+      // Create FormData for multipart/form-data submission
       const submitData = new FormData();
       
       // Add text fields
@@ -348,50 +348,47 @@ const ContactForm = () => {
       submitData.append('urgency', formData.urgency);
       submitData.append('department', formData.department);
       
-      // Add files
+      // Add metadata about files
+      submitData.append('has_attachments', uploadedFiles.length > 0);
+      submitData.append('attachment_count', uploadedFiles.length.toString());
+      
+      // Add all uploaded files (voice, video, documents)
       uploadedFiles.forEach((file, index) => {
-        submitData.append(`attachment_${index}`, file);
+        // Use consistent field name that backend expects
+        submitData.append('files', file);
+        
+        // Add file metadata
+        submitData.append(`file_${index}_name`, file.name);
+        submitData.append(`file_${index}_type`, file.type);
+        submitData.append(`file_${index}_size`, file.size.toString());
       });
 
-      // For now, convert to JSON for the existing API
-      const apiData = {
-        full_name: formData.name,
-        email: formData.email,
-        company: formData.company || '',
-        phone: formData.phone || '',
-        subject: formData.subject || 'General Inquiry',
-        message: `${formData.message}\n\nAdditional Info:\n- Preferred Contact: ${formData.preferredContact}\n- Urgency: ${formData.urgency}\n- Department: ${formData.department}\n- Attachments: ${uploadedFiles.length} file(s) uploaded`,
-        preferred_contact: formData.preferredContact,
-        urgency: formData.urgency,
-        department: formData.department,
-        has_attachments: uploadedFiles.length > 0,
-        attachment_count: uploadedFiles.length
-      };
-
+      // Send FormData (not JSON) to backend
       const response = await fetch('https://hushh-api-53407187172.us-central1.run.app/send-email', {
         method: 'POST',
         headers: {
+          // Don't set Content-Type - let browser set it with boundary for multipart/form-data
           'accept': 'application/json',
-          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(apiData)
+        body: submitData // Send FormData directly
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorText = await response.text();
+        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
       }
 
       const result = await response.json();
       
       toast({
         title: "Message sent successfully! 🎉",
-        description: "We'll get back to you as soon as possible. Check your email for confirmation.",
+        description: `We'll get back to you as soon as possible. ${uploadedFiles.length > 0 ? `${uploadedFiles.length} file(s) attached.` : ''} Check your email for confirmation.`,
         status: "success",
         duration: 6000,
         isClosable: true,
       });
 
-      // Reset form
+      // Reset form and clear all files
       setFormData({
         name: '',
         email: '',
@@ -411,7 +408,9 @@ const ContactForm = () => {
       console.error('Error sending email:', error);
       toast({
         title: "Failed to send message",
-        description: "Please try again later or contact us directly via WhatsApp.",
+        description: error.message.includes('413') ? 
+          "Files too large. Please reduce file size and try again." :
+          "Please try again later or contact us directly via WhatsApp.",
         status: "error",
         duration: 5000,
         isClosable: true,
