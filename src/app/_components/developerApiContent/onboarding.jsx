@@ -12,8 +12,15 @@ import {
 } from "@chakra-ui/react";
 import { keyframes } from '@emotion/react';
 import '../../../../pages/fonts.css'
-import { useAuth } from "../../context/AuthContext";
-import AppleSignInButton from "../../login/components/AppleSignInButton.jsx";
+import { 
+  signInWithGoogle, 
+  signOut, 
+  getCurrentSession, 
+  getCurrentUser, 
+  onAuthStateChange 
+} from "./supabaseAuth";
+import AuthCallback from "./authCallback";
+import DebugAuth from "./debugAuth";
 import { ChevronRightIcon } from '@chakra-ui/icons';
 // Clean, subtle animations for professional design
 const fadeIn = keyframes`
@@ -32,50 +39,84 @@ const gentleHover = keyframes`
 `;
 
 const Onboarding = () => {
-  const { signIn, signOut, isAuthenticated, user, loading } = useAuth();
-  const [apiKey, setApiKey] = useState('');
+  const [session, setSession] = useState(null);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [isSigningIn, setIsSigningIn] = useState(false);
-  const [copySuccess, setCopySuccess] = useState('Copy');
-  const textAreaRef = useRef(null);
   const toast = useToast();
 
   useEffect(() => {
-    if (isAuthenticated && user) {
+    // Get initial session
+    const getInitialSession = async () => {
+      try {
+        const { session, error } = await getCurrentSession();
+        if (!error && session) {
+          setSession(session);
+          setUser(session.user);
+        }
+      } catch (error) {
+        console.error('Error getting initial session:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getInitialSession();
+
+    // Listen for auth changes
+    const { data: { subscription } } = onAuthStateChange(async (event, session) => {
+      console.log('Auth state changed:', event, session);
+      setSession(session);
+      setUser(session?.user ?? null);
+      setLoading(false);
+
+      if (event === 'SIGNED_IN' && session?.user) {
         toast({
-        title: "Welcome! 🎉",
-        description: `Successfully signed in as ${user.email}`,
+          title: "Welcome! 🎉",
+          description: `Successfully signed in as ${session.user.email}`,
           status: "success",
           duration: 3000,
           isClosable: true,
-        position: "top",
-      });
-    }
-  }, [isAuthenticated, user, toast]);
+          position: "top",
+        });
+      }
+    });
+
+    return () => subscription?.unsubscribe();
+  }, [toast]);
 
   const handleGoogleSignIn = async () => {
     if (isSigningIn) return;
     
     setIsSigningIn(true);
     try {
-      await signIn();
-      // The OAuth process will redirect to Google, and success will be handled when user returns
+      const { data, error } = await signInWithGoogle();
+      if (error) {
+        throw error;
+      }
+      // The OAuth process will redirect to Google
     } catch (error) {
       console.error('Error signing in:', error);
       toast({
         title: "Authentication Error",
-        description: "There was an error signing in. Please try again.",
+        description: error.message || "There was an error signing in. Please try again.",
         status: "error",
         duration: 4000,
         isClosable: true,
         position: "top",
       });
       setIsSigningIn(false);
-      }
+    }
   };
 
   const handleLogout = async () => {
     try {
-      await signOut();
+      const { error } = await signOut();
+      if (error) {
+        throw error;
+      }
+      setSession(null);
+      setUser(null);
       toast({
         title: "Logged out",
         description: "You have been successfully logged out.",
@@ -88,7 +129,7 @@ const Onboarding = () => {
       console.error("Logout error:", error);
       toast({
         title: "Logout failed",
-        description: "An error occurred while logging out.",
+        description: error.message || "An error occurred while logging out.",
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -135,19 +176,22 @@ const Onboarding = () => {
   }
 
   return (
-    <Box
-      p={10}
-      borderRadius="24px"
-      bg="white"
-      border="1px solid rgba(0, 0, 0, 0.06)"
-      boxShadow="0 8px 32px rgba(0, 0, 0, 0.08)"
-      position="relative"
-      maxW="540px"
-      mx="auto"
-      animation={`${fadeIn} 0.6s ease-out`}
-    >
+    <>
+      <AuthCallback />
+      <VStack spacing={6} maxW="540px" mx="auto">
+        {/* <DebugAuth />  */}
+        <Box
+          p={10}
+          borderRadius="24px"
+          bg="white"
+          border="1px solid rgba(0, 0, 0, 0.06)"
+          boxShadow="0 8px 32px rgba(0, 0, 0, 0.08)"
+          position="relative"
+          w="full"
+          animation={`${fadeIn} 0.6s ease-out`}
+        >
       <VStack spacing={8}>
-        {isAuthenticated ? (
+        {session && user ? (
           <>
             {/* Authenticated State - Clean Apple Style */}
             <VStack spacing={6} textAlign="center" w="full">
@@ -299,36 +343,16 @@ const Onboarding = () => {
                 Continue with Google
       </Button>
 
-              {/* Clean Apple Sign In Button */}
-              <Box w="full">
-                <AppleSignInButton 
-                  isDisabled={isSigningIn}
-                  size="md"
-                  variant="minimal"
-                  onSuccess={(data) => {
-                    console.log('Apple Sign-In Success:', data);
-                    toast({
-                      title: "Apple Sign-In Successful",
-                      description: "Welcome to Hushh Developer API",
-                      status: "success",
-                      duration: 3000,
-                      isClosable: true,
-                      position: "top",
-                    });
-                  }}
-                  onError={(error) => {
-                    console.error('Apple Sign-In Error:', error);
-                    toast({
-                      title: "Apple Sign-In Failed",
-                      description: error.message || "Failed to sign in with Apple. Please try again.",
-                      status: "error",
-                      duration: 5000,
-                      isClosable: true,
-                      position: "top",
-                    });
-                  }}
-                />
-    </Box>
+              {/* Apple Sign-In will be implemented later */}
+              <Text
+                fontSize="sm"
+                color="rgba(0, 0, 0, 0.4)"
+                textAlign="center"
+                fontFamily="system-ui, -apple-system"
+                fontWeight={400}
+              >
+                Apple Sign-In coming soon
+              </Text>
 
               {/* Clean Divider */}
               <Box
@@ -351,9 +375,11 @@ const Onboarding = () => {
               </Text>
             </VStack>
           </>
-  )}
-</VStack> 
+        )}
+      </VStack> 
     </Box>
+    </VStack>
+    </>
   );
 };
 

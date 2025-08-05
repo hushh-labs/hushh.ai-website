@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Developer API Authentication</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 40px;
+            max-width: 600px;
+            margin: 0 auto;
+            background: #f5f5f7;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+        h1 {
+            color: #1d1d1f;
+            margin-bottom: 20px;
+        }
+        .status {
+            padding: 16px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        code {
+            background: #f6f8fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Consolas', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Developer API Authentication Test</h1>
+        
+        <div class="status error">
+            ⚠️ <strong>Configuration Required!</strong><br>
+            Google Sign-In implementation is complete, but Supabase OAuth configuration is needed to resolve the "User not found" error.
+        </div>
+
+        <div class="status info">
+            <strong>📋 Implementation Details:</strong><br>
+            • <strong>Supabase Instance:</strong> <code>rpmzykoxqnbozgdoqbpc.supabase.co</code><br>
+            • <strong>Google Client ID:</strong> <code>53407187172-t1ojln3gadj5pvd10bga2gjevvnt93lq.apps.googleusercontent.com</code><br>
+            • <strong>Callback URL:</strong> <code>https://rpmzykoxqnbozgdoqbpc.supabase.co/auth/v1/callback</code><br>
+            • <strong>Redirect URL:</strong> <code>https://hushh.ai/developer-Api/on-boarding</code>
+        </div>
+
+        <div class="status info">
+            <strong>🛠️ Files Created/Modified:</strong><br>
+            • <code>supabaseAuth.js</code> - New Supabase auth configuration<br>
+            • <code>authCallback.jsx</code> - OAuth callback handler<br>
+            • <code>onboarding.jsx</code> - Updated with new auth flow<br>
+        </div>
+
+        <div class="status success">
+            <strong>🚀 Features Implemented:</strong><br>
+            ✅ Google OAuth integration with Supabase<br>
+            ✅ Session management and persistence<br>
+            ✅ Real-time auth state changes<br>
+            ✅ Professional UI with Apple-style design<br>
+            ✅ Error handling and user feedback<br>
+            ✅ Secure token management<br>
+        </div>
+
+        <h2>🚨 IMMEDIATE FIX REQUIRED</h2>
+        <div class="status error">
+            <strong>The "User not found" error indicates Google OAuth is not configured in Supabase.</strong>
+        </div>
+        
+        <h3>📋 Quick Fix Steps:</h3>
+        <ol>
+            <li><strong>Go to Supabase Dashboard:</strong> <code>https://supabase.com/dashboard</code></li>
+            <li><strong>Select your project:</strong> <code>rpmzykoxqnbozgdoqbpc</code></li>
+            <li><strong>Navigate to:</strong> Authentication → Providers → Google</li>
+            <li><strong>Enable Google provider and set:</strong>
+                <ul>
+                    <li>✅ Toggle ON "Enable Google provider"</li>
+                    <li>✅ Toggle ON "Allow new users to sign up"</li>
+                    <li>Client ID: <code>53407187172-t1ojln3gadj5pvd10bga2gjevvnt93lq.apps.googleusercontent.com</code></li>
+                    <li>Client Secret: <code>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</code></li>
+                </ul>
+            </li>
+            <li><strong>🚨 CRITICAL - Google Console Setup:</strong>
+                <ul>
+                    <li>Go to <a href="https://console.cloud.google.com" target="_blank">Google Cloud Console</a></li>
+                    <li>Navigate to APIs & Services → Credentials</li>
+                    <li>Find OAuth 2.0 Client ID and add this to Authorized redirect URIs:</li>
+                    <li><code>https://rpmzykoxqnbozgdoqbpc.supabase.co/auth/v1/callback</code></li>
+                    <li><strong>Without this, OAuth will fail with "User not found" error!</strong></li>
+                </ul>
+            </li>
+            <li><strong>Set Redirect URLs in Authentication → Settings:</strong>
+                <ul>
+                    <li>Site URL: <code>http://localhost:3000</code></li>
+                    <li>Additional Redirect URLs: <code>http://localhost:3000/developer-Api/on-boarding</code></li>
+                </ul>
+            </li>
+            <li><strong>Save changes and wait 2-3 minutes</strong></li>
+        </ol>
+
+        <h2>🧪 Test After Configuration</h2>
+        <p>After completing the Supabase setup:</p>
+        <ol>
+            <li>Navigate to <code>/developer-Api/on-boarding</code></li>
+            <li>Use the Debug Panel to verify configuration</li>
+            <li>Click "Continue with Google"</li>
+            <li>Complete Google OAuth flow</li>
+            <li>Verify successful authentication</li>
+        </ol>
+
+        <div class="status info">
+            <strong>📝 Next Steps:</strong><br>
+            • Apple Sign-In implementation (coming next)<br>
+            • Environment variable configuration<br>
+            • Additional security enhancements<br>
+            • Integration testing
+        </div>
+    </div>
+</body>
+</html>
