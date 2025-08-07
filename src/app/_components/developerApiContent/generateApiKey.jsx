@@ -11,25 +11,15 @@ import {
 } from "@chakra-ui/react";
 import config from "../config/config"; // Make sure this contains supabaseClient
 import { useApiKey } from "../../context/apiKeyContext";
+import { useAuth } from "../../context/AuthContext";
 
 const GenerateApiKey = () => {
   const { apiKey, saveApiKey, isLoading, setIsLoading, hasApiKey } = useApiKey();
-  const [session, setSession] = useState(null);
+  const { isAuthenticated, user, loading } = useAuth();
   const toast = useToast();
 
-  useEffect(() => {
-    const { data: authListener } =
-      config.supabaseClient.auth.onAuthStateChange((_event, session) => {
-        setSession(session);
-      });
-
-    return () => {
-      authListener?.subscription?.unsubscribe?.();
-    };
-  }, []);
-
   const handleGenerateApiKey = async () => {
-    if (!session?.user?.email) {
+    if (!isAuthenticated || !user?.email) {
       toast({
         title: "Authentication Required",
         description: "Please sign in before generating an API key.",
@@ -41,12 +31,12 @@ const GenerateApiKey = () => {
     }
 
     setIsLoading(true);
-    const userMail = session.user.email;
+    const userMail = user.email;
 
     try {
-      // Log userMail and access token for debugging
+      // Log userMail for debugging
       console.log("User email:", userMail);
-      console.log("Access token:", session.access_token);
+      console.log("Authenticated user:", user);
 
       const response = await fetch(
         `https://hushh-api-53407187172.us-central1.run.app/generateapikey?mail=${userMail}`,
@@ -54,7 +44,7 @@ const GenerateApiKey = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${session.access_token}`,
+            Authorization: `Bearer ${user.access_token || 'no-token'}`,
           },
         }
       );
@@ -146,10 +136,10 @@ const GenerateApiKey = () => {
 
         <button
           onClick={handleGenerateApiKey}
-          disabled={isLoading}
+          disabled={isLoading || !isAuthenticated}
           className=" bg-[#bd1e59] w-full text-white inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary-foreground h-10 px-4 py-2 mt-4"
         >
-          {isLoading ? "Generating..." : "Generate New API Key"}
+          {loading ? "Loading..." : isLoading ? "Generating..." : !isAuthenticated ? "Please Sign In First" : "Generate New API Key"}
         </button>
 
         {hasApiKey() && (

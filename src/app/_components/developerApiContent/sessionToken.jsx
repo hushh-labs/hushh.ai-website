@@ -4,43 +4,28 @@ import config from '../config/config';
 import { httpRequest } from '../requestHandler/requestHandler';
 import { useToast } from '@chakra-ui/react';
 import { useApiKey } from '../../context/apiKeyContext';
+import { useAuth } from '../../context/AuthContext';
 
 const SessionToken = () => {
-  const [session, setSession] = useState(null);
+  const { isAuthenticated, user, loading } = useAuth();
   const { apiKey, hasApiKey } = useApiKey();
   const [sessionToken, setSessionToken] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
-  useEffect(() => {
-    // Get the current session
-    config.supabaseClient.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    // Listen for auth state changes
-    const {
-      data: { subscription },
-    } = config.supabaseClient.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
   // Check if we have the required data
   useEffect(() => {
-    if (session && !hasApiKey()) {
+    if (isAuthenticated && !hasApiKey()) {
       setError('No API key found. Please generate an API key first.');
-    } else if (session && hasApiKey()) {
+    } else if (isAuthenticated && hasApiKey()) {
       setError(''); // Clear any previous errors
     }
-  }, [session, apiKey, hasApiKey]);
+  }, [isAuthenticated, apiKey, hasApiKey]);
 
   // Call the session token API
   const fetchSessionToken = async () => {
-    if (!session?.user?.email || !hasApiKey()) {
+    if (!isAuthenticated || !user?.email || !hasApiKey()) {
       setError('User email or API key is missing');
       toast({
         title: 'Missing Information',
@@ -54,9 +39,11 @@ const SessionToken = () => {
 
     setIsLoading(true);
     try {
+      console.log('Fetching session token for user:', user.email);
+      
       const response = await httpRequest(
         'POST',
-        `sessiontoken?mail=${session.user.email}&api_key=${apiKey}`,
+        `sessiontoken?mail=${user.email}&api_key=${apiKey}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -104,9 +91,9 @@ const SessionToken = () => {
       <button
         onClick={fetchSessionToken}
         className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary-foreground h-10 px-4 py-2 bg-[#bd1e59] hover:bg-[#a11648] mt-4"
-        disabled={isLoading || !hasApiKey()}
+        disabled={isLoading || !hasApiKey() || !isAuthenticated}
       >
-        {isLoading ? 'Processing...' : 'Get Session Token'}
+        {loading ? 'Loading...' : isLoading ? 'Processing...' : !isAuthenticated ? 'Please Sign In First' : 'Get Session Token'}
       </button>
       {error && <div className="text-red-500 mt-4">{error}</div>}
       <div className="border text-card-foreground shadow-sm bg-[#1C1C1E] mt-4 p-4 flex items-center justify-between rounded">
