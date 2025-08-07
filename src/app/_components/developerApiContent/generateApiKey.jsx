@@ -9,27 +9,18 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import config from "../config/config"; // Make sure this contains supabaseClient
 import { useApiKey } from "../../context/apiKeyContext";
 
 const GenerateApiKey = () => {
   const { apiKey, saveApiKey, isLoading, setIsLoading, hasApiKey } = useApiKey();
-  const [session, setSession] = useState(null);
+  const { data: session, status } = useSession();
   const toast = useToast();
 
-  useEffect(() => {
-    const { data: authListener } =
-      config.supabaseClient.auth.onAuthStateChange((_event, session) => {
-        setSession(session);
-      });
-
-    return () => {
-      authListener?.subscription?.unsubscribe?.();
-    };
-  }, []);
 
   const handleGenerateApiKey = async () => {
-    if (!session?.user?.email) {
+    if (!session?.user) {
       toast({
         title: "Authentication Required",
         description: "Please sign in before generating an API key.",
@@ -40,13 +31,26 @@ const GenerateApiKey = () => {
       return;
     }
 
+    // Check if API key is already available in session (from NextAuth callback)
+    if (session?.API_key) {
+      saveApiKey(session.API_key);
+      toast({
+        title: "API Key Retrieved",
+        description: "Your API key is ready for use",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
     setIsLoading(true);
     const userMail = session.user.email;
 
     try {
-      // Log userMail and access token for debugging
+      // Log userMail and session data for debugging
       console.log("User email:", userMail);
-      console.log("Access token:", session.access_token);
+      console.log("NextAuth session:", session);
 
       const response = await fetch(
         `https://hushh-api-53407187172.us-central1.run.app/generateapikey?mail=${userMail}`,
@@ -54,7 +58,7 @@ const GenerateApiKey = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${session.access_token}`,
+            Authorization: `Bearer ${session.accessToken || session.access_token}`,
           },
         }
       );
@@ -81,6 +85,7 @@ const GenerateApiKey = () => {
           .upsert([
             {
               mail: userMail,
+              user_id: session.user.id,
               api_key: result.api_key,
             }
           ], { 

@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useApiKey } from "../../context/apiKeyContext";
 import axios from "axios";
+import { useSession, signIn, signOut } from "next-auth/react";
 import { 
   Box, 
   Button, 
@@ -12,9 +13,8 @@ import {
 } from "@chakra-ui/react";
 import { keyframes } from '@emotion/react';
 import '../../../../pages/fonts.css'
-import { useAuth } from "../../context/AuthContext";
-import AppleSignInButton from "../../login/components/AppleSignInButton.jsx";
 import { ChevronRightIcon } from '@chakra-ui/icons';
+import config from "../config/config";
 // Clean, subtle animations for professional design
 const fadeIn = keyframes`
   0% { opacity: 0; transform: translateY(10px); }
@@ -32,35 +32,159 @@ const gentleHover = keyframes`
 `;
 
 const Onboarding = () => {
-  const { signIn, signOut, isAuthenticated, user, loading } = useAuth();
+  const { data: session, status } = useSession();
   const [apiKey, setApiKey] = useState('');
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [copySuccess, setCopySuccess] = useState('Copy');
+  const [isInsertingUser, setIsInsertingUser] = useState(false);
   const textAreaRef = useRef(null);
   const toast = useToast();
 
-  useEffect(() => {
-    if (isAuthenticated && user) {
+  // Function to insert user data to Supabase
+  const insertUserToSupabase = async (userData) => {
+    console.log('🚀 ===== STARTING USER DATA INSERTION =====');
+    console.log('📋 User data to insert:', userData);
+    
+    setIsInsertingUser(true);
+    
+    try {
+      // Check if user already exists
+      console.log('🔍 Checking if user already exists in database...');
+      const { data: existingUser, error: fetchError } = await config.supabaseClient
+        .from('dev_api_userprofile')
+        .select('mail, user_id, firstname')
+        .eq('mail', userData.email)
+        .single();
+
+      if (fetchError && fetchError.code !== 'PGRST116') {
+        console.error('❌ Error checking existing user:', fetchError);
+        throw fetchError;
+      }
+
+      if (existingUser) {
+        console.log('👤 User already exists in database:', existingUser);
         toast({
-        title: "Welcome! 🎉",
-        description: `Successfully signed in as ${user.email}`,
-          status: "success",
+          title: "Welcome Back! 👋",
+          description: `User found in database. Complete your profile if needed.`,
+          status: "info",
           duration: 3000,
           isClosable: true,
+          position: "top",
+        });
+        return;
+      }
+
+      // Prepare user data for insertion - only basic info from session
+      const userProfileData = {
+        mail: userData.email,
+        user_id: userData.id || userData.sub,
+        firstname: userData.name || userData.given_name || 'User'
+      };
+
+      console.log('📝 Prepared user profile data:', userProfileData);
+
+      // Insert new user to Supabase
+      console.log('💾 Inserting new user to database...');
+      const { data: insertedData, error: insertError } = await config.supabaseClient
+        .from('dev_api_userprofile')
+        .insert([userProfileData])
+        .select();
+
+      if (insertError) {
+        console.error('❌ Error inserting user:', insertError);
+        throw insertError;
+      }
+
+      console.log('✅ User successfully inserted to database:', insertedData);
+      
+      toast({
+        title: "Basic Profile Created! 🎉",
+        description: `Welcome ${userData.name}! Please complete your profile setup next.`,
+        status: "success",
+        duration: 4000,
+        isClosable: true,
         position: "top",
       });
+
+    } catch (error) {
+      console.error('🚫 Error in user insertion process:', error);
+      toast({
+        title: "Basic Profile Setup Error",
+        description: "There was an issue creating your basic profile. Please try again.",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+        position: "top",
+      });
+    } finally {
+      setIsInsertingUser(false);
+      console.log('🏁 ===== USER DATA INSERTION COMPLETE =====');
     }
-  }, [isAuthenticated, user, toast]);
+  };
+
+  useEffect(() => {
+    console.log('🔄 Onboarding useEffect triggered');
+    console.log('Session status:', status);
+    console.log('Session data:', session);
+    
+    if (session?.user) {
+      console.log('👤 User session detected:', {
+        email: session.user.email,
+        name: session.user.name,
+        id: session.user.id || session.id,
+        image: session.user.image
+      });
+
+      toast({
+        title: "Welcome! 🎉",
+        description: `Successfully signed in as ${session.user.email}`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+
+      // Auto-insert user data to Supabase after successful sign-in
+      const userData = {
+        email: session.user.email,
+        name: session.user.name,
+        id: session.user.id || session.id || session.token?.sub,
+        image: session.user.image
+      };
+
+      console.log('🔄 Triggering automatic user data insertion...');
+      insertUserToSupabase(userData);
+    }
+  }, [session, toast]);
 
   const handleGoogleSignIn = async () => {
     if (isSigningIn) return;
     
+    console.log('🔗 ===== STARTING GOOGLE SIGN-IN PROCESS =====');
+    console.log('🔗 User initiated Google sign-in...');
+    
     setIsSigningIn(true);
     try {
-      await signIn();
-      // The OAuth process will redirect to Google, and success will be handled when user returns
+      console.log('🔗 Calling NextAuth signIn with Google provider...');
+      const result = await signIn('google', { 
+        callbackUrl: '/developer-Api/on-boarding',
+        redirect: false 
+      });
+      
+      console.log('🔗 Google sign-in result:', result);
+      
+      if (result?.error) {
+        console.error('❌ Google sign-in error:', result.error);
+        throw new Error(result.error);
+      }
+      
+      if (result?.ok) {
+        console.log('✅ Google sign-in successful!');
+        // The session callback will handle the user data insertion
+      }
+      
     } catch (error) {
-      console.error('Error signing in:', error);
+      console.error('❌ Error in Google sign-in process:', error);
       toast({
         title: "Authentication Error",
         description: "There was an error signing in. Please try again.",
@@ -70,12 +194,21 @@ const Onboarding = () => {
         position: "top",
       });
       setIsSigningIn(false);
-      }
+    }
+    console.log('🏁 ===== GOOGLE SIGN-IN PROCESS COMPLETE =====');
   };
 
   const handleLogout = async () => {
+    console.log('🚪 ===== STARTING LOGOUT PROCESS =====');
+    console.log('🚪 User initiated logout...');
+    
     try {
-      await signOut();
+      console.log('🚪 Calling NextAuth signOut...');
+      await signOut({ 
+        callbackUrl: '/developer-Api/on-boarding' 
+      });
+      
+      console.log('✅ Logout successful!');
       toast({
         title: "Logged out",
         description: "You have been successfully logged out.",
@@ -85,7 +218,7 @@ const Onboarding = () => {
         position: "top",
       });
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error("❌ Logout error:", error);
       toast({
         title: "Logout failed",
         description: "An error occurred while logging out.",
@@ -95,11 +228,14 @@ const Onboarding = () => {
         position: "top",
       });
     }
+    console.log('🏁 ===== LOGOUT PROCESS COMPLETE =====');
   };
 
 
 
-  if (loading) {
+  if (status === "loading" || isInsertingUser) {
+    console.log('⏳ Loading state - Status:', status, 'Inserting User:', isInsertingUser);
+    
     return (
       <Box
         p={12}
@@ -127,7 +263,7 @@ const Onboarding = () => {
             }}
           />
           <Text color="rgba(0, 0, 0, 0.8)" fontSize="lg" fontWeight={500} fontFamily="system-ui, -apple-system">
-            Loading...
+            {isInsertingUser ? 'Setting up your profile...' : 'Loading...'}
           </Text>
         </VStack>
       </Box>
@@ -147,7 +283,7 @@ const Onboarding = () => {
       animation={`${fadeIn} 0.6s ease-out`}
     >
       <VStack spacing={8}>
-        {isAuthenticated ? (
+        {session?.user ? (
           <>
             {/* Authenticated State - Clean Apple Style */}
             <VStack spacing={6} textAlign="center" w="full">
@@ -185,8 +321,15 @@ const Onboarding = () => {
                     color="rgba(0, 0, 0, 0.6)"
                     fontWeight={400}
                   >
-                    Welcome back, {user?.email}
-      </Text>
+                    Welcome back, {session?.user?.email}
+                  </Text>
+                  <Text 
+                    fontSize="sm" 
+                    color="rgba(0, 0, 0, 0.5)"
+                    fontWeight={400}
+                  >
+                    Name: {session?.user?.name} | ID: {session?.user?.id || session?.id || 'Auto-generated'}
+                  </Text>
                 </VStack>
               </Box>
               
@@ -299,36 +442,16 @@ const Onboarding = () => {
                 Continue with Google
       </Button>
 
-              {/* Clean Apple Sign In Button */}
-              <Box w="full">
-                <AppleSignInButton 
-                  isDisabled={isSigningIn}
-                  size="md"
-                  variant="minimal"
-                  onSuccess={(data) => {
-                    console.log('Apple Sign-In Success:', data);
-                    toast({
-                      title: "Apple Sign-In Successful",
-                      description: "Welcome to Hushh Developer API",
-                      status: "success",
-                      duration: 3000,
-                      isClosable: true,
-                      position: "top",
-                    });
-                  }}
-                  onError={(error) => {
-                    console.error('Apple Sign-In Error:', error);
-                    toast({
-                      title: "Apple Sign-In Failed",
-                      description: error.message || "Failed to sign in with Apple. Please try again.",
-                      status: "error",
-                      duration: 5000,
-                      isClosable: true,
-                      position: "top",
-                    });
-                  }}
-                />
-    </Box>
+              {/* Apple Sign-In coming soon */}
+              <Text
+                fontSize="sm"
+                color="rgba(0, 0, 0, 0.4)"
+                textAlign="center"
+                fontFamily="system-ui, -apple-system"
+                fontWeight={400}
+              >
+                Apple Sign-In coming soon
+              </Text>
 
               {/* Clean Divider */}
               <Box

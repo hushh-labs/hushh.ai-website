@@ -3,7 +3,15 @@ import GoogleProvider from "next-auth/providers/google";
 import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import AppleProvider from "next-auth/providers/apple";
-import axios from 'axios';
+import { createClient } from '@supabase/supabase-js';
+
+// Create Supabase client
+const supabaseUrl = "https://rpmzykoxqnbozgdoqbpc.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJwbXp5a294cW5ib3pnZG9xYnBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5Mjc5NzEsImV4cCI6MjAxNzUwMzk3MX0.3GwG8YQKwZSWfGgTBEEA47YZAZ-Nr4HiirYPWiZtpZ0";
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+console.log('🔄 NextAuth Route File Loaded!');
+
 const authOptions = {
   providers: [
     GithubProvider({
@@ -28,7 +36,7 @@ const authOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      authorize: async (credentials, req) => {
+      authorize: async (credentials) => {
         if (
           credentials.email === "example@example.com" &&
           credentials.password === "password123"
@@ -55,45 +63,65 @@ const authOptions = {
       },
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: "fd7c5187bee6b04ae7b2a65b6a756cf96e6b34dc6b4fd3cef1ad2b13e42a4a1b",
   callbacks: {
-    async session(session, token, user) {
+    async session({ session, token }) {
+      console.log('🎯 ===== SESSION CALLBACK START =====');
+      console.log('🚀 SESSION CALLBACK TRIGGERED!');
+      console.log('Session received:', session);
+      console.log('Token received:', token);
+      
       if (session.user && session.user.email) {
         session.accessToken = token.accessToken;
-        // session.user.id = token.id;
-        session.id = token.id
+        session.id = token.uid || token.sub;
         session.userName = token.userName;
-        console.log('Session from Post request:', session)
+        session.token = {
+          email: session.user.email,
+          name: session.user.name,
+          sub: token.sub
+        };
+        console.log('Session from NextAuth:', session);
+        
         try {
-          // Make a POST request to your backend API to get the API token key
-          const response = await axios.post(
-            "https://developer-api-53407187172.us-central1.run.app/login",
-            {
-              email: session.user.email,
-              first_name: session.user.name,
-              password: session.token.sub,
-            },
-            {
-              headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-              },
-            }
-          );
+          // First, save user profile to Supabase dev_api_userprofile table
+          console.log('Saving user profile to database...');
+          
+          const profileData = {
+            mail: session.user.email,
+            user_id: session.id,
+            firstname: session.user.name
+          };
 
-          // If the request is successful, extract the API key from the response
-          const apiKey = response.data.data.API_key;
-          console.log('Response after sending User data', response)
-          // Add the API key to the session
-          session.API_key = apiKey;
-          // console.log("API", apiKey);
-          return response;
+          console.log('Profile data to save:', profileData);
+
+          const { data: upsertData, error: upsertError } = await supabase
+            .from('dev_api_userprofile')
+            .upsert([profileData], { 
+              onConflict: 'mail',
+              ignoreDuplicates: false 
+            })
+            .select();
+
+          if (upsertError) {
+            console.error('Error saving user profile:', upsertError);
+          } else {
+            console.log('User profile saved successfully:', upsertData);
+          }
+
+
         } catch (error) {
           console.error("Error fetching API key:", error);
         }
       }
       return session;
     },
-    async jwt({token, user}) {
+    async jwt({token, user, account}) {
+      console.log('🔥 ===== JWT CALLBACK START =====');
+      console.log('🚀 JWT CALLBACK TRIGGERED!');
+      console.log('User:', user);
+      console.log('Token:', token);
+      console.log('Account:', account);
+      
       // User Id is unique identifier id === uid
       if (user?.id) {
           token.uid = user.id
@@ -101,6 +129,38 @@ const authOptions = {
       if (user?.userName) {
           token.userName = user.userName;
       }
+      
+      // Save user profile to Supabase when user first signs in
+      if (user && account && account.provider === 'google') {
+        console.log('🔥 Google sign-in detected, saving user profile...');
+        
+        try {
+          const profileData = {
+            mail: user.email,
+            user_id: user.id,
+            firstname: user.name
+          };
+
+          console.log('Profile data to save:', profileData);
+
+          const { data: upsertData, error: upsertError } = await supabase
+            .from('dev_api_userprofile')
+            .upsert([profileData], { 
+              onConflict: 'mail',
+              ignoreDuplicates: false 
+            })
+            .select();
+
+          if (upsertError) {
+            console.error('❌ Error saving user profile:', upsertError);
+          } else {
+            console.log('✅ User profile saved successfully:', upsertData);
+          }
+        } catch (error) {
+          console.error('❌ Error in profile save process:', error);
+        }
+      }
+      
       return token
    },
   },
@@ -110,5 +170,7 @@ const authOptions = {
 };
 
 const handler = NextAuth(authOptions);
+
+console.log('🚀 NextAuth Handler Created!');
 
 export { handler as GET, handler as POST };
