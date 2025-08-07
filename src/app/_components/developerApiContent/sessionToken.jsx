@@ -1,10 +1,25 @@
 'use client'
 import React, { useState, useEffect } from 'react';
+import { 
+  Box, 
+  Button, 
+  Text, 
+  useToast, 
+  VStack, 
+  Input,
+  Textarea
+} from "@chakra-ui/react";
+import { keyframes } from '@emotion/react';
 import config from '../config/config';
 import { httpRequest } from '../requestHandler/requestHandler';
-import { useToast } from '@chakra-ui/react';
 import { useApiKey } from '../../context/apiKeyContext';
 import { useAuth } from '../../context/AuthContext';
+
+// Clean animations for Apple-like design
+const fadeIn = keyframes`
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+`;
 
 const SessionToken = () => {
   const { isAuthenticated, user, loading } = useAuth();
@@ -86,41 +101,277 @@ const SessionToken = () => {
     }
   };
 
-  return (
-    <div className="shadow-sm text-white mt-8 onBoarding">
-      <button
-        onClick={fetchSessionToken}
-        className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary-foreground h-10 px-4 py-2 bg-[#bd1e59] hover:bg-[#a11648] mt-4"
-        disabled={isLoading || !hasApiKey() || !isAuthenticated}
+  if (loading) {
+    return (
+      <Box
+        p={12}
+        borderRadius="24px"
+        bg="white"
+        border="1px solid rgba(0, 0, 0, 0.06)"
+        boxShadow="0 4px 24px rgba(0, 0, 0, 0.04)"
+        textAlign="center"
+        maxW="600px"
+        mx="auto"
       >
-        {loading ? 'Loading...' : isLoading ? 'Processing...' : !isAuthenticated ? 'Please Sign In First' : 'Get Session Token'}
-      </button>
-      {error && <div className="text-red-500 mt-4">{error}</div>}
-      <div className="border text-card-foreground shadow-sm bg-[#1C1C1E] mt-4 p-4 flex items-center justify-between rounded">
-        <input
-          className="flex h-10 w-full rounded-md border border-input px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 bg-transparent border-none text-white placeholder-gray-400"
-          placeholder="Please click on the button above to get your session token "
-          value={sessionToken}
-          readOnly
-        />
-        <button
-          onClick={() => {
-            navigator.clipboard.writeText(sessionToken);
-            toast({
-              title: 'Copied to Clipboard',
-              description: 'Session token has been copied to clipboard.',
-              status: 'success',
-              duration: 2000,
-              isClosable: true,
-            });
+        <VStack spacing={6}>
+          <Box
+            w="32px"
+            h="32px"
+            borderRadius="50%"
+            border="2px solid rgba(0, 0, 0, 0.1)"
+            borderTopColor="black"
+            animation={`spin 1s linear infinite`}
+            sx={{
+              '@keyframes spin': {
+                '0%': { transform: 'rotate(0deg)' },
+                '100%': { transform: 'rotate(360deg)' }
+              }
+            }}
+          />
+          <Text color="rgba(0, 0, 0, 0.8)" fontSize="lg" fontWeight={500} fontFamily="system-ui, -apple-system">
+            Loading...
+          </Text>
+        </VStack>
+      </Box>
+    );
+  }
+
+  return (
+    <Box
+      p={10}
+      borderRadius="24px"
+      bg="white"
+      border="1px solid rgba(0, 0, 0, 0.06)"
+      boxShadow="0 8px 32px rgba(0, 0, 0, 0.08)"
+      position="relative"
+      maxW="600px"
+      mx="auto"
+      animation={`${fadeIn} 0.6s ease-out`}
+    >
+      <VStack spacing={8}>
+        {/* Header */}
+        <VStack spacing={3} textAlign="center">
+          <Text
+            fontSize="2xl"
+            fontWeight={600}
+            color="black"
+            letterSpacing="-0.02em"
+            fontFamily="system-ui, -apple-system"
+            lineHeight="1.2"
+          >
+            Generate Session Token
+          </Text>
+          <Text
+            fontSize="md"
+            color="rgba(0, 0, 0, 0.6)"
+            lineHeight="1.5"
+            maxW="400px"
+            fontFamily="system-ui, -apple-system"
+            fontWeight={400}
+          >
+            Generate a secure session token for API authentication
+          </Text>
+        </VStack>
+
+        {/* Authentication Status */}
+        {!isAuthenticated && (
+          <Box
+            p={4}
+            borderRadius="12px"
+            bg="rgba(255, 193, 7, 0.1)"
+            border="1px solid rgba(255, 193, 7, 0.2)"
+            w="full"
+          >
+            <Text
+              fontSize="sm"
+              color="rgba(0, 0, 0, 0.8)"
+              fontFamily="system-ui, -apple-system"
+              textAlign="center"
+            >
+              ⚠️ Please sign in first to generate your session token
+            </Text>
+          </Box>
+        )}
+
+        {/* API Key Status */}
+        {isAuthenticated && !hasApiKey() && (
+          <Box
+            p={4}
+            borderRadius="12px"
+            bg="rgba(255, 193, 7, 0.1)"
+            border="1px solid rgba(255, 193, 7, 0.2)"
+            w="full"
+          >
+            <Text
+              fontSize="sm"
+              color="rgba(0, 0, 0, 0.8)"
+              fontFamily="system-ui, -apple-system"
+              textAlign="center"
+            >
+              🔑 Please generate an API key first before creating a session token
+            </Text>
+          </Box>
+        )}
+
+        {/* User Info Display */}
+        {isAuthenticated && user && hasApiKey() && (
+          <Box
+            p={4}
+            borderRadius="12px"
+            bg="rgba(0, 0, 0, 0.02)"
+            border="1px solid rgba(0, 0, 0, 0.06)"
+            w="full"
+          >
+            <Text
+              fontSize="sm"
+              color="rgba(0, 0, 0, 0.6)"
+              fontFamily="system-ui, -apple-system"
+              textAlign="center"
+            >
+              Generating session token for: <Text as="span" fontWeight={500} color="black">{user?.email}</Text>
+            </Text>
+          </Box>
+        )}
+
+        {/* Error Display */}
+        {error && (
+          <Box
+            p={4}
+            borderRadius="12px"
+            bg="rgba(220, 53, 69, 0.1)"
+            border="1px solid rgba(220, 53, 69, 0.2)"
+            w="full"
+          >
+            <Text
+              fontSize="sm"
+              color="rgba(220, 53, 69, 0.8)"
+              fontFamily="system-ui, -apple-system"
+              textAlign="center"
+            >
+              ❌ {error}
+            </Text>
+          </Box>
+        )}
+
+        {/* Generate Button */}
+        <Button
+          onClick={fetchSessionToken}
+          disabled={isLoading || !hasApiKey() || !isAuthenticated}
+          w="full"
+          h="52px"
+          bg="black"
+          color="white"
+          borderRadius="12px"
+          fontSize="md"
+          fontWeight={500}
+          fontFamily="system-ui, -apple-system"
+          isLoading={isLoading}
+          loadingText="Generating Session Token..."
+          _hover={{
+            bg: "rgba(0, 0, 0, 0.8)",
+            transform: "translateY(-1px)",
+            boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
           }}
-          className="inline-flex items-center gap-2 justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 border-none bg-[#313134] text-gray-300 ml-3"
-          disabled={!sessionToken}
+          _active={{
+            transform: "translateY(0px)",
+            bg: "rgba(0, 0, 0, 0.9)",
+          }}
+          _disabled={{
+            bg: "rgba(0, 0, 0, 0.3)",
+            cursor: "not-allowed",
+            transform: "none",
+            boxShadow: "none",
+          }}
+          transition="all 0.2s ease"
         >
-          Copy
-        </button>
-      </div>
-    </div>
+          {loading ? 'Loading...' : isLoading ? 'Processing...' : !isAuthenticated ? 'Please Sign In First' : 'Get Session Token'}
+        </Button>
+
+        {/* Session Token Display */}
+        {sessionToken && (
+          <Box w="full">
+            <VStack spacing={4}>
+              <Text
+                fontSize="md"
+                fontWeight={500}
+                color="black"
+                fontFamily="system-ui, -apple-system"
+                textAlign="center"
+              >
+                Your Session Token
+              </Text>
+              
+              <Box
+                p={4}
+                borderRadius="12px"
+                bg="rgba(0, 0, 0, 0.02)"
+                border="1px solid rgba(0, 0, 0, 0.06)"
+                w="full"
+              >
+                <VStack spacing={3}>
+                  <Textarea
+                    value={sessionToken}
+                    isReadOnly
+                    bg="white"
+                    border="1px solid rgba(0, 0, 0, 0.12)"
+                    borderRadius="8px"
+                    fontSize="sm"
+                    fontFamily="Monaco, 'Courier New', monospace"
+                    minH="100px"
+                    resize="none"
+                    _focus={{
+                      borderColor: "rgba(0, 0, 0, 0.3)",
+                      boxShadow: "0 0 0 3px rgba(0, 0, 0, 0.05)",
+                    }}
+                  />
+                  <Button
+                    onClick={() => {
+                      navigator.clipboard.writeText(sessionToken);
+                      toast({
+                        title: 'Copied to Clipboard',
+                        description: 'Session token has been copied to clipboard.',
+                        status: 'success',
+                        duration: 2000,
+                        isClosable: true,
+                        position: "top",
+                      });
+                    }}
+                    size="md"
+                    bg="white"
+                    color="black"
+                    border="1px solid rgba(0, 0, 0, 0.12)"
+                    borderRadius="8px"
+                    fontWeight={500}
+                    fontSize="sm"
+                    fontFamily="system-ui, -apple-system"
+                    _hover={{
+                      bg: "rgba(0, 0, 0, 0.04)",
+                      borderColor: "rgba(0, 0, 0, 0.2)",
+                    }}
+                    _active={{
+                      bg: "rgba(0, 0, 0, 0.08)",
+                    }}
+                    transition="all 0.2s ease"
+                  >
+                    Copy Session Token
+                  </Button>
+                </VStack>
+              </Box>
+
+              <Text
+                fontSize="xs"
+                color="rgba(0, 0, 0, 0.5)"
+                textAlign="center"
+                fontFamily="system-ui, -apple-system"
+                fontWeight={400}
+              >
+                Use this token for authenticated API requests. Keep it secure.
+              </Text>
+            </VStack>
+          </Box>
+        )}
+      </VStack>
+    </Box>
   );
 };
 
