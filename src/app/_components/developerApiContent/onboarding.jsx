@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useApiKey } from "../../context/apiKeyContext";
 import axios from "axios";
+import { useSession, signIn, signOut } from "next-auth/react";
 import { 
   Box, 
   Button, 
@@ -12,8 +13,6 @@ import {
 } from "@chakra-ui/react";
 import { keyframes } from '@emotion/react';
 import '../../../../pages/fonts.css'
-import { useAuth } from "../../context/AuthContext";
-import AppleSignInButton from "../../login/components/AppleSignInButton.jsx";
 import { ChevronRightIcon } from '@chakra-ui/icons';
 // Clean, subtle animations for professional design
 const fadeIn = keyframes`
@@ -32,7 +31,7 @@ const gentleHover = keyframes`
 `;
 
 const Onboarding = () => {
-  const { signIn, signOut, isAuthenticated, user, loading } = useAuth();
+  const { data: session, status } = useSession();
   const [apiKey, setApiKey] = useState('');
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [copySuccess, setCopySuccess] = useState('Copy');
@@ -40,25 +39,26 @@ const Onboarding = () => {
   const toast = useToast();
 
   useEffect(() => {
-    if (isAuthenticated && user) {
-        toast({
+    if (session?.user) {
+      toast({
         title: "Welcome! 🎉",
-        description: `Successfully signed in as ${user.email}`,
-          status: "success",
-          duration: 3000,
-          isClosable: true,
+        description: `Successfully signed in as ${session.user.email}`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
         position: "top",
       });
     }
-  }, [isAuthenticated, user, toast]);
+  }, [session, toast]);
 
   const handleGoogleSignIn = async () => {
     if (isSigningIn) return;
     
     setIsSigningIn(true);
     try {
-      await signIn();
-      // The OAuth process will redirect to Google, and success will be handled when user returns
+      await signIn('google', { 
+        callbackUrl: '/developer-Api/on-boarding' 
+      });
     } catch (error) {
       console.error('Error signing in:', error);
       toast({
@@ -70,12 +70,14 @@ const Onboarding = () => {
         position: "top",
       });
       setIsSigningIn(false);
-      }
+    }
   };
 
   const handleLogout = async () => {
     try {
-      await signOut();
+      await signOut({ 
+        callbackUrl: '/developer-Api/on-boarding' 
+      });
       toast({
         title: "Logged out",
         description: "You have been successfully logged out.",
@@ -99,7 +101,7 @@ const Onboarding = () => {
 
 
 
-  if (loading) {
+  if (status === "loading") {
     return (
       <Box
         p={12}
@@ -147,7 +149,7 @@ const Onboarding = () => {
       animation={`${fadeIn} 0.6s ease-out`}
     >
       <VStack spacing={8}>
-        {isAuthenticated ? (
+        {session?.user ? (
           <>
             {/* Authenticated State - Clean Apple Style */}
             <VStack spacing={6} textAlign="center" w="full">
@@ -185,7 +187,7 @@ const Onboarding = () => {
                     color="rgba(0, 0, 0, 0.6)"
                     fontWeight={400}
                   >
-                    Welcome back, {user?.email}
+                    Welcome back, {session?.user?.email}
       </Text>
                 </VStack>
               </Box>
@@ -299,36 +301,16 @@ const Onboarding = () => {
                 Continue with Google
       </Button>
 
-              {/* Clean Apple Sign In Button */}
-              <Box w="full">
-                <AppleSignInButton 
-                  isDisabled={isSigningIn}
-                  size="md"
-                  variant="minimal"
-                  onSuccess={(data) => {
-                    console.log('Apple Sign-In Success:', data);
-                    toast({
-                      title: "Apple Sign-In Successful",
-                      description: "Welcome to Hushh Developer API",
-                      status: "success",
-                      duration: 3000,
-                      isClosable: true,
-                      position: "top",
-                    });
-                  }}
-                  onError={(error) => {
-                    console.error('Apple Sign-In Error:', error);
-                    toast({
-                      title: "Apple Sign-In Failed",
-                      description: error.message || "Failed to sign in with Apple. Please try again.",
-                      status: "error",
-                      duration: 5000,
-                      isClosable: true,
-                      position: "top",
-                    });
-                  }}
-                />
-    </Box>
+              {/* Apple Sign-In coming soon */}
+              <Text
+                fontSize="sm"
+                color="rgba(0, 0, 0, 0.4)"
+                textAlign="center"
+                fontFamily="system-ui, -apple-system"
+                fontWeight={400}
+              >
+                Apple Sign-In coming soon
+              </Text>
 
               {/* Clean Divider */}
               <Box

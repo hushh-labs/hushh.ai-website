@@ -4,43 +4,23 @@ import {
   Box,
   Button,
   Divider,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
   HStack,
-  Icon,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  InputRightElement,
   Text,
-  Toast,
-  Tooltip,
   useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState } from "react";
+import { useSession, signIn } from "next-auth/react";
 import DeveloperBg from "../../_components/svg/developerApi/developerApiLoginBg.svg";
 import BgLeftCircle from "../../_components/svg/developerApi/developerLoginLCircle.svg";
-import BgTopRightCircle from "../../_components/svg/developerApi/developerLoginTRCircle.svg";
 import BgRightCircle from "../../_components/svg/developerApi/developerLoginRCircle.svg";
 import Image from "next/image";
-import { EmailIcon } from "@chakra-ui/icons";
-import { FiAlertCircle, FiLock, FiUser } from "react-icons/fi";
-import { useSession, signIn, signOut } from "next-auth/react";
 import GoogelIcon from "../../_components/svg/icons/googleIcon.svg";
-import GithubIcon from "../../_components/svg/icons/githubIcon.svg";
-import Loading from "../../_components/features/loading";
 import { useApiKey } from "../../context/apiKeyContext";
 import AppleIcon from "../../_components/svg/icons/appleIconLogo.svg";
-import PhoneInput from "react-phone-number-input";
 import 'react-phone-number-input/style.css'
-import { getCountryCallingCode } from "react-phone-number-input";
-import authentication from '../../_components/authentication/authentication'
 
 export default function LoginPage() {
-  const { data: session, status } = useSession();
   const { setApiKey } = useApiKey();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -58,19 +38,24 @@ export default function LoginPage() {
 
   const handleGoogleLogin = async () => {
     try {
-      await authentication.googleSignIn()
+      // Use NextAuth's signIn directly - this will go to Google OAuth with your new credentials
+      await signIn('google', { 
+        callbackUrl: '/developer-Api/on-boarding',
+        redirect: true 
+      });
+      
       toast({
-        title: "Google Sign-In Successful",
-        description: "You have been signed in with Google.",
-        status: "success",
-        duration: 3000,
+        title: "Redirecting to Google",
+        description: "Redirecting to Google for authentication...",
+        status: "info",
+        duration: 2000,
         isClosable: true,
       });
-      // router.push("/developer-Api/on-boarding");
     } catch (error) {
+      console.error('Google Sign-In Error:', error);
       toast({
         title: "Google Sign-In Error",
-        description: error.message,
+        description: "Failed to initiate Google sign-in. Please try again.",
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -80,19 +65,24 @@ export default function LoginPage() {
 
   const handleAppleLogin = async () => {
     try {
-      await authentication.appleSignIn(setEmail);
+      // Use NextAuth's signIn for Apple as well
+      await signIn('apple', { 
+        callbackUrl: '/developer-Api/on-boarding',
+        redirect: true 
+      });
+      
       toast({
-        title: "Apple Sign-In Successful",
-        description: "You have been signed in with Apple.",
-        status: "success",
-        duration: 3000,
+        title: "Redirecting to Apple",
+        description: "Redirecting to Apple for authentication...",
+        status: "info",
+        duration: 2000,
         isClosable: true,
       });
-      router.push("/developer-Api/on-boarding");
     } catch (error) {
+      console.error('Apple Sign-In Error:', error);
       toast({
         title: "Apple Sign-In Error",
-        description: error.message,
+        description: "Failed to initiate Apple sign-in. Please try again.",
         status: "error",
         duration: 3000,
         isClosable: true,

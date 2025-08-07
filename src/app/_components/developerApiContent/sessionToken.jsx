@@ -1,39 +1,24 @@
 'use client'
 import React, { useState, useEffect } from 'react';
+import { useSession } from "next-auth/react";
 import config from '../config/config';
 import { httpRequest } from '../requestHandler/requestHandler';
 import { useToast } from '@chakra-ui/react';
 import { useApiKey } from '../../context/apiKeyContext';
 
 const SessionToken = () => {
-  const [session, setSession] = useState(null);
+  const { data: session, status } = useSession();
   const { apiKey, hasApiKey } = useApiKey();
   const [sessionToken, setSessionToken] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
-  useEffect(() => {
-    // Get the current session
-    config.supabaseClient.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    // Listen for auth state changes
-    const {
-      data: { subscription },
-    } = config.supabaseClient.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
   // Check if we have the required data
   useEffect(() => {
-    if (session && !hasApiKey()) {
+    if (session?.user && !hasApiKey()) {
       setError('No API key found. Please generate an API key first.');
-    } else if (session && hasApiKey()) {
+    } else if (session?.user && hasApiKey()) {
       setError(''); // Clear any previous errors
     }
   }, [session, apiKey, hasApiKey]);

@@ -13,8 +13,8 @@ import {
   Container,
 } from "@chakra-ui/react";
 import { keyframes } from '@emotion/react';
+import { useSession } from "next-auth/react";
 import config from "../config/config"; // Developer API Supabase client config
-import { useAuth } from "../../context/AuthContext"; // OAuth authentication
 
 // Clean animations for Apple-like design
 const fadeIn = keyframes`
@@ -23,7 +23,7 @@ const fadeIn = keyframes`
 `;
 
 const ProfileSetup = () => {
-  const { isAuthenticated, user, loading } = useAuth(); // Use centralized auth
+  const { data: session, status } = useSession();
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -46,7 +46,7 @@ const ProfileSetup = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    if (!isAuthenticated || !user) {
+    if (!session?.user) {
       toast({
         title: "Authentication Required",
         description: "Please sign in before setting up your profile.",
@@ -59,7 +59,7 @@ const ProfileSetup = () => {
       return;
     }
 
-    const userEmail = user.email;
+    const userEmail = session.user.email;
 
     try {
       console.log("Checking existing profile...");
@@ -77,7 +77,7 @@ const ProfileSetup = () => {
 
       const profileData = {
         mail: userEmail,
-        user_id: user.id,
+        user_id: session.user.id,
         ...formData,
       };
 
@@ -121,7 +121,7 @@ const ProfileSetup = () => {
     }
   };
 
-  if (loading) {
+  if (status === "loading") {
     return (
       <Box
         p={12}
@@ -156,7 +156,7 @@ const ProfileSetup = () => {
     );
   }
 
-  if (!isAuthenticated) {
+  if (!session?.user) {
     return (
       <Box
         p={10}
@@ -246,7 +246,7 @@ const ProfileSetup = () => {
             fontFamily="system-ui, -apple-system"
             textAlign="center"
           >
-            Signed in as: <Text as="span" fontWeight={500} color="black">{user?.email}</Text>
+            Signed in as: <Text as="span" fontWeight={500} color="black">{session?.user?.email}</Text>
           </Text>
         </Box>
 
