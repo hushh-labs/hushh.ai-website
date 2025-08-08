@@ -91,8 +91,7 @@ const ContactForm = () => {
     subject: '',
     message: '',
     preferredContact: 'email',
-    urgency: 'normal',
-    department: 'general'
+    department: 'Sales'
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -334,34 +333,45 @@ const ContactForm = () => {
     setIsSubmitting(true);
 
     try {
-      // Create FormData for multipart/form-data submission
+      // Create FormData matching backend API exactly
       const submitData = new FormData();
       
-      // Add text fields
+      // Add text fields that match backend API
       submitData.append('full_name', formData.name);
       submitData.append('email', formData.email);
       submitData.append('company', formData.company || '');
       submitData.append('phone', formData.phone || '');
+      submitData.append('department', formData.department);
+      submitData.append('preferred_contact', formData.preferredContact);
       submitData.append('subject', formData.subject || 'General Inquiry');
       submitData.append('message', formData.message);
-      submitData.append('preferred_contact', formData.preferredContact);
-      submitData.append('urgency', formData.urgency);
-      submitData.append('department', formData.department);
       
-      // Add metadata about files
-      submitData.append('has_attachments', uploadedFiles.length > 0);
-      submitData.append('attachment_count', uploadedFiles.length.toString());
-      
-      // Add all uploaded files (voice, video, documents)
-      uploadedFiles.forEach((file, index) => {
-        // Use consistent field name that backend expects
-        submitData.append('files', file);
+      // Categorize and add files based on type
+      uploadedFiles.forEach((file) => {
+        const fileType = file.type.toLowerCase();
+        const fileName = file.name.toLowerCase();
         
-        // Add file metadata
-        submitData.append(`file_${index}_name`, file.name);
-        submitData.append(`file_${index}_type`, file.type);
-        submitData.append(`file_${index}_size`, file.size.toString());
+        if (fileType.startsWith('audio/') || fileName.includes('voice') || fileName.includes('audio')) {
+          // Voice recordings go to voice_note field
+          submitData.append('voice_note', file);
+        } else if (fileType.startsWith('video/') || fileName.includes('video')) {
+          // Video recordings go to video_message field
+          submitData.append('video_message', file);
+        } else {
+          // All other files (documents, images, etc.) go to file_upload
+          submitData.append('file_upload', file);
+        }
       });
+
+      // Debug: Log FormData contents (you can remove this in production)
+      console.log('📤 Sending FormData to API:');
+      for (let [key, value] of submitData.entries()) {
+        if (value instanceof File) {
+          console.log(`${key}:`, `File(${value.name}, ${value.type}, ${(value.size/1024/1024).toFixed(2)}MB)`);
+        } else {
+          console.log(`${key}:`, value);
+        }
+      }
 
       // Send FormData (not JSON) to backend
       const response = await fetch('https://hushh-api-53407187172.us-central1.run.app/send-email', {
@@ -397,8 +407,7 @@ const ContactForm = () => {
         subject: '',
         message: '',
         preferredContact: 'email',
-        urgency: 'normal',
-        department: 'general'
+        department: 'Sales'
       });
       setUploadedFiles([]);
       setRecordedAudio(null);
@@ -951,9 +960,15 @@ const ContactForm = () => {
                     </SimpleGrid>
 
                     {/* Additional Options */}
-                    <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
+                    <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
                       <FormControl>
-                        <FormLabel fontWeight="600" color="gray.700">
+                        <FormLabel 
+                          fontWeight="500" 
+                          color="#1d1d1f"
+                          fontSize="md"
+                          fontFamily="-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                          mb={2}
+                        >
                           Department
                         </FormLabel>
                         <Select
@@ -961,47 +976,36 @@ const ContactForm = () => {
                           value={formData.department}
                           onChange={handleChange}
                           size="lg"
-                          borderRadius="xl"
-                          borderColor="gray.300"
-                          _focus={{ borderColor: "#0071E3", boxShadow: "0 0 0 1px #0071E3" }}
-                          bg="gray.50"
-                          _hover={{ bg: "white" }}
-                          transition="all 0.2s"
+                          borderRadius="12px"
+                          borderColor="#d2d2d7"
+                          _focus={{ 
+                            borderColor: "#007AFF", 
+                            boxShadow: "0 0 0 3px rgba(0, 122, 255, 0.1)",
+                            bg: "white"
+                          }}
+                          bg="#f5f5f7"
+                          _hover={{ bg: "white", borderColor: "#a1a1a6" }}
+                          transition="all 0.2s ease"
+                          fontFamily="-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                          h="48px"
+                          fontSize="md"
                         >
-                          <option value="general">General Inquiry</option>
-                          <option value="sales">Sales</option>
-                          <option value="support">Technical Support</option>
-                          <option value="partnership">Partnership</option>
-                          <option value="media">Media & Press</option>
-                          <option value="careers">Careers</option>
+                          <option value="Sales">Sales</option>
+                          <option value="Support">Technical Support</option>
+                          <option value="Partnership">Partnership</option>
+                          <option value="Media">Media & Press</option>
+                          <option value="General">General Inquiry</option>
                         </Select>
                       </FormControl>
 
                       <FormControl>
-                        <FormLabel fontWeight="600" color="gray.700">
-                          Urgency Level
-                        </FormLabel>
-                        <Select
-                          name="urgency"
-                          value={formData.urgency}
-                          onChange={handleChange}
-                          size="lg"
-                          borderRadius="xl"
-                          borderColor="gray.300"
-                          _focus={{ borderColor: "#0071E3", boxShadow: "0 0 0 1px #0071E3" }}
-                          bg="gray.50"
-                          _hover={{ bg: "white" }}
-                          transition="all 0.2s"
+                        <FormLabel 
+                          fontWeight="500" 
+                          color="#1d1d1f"
+                          fontSize="md"
+                          fontFamily="-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                          mb={2}
                         >
-                          <option value="low">Low - General inquiry</option>
-                          <option value="normal">Normal - Standard response</option>
-                          <option value="high">High - Priority response</option>
-                          <option value="urgent">Urgent - Immediate attention</option>
-                        </Select>
-                      </FormControl>
-
-                      <FormControl>
-                        <FormLabel fontWeight="600" color="gray.700">
                           Preferred Contact
                         </FormLabel>
                         <Select
@@ -1009,12 +1013,19 @@ const ContactForm = () => {
                           value={formData.preferredContact}
                           onChange={handleChange}
                           size="lg"
-                          borderRadius="xl"
-                          borderColor="gray.300"
-                          _focus={{ borderColor: "#0071E3", boxShadow: "0 0 0 1px #0071E3" }}
-                          bg="gray.50"
-                          _hover={{ bg: "white" }}
-                          transition="all 0.2s"
+                          borderRadius="12px"
+                          borderColor="#d2d2d7"
+                          _focus={{ 
+                            borderColor: "#007AFF", 
+                            boxShadow: "0 0 0 3px rgba(0, 122, 255, 0.1)",
+                            bg: "white"
+                          }}
+                          bg="#f5f5f7"
+                          _hover={{ bg: "white", borderColor: "#a1a1a6" }}
+                          transition="all 0.2s ease"
+                          fontFamily="-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                          h="48px"
+                          fontSize="md"
                         >
                           <option value="email">Email</option>
                           <option value="phone">Phone Call</option>
@@ -1025,7 +1036,13 @@ const ContactForm = () => {
                     </SimpleGrid>
 
                     <FormControl>
-                      <FormLabel fontWeight="600" color="gray.700">
+                      <FormLabel 
+                        fontWeight="500" 
+                        color="#1d1d1f"
+                        fontSize="md"
+                        fontFamily="-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                        mb={2}
+                      >
                         Subject
                       </FormLabel>
                       <Input
@@ -1034,17 +1051,30 @@ const ContactForm = () => {
                         onChange={handleChange}
                         placeholder="Brief subject of your message"
                         size="lg"
-                        borderRadius="xl"
-                        borderColor="gray.300"
-                        _focus={{ borderColor: "#0071E3", boxShadow: "0 0 0 1px #0071E3" }}
-                        bg="gray.50"
-                        _hover={{ bg: "white" }}
-                        transition="all 0.2s"
+                        borderRadius="12px"
+                        borderColor="#d2d2d7"
+                        _focus={{ 
+                          borderColor: "#007AFF", 
+                          boxShadow: "0 0 0 3px rgba(0, 122, 255, 0.1)",
+                          bg: "white"
+                        }}
+                        bg="#f5f5f7"
+                        _hover={{ bg: "white", borderColor: "#a1a1a6" }}
+                        transition="all 0.2s ease"
+                        fontFamily="-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                        h="48px"
+                        fontSize="md"
                       />
                     </FormControl>
 
                     <FormControl isRequired isInvalid={errors.message}>
-                      <FormLabel fontWeight="600" color="gray.700">
+                      <FormLabel 
+                        fontWeight="500" 
+                        color="#1d1d1f"
+                        fontSize="md"
+                        fontFamily="-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                        mb={2}
+                      >
                         Message *
                       </FormLabel>
                       <Textarea
@@ -1054,15 +1084,28 @@ const ContactForm = () => {
                         placeholder="Tell us how we can help you..."
                         rows={6}
                         resize="vertical"
-                        borderRadius="xl"
-                        borderColor="gray.300"
-                        _focus={{ borderColor: "#0071E3", boxShadow: "0 0 0 1px #0071E3" }}
-                        bg="gray.50"
-                        _hover={{ bg: "white" }}
-                        transition="all 0.2s"
+                        borderRadius="12px"
+                        borderColor="#d2d2d7"
+                        _focus={{ 
+                          borderColor: "#007AFF", 
+                          boxShadow: "0 0 0 3px rgba(0, 122, 255, 0.1)",
+                          bg: "white"
+                        }}
+                        bg="#f5f5f7"
+                        _hover={{ bg: "white", borderColor: "#a1a1a6" }}
+                        transition="all 0.2s ease"
+                        fontFamily="-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                        fontSize="md"
                       />
                       {errors.message && (
-                        <Text color="red.500" fontSize="sm" mt={1}>{errors.message}</Text>
+                        <Text 
+                          color="#FF3B30" 
+                          fontSize="sm" 
+                          mt={1}
+                          fontFamily="-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                        >
+                          {errors.message}
+                        </Text>
                       )}
                     </FormControl>
 
