@@ -64,6 +64,28 @@ const LoginPageContent = () => {
   const [mounted, setMounted] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [windowSize, setWindowSize] = useState({ width: 1920, height: 1080 });
+  const [redirecting, setRedirecting] = useState(false);
+
+  // Separate effect for immediate authentication redirect
+  useEffect(() => {
+    // Check for Apple auth success flag for instant redirect
+    if (typeof window !== 'undefined') {
+      const appleAuthSuccess = localStorage.getItem('apple_auth_success');
+      if (appleAuthSuccess === 'true') {
+        console.log('Apple auth success detected, redirecting immediately...');
+        setRedirecting(true); // Hide form immediately
+        localStorage.removeItem('apple_auth_success'); // Clean up
+        router.replace(redirectTo);
+        return;
+      }
+    }
+
+    if (isAuthenticated && !loading) {
+      console.log('User authenticated, redirecting immediately...');
+      setRedirecting(true); // Hide form immediately
+      router.replace(redirectTo);
+    }
+  }, [isAuthenticated, loading, router, redirectTo]);
 
   useEffect(() => {
     setMounted(true);
@@ -71,12 +93,6 @@ const LoginPageContent = () => {
     // Set initial window size
     if (typeof window !== 'undefined') {
       setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-    }
-    
-    // Immediately redirect if authenticated (no loading screen)
-    if (isAuthenticated && !loading) {
-      router.replace(redirectTo);
-      return;
     }
 
     // Mouse tracking for interactive effects
@@ -100,7 +116,7 @@ const LoginPageContent = () => {
         window.removeEventListener('resize', handleResize);
       };
     }
-  }, [isAuthenticated, router, redirectTo]);
+  }, []);
 
   const handleGoogleSignIn = async () => {
     if (isSigningIn) return;
@@ -168,7 +184,25 @@ const LoginPageContent = () => {
     );
   }
 
-  // No loading screen needed - immediate redirect handled in useEffect
+  // Show minimal redirecting state when redirecting
+  if (redirecting) {
+    return (
+      <Box
+        minH="100vh"
+        bg="radial-gradient(ellipse at top, #0f0f23 0%, #000000 100%)"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <VStack spacing={4}>
+          <Box fontSize="3xl">🚀</Box>
+          <Text color="white" fontSize="lg" fontWeight={500}>
+            Redirecting...
+          </Text>
+        </VStack>
+      </Box>
+    );
+  }
 
   return (
     <ContentWrapper includeHeaderSpacing={true}>

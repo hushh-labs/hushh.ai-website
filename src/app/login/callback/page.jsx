@@ -182,22 +182,18 @@ const AppleCallbackContent = () => {
           }
         }
         
-        // Store success state
+        // Store success state for instant redirect detection
         localStorage.setItem('apple_auth_success', 'true');
         
-        // Show quick success toast and redirect immediately
-        toast({
-          title: "🎉 Welcome to Hushh!",
-          description: `Successfully signed in with Apple!`,
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-          position: "top",
-        });
-        
-        // Immediate redirect to home page (no delay)
+        // Immediate redirect to home page (no toast delay)
         const redirectTo = searchParams.get('redirect') || '/';
-        router.replace(redirectTo);
+        
+        // Use window.location for fastest possible redirect
+        if (typeof window !== 'undefined') {
+          window.location.href = redirectTo;
+        } else {
+          router.replace(redirectTo);
+        }
 
       } catch (error) {
         console.error('Unexpected error in Apple callback:', error);
