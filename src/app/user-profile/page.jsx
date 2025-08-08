@@ -719,9 +719,101 @@ const UserProfile = () => {
           </MotionCard>
 
           {/* Profile Details */}
-          <Grid templateColumns={{ base: "1fr", lg: "2fr 1fr", md:'2fr 1fr' }} gap={{ base: 6, lg: 8 }}>
+          <Grid templateColumns={{ base: "1fr", lg: "1fr 2fr", md:'1fr 2fr' }} gap={{ base: 6, lg: 8 }}>
+             {/* Sidebar */}
+             <GridItem order={{ base: 2, lg: 1 }}>
+              <VStack spacing={6}>
+                {/* Account Stats */}
+                <MotionCard
+                  variants={childVariants}
+                  bg="white"
+                  boxShadow="lg"
+                  borderRadius="xl"
+                  w="full"
+                >
+                  <CardBody p={6}>
+                    <VStack spacing={4} align="stretch">
+                      <Heading size="sm" color="gray.800" fontFamily="Inter, sans-serif">
+                        Account Stats
+                      </Heading>
+                      
+                      <HStack justify="space-between">
+                        <Text color="gray.600">User Coins</Text>
+                        <Badge colorScheme="yellow" variant="solid" borderRadius="full" px={3}>
+                          {userData.user_coins || 0}
+                        </Badge>
+                      </HStack>
+                      
+                      {/* Update Member Since to use accountCreation */}
+                      <HStack justify="space-between">
+                        <Text color="gray.600">Member Since</Text>
+                        <Text fontSize="sm" color="gray.700">
+                          {formatAccountCreationDate(userData.accountCreation)}
+                        </Text>
+                      </HStack>
+                      
+                      <HStack justify="space-between">
+                        <Text color="gray.600">Profile Status</Text>
+                        <Badge colorScheme="green" variant="solid" borderRadius="full">
+                          Complete
+                        </Badge>
+                      </HStack>
+                    </VStack>
+                  </CardBody>
+                </MotionCard>
+
+                {/* Quick Actions */}
+                <MotionCard
+                  variants={childVariants}
+                  bg="white"
+                  boxShadow="lg"
+                  borderRadius="xl"
+                  w="full"
+                >
+                  <CardBody p={6}>
+                    <VStack spacing={4} align="stretch">
+                      <Heading size="sm" color="gray.800" fontFamily="Inter, sans-serif">
+                        Quick Actions
+                      </Heading>
+                      
+                      <Button
+                        // leftIcon={<FiSettings />}
+                        variant="outline"
+                        size="sm"
+                        w="full"
+                        onClick={() => router.push('/')}
+                      >
+                        Explore our products
+                      </Button>
+                      
+                      <Button
+                        // leftIcon={<HushhLogo/>}
+                        variant="outline"
+                        size="sm"
+                        w="full"
+                        onClick={() => router.push('/about')}
+                      >
+                        🤫 Know About Hushh
+                      </Button>
+                      
+                      <Button
+                        leftIcon={<FiLogOut />}
+                        variant="outline"
+                        colorScheme="red"
+                        size="sm"
+                        w="full"
+                        onClick={handleSignOut}
+                      >
+                        Sign Out
+                      </Button>
+                    </VStack>
+                  </CardBody>
+                </MotionCard>
+              </VStack>
+            </GridItem>
+            
             {/* Main Profile Information */}
-            <GridItem order={{ base: 1, lg: 1 }}>
+            <GridItem order={{ base: 1, lg: 2 }}>
               <MotionCard
                 variants={childVariants}
                 bg="linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%)"
@@ -1059,98 +1151,7 @@ const UserProfile = () => {
                 </CardBody>
               </MotionCard>
             </GridItem>
-
-            {/* Sidebar */}
-            <GridItem>
-              <VStack spacing={6}>
-                {/* Account Stats */}
-                <MotionCard
-                  variants={childVariants}
-                  bg="white"
-                  boxShadow="lg"
-                  borderRadius="xl"
-                  w="full"
-                >
-                  <CardBody p={6}>
-                    <VStack spacing={4} align="stretch">
-                      <Heading size="sm" color="gray.800" fontFamily="Inter, sans-serif">
-                        Account Stats
-                      </Heading>
-                      
-                      <HStack justify="space-between">
-                        <Text color="gray.600">User Coins</Text>
-                        <Badge colorScheme="yellow" variant="solid" borderRadius="full" px={3}>
-                          {userData.user_coins || 0}
-                        </Badge>
-                      </HStack>
-                      
-                      {/* Update Member Since to use accountCreation */}
-                      <HStack justify="space-between">
-                        <Text color="gray.600">Member Since</Text>
-                        <Text fontSize="sm" color="gray.700">
-                          {formatAccountCreationDate(userData.accountCreation)}
-                        </Text>
-                      </HStack>
-                      
-                      <HStack justify="space-between">
-                        <Text color="gray.600">Profile Status</Text>
-                        <Badge colorScheme="green" variant="solid" borderRadius="full">
-                          Complete
-                        </Badge>
-                      </HStack>
-                    </VStack>
-                  </CardBody>
-                </MotionCard>
-
-                {/* Quick Actions */}
-                <MotionCard
-                  variants={childVariants}
-                  bg="white"
-                  boxShadow="lg"
-                  borderRadius="xl"
-                  w="full"
-                >
-                  <CardBody p={6}>
-                    <VStack spacing={4} align="stretch">
-                      <Heading size="sm" color="gray.800" fontFamily="Inter, sans-serif">
-                        Quick Actions
-                      </Heading>
-                      
-                      <Button
-                        // leftIcon={<FiSettings />}
-                        variant="outline"
-                        size="sm"
-                        w="full"
-                        onClick={() => router.push('/')}
-                      >
-                        Explore our products
-                      </Button>
-                      
-                      <Button
-                        // leftIcon={<HushhLogo/>}
-                        variant="outline"
-                        size="sm"
-                        w="full"
-                        onClick={() => router.push('/about')}
-                      >
-                        🤫 Know About Hushh
-                      </Button>
-                      
-                      <Button
-                        leftIcon={<FiLogOut />}
-                        variant="outline"
-                        colorScheme="red"
-                        size="sm"
-                        w="full"
-                        onClick={handleSignOut}
-                      >
-                        Sign Out
-                      </Button>
-                    </VStack>
-                  </CardBody>
-                </MotionCard>
-              </VStack>
-            </GridItem>
+             
           </Grid>
         </MotionBox>
       </Container>

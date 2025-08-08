@@ -709,7 +709,7 @@ const LoginPageContent = () => {
                       status: "success",
                       duration: 3000,
                       isClosable: true,
-                      position: "top",
+                      position: "bottom",
                     });
                   }}
                   onError={(error) => {
@@ -720,7 +720,7 @@ const LoginPageContent = () => {
                       status: "error",
                       duration: 5000,
                       isClosable: true,
-                      position: "top",
+                      position: "bottom",
                     });
                   }}
                 />

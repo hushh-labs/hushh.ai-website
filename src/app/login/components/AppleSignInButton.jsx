@@ -72,8 +72,8 @@ const AppleSignInButton = ({
         description: "Please wait while we redirect you to Apple Sign-In...",
         status: "loading",
         duration: null,
-        isClosable: false,
-        position: "top",
+        isClosable: true,
+        position: "bottom",
       });
 
       // Determine redirect URL based on environment
@@ -108,7 +108,7 @@ const AppleSignInButton = ({
           status: "error",
           duration: 5000,
           isClosable: true,
-          position: "top",
+          position: "bottom",
         });
 
         // Call error callback
@@ -138,7 +138,7 @@ const AppleSignInButton = ({
         status: "error",
         duration: 5000,
         isClosable: true,
-        position: "top",
+        position: "bottom",
       });
 
       // Call error callback
