@@ -9,7 +9,8 @@ import {
   Box,
 } from '@chakra-ui/react';
 import { keyframes } from '@emotion/react';
-import appleAuthService from '../services/appleAuthService.js';
+import { createClient } from '@supabase/supabase-js';
+import config from '../../../lib/config/config.js';
 
 // Apple Logo SVG Component
 const AppleIcon = (props) => (
@@ -52,34 +53,63 @@ const AppleSignInButton = ({
     try {
       console.log('Apple Sign-In button clicked');
       
+      // Create Supabase client
+      const supabase = config.supabaseClient || createClient(
+        config.SUPABASE_URL, 
+        config.SUPABASE_ANON_KEY,
+        {
+          auth: {
+            autoRefreshToken: true,
+            persistSession: true,
+            detectSessionInUrl: true
+          }
+        }
+      );
+
       // Show loading toast
       const loadingToast = toast({
-        title: "🍎 Connecting to Apple...",
-        description: "Please wait while we redirect you to Apple Sign-In",
-        status: "info",
-        duration: 3000,
-        isClosable: true,
+        title: "Connecting to Apple",
+        description: "Please wait while we redirect you to Apple Sign-In...",
+        status: "loading",
+        duration: null,
+        isClosable: false,
         position: "top",
       });
 
-      // Initiate Apple OAuth flow
-      const { data, error } = await appleAuthService.signInWithAppleOAuth();
+      // Determine redirect URL based on environment
+      const redirectTo = typeof window !== 'undefined' 
+        ? `${window.location.origin}/login/callback`
+        : config.redirect_url;
+
+      console.log('Using redirect URL:', redirectTo);
+
+      // Initiate Apple OAuth flow using Supabase Auth
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'apple',
+        options: {
+          redirectTo,
+          queryParams: {
+            response_type: 'code',
+            response_mode: 'query',
+            scope: 'name email'
+          }
+        }
+      });
+
+      // Close loading toast
+      toast.close(loadingToast);
 
       if (error) {
         console.error('Apple Sign-In Error:', error);
         
-        // Close loading toast
-        toast.close(loadingToast);
-        
-        // Show error toast
-        // toast({
-        //   title: "Apple Sign-In Error",
-        //   description: error.message || "Failed to connect to Apple. Please try again.",
-        //   status: "error",
-        //   duration: 5000,
-        //   isClosable: true,
-        //   position: "top",
-        // });
+        toast({
+          title: "Apple Sign-In Error",
+          description: error.message || "Failed to connect to Apple. Please try again.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "top",
+        });
 
         // Call error callback
         if (onError && typeof onError === 'function') {
@@ -102,14 +132,14 @@ const AppleSignInButton = ({
     } catch (error) {
       console.error('Unexpected Apple Sign-In error:', error);
       
-      // toast({
-      //   title: "Unexpected Error",
-      //   description: "An unexpected error occurred. Please try again.",
-      //   status: "error",
-      //   duration: 5000,
-      //   isClosable: true,
-      //   position: "top",
-      // });
+      toast({
+        title: "Unexpected Error",
+        description: "An unexpected error occurred. Please try again.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
 
       // Call error callback
       if (onError && typeof onError === 'function') {

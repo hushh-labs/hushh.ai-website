@@ -14,7 +14,8 @@ import {
 } from '@chakra-ui/react';
 import { keyframes } from '@emotion/react';
 import { ArrowBackIcon, CheckIcon, WarningIcon } from '@chakra-ui/icons';
-import appleAuthService from '../services/appleAuthService.js';
+import { createClient } from '@supabase/supabase-js';
+import config from '../../../lib/config/config.js';
 
 // Animation keyframes
 const fadeIn = keyframes`
@@ -112,8 +113,21 @@ const AppleCallbackContent = () => {
         console.log('Authorization code received, processing...');
         setMessage('Exchanging authorization code...');
 
-        // Handle the Apple callback through our service
-        const { data, error: callbackError } = await appleAuthService.handleAppleCallback(currentUrl);
+        // Create Supabase client
+        const supabase = config.supabaseClient || createClient(
+          config.SUPABASE_URL, 
+          config.SUPABASE_ANON_KEY,
+          {
+            auth: {
+              autoRefreshToken: true,
+              persistSession: true,
+              detectSessionInUrl: true
+            }
+          }
+        );
+
+        // Exchange the authorization code for a session using Supabase Auth
+        const { data, error: callbackError } = await supabase.auth.exchangeCodeForSession(code);
 
         if (callbackError) {
           console.error('Apple callback processing error:', callbackError);
@@ -124,14 +138,14 @@ const AppleCallbackContent = () => {
             description: callbackError.message || 'Failed to process the authentication callback'
           });
           
-          // toast({
-          //   title: "Authentication Processing Failed",
-          //   description: callbackError.message || "Failed to process Apple authentication",
-          //   status: "error",
-          //   duration: 5000,
-          //   isClosable: true,
-          //   position: "top",
-          // });
+          toast({
+            title: "Authentication Processing Failed",
+            description: callbackError.message || "Failed to process Apple authentication",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+            position: "top",
+          });
           
           return;
         }
@@ -139,6 +153,34 @@ const AppleCallbackContent = () => {
         console.log('Apple authentication successful:', data);
         setStatus('success');
         setMessage('Apple authentication successful!');
+        
+        // Handle successful authentication - store user profile if needed
+        if (data?.user) {
+          try {
+            // Optional: Store user profile in your database
+            const userData = {
+              user_id: data.user.id,
+              mail: data.user.email,
+              firstname: data.user.user_metadata?.full_name || data.user.user_metadata?.name || '',
+              lastname: '', // Apple doesn't provide separate last name
+              avatar_url: data.user.user_metadata?.avatar_url || null,
+              provider: 'apple',
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            };
+
+            // Upsert user profile to database
+            await supabase
+              .from('dev_api_userprofile')
+              .upsert([userData], { 
+                onConflict: 'mail',
+                ignoreDuplicates: false 
+              });
+          } catch (profileError) {
+            console.warn('Failed to update user profile:', profileError);
+            // Don't fail the auth process if profile update fails
+          }
+        }
         
         toast({
           title: "🎉 Welcome to Hushh!",
