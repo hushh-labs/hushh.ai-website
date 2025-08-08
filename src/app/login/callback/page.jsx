@@ -111,8 +111,8 @@ const AppleCallbackContent = () => {
         }
 
         console.log('Authorization code received, processing...');
-        setMessage('Exchanging authorization code...');
-
+        // Skip loading message for faster UX
+        
         // Create Supabase client
         const supabase = config.supabaseClient || createClient(
           config.SUPABASE_URL, 
@@ -182,23 +182,22 @@ const AppleCallbackContent = () => {
           }
         }
         
-        toast({
-          title: "🎉 Welcome to Hushh!",
-          description: `Successfully signed in with Apple! Welcome, ${data?.user?.email || 'User'}`,
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-          position: "top",
-        });
-
         // Store success state
         localStorage.setItem('apple_auth_success', 'true');
         
-        // Redirect to dashboard or intended page after successful authentication
-        setTimeout(() => {
-          const redirectTo = searchParams.get('redirect') || '/';
-          router.push(redirectTo);
-        }, 2000);
+        // Show quick success toast and redirect immediately
+        toast({
+          title: "🎉 Welcome to Hushh!",
+          description: `Successfully signed in with Apple!`,
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+          position: "top",
+        });
+        
+        // Immediate redirect to home page (no delay)
+        const redirectTo = searchParams.get('redirect') || '/';
+        router.replace(redirectTo);
 
       } catch (error) {
         console.error('Unexpected error in Apple callback:', error);
@@ -237,21 +236,31 @@ const AppleCallbackContent = () => {
     router.push('/');
   };
 
-  // Simple content rendering
+  // Minimal content rendering for faster UX
   const renderContent = () => {
-    return (
-      <VStack spacing={6} textAlign="center">
-        <Spinner size="xl" color="white" />
-        <VStack spacing={3}>
-          <Text fontSize="xl" fontWeight={600} color="white">
-            {message}
-          </Text>
-          {status === 'error' && errorDetails && (
+    if (status === 'error' && errorDetails) {
+      return (
+        <VStack spacing={6} textAlign="center">
+          <Box fontSize="4xl">⚠️</Box>
+          <VStack spacing={3}>
+            <Text fontSize="xl" fontWeight={600} color="white">
+              Sign-in Failed
+            </Text>
             <Text fontSize="sm" color="rgba(255, 255, 255, 0.7)">
               {errorDetails.description}
             </Text>
-          )}
+          </VStack>
         </VStack>
+      );
+    }
+    
+    // Show minimal loading for processing state
+    return (
+      <VStack spacing={4} textAlign="center">
+        <Box fontSize="4xl">🍃</Box>
+        <Text fontSize="lg" fontWeight={500} color="white">
+          Signing you in...
+        </Text>
       </VStack>
     );
   };

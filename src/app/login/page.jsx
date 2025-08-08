@@ -73,8 +73,10 @@ const LoginPageContent = () => {
       setWindowSize({ width: window.innerWidth, height: window.innerHeight });
     }
     
-    if (isAuthenticated) {
-      router.push(redirectTo);
+    // Immediately redirect if authenticated (no loading screen)
+    if (isAuthenticated && !loading) {
+      router.replace(redirectTo);
+      return;
     }
 
     // Mouse tracking for interactive effects
@@ -166,33 +168,7 @@ const LoginPageContent = () => {
     );
   }
 
-  if (isAuthenticated) {
-    return (
-      <Box
-        minH="100vh"
-        bg="radial-gradient(ellipse at top, #0f0f23 0%, #000000 100%)"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <VStack spacing={6}>
-          <Box
-            w="80px"
-            h="80px"
-            borderRadius="50%"
-            sx={{
-              background: "linear-gradient(45deg, #0071E3, #BB62FC, #F34556, #F44F22)",
-              backgroundSize: "400% 400%",
-            }}
-            animation={`${gradientShift} 3s ease infinite, ${pulse} 1.5s ease-in-out infinite`}
-          />
-          <Text color="white" fontSize="lg" fontWeight={500}>
-            Redirecting to your dashboard...
-          </Text>
-        </VStack>
-      </Box>
-    );
-  }
+  // No loading screen needed - immediate redirect handled in useEffect
 
   return (
     <ContentWrapper includeHeaderSpacing={true}>
@@ -716,33 +692,7 @@ const LoginPageContent = () => {
                 />
 
                 {/* Divider */}
-                <Box position="relative" w="full">
-                  <Box
-                    position="absolute"
-                    top="50%"
-                    left="0"
-                    right="0"
-                    h="1px"
-                    bg="rgba(255, 255, 255, 0.1)"
-                    transform="translateY(-50%)"
-                  />
-                  <Text
-                    bg="rgba(255, 255, 255, 0.05)"
-                    px={4}
-                    py={2}
-                    fontSize="sm"
-                    color="rgba(255, 255, 255, 0.6)"
-                    textAlign="center"
-                    borderRadius="full"
-                    border="1px solid rgba(255, 255, 255, 0.1)"
-                    backdropFilter="blur(10px)"
-                    position="relative"
-                    w="fit-content"
-                    mx="auto"
-                  >
-                    or continue with email
-                  </Text>
-                </Box>
+               
 
                 {/* Security Badges */}
                 {/* <VStack spacing={3} w="full">
