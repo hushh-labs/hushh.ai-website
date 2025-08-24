@@ -13,6 +13,7 @@ import FundingBanner from "./_components/features/FundingBanner";
 import { siteMetadata } from "./sitemetadata";
 import { AuthProvider } from "./context/AuthContext";
 import { BannerHeightProvider } from "./context/BannerHeightContext";
+import HushhBot from "./_components/HushhBot";
 
 export const metadata = {
   metadataBase: new URL(siteMetadata.siteUrl),
@@ -168,6 +169,8 @@ export default function RootLayout({ children }) {
                   {/* Header positioned dynamically after banners */}
                   <HeaderComponent />
                   {children}
+                  {/* Hushh Bot Chatbot */}
+                  <HushhBot />
                 </Providers>
               </div>
             </BannerHeightProvider>
