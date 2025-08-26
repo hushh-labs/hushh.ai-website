@@ -68,18 +68,21 @@ function parseMdxFile(filePath) {
     // Determine content type and URL based on file path
     let type, url, category;
     
-    if (filePath.includes('/content/')) {
+    // Normalize path separators for cross-platform support
+    const normalizedPath = filePath.replace(/\\/g, '/');
+
+    if (normalizedPath.includes('/content/')) {
       type = 'blog';
       category = 'Blog Posts';
       // Extract slug from content/slug/index.mdx pattern
-      const pathParts = filePath.split('/content/')[1].split('/');
+      const pathParts = normalizedPath.split('/content/')[1].split('/');
       const slug = pathParts[0];
-      url = `/hushhBlogs/${slug}`;
-    } else if (filePath.includes('/pages/')) {
+      url = `/blogs/${slug}`;
+    } else if (normalizedPath.includes('/pages/')) {
       type = 'documentation';
       category = 'Documentation';
       // Extract path from pages/path.mdx pattern - FIXED URL GENERATION
-      const relativePath = filePath.split('/pages/')[1].replace('.mdx', '');
+      const relativePath = normalizedPath.split('/pages/')[1].replace('.mdx', '');
       url = `/${relativePath}`; // Remove the '/pages/' prefix
     } else {
       type = 'page';

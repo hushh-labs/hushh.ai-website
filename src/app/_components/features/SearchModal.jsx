@@ -318,6 +318,10 @@ const SearchModal = ({ isOpen, onClose }) => {
       motionPreset="slideInTop"
       closeOnOverlayClick={true}
       closeOnEsc={true}
+      // Ensure modal renders above fixed header and other overlays
+      blockScrollOnMount={true}
+      isCentered={true}
+      zIndex={2000}
     >
       <ModalOverlay 
         bg={overlayColor}
@@ -331,8 +335,6 @@ const SearchModal = ({ isOpen, onClose }) => {
         borderRadius={{ base: "0", md: "16px" }}
         boxShadow="0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1)"
         maxH="80vh"
-        mt={{ base: 0, md: "10vh" }}
-        mx={{ base: 0, md: "auto" }}
         overflow="hidden"
       >
         <Box p={0}>

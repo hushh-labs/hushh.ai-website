@@ -67,7 +67,7 @@ export class ContentIndexer {
                 .replace(/^\s+/gm, '') // Remove leading whitespace
                 .trim();
 
-              const blogUrl = `/hushhBlogs/${folder}`;
+              const blogUrl = `/blogs/${folder}`;
               
               // Enhanced title extraction with better fallbacks
               let title = frontmatter.title;

@@ -577,7 +577,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                 <div className="flex items-center space-x-2 lg:space-x-3 xl:space-x-4 ml-4">
                   {/* Search Icon */}
                   <button
-                    onClick={onSearchOpen}
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); onSearchOpen(); }}
                     className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 group relative"
                     aria-label="Search (⌘K)"
                     type="button"

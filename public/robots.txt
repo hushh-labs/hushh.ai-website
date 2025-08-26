@@ -1,6 +1,7 @@
 # *
 User-agent: *
 Allow: /
+Disallow: /clientside/*
 Disallow: /api/*
 Disallow: /_next/*
 Disallow: /*?q=*
