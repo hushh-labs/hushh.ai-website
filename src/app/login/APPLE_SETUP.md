@@ -1,4 +1,4 @@
-# Apple Sign-In Setup Guide for Hushh Website
+# Apple Sign-In and Wallet Setup Guide for Hushh Website
 
 This guide provides complete instructions for setting up Apple Sign-In with Supabase authentication in the Hushh website.
 
@@ -121,6 +121,14 @@ APPLE_TEAM_ID=YOUR_TEAM_ID_HERE
 APPLE_KEY_ID=YOUR_KEY_ID_HERE
 APPLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYOUR_PRIVATE_KEY_CONTENT\n-----END PRIVATE KEY-----"
 
+# Apple Wallet Pass (PKPass) Configuration
+# Base64 strings of certificates
+APPLE_WWDR_CERT_BASE64=
+APPLE_PASS_CERT_P12_BASE64=
+APPLE_PASS_CERT_PASSWORD=
+APPLE_ORG_NAME=Hushh
+APPLE_PASS_TYPE_IDENTIFIER=pass.hushh.id
+
 # Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=https://gsqmwxqgqrgzhlhmbscg.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzcW13eHFncXJnemhsaG1ic2NnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg3NTk5ODYsImV4cCI6MjA1NDMzNTk4Nn0.a30I6aLvNNIS6coxJbgTeGBUmKR0NvTkZUDG5uyloFY
@@ -128,6 +136,14 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzd
 # NextAuth Secret
 NEXTAUTH_SECRET=your_nextauth_secret_here
 ```
+
+## 🍎 Apple Wallet Pass Route
+
+- API: `GET /api/wallet/pass?hushh_id=H12345&name=John%20Doe`
+- Response: `application/vnd.apple.pkpass` (download triggers Wallet on iOS)
+- Desktop flow: The profile page shows a QR containing the URL above to scan on iPhone.
+
+Ensure you upload the correct certificates and identifiers in env before testing in production.
 
 ## 📁 File Structure
 
