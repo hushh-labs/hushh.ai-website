@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import Passkit from "passkit-generator";
+import { PKPass } from "passkit-generator";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 // This route generates a basic Apple Wallet pass (.pkpass) with the user's name and Hushh ID.
 // Certificates are loaded from env or mocked in development. Replace with real certs for prod.
@@ -32,7 +35,7 @@ export async function GET(request) {
     const wwdr = Buffer.from(WWDR_CERT, "base64");
     const signerCert = Buffer.from(SIGNING_CERT, "base64");
 
-    const pass = await Passkit.createPass({
+    const pass = await PKPass.from({
       model: {
         description: "Hushh ID Card",
         organizationName: PASS_ORG_NAME,
