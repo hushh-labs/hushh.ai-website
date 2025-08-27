@@ -1,5 +1,7 @@
+/* eslint-env node */
+/* global process */
 import { NextResponse } from "next/server";
-import { PKPass } from "passkit-generator";
+import { Buffer } from "node:buffer";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -9,6 +11,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET(request) {
   try {
+    const { PKPass } = await import("passkit-generator");
     const { searchParams } = new URL(request.url);
     const hushhId = searchParams.get("hushh_id") || "";
     const name = searchParams.get("name") || "Hushh User";
