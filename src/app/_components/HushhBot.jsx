@@ -168,7 +168,7 @@ const HushhBot = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed inset-0 pt-16 sm:inset-auto sm:bottom-20 sm:right-2 sm:left-auto sm:top-auto sm:pt-0 sm:w-[calc(100vw-1rem)] md:bottom-20 md:right-6 md:w-72 lg:bottom-24 lg:right-8 lg:w-80 sm:h-[450px] md:h-[450px] lg:h-[500px] bg-white sm:rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden z-[9999]"
+            className="fixed inset-0 pt-16 sm:inset-auto sm:bottom-20 sm:right-2 sm:left-auto sm:top-auto sm:pt-0 sm:w-[calc(100vw-1rem)] md:bottom-20 md:right-6 md:w-96 lg:bottom-24 lg:right-8 lg:w-[30rem] sm:h-[450px] md:h-[450px] lg:h-[500px] bg-white sm:rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden z-[9999]"
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
