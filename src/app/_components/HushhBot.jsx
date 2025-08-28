@@ -89,9 +89,19 @@ const HushhBot = () => {
           content: data.response || data.message || 'I apologize, but I couldn\'t process your request. Please try again.',
           timestamp: new Date()
         };
+        const links = Array.isArray(data.links) ? data.links : [];
         setMessages(prev => {
           const withoutTyping = prev.filter(m => m.id !== typingIdRef.current);
-          return [...withoutTyping, botMessage];
+          const next = [...withoutTyping, botMessage];
+          if (links.length > 0) {
+            next.push({
+              id: Date.now() + 2,
+              type: 'links',
+              links,
+              timestamp: new Date()
+            });
+          }
+          return next;
         });
         setIsLoading(false);
         setIsTyping(false);
@@ -224,6 +234,19 @@ const HushhBot = () => {
                         <motion.span className="w-2.5 h-2.5 bg-white/90 rounded-full"
                           animate={{ y: [0, -4, 0], opacity: [0.6, 1, 0.6] }}
                           transition={{ duration: 0.8, repeat: Infinity, ease: 'easeInOut', repeatType: 'loop', delay: 0.3 }} />
+                      </div>
+                    </div>
+                  ) : message.type === 'links' ? (
+                    <div className="max-w-[85%] sm:max-w-[85%] md:max-w-[85%] lg:max-w-[80%]">
+                      <div className="bg-white text-gray-800 rounded-2xl rounded-bl-md shadow-sm border border-gray-200 px-4 py-3">
+                        <p className="text-sm font-medium text-gray-700 mb-2">Here are your links:</p>
+                        <ul className="space-y-1 list-disc list-inside">
+                          {Array.isArray(message.links) && message.links.map((href, idx) => (
+                            <li key={idx} className="text-sm">
+                              <a href={href} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline break-all">{href}</a>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
                     </div>
                   ) : (
