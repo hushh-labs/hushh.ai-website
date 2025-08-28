@@ -175,9 +175,9 @@ const HushhBot = () => {
             transition={{ duration: 0.3, ease: "easeOut" }}
           >
             {/* Header */}
-            <div className="relative bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-4 sm:px-3 sm:py-3 md:px-4 md:py-3 lg:px-5 lg:py-4 pr-12 text-white min-h-[64px] sm:min-h-0">
-              <div className="flex items-center">
-                <div className="flex items-center space-x-3 md:space-x-3 max-w-[75%] sm:max-w-none overflow-hidden">
+            <div className="relative bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-4 sm:px-3 sm:py-3 md:px-4 md:py-3 lg:px-5 lg:py-4 pr-14 sm:pr-12 text-white min-h-[64px] sm:min-h-0">
+              <div className="flex items-center justify-between">
+                <div className="flex space-x-3 md:space-x-3 max-w-[82%] sm:max-w-none overflow-hidden">
                   <div className="w-8 h-8 sm:w-7 sm:h-7 md:w-7 md:h-7 lg:w-8 lg:h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
                     <svg className="w-5 h-5 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-5 lg:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -191,7 +191,7 @@ const HushhBot = () => {
                 {/* Close button */}
                 <button
                   onClick={handleClose}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2 sm:p-1 hover:bg-white/20 rounded-full transition-colors flex items-center justify-center"
+                  className="absolute right-2 sm:right-3 lg:right-4 top-1/2 -translate-y-1/2 p-2 sm:p-1 hover:bg-white/20 rounded-full transition-colors flex items-end justify-end"
                   aria-label="Close chat"
                 >
                   <svg className="w-6 h-6 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-5 lg:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
