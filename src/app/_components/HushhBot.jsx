@@ -19,6 +19,7 @@ const HushhBot = () => {
   const [error, setError] = useState(null);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const typingIdRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -50,6 +51,19 @@ const HushhBot = () => {
     setIsTyping(true);
     setError(null);
 
+    // Add a rich typing placeholder message that will be replaced once the API responds
+    const typingId = `typing-${Date.now()}`;
+    typingIdRef.current = typingId;
+    setMessages(prev => [
+      ...prev,
+      {
+        id: typingId,
+        type: 'typing',
+        content: '',
+        timestamp: new Date()
+      }
+    ]);
+
     try {
       const response = await fetch('https://hushh-techh.onrender.com/api/hushh/chat', {
         method: 'POST',
@@ -67,7 +81,7 @@ const HushhBot = () => {
 
       const data = await response.json();
       
-      // Simulate typing delay for better UX
+      // Simulate small delay for smoother UX and then replace typing bubble
       setTimeout(() => {
         const botMessage = {
           id: Date.now() + 1,
@@ -75,10 +89,13 @@ const HushhBot = () => {
           content: data.response || data.message || 'I apologize, but I couldn\'t process your request. Please try again.',
           timestamp: new Date()
         };
-        setMessages(prev => [...prev, botMessage]);
+        setMessages(prev => {
+          const withoutTyping = prev.filter(m => m.id !== typingIdRef.current);
+          return [...withoutTyping, botMessage];
+        });
         setIsLoading(false);
         setIsTyping(false);
-      }, 1000);
+      }, 500);
 
     } catch (error) {
       console.error('Error:', error);
@@ -88,7 +105,10 @@ const HushhBot = () => {
         content: 'Sorry, I\'m experiencing some technical difficulties. Please try again later.',
         timestamp: new Date()
       };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages(prev => {
+        const withoutTyping = prev.filter(m => m.id !== typingIdRef.current);
+        return [...withoutTyping, errorMessage];
+      });
       setError(error.message);
       setIsLoading(false);
       setIsTyping(false);
@@ -191,39 +211,39 @@ const HushhBot = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div
-                    className={`max-w-[85%] sm:max-w-[85%] md:max-w-[85%] lg:max-w-[80%] px-4 py-3 sm:px-3 sm:py-2 md:px-3 md:py-2 lg:px-4 lg:py-3 rounded-2xl ${
-                      message.type === 'user'
-                        ? 'bg-blue-600 text-white rounded-br-md'
-                        : 'bg-white text-gray-800 rounded-bl-md shadow-sm border border-gray-200'
-                    }`}
-                  >
-                    <p className="text-base sm:text-sm leading-relaxed break-words">{message.content}</p>
-                    <p className={`text-sm sm:text-xs mt-2 sm:mt-1 md:mt-1 lg:mt-2 ${
-                      message.type === 'user' ? 'text-blue-100' : 'text-gray-500'
-                    }`}>
-                      {formatTime(message.timestamp)}
-                    </p>
-                  </div>
+                  {message.type === 'typing' ? (
+                    <div className="max-w-[75%] sm:max-w-[75%] md:max-w-[70%] lg:max-w-[60%]">
+                      <div className="inline-flex items-center gap-2 bg-blue-600 text-white px-3 py-2 rounded-2xl rounded-bl-md shadow-sm">
+                        <span className="sr-only">Hushh is typing…</span>
+                        <motion.span className="w-2.5 h-2.5 bg-white/90 rounded-full"
+                          animate={{ y: [0, -4, 0], opacity: [0.6, 1, 0.6] }}
+                          transition={{ duration: 0.8, repeat: Infinity, ease: 'easeInOut', repeatType: 'loop' }} />
+                        <motion.span className="w-2.5 h-2.5 bg-white/90 rounded-full"
+                          animate={{ y: [0, -4, 0], opacity: [0.6, 1, 0.6] }}
+                          transition={{ duration: 0.8, repeat: Infinity, ease: 'easeInOut', repeatType: 'loop', delay: 0.15 }} />
+                        <motion.span className="w-2.5 h-2.5 bg-white/90 rounded-full"
+                          animate={{ y: [0, -4, 0], opacity: [0.6, 1, 0.6] }}
+                          transition={{ duration: 0.8, repeat: Infinity, ease: 'easeInOut', repeatType: 'loop', delay: 0.3 }} />
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      className={`max-w-[85%] sm:max-w-[85%] md:max-w-[85%] lg:max-w-[80%] px-4 py-3 sm:px-3 sm:py-2 md:px-3 md:py-2 lg:px-4 lg:py-3 rounded-2xl ${
+                        message.type === 'user'
+                          ? 'bg-blue-600 text-white rounded-br-md'
+                          : 'bg-white text-gray-800 rounded-bl-md shadow-sm border border-gray-200'
+                      }`}
+                    >
+                      <p className="text-base sm:text-sm leading-relaxed break-words">{message.content}</p>
+                      <p className={`text-sm sm:text-xs mt-2 sm:mt-1 md:mt-1 lg:mt-2 ${
+                        message.type === 'user' ? 'text-blue-100' : 'text-gray-500'
+                      }`}>
+                        {formatTime(message.timestamp)}
+                      </p>
+                    </div>
+                  )}
                 </motion.div>
               ))}
-              
-              {/* Typing indicator */}
-              {isTyping && (
-                <motion.div
-                  className="flex justify-start"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                >
-                  <div className="bg-white text-gray-800 rounded-2xl rounded-bl-md shadow-sm border border-gray-200 px-4 py-3 sm:px-3 sm:py-2 md:px-3 md:py-2 lg:px-4 lg:py-3">
-                    <div className="flex space-x-1">
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
               
               <div ref={messagesEndRef} />
             </div>
