@@ -4,6 +4,7 @@ import UploadCard from "../_components/socialOnboarding/UploadCard";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../context/AuthContext";
 import { uploadImages } from "../lib/api/socialOnboarding";
+import ContentWrapper from "src/app/_components/layout/ContentWrapper";
 
 export default function SocialOnboardingPage() {
   const router = useRouter();
@@ -46,6 +47,7 @@ export default function SocialOnboardingPage() {
   };
 
   return (
+    <ContentWrapper>
     <main className="relative mx-auto max-w-6xl px-6 md:px-10 py-12 md:py-16">
       {/* Header */}
       <section className="text-center mb-10 md:mb-14">
@@ -113,6 +115,7 @@ export default function SocialOnboardingPage() {
         Step 1 of 4
       </div>
     </main>
+    </ContentWrapper>
   );
 }
 

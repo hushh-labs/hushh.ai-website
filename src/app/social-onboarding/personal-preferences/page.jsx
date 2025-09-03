@@ -4,6 +4,7 @@ import QuestionInput from "../../_components/socialOnboarding/QuestionInput";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../context/AuthContext";
 import { savePreferences, buildPreferencesPayload } from "../../lib/api/socialOnboarding";
+import ContentWrapper from "src/app/_components/layout/ContentWrapper";
 
 // Metadata handled in parent layout if needed (client pages cannot export metadata)
 
@@ -24,6 +25,7 @@ export default function PersonalPreferencesPage() {
   const set = (k) => (v) => setState((s) => ({ ...s, [k]: v }));
 
   return (
+    <ContentWrapper>
     <main className="mx-auto max-w-6xl px-6 md:px-10 py-10 md:py-14">
       <header className="text-center mb-6 md:mb-8">
         <div className="mx-auto mb-4 h-10 w-10 rounded-full border border-black grid place-items-center">
@@ -104,6 +106,7 @@ export default function PersonalPreferencesPage() {
         </button>
       </div>
     </main>
+    </ContentWrapper>
   );
 }
 

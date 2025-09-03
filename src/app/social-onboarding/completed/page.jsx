@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import Link from "next/link";
+import ContentWrapper from "src/app/_components/layout/ContentWrapper";
 
 // export const metadata = {
 //   title: "Profile Setup Complete",
@@ -14,6 +15,7 @@ export default function OnboardingCompletedPage() {
     } catch {}
   }, []);
   return (
+    <ContentWrapper>    
     <main className="min-h-[70vh] flex flex-col items-center justify-center px-6 py-16 text-center">
       <div className="mb-6 h-16 w-16 grid place-items-center rounded-full border border-black">
         <span aria-hidden className="text-2xl">🎉</span>
@@ -33,6 +35,7 @@ export default function OnboardingCompletedPage() {
         </Link>
       </div>
     </main>
+    </ContentWrapper>
   );
 }
 
