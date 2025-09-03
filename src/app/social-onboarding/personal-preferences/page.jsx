@@ -72,10 +72,10 @@ export default function PersonalPreferencesPage() {
 
       <div className="mt-8 text-xs text-gray-500 text-center">
         By entering information, I agree to Hushh's
-        <a className="text-red-500 underline ml-1" href="/terms-of-service">Terms of Service</a>,
-        <a className="text-red-500 underline ml-1" href="/non-discrimination">Non-discrimination Policy</a>
-        and <a className="text-red-500 underline" href="/payments-terms">Payments Terms of Service</a> and acknowledge the
-        <a className="text-red-500 underline ml-1" href="/privacy-policy">Privacy Policy</a>.
+        <a className="text-red-500 underline ml-1" href="/legal/termsofuse">Terms of Service</a>,
+        {/* <a className="text-red-500 underline ml-1" href="/non-discrimination">Non-discrimination Policy</a> */}
+        {/* and <a className="text-red-500 underline" href="/payments-terms">Payments Terms of Service</a> and acknowledge the */}
+        <a className="text-red-500 underline ml-1" href="/legal/privacypolicy">Privacy Policy</a>.
         See our Consent Policy <a className="text-red-500 underline" href="/consent-ai-protocol">here</a>.
       </div>
 

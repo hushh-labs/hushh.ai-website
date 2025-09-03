@@ -1,5 +1,6 @@
 import React from "react";
 import { siteMetadata } from "../sitemetadata";
+import FooterComponent from "../_components/features/FooterComponent";
 
 export const metadata = {
   title: "Social Profile Setup",
@@ -17,7 +18,12 @@ export const metadata = {
 };
 
 export default function SocialOnboardingLayout({ children }) {
-  return <div className="min-h-screen bg-white">{children}</div>;
+  return (
+    <>
+  <div className="min-h-screen bg-white">{children}</div>
+  <FooterComponent/>
+  </>
+  );
 }
 
 
