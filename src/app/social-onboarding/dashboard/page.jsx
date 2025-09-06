@@ -264,7 +264,8 @@ export default function SocialProfileDashboard() {
         <div className="text-sm md:text-base font-semibold">Likes</div>
         <p className="text-gray-700">{likesText || "—"}</p>
 
-        <div className="text-sm md:text-base font-semibold">Relationship</div>
+
+        <div className="text-sm md:text-base font-semibold">Hobbies</div>
         <p className="text-gray-700">{relationshipText || "—"}</p>
       </div>
 
