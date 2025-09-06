@@ -15,7 +15,7 @@ import {
   Icon,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { FiUser, FiLogOut, FiMail, FiSettings, FiChevronRight } from 'react-icons/fi';
+import { FiUser, FiLogOut, FiMail, FiSettings, FiChevronRight, FiUserPlus } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -194,13 +194,14 @@ const UserAvatar = () => {
   };
 
   const handleProfileClick = () => {
-    if (userExists) {
-      // User exists - go to view profile
-      navigateToProfile();
-    } else {
-      // User doesn't exist - go to setup profile
-      navigateToRegistration();
-    }
+    // Prefer modern UX: route to dedicated social onboarding setup if not completed; else to profile
+    try {
+      const completed = typeof window !== 'undefined' && localStorage.getItem('hushh_social_profile_completed') === 'true';
+      if (!completed) {
+        return router.push('/social-onboarding');
+      }
+    } catch {}
+    navigateToProfile();
   };
 
   if (!user) return null;
@@ -296,6 +297,32 @@ const UserAvatar = () => {
         
         {/* Menu Items */}
         <Box py={1}>
+          <MenuItem 
+            bg="transparent"
+            color={textPrimary}
+            _hover={{
+              bg: itemHoverBg,
+              color: textPrimary,
+            }}
+            _focus={{
+              bg: itemHoverBg,
+            }}
+            fontSize="15px"
+            fontWeight="400"
+            py={3}
+            px={5}
+            onClick={() => router.push('/social-onboarding')}
+            transition="all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)"
+            fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+            justifyContent="space-between"
+          >
+            <HStack spacing={3}>
+              <Icon as={FiUserPlus} size="16px" />
+              <Text>Setup your Social Profile</Text>
+            </HStack>
+            <Icon as={FiChevronRight} size="14px" color={textSecondary} />
+          </MenuItem>
+
           <MenuItem 
             bg="transparent"
             color={textPrimary}
