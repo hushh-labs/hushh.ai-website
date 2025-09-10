@@ -1,13 +1,15 @@
 'use client'
 import React from 'react'
 import { Container, VStack, Heading, Text, HStack, Button, Box } from '@chakra-ui/react'
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
 import NextImage from 'next/image'
 // import BlackLockIcon from '@/public/images/black-lock-icon.png'
 import ContentWrapper from '../_components/layout/ContentWrapper'
 import ContactForm from '../_components/features/contactForm'
+import { useRouter } from 'next/navigation'
 
 const page = () => {
+const router = useRouter();
   return (
     <>
     <Box bg="#f5f5f7">
@@ -85,6 +87,7 @@ const page = () => {
             letterSpacing="-0.02em"
             lineHeight={1.1}
             mb={{ base: 8, md: 10, lg: 12 }}
+            textAlign="center"
           >
             Our Philosophy
           </Heading>
@@ -98,6 +101,7 @@ const page = () => {
             letterSpacing="-0.01em"
             mb={{ base: 6, md: 8 }}
             fontWeight="400"
+            textAlign="center"
           >
             In a world racing toward agentic automation, we slow down and ask:<br />
             Who owns the agent? Who owns the data? Who gets the upside?
@@ -112,13 +116,14 @@ const page = () => {
             letterSpacing="-0.01em"
             mb={{ base: 6, md: 8 }}
             fontWeight="700"
+            textAlign="center"
           >
             Our answer: You do. We believe
           </Text>
 
           {/* Philosophy Points */}
-          <VStack spacing={{ base: 4, md: 5 }} align="start" mb={{ base: 8, md: 10, lg: 12 }}>
-            <Box display="flex" alignItems="flex-start" gap={3}>
+          <VStack spacing={{ base: 4, md: 5 }} align="center" mb={{ base: 8, md: 10, lg: 12 }} w="full">
+            <Box display="flex" alignItems="flex-start" gap={3} justifyContent="center" maxW="800px">
               <Box
                 w="6px"
                 h="6px"
@@ -134,12 +139,13 @@ const page = () => {
                 lineHeight={1.6}
                 letterSpacing="-0.01em"
                 fontWeight="400"
+                textAlign="left"
               >
                 Consent is not a checkbox — it's a contract.
               </Text>
             </Box>
 
-            <Box display="flex" alignItems="flex-start" gap={3}>
+            <Box display="flex" alignItems="flex-start" gap={3} justifyContent="center" maxW="800px">
               <Box
                 w="6px"
                 h="6px"
@@ -155,12 +161,13 @@ const page = () => {
                 lineHeight={1.6}
                 letterSpacing="-0.01em"
                 fontWeight="400"
+                textAlign="left"
               >
                 AI should serve the user — not the system.
               </Text>
             </Box>
 
-            <Box display="flex" alignItems="flex-start" gap={3}>
+            <Box display="flex" alignItems="flex-start" gap={3} justifyContent="center" maxW="800px">
               <Box
                 w="6px"
                 h="6px"
@@ -176,6 +183,7 @@ const page = () => {
                 lineHeight={1.6}
                 letterSpacing="-0.01em"
                 fontWeight="400"
+                textAlign="left"
               >
                 Privacy is a design principle — not a feature.
               </Text>
@@ -190,6 +198,7 @@ const page = () => {
             lineHeight={1.6}
             letterSpacing="-0.01em"
             fontWeight="600"
+            textAlign="center"
           >
             We don't sell user data. We help users create value with it — on their terms.
           </Text>
@@ -304,7 +313,7 @@ const page = () => {
             px={{ base: 6, md: 8 }}
             py={{ base: 4, md: 5 }}
             onClick={() => {
-              router.push("/legal/privacy-policy");
+              router.push("/legal/privacypolicy");
             }}
             fontSize={{ base: "16px", md: "18px" }}
             fontWeight="500"
