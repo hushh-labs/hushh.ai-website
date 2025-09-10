@@ -809,6 +809,7 @@ const SolutionsPage = () => {
                 bg="#0071E3"
                 color="white"
                 borderRadius="full"
+                onClick={() => window.open("/contact-us", "_blank")}
                 px={{ base: 8, md: 10 }}
                 py={{ base: 6, md: 7 }}
                 fontSize={{ base: "16px", md: "18px" }}

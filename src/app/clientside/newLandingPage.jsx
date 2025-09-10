@@ -152,7 +152,7 @@ const NewLandingPage = () => {
               _hover={{ bg: "gray.800" }}
               _active={{ bg: "gray.900" }}
             >
-              Get Early Access
+              Download the App
             </Button>
           </HStack>
         </VStack>

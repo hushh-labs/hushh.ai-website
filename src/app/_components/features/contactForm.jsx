@@ -120,9 +120,9 @@ const ContactForm = () => {
     },
     support: {
       title: "Customer Support",
-      phone: "+1 (888) 462-1726",
+      phone: "+1 (765) 532-4284",
       email: "support@hushh.ai",
-      whatsapp: "+1 (888) 462-1726",
+      whatsapp: "+1 (765) 532-4284",
       hours: "24/7 Support Available"
     }
   };
@@ -313,7 +313,7 @@ const ContactForm = () => {
 
   const openCalendly = () => {
     // Replace with your actual Calendly link
-    window.open('https://calendly.com/hushh-team/consultation', '_blank');
+    window.open('https://calendly.com/hushh/30min', '_blank');
   };
 
   const handleSubmit = async (e) => {

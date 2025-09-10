@@ -330,7 +330,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
         {
           name: "FAQ",
           description: "Frequently asked questions",
-          href: "https://github.com/hushh-labs/consent-protocol/blob/main/docs/faq.md"
+          href: "/frequently-asked-questions"
         },
       ]
     }

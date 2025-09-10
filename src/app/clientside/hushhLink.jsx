@@ -153,76 +153,7 @@ const HushhLink = () => {
               >
  Hushh Link is the cryptographic layer that ensures every action your agent takes is explicitly approved — and easily revocable              </MotionText>
 
-              {/* CTA Buttons */}
-              <MotionBox {...buttonAnimation}>
-                <HStack 
-                  spacing={{ base: 4, md: 6 }}
-                  justify="center"
-                  flexDir={{ base: "column", md: "row" }}
-                  w="full"
-                >
-                  <MotionButton
-                    size="lg"
-                    bg="#0071E3"
-                    color="white"
-                    px={{ base: 8, md: 10 }}
-                    py={{ base: 6, md: 6 }}
-                    borderRadius="60px"
-                    fontSize={{ base: "18px", md: "20px", lg: "32px" }}
-                    fontWeight="500"
-                    fontFamily="Inter, sans-serif"
-                    letterSpacing="-0.02em"
-                    onClick={() => {
-                        router.push("https://github.com/hushh-labs/consent-protocol");
-                      }}
-                    minW={{ base: "250px", md: "300px" }}
-                    h={{ base: "50px", md: "70px" }}
-                    _hover={{
-                      bg: "#0056B3",
-                      transform: "translateY(-2px)",
-                      boxShadow: "0 8px 25px rgba(0, 113, 227, 0.3)"
-                    }}
-                    _active={{
-                      transform: "translateY(0)"
-                    }}
-                    transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    Explore Link API
-                  </MotionButton>
-
-                  {/* <MotionButton
-                    size="lg"
-                    bg="transparent"
-                    color="#0071E3"
-                    px={{ base: 8, md: 12 }}
-                    py={{ base: 6, md: 8 }}
-                    borderRadius="60px"
-                    fontSize={{ base: "18px", md: "20px", lg: "32px" }}
-                    fontWeight="500"
-                    fontFamily="Inter, sans-serif"
-                    letterSpacing="-0.02em"
-                    minW={{ base: "250px", md: "300px" }}
-                    h={{ base: "50px", md: "70px" }}
-                    border="3px solid #0071E3"
-                    _hover={{
-                      bg: "#0071E3",
-                      color: "white",
-                      transform: "translateY(-2px)",
-                      boxShadow: "0 8px 25px rgba(0, 113, 227, 0.3)"
-                    }}
-                    _active={{
-                      transform: "translateY(0)"
-                    }}
-                    transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    View Consent Logs
-                  </MotionButton> */}
-                </HStack>
-              </MotionBox>
+             
 
               {/* Additional info text */}
               <MotionText
