@@ -143,7 +143,7 @@ const LoginPageContent = () => {
     return (
       <Box
         minH="100vh"
-        bg="radial-gradient(ellipse at top, #0f0f23 0%, #000000 100%)"
+        bg="#ffffff"
         display="flex"
         alignItems="center"
         justifyContent="center"
@@ -176,7 +176,7 @@ const LoginPageContent = () => {
               animation={`${pulse} 2s ease-in-out infinite`}
             />
           </Box>
-          <Text color="white" fontSize="lg" fontWeight={500}>
+          <Text color="#1d1d1f" fontSize="lg" fontWeight={500}>
             Loading your experience...
           </Text>
         </VStack>
@@ -189,14 +189,14 @@ const LoginPageContent = () => {
     return (
       <Box
         minH="100vh"
-        bg="radial-gradient(ellipse at top, #0f0f23 0%, #000000 100%)"
+        bg="#ffffff"
         display="flex"
         alignItems="center"
         justifyContent="center"
       >
         <VStack spacing={4}>
           <Box fontSize="3xl">🚀</Box>
-          <Text color="white" fontSize="lg" fontWeight={500}>
+          <Text color="#1d1d1f" fontSize="lg" fontWeight={500}>
             Redirecting...
           </Text>
         </VStack>
@@ -211,93 +211,10 @@ const LoginPageContent = () => {
         position="relative"
         overflow="hidden"
         sx={{
-          background: "radial-gradient(ellipse at top, #0f0f23 0%, #000000 100%)",
+          background: "#ffffff",
         }}
       >
-      {/* Interactive Background Elements */}
-      <Box position="absolute" top="0" left="0" w="100%" h="100%" zIndex={0}>
-        {/* Main Animated Gradient Orbs */}
-        <Box
-          position="absolute"
-          top="15%"
-          left="10%"
-          w="500px"
-          h="500px"
-          sx={{
-            background: "radial-gradient(circle, rgba(0, 113, 227, 0.12) 0%, transparent 70%)",
-            backgroundSize: "200% 200%",
-          }}
-          borderRadius="50%"
-          filter="blur(80px)"
-          animation={`${float} 20s ease-in-out infinite, ${gradientShift} 8s ease infinite`}
-        />
-        <Box
-          position="absolute"
-          top="50%"
-          right="5%"
-          w="400px"
-          h="400px"
-          sx={{
-            background: "radial-gradient(circle, rgba(187, 98, 252, 0.12) 0%, transparent 70%)",
-            backgroundSize: "200% 200%",
-          }}
-          borderRadius="50%"
-          filter="blur(80px)"
-          animation={`${float} 25s ease-in-out infinite reverse, ${gradientShift} 12s ease infinite`}
-        />
-        <Box
-          position="absolute"
-          bottom="20%"
-          left="50%"
-          w="350px"
-          h="350px"
-          sx={{
-            background: "radial-gradient(circle, rgba(243, 69, 86, 0.1) 0%, transparent 70%)",
-            backgroundSize: "200% 200%",
-          }}
-          borderRadius="50%"
-          filter="blur(60px)"
-          animation={`${float} 30s ease-in-out infinite, ${gradientShift} 15s ease infinite`}
-        />
-
-        {/* Floating Particles with Mouse Interaction */}
-        {[...Array(20)].map((_, i) => (
-          <Box
-            key={i}
-            position="absolute"
-            w="4px"
-            h="4px"
-            sx={{
-              background: `linear-gradient(45deg, #0071E3, #BB62FC, #F34556, #F44F22)`,
-              backgroundSize: "400% 400%",
-            }}
-            borderRadius="50%"
-            top={`${Math.random() * 100}%`}
-            left={`${Math.random() * 100}%`}
-            animation={`${float} ${15 + Math.random() * 10}s ease-in-out infinite, ${gradientShift} ${5 + Math.random() * 5}s ease infinite`}
-            opacity="0.7"
-            transform={mounted ? `translate(${(mousePosition.x - windowSize.width / 2) * 0.01}px, ${(mousePosition.y - windowSize.height / 2) * 0.01}px)` : 'translate(0px, 0px)'}
-            transition="transform 0.3s ease"
-          />
-        ))}
-
-        {/* Grid Pattern Overlay */}
-        <Box
-          position="absolute"
-          top="0"
-          left="0"
-          w="100%"
-          h="100%"
-          opacity="0.03"
-          sx={{
-            backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: "50px 50px",
-          }}
-        />
-      </Box>
+      {/* Minimal background for light theme intentionally left clean */}
 
       {/* Main Content Layout */}
       <Grid
@@ -322,21 +239,15 @@ const LoginPageContent = () => {
             cursor="pointer"
             onClick={() => router.push('/')}
             _hover={{ 
-              opacity: 0.8, 
-              transform: "translateX(-4px)",
-              color: "#0071E3"
+              color: "#000000"
             }}
             transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
             mb={10}
             alignSelf={{ base: "center", lg: "flex-start" }}
-            p={3}
-            borderRadius="lg"
-            bg="rgba(255, 255, 255, 0.05)"
-            backdropFilter="blur(20px)"
-            border="1px solid rgba(255, 255, 255, 0.1)"
+            p={0}
           >
-            <ArrowBackIcon color="rgba(255, 255, 255, 0.8)" />
-            <Text color="rgba(255, 255, 255, 0.8)" fontSize="sm" fontWeight={500}>
+            <ArrowBackIcon color="#6e6e73" />
+            <Text color="#6e6e73" fontSize="sm" fontWeight={500}>
               Back to Home
             </Text>
           </HStack>
@@ -351,34 +262,12 @@ const LoginPageContent = () => {
             {/* Enhanced Brand Section */}
             <VStack spacing={8} align={{ base: "center", lg: "flex-start" }}>
               <HStack spacing={6} align="center">
-                <Box position="relative">
-                  {/* Animated Glow Ring */}
-                  <Box
-                    position="absolute"
-                    top="50%"
-                    left="50%"
-                    transform="translate(-50%, -50%)"
-                    w="120px"
-                    h="120px"
-                    sx={{
-                      background: "conic-gradient(from 0deg, #0071E3, #BB62FC, #F34556, #F44F22, #0071E3)",
-                    }}
-                    borderRadius="50%"
-                    filter="blur(20px)"
-                    animation={`${rotate} 8s linear infinite, ${pulse} 4s ease-in-out infinite`}
-                    opacity="0.6"
-                  />
-                  <Image
-                    src="/svgs/hushhEmoji.svg"
-                    alt="Hushh Logo"
-                    w="100px"
-                    h="100px"
-                    position="relative"
-                    zIndex={1}
-                    transition="transform 0.3s ease"
-                    _hover={{ transform: "scale(1.05)" }}
-                  />
-                </Box>
+                <Image
+                  src="/svgs/hushhEmoji.svg"
+                  alt="Hushh Logo"
+                  w="64px"
+                  h="64px"
+                />
                 
                 {/* <VStack spacing={2} align={{ base: "center", lg: "flex-start" }}>
                   <Text
@@ -416,29 +305,15 @@ const LoginPageContent = () => {
                   fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
                   fontWeight={800}
                   lineHeight="1.1"
-                  color="white"
+                  color="#1d1d1f"
                   letterSpacing="-0.02em"
                 >
-                  Welcome to the Future of{" "}
-                  <Text
-                    as="span"
-                    sx={{
-                      background: "linear-gradient(90deg, #BB62FC 0%, #F34556 100%)",
-                      backgroundSize: "200% 200%",
-                      webkitBackgroundClip: "text",
-                      backgroundClip: "text",
-                      webkitTextFillColor: "transparent",
-                      color: "transparent",
-                    }}
-                    animation={`${gradientShift} 4s ease infinite`}
-                  >
-                    Data Sovereignty
-                  </Text>
+                  Welcome to the Future of Data Sovereignty
                 </Text>
                 
                 <Text
                   fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
-                  color="rgba(255, 255, 255, 0.85)"
+                  color="#6e6e73"
                   lineHeight="1.6"
                   fontWeight={400}
                 >
@@ -459,77 +334,47 @@ const LoginPageContent = () => {
                   icon: "🛡️", 
                   title: "Privacy First", 
                   desc: "End-to-end encrypted vault",
-                  gradient: "linear-gradient(135deg, #0071E3 0%, #00A3FF 100%)"
                 },
                 { 
                   icon: "🤖", 
                   title: "AI Powered", 
                   desc: "Intelligent automation",
-                  gradient: "linear-gradient(135deg, #BB62FC 0%, #D478FF 100%)"
                 },
                 { 
                   icon: "💰", 
                   title: "Monetize Data", 
                   desc: "Earn from your information",
-                  gradient: "linear-gradient(135deg, #F34556 0%, #FF6B7D 100%)"
                 },
                 { 
                   icon: "⚡", 
                   title: "Lightning Fast", 
                   desc: "Instant insights & actions",
-                  gradient: "linear-gradient(135deg, #F44F22 0%, #FF7A4A 100%)"
                 },
               ].map((feature, i) => (
                 <Box
                   key={i}
                   p={5}
                   borderRadius="2xl"
-                  bg="rgba(255, 255, 255, 0.05)"
-                  border="1px solid rgba(255, 255, 255, 0.1)"
-                  backdropFilter="blur(30px)"
+                  bg="#ffffff"
+                  border="1px solid #e5e5ea"
                   position="relative"
                   overflow="hidden"
                   _hover={{
-                    bg: "rgba(255, 255, 255, 0.08)",
-                    transform: "translateY(-4px) scale(1.02)",
-                    borderColor: "rgba(255, 255, 255, 0.2)",
+                    bg: "#f5f5f7",
+                    borderColor: "#d2d2d7",
                   }}
                   transition="all 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
                   animation={`${slideInUp} ${0.8 + i * 0.1}s ease-out`}
                   cursor="pointer"
                 >
-                  {/* Shimmer Effect */}
-                  <Box
-                    position="absolute"
-                    top="0"
-                    left="-100%"
-                    w="100%"
-                    h="100%"
-                    sx={{
-                      background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)",
-                    }}
-                    animation={`${shimmer} 3s ease infinite`}
-                    animationDelay={`${i * 0.5}s`}
-                  />
-                  
                   <VStack spacing={3} align="start" position="relative" zIndex={1}>
                     <HStack spacing={3}>
-                      <Box
-                        fontSize="2xl"
-                        p={2}
-                        borderRadius="lg"
-                        sx={{ background: feature.gradient }}
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                      >
-                        {feature.icon}
-                      </Box>
+                      <Box fontSize="xl">{feature.icon}</Box>
                       <VStack align="start" spacing={1}>
-                        <Text fontSize="md" fontWeight={700} color="white">
+                        <Text fontSize="md" fontWeight={700} color="#1d1d1f">
                           {feature.title}
                         </Text>
-                        <Text fontSize="sm" color="rgba(255, 255, 255, 0.7)">
+                        <Text fontSize="sm" color="#6e6e73">
                           {feature.desc}
                         </Text>
                       </VStack>
@@ -541,7 +386,7 @@ const LoginPageContent = () => {
           </VStack>
         </Flex>
 
-        {/* Right Side - Advanced Login Form */}
+        {/* Right Side - Login Form */}
         <Flex
           direction="column"
           justify="center"
@@ -550,17 +395,7 @@ const LoginPageContent = () => {
           py={{ base: 12, lg: 0 }}
           position="relative"
         >
-          {/* Glassmorphism Background */}
-          <Box
-            position="absolute"
-            top="0"
-            left="0"
-            w="100%"
-            h="100%"
-            bg="rgba(0, 0, 0, 0.2)"
-            backdropFilter="blur(30px)"
-            borderLeft={{ base: "none", lg: "1px solid rgba(255, 255, 255, 0.1)" }}
-          />
+          {/* No overlay needed in light theme */}
 
           <VStack
             spacing={10}
@@ -570,55 +405,32 @@ const LoginPageContent = () => {
             position="relative"
             zIndex={1}
           >
-            {/* Premium Login Card */}
+            {/* Login Card */}
             <Box
               w="full"
               p={10}
               borderRadius="3xl"
-              bg="rgba(255, 255, 255, 0.08)"
-              border="2px solid rgba(255, 255, 255, 0.15)"
-              backdropFilter="blur(40px)"
-              boxShadow="0 40px 80px rgba(0, 0, 0, 0.4)"
+              bg="#ffffff"
+              border="1px solid #e5e5ea"
+              boxShadow="0 8px 24px rgba(0, 0, 0, 0.06)"
               position="relative"
               overflow="hidden"
             >
-              {/* Animated Border Glow */}
-              <Box
-                position="absolute"
-                top="-2px"
-                left="-2px"
-                right="-2px"
-                bottom="-2px"
-                borderRadius="3xl"
-                sx={{
-                  background: "conic-gradient(from 0deg, #0071E3, #BB62FC, #F34556, #F44F22, #0071E3)",
-                  backgroundSize: "400% 400%",
-                }}
-                animation={`${rotate} 8s linear infinite, ${gradientShift} 6s ease infinite`}
-                opacity="0.6"
-                zIndex={-1}
-              />
+              {/* Minimal borders, no animated glow in light theme */}
 
               <VStack spacing={8} position="relative" zIndex={1}>
                 <VStack spacing={4} textAlign="center">
                   <Text
                     fontSize="3xl"
                     fontWeight={800}
-                    color="white"
+                    color="#1d1d1f"
                     letterSpacing="-0.02em"
-                    sx={{
-                      background: "linear-gradient(135deg, #ffffff 0%, #e5e5e5 100%)",
-                      webkitBackgroundClip: "text",
-                      backgroundClip: "text",
-                      webkitTextFillColor: "transparent",
-                      color: "transparent",
-                    }}
                   >
                     Sign In to Continue
                   </Text>
                   <Text
                     fontSize="md"
-                    color="rgba(255, 255, 255, 0.75)"
+                    color="#6e6e73"
                     lineHeight="1.6"
                     maxW="300px"
                   >
@@ -626,47 +438,30 @@ const LoginPageContent = () => {
                   </Text>
                 </VStack>
 
-                {/* Premium Google Sign In Button */}
+                {/* Google Sign In Button */}
                 <Button
                   onClick={handleGoogleSignIn}
                   isLoading={isSigningIn}
                   loadingText="Signing in..."
                   w="full"
                   h="64px"
-                  bg="white"
-                  color="#1a1a1a"
+                  bg="#ffffff"
+                  color="#1d1d1f"
                   borderRadius="2xl"
                   fontSize="lg"
                   fontWeight={700}
-                  border="2px solid transparent"
+                  border="1px solid #d2d2d7"
                   position="relative"
                   overflow="hidden"
-                  boxShadow="0 10px 30px rgba(255, 255, 255, 0.1)"
+                  boxShadow="none"
                   _hover={{
-                    transform: "translateY(-3px)",
-                    boxShadow: "0 15px 40px rgba(255, 255, 255, 0.2)",
-                    bg: "#f8f9fa",
-                    _before: {
-                      opacity: 1,
-                    },
+                    bg: "#f5f5f7",
+                    borderColor: "#1d1d1f",
                   }}
                   _active={{
-                    transform: "translateY(-1px)",
+                    bg: "#f0f0f3",
                   }}
-                  _before={{
-                    content: '""',
-                    position: "absolute",
-                    top: "-2px",
-                    left: "-2px",
-                    right: "-2px",
-                    bottom: "-2px",
-                    background: "linear-gradient(45deg, #0071E3, #BB62FC, #F34556, #F44F22)",
-                    borderRadius: "2xl",
-                    opacity: 0,
-                    transition: "opacity 0.3s ease",
-                    zIndex: -1,
-                  }}
-                  transition="all 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
+                  transition="all 0.2s ease"
                   leftIcon={
                     !isSigningIn && (
                       <Box w="24px" h="24px">
@@ -698,14 +493,14 @@ const LoginPageContent = () => {
                   Continue with Google
                 </Button>
 
-                {/* Premium Apple Sign In Button */}
+                {/* Apple Sign In Button */}
                 <AppleSignInButton 
                   isDisabled={isSigningIn}
                   onSuccess={(data) => {
                     console.log('Apple Sign-In Success:', data);
                     toast({
-                      title: "🍎 Apple Sign-In Successful!",
-                      description: "Welcome to Hushh! Redirecting you now...",
+                      title: "Apple Sign-In Successful",
+                      description: "Welcome to Hushh. Redirecting...",
                       status: "success",
                       duration: 3000,
                       isClosable: true,
@@ -715,7 +510,7 @@ const LoginPageContent = () => {
                   onError={(error) => {
                     console.error('Apple Sign-In Error:', error);
                     toast({
-                      title: "Apple Sign-In Failed",
+                      title: "Apple Sign-In failed",
                       description: error.message || "Failed to sign in with Apple. Please try again.",
                       status: "error",
                       duration: 5000,
@@ -773,17 +568,16 @@ const LoginPageContent = () => {
               </VStack>
             </Box>
 
-            {/* Legal Notice with Enhanced Styling */}
+            {/* Legal Notice */}
             <Box
               p={6}
               borderRadius="xl"
-              bg="rgba(255, 255, 255, 0.03)"
-              border="1px solid rgba(255, 255, 255, 0.08)"
-              backdropFilter="blur(20px)"
+              bg="#f5f5f7"
+              border="1px solid #e5e5ea"
             >
               <Text
                 fontSize="sm"
-                color="rgba(255, 255, 255, 0.6)"
+                color="#6e6e73"
                 textAlign="center"
                 lineHeight="1.6"
               >
@@ -791,14 +585,11 @@ const LoginPageContent = () => {
                 <Link href="/legal/termsofuse">
                   <Text
                     as="span"
-                    color="#0071E3"
+                    color="#06c"
                     textDecoration="underline"
                     fontWeight={600}
-                    _hover={{ 
-                      color: "#BB62FC",
-                      textShadow: "0 0 8px rgba(0, 113, 227, 0.4)"
-                    }}
-                    transition="all 0.3s ease"
+                    _hover={{ color: "#0040aa" }}
+                    transition="color 0.2s ease"
                   >
                     Terms of Service
                   </Text>
@@ -807,14 +598,11 @@ const LoginPageContent = () => {
                 <Link href="/legal/privacypolicy">
                   <Text
                     as="span"
-                    color="#0071E3"
+                    color="#06c"
                     textDecoration="underline"
                     fontWeight={600}
-                    _hover={{ 
-                      color: "#BB62FC",
-                      textShadow: "0 0 8px rgba(0, 113, 227, 0.4)"
-                    }}
-                    transition="all 0.3s ease"
+                    _hover={{ color: "#0040aa" }}
+                    transition="color 0.2s ease"
                   >
                     Privacy Policy
                   </Text>
@@ -833,18 +621,10 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <Box
-          minH="100vh"
-          bg="radial-gradient(ellipse at top, #0f0f23 0%, #000000 100%)"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
+        <Box minH="100vh" bg="#ffffff" display="flex" alignItems="center" justifyContent="center">
           <VStack spacing={6}>
-            <Spinner size="xl" color="white" />
-            <Text color="white" fontSize="lg" fontWeight={500}>
-              Loading...
-            </Text>
+            <Spinner size="xl" color="#1d1d1f" />
+            <Text color="#1d1d1f" fontSize="lg" fontWeight={500}>Loading...</Text>
           </VStack>
         </Box>
       }
