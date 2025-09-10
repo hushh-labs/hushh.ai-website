@@ -22,7 +22,7 @@ import HeaderBG from "../_components/svg/hushhCommunity/headerBG.svg";
 const HushhCommunity = () => {
   return (
     <>
-      <Box>
+      <Box bg="#ffffff">
         <Image
           src={HeaderBG}
           style={{ position: "absolute", zIndex: "-1" }}
@@ -31,26 +31,52 @@ const HushhCommunity = () => {
         />
         <Stack display={"flex"} flexDirection={"column"}>
           <Box
-            mt={{ md: "8rem", base: "4rem" }}
+            mt={{ md: "0rem", base: "4rem" }}
             p={{ base: 6, md: 12 }}
             display={"flex"}
             flexDirection={"column"}
             alignItems={"flex-start"}
             textAlign={"left"}
+            position={"relative"}
+            bg="#f5f5f7"
+            overflow="hidden"
           >
+            {/* Subtle pattern overlay */}
+            <Box
+              position="absolute"
+              top={0}
+              left={0}
+              right={0}
+              bottom={0}
+              opacity={0.02}
+              backgroundImage="radial-gradient(circle at 25% 25%, #000 1px, transparent 1px)"
+              backgroundSize="60px 60px"
+              pointerEvents="none"
+            />
+            {/* Gradient label */}
             <Text
-              className="hushh-gradient"
+              fontSize={{ base: "1rem", md: "1.25rem" }}
+              fontWeight={"700"}
+              bgGradient="linear(90deg, hsla(210, 100%, 45%, 1) 0%, hsla(275, 96%, 69%, 1) 25%, hsla(354, 88%, 61%, 1) 50%, hsla(13, 91%, 55%, 1) 100%)"
+              bgClip="text"
+              letterSpacing={"-0.02em"}
+              mb={{ base: 2, md: 3 }}
+            >
+              Hushh Community
+            </Text>
+            <Text
               fontWeight={"700"}
               fontSize={{ md: "4.635rem", base: "2rem" }}
               lineHeight={{ md: "90px", base: "40px" }}
+              color="#1d1d1f"
             >
               Revolutionizing Luxury Sales:
             </Text>
             <Text
-              className="gradient"
               fontWeight={"700"}
               fontSize={{ md: "4.635rem", base: "2rem" }}
               lineHeight={{ md: "90px", base: "40px" }}
+              color="#1d1d1f"
             >
               Empowering Agents, Delighting Customers
             </Text>
@@ -90,7 +116,7 @@ const HushhCommunity = () => {
           >
             <Text
               fontWeight={"600"}
-              className="new-gradient"
+              color="#06c"
               fontSize={{ md: "1rem", base: "0.75rem" }}
               letterSpacing={"0.255rem"}
               lineHeight={"16px"}
@@ -99,15 +125,15 @@ const HushhCommunity = () => {
             </Text>
             <Text
               fontWeight={"500"}
-              className="gradient"
               fontSize={{ md: "3.75rem", base: "1.825rem" }}
               lineHeight={{ md: "63.3px", base: "38px" }}
+              color="#1d1d1f"
             >
               A Disconnected Luxury Experience
             </Text>
             <Text
               fontWeight={"500"}
-              color={"#ABABAB"}
+              color={"#6e6e73"}
               fontSize={{ md: "1rem", base: "0.65rem" }}
               lineHeight={{ md: "36px", base: "25px" }}
             >
@@ -135,7 +161,7 @@ const HushhCommunity = () => {
         >
           <Text
             mr={{ md: "50%", base: "" }}
-            className="new-gradient"
+            color="#06c"
             fontWeight={"600"}
             fontSize={{ md: "1rem", base: "0.5rem" }}
             lineHeight={"16px"}
@@ -145,16 +171,16 @@ const HushhCommunity = () => {
           </Text>
           <Text
             mr={{ md: "50%", base: "" }}
-            className="gradient"
             fontWeight={"500"}
             fontSize={{ md: "3.75rem", base: "1.8rem" }}
             lineHeight={{ md: "63.3px", base: "35px" }}
+            color="#1d1d1f"
           >
             Transforming the Luxury Retail Landscape
           </Text>
           <Text
             mr={{ md: "50%", base: "" }}
-            color={"#ABABAB"}
+            color={"#6e6e73"}
             fontWeight={"500"}
             fontSize={{ md: "1rem", base: "0.75rem" }}
             lineHeight={{ md: "36px", base: "25px" }}
@@ -183,16 +209,16 @@ const HushhCommunity = () => {
                 alignItems={"flex-start"}
                 flexDirection={"row"}
               >
-                <Image
+                {/* <Image
                   style={{ flex: "0.1" }}
                   src={CustomerInsightsImg}
                   alt="Instant Customer Insights"
                   title="Instant Customer Insights"
-                />
+                /> */}
                 <VStack flex={0.9} textAlign={"left"} alignItems={"flex-start"}>
                   <Text
                     fontWeight={"600"}
-                    color={"#E4E4E4"}
+                    color={"#1d1d1f"}
                     fontSize={{ md: "1.25rem", base: "0.75rem" }}
                     lineHeight={"32px"}
                     letterSpacing={"0.1rem"}
@@ -200,7 +226,7 @@ const HushhCommunity = () => {
                     INSTANT CUSTOMER INSIGHTS
                   </Text>
                   <Text
-                    color={"#ABABAB"}
+                    color={"#6e6e73"}
                     fontWeight={"500"}
                     fontSize={{ md: "1rem", base: "0.625rem" }}
                     lineHeight={{ md: "36px", base: "24px" }}
@@ -218,16 +244,16 @@ const HushhCommunity = () => {
                 alignItems={"flex-start"}
                 flexDirection={"row"}
               >
-                <Image
+                {/* <Image
                   style={{ flex: "0.1" }}
                   src={CommunicationImg}
                   alt="Instant Customer Insights"
                   title="Instant Customer Insights"
-                />
+                /> */}
                 <VStack flex={0.9} textAlign={"left"} alignItems={"flex-start"}>
                   <Text
                     fontWeight={"600"}
-                    color={"#E4E4E4"}
+                    color={"#1d1d1f"}
                     fontSize={{ md: "1.25rem", base: "0.75rem" }}
                     lineHeight={"32px"}
                     letterSpacing={"0.1rem"}
@@ -235,7 +261,7 @@ const HushhCommunity = () => {
                     PERSONALIZED COMMUNICATOIN
                   </Text>
                   <Text
-                    color={"#ABABAB"}
+                    color={"#6e6e73"}
                     fontWeight={"500"}
                     fontSize={{ md: "1rem", base: "0.625rem" }}
                     lineHeight={{ md: "36px", base: "24px" }}
@@ -253,16 +279,16 @@ const HushhCommunity = () => {
                 alignItems={"flex-start"}
                 flexDirection={"row"}
               >
-                <Image
+                {/* <Image
                   style={{ flex: "0.1" }}
                   src={ValueCustomer}
                   alt="Instant Customer Insights"
                   title="Instant Customer Insights"
-                />
+                /> */}
                 <VStack flex={0.9} textAlign={"left"} alignItems={"flex-start"}>
                   <Text
                     fontWeight={"600"}
-                    color={"#E4E4E4"}
+                    color={"#1d1d1f"}
                     fontSize={{ md: "1.25rem", base: "0.75rem" }}
                     lineHeight={"32px"}
                     letterSpacing={"0.1rem"}
@@ -270,7 +296,7 @@ const HushhCommunity = () => {
                     FOCUS ON HIGH-VALUE CUSTOMERS
                   </Text>
                   <Text
-                    color={"#ABABAB"}
+                    color={"#6e6e73"}
                     fontWeight={"500"}
                     fontSize={{ md: "1rem", base: "0.625rem" }}
                     lineHeight={{ md: "36px", base: "24px" }}
@@ -288,16 +314,16 @@ const HushhCommunity = () => {
                 alignItems={"flex-start"}
                 flexDirection={"row"}
               >
-                <Image
+                {/* <Image
                   style={{ flex: "0.1" }}
                   src={EthicalData}
                   alt="hushh Ethical Data Collection"
                   title="hushh Ethical Data Collection"
-                />
+                /> */}
                 <VStack flex={0.9} textAlign={"left"} alignItems={"flex-start"}>
                   <Text
                     fontWeight={"600"}
-                    color={"#E4E4E4"}
+                    color={"#1d1d1f"}
                     fontSize={{ md: "1.25rem", base: "0.75rem" }}
                     lineHeight={"32px"}
                     letterSpacing={"0.1rem"}
@@ -305,7 +331,7 @@ const HushhCommunity = () => {
                     ETHICAL DATA COLLECTION
                   </Text>
                   <Text
-                    color={"#ABABAB"}
+                    color={"#6e6e73"}
                     fontWeight={"500"}
                     fontSize={{ md: "1rem", base: "0.625rem" }}
                     lineHeight={{ md: "36px", base: "24px" }}
@@ -329,17 +355,7 @@ const HushhCommunity = () => {
                 alt="Hushh Logo"
               />
             </Box>
-            <Image
-              src={Ellipse}
-              alt="Ellipse"
-              style={{
-                position: "absolute",
-                minWidth: "100%",
-                opacity: "92%",
-                zIndex: "3",
-              }}
-              title="Ellipse"
-            />
+            {/* Removed dark ellipse overlay for light theme */}
           </HStack>
         </VStack>
 
@@ -351,17 +367,17 @@ const HushhCommunity = () => {
           alignItems={"center"}
         >
           <Text
-            className="gradient"
             fontWeight={"400"}
             fontSize={{ md: "3.75rem", base: "1.9rem" }}
             lineHeight={{ md: "75px", base: "40px" }}
             as={"h1"}
+            color="#1d1d1f"
           >
             Join the <br /> Hushh Movement
           </Text>
           <Text
             mx={{ md: "9rem", base: "1.25rem" }}
-            color={"#FFFFFF"}
+            color={"#6e6e73"}
             lineHeight={{ md: "31.5px", base: "28px" }}
             fontSize={{ md: "1.15rem", base: "0.75rem" }}
             fontWeight={"400"}
@@ -386,7 +402,7 @@ const HushhCommunity = () => {
                 title="Hushh Community Discord Channel"
               />
               <Text
-                color={"#E4E4E4"}
+                color={"#1d1d1f"}
                 fontWeight={"600"}
                 fontSize={{ md: "1.25rem", base: "0.85rem" }}
               >
@@ -396,11 +412,13 @@ const HushhCommunity = () => {
                 onClick={() =>
                   window.open("https://discord.gg/8Xyf84kdF9", "_blank")
                 }
-                bg={"linear-gradient(265.3deg, #e54d60 8.81%, #a342ff 94.26%)"}
-                color={"white"}
+                bg="#ffffff"
+                color="#0071E3"
+                border="2px solid #0071E3"
+                borderRadius="60px"
                 fontWeight={"500"}
                 fontSize={{ md: "1rem", base: "0.65rem" }}
-                _hover={{color:'black',bg:'white'}}
+                _hover={{ bg: "#0071E3", color: "white" }}
               >
                 Join Now
               </Button>
@@ -412,7 +430,7 @@ const HushhCommunity = () => {
                 title="Hushh Community WhatsApp Channel"
               />
               <Text
-                color={"#E4E4E4"}
+                color={"#1d1d1f"}
                 fontWeight={"600"}
                 fontSize={{ md: "1.25rem", base: "0.85rem" }}
               >
@@ -425,11 +443,13 @@ const HushhCommunity = () => {
                     "_blank"
                   )
                 }
-                bg={"linear-gradient(265.3deg, #e54d60 8.81%, #a342ff 94.26%)"}
-                color={"white"}
+                bg="#ffffff"
+                color="#0071E3"
+                border="2px solid #0071E3"
+                borderRadius="60px"
                 fontWeight={"500"}
                 fontSize={{ md: "1rem", base: "0.65rem" }}
-                _hover={{color:'black',bg:'white'}}
+                _hover={{ bg: "#0071E3", color: "white" }}
               >
                 Join Now
               </Button>
@@ -441,7 +461,7 @@ const HushhCommunity = () => {
                 title="Hushh Community LinkedIn Channel"
               />
               <Text
-                color={"#E4E4E4"}
+                color={"#1d1d1f"}
                 fontWeight={"600"}
                 fontSize={{ md: "1.25rem", base: "0.85rem" }}
               >
@@ -454,11 +474,13 @@ const HushhCommunity = () => {
                     "_blank"
                   )
                 }
-                bg={"linear-gradient(265.3deg, #e54d60 8.81%, #a342ff 94.26%)"}
-                color={"white"}
+                bg="#ffffff"
+                color="#0071E3"
+                border="2px solid #0071E3"
+                borderRadius="60px"
                 fontWeight={"500"}
                 fontSize={{ md: "1rem", base: "0.65rem" }}
-                _hover={{color:'black',bg:'white'}}
+                _hover={{ bg: "#0071E3", color: "white" }}
               >
                 Join Now
               </Button>
