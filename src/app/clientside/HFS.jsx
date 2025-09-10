@@ -61,6 +61,7 @@ const ClientHFS = () => {
         minW={"100%"}
         display={"flex"}
         flexDirection={"column"}
+        bg="#ffffff"
       >
         <Box
           alignItems={"center"}
@@ -69,26 +70,56 @@ const ClientHFS = () => {
           flexDirection={"column"}
           mt={{ base: "3rem" }}
           gap={{ base: "1rem" }}
+          position={"relative"}
+          bg={"#f5f5f7"}
+          pt={{ md: "8rem", base: "6rem" }}
+          pb={{ md: "4rem", base: "3rem" }}
+          overflow={"hidden"}
         >
+          {/* Subtle pattern overlay */}
+          <Box
+            position="absolute"
+            top="0"
+            left="0"
+            right="0"
+            bottom="0"
+            opacity="0.02"
+            backgroundImage="radial-gradient(circle at 25% 25%, #000 1px, transparent 1px)"
+            backgroundSize="60px 60px"
+            pointerEvents="none"
+          />
+          {/* Gradient label */}
+          <Text
+            fontSize={{ base: "18px", md: "24px" }}
+            fontWeight="bold"
+            bgGradient="linear(90deg, hsla(210, 100%, 45%, 1) 0%, hsla(275, 96%, 69%, 1) 25%, hsla(354, 88%, 61%, 1) 50%, hsla(13, 91%, 55%, 1) 100%)"
+            bgClip="text"
+            letterSpacing="-0.02em"
+            fontFamily="Inter, sans-serif"
+            mb={{ base: 2, md: 3 }}
+            zIndex={1}
+          >
+            Hushh For Students
+          </Text>
           <Heading
             fontWeight={"700"}
             lineHeight={{ md: "255.6px", base: "60px" }}
             textAlign={"center"}
             fontSize={{ md: "8.8rem", base: "2.5rem" }}
-            pt={{ md: "8rem", base: "3rem" }}
-            className="gradient"
+            color="#1d1d1f"
             px={{ base: "0.5rem" }}
             mb={{ base: "0.5rem" }}
             as={"h1"}
+            zIndex={1}
           >
             Hushh For Students
           </Heading>
           <Heading
-            className="color-gradient"
             fontWeight={"700"}
             fontSize={{ md: "2rem", base: "1rem" }}
             lineHeight={{ md: "57.6px", base: "28.3px" }}
             textAlign={"center"}
+            color="#1d1d1f"
             as={"h2"}
           >
             Empowering and rewarding digital engagement
@@ -97,24 +128,23 @@ const ClientHFS = () => {
             px={{ md: "17.8rem" }}
             mb={{ base: "1rem", md: "4rem" }}
             textAlign={"center"}
-            color={"#656565"}
+            color={"#6e6e73"}
           >
             Hushh for students: Revolutionizing data exchange by empowering
             students and providing businesses with valuable insights, balancing
             rewards and privacy
           </Text>
           <Button
-            border={"1px solid #606060"}
-            borderRadius={"2px"}
+            border={"1px solid #d2d2d7"}
+            borderRadius={"8px"}
             w={{ md: "16rem", base: "10rem" }}
-            color={extendedTheme.colors._white}
+            color={"#1d1d1f"}
             lineHeight={{ md: "28px", base: "14px" }}
-            background={"transparent"}
-            letterSpacing={{ md: "0.5rem", base: "0.25rem" }}
+            background={"#ffffff"}
+            letterSpacing={{ md: "0.2rem", base: "0.1rem" }}
             _hover={{
-              background:
-                "linear-gradient(265.3deg, #E54D60 8.81%, #A342FF 94.26%)",
-              border: "none",
+              background: "#f5f5f7",
+              border: "1px solid #1d1d1f",
             }}
             onClick={learnMoreScroll}
           >
@@ -132,18 +162,17 @@ const ClientHFS = () => {
         >
           <Button
             display={{ md: "flex", base: "none" }}
-            border={"1px solid #606060"}
-            borderRadius={"4rem"}
+            border={"1px solid #d2d2d7"}
+            borderRadius={"9999px"}
             w={"13rem"}
-            color={extendedTheme.colors._white}
+            color={"#1d1d1f"}
             lineHeight={"28px"}
-            background={"transparent"}
+            background={"#ffffff"}
             letterSpacing={"0.2rem"}
             onClick={() => router.push("https://shorturl.at/ceFOR")}
             _hover={{
-              background:
-                "linear-gradient(265.3deg, #E54D60 8.81%, #A342FF 94.26%)",
-              border: "none",
+              background: "#f5f5f7",
+              border: "1px solid #1d1d1f",
             }}
             padding={"15px 68px 15px 68px"}
           >
@@ -158,18 +187,17 @@ const ClientHFS = () => {
           <Button
             ml={{ md: "55rem" }}
             display={"flex"}
-            border={"1px solid #606060"}
-            borderRadius={"4rem"}
+            border={"1px solid #d2d2d7"}
+            borderRadius={"9999px"}
             onClick={() => router.push("https://shorturl.at/ceFOR")}
             w={"12rem"}
-            color={extendedTheme.colors._white}
+            color={"#1d1d1f"}
             lineHeight={"32.4px"}
-            background={"transparent"}
+            background={"#ffffff"}
             letterSpacing={"0.29rem"}
             _hover={{
-              background:
-                "linear-gradient(265.3deg, #E54D60 8.81%, #A342FF 94.26%)",
-              border: "none",
+              background: "#f5f5f7",
+              border: "1px solid #1d1d1f",
             }}
             padding={"15px 68px 15px 68px"}
           >
@@ -186,10 +214,10 @@ const ClientHFS = () => {
           gap={{ md: "2rem", base: "1rem" }}
         >
           <Text
-            className="gradient"
             fontSize={{ md: "3.75rem", base: "1.5rem" }}
             display={{ md: "flex", base: "none" }}
             fontWeight={400}
+            color="#1d1d1f"
           >
             Here's how{" "}
             <Text style={{ fontWeight: 700, margin: "0 1rem" }}>
@@ -198,15 +226,15 @@ const ClientHFS = () => {
             your experience
           </Text>
           <Text
-            className="gradient"
             fontSize={{ md: "3.75rem", base: "1.5rem" }}
             display={{ md: "none", base: "flex" }}
             fontWeight={400}
+            color="#1d1d1f"
           >
             Here's how Hushh elevates your experience
           </Text>
           <Text
-            color={extendedTheme.colors.secondary}
+            color={"#6e6e73"}
             fontWeight={"500"}
             fontSize={"1rem"}
             lineHeight={{ md: "2.25rem", base: "1.5rem" }}
@@ -235,7 +263,7 @@ const ClientHFS = () => {
               icon={<DataIcon />}
               title="Data Value Setting"
               alignItems={""}
-              onClick={"#"}
+              // onClick={"#"}
               textAlign={"left"}
               description="Students have the ability to set a value for their data, establishing both transparency and control over it.​"
             />
@@ -243,14 +271,14 @@ const ClientHFS = () => {
               icon={<DataExchangeIcon />}
               title="Secure Data Exchange​"
               textAlign={"left"}
-              alignItems={""}
+              // alignItems={""}
               onClick={"#"}
               description="The platform enables businesses to securely purchase data from students. This process is designed to ensure data privacy and secure transactions.​​"
             />
             <ServiceCard
               icon={<RewardIcon />}
               alignItems={"left"}
-              onClick={"#"}
+              // onClick={"#"}
               title="Rewards and Points System​"
               textAlign={"left"}
               description="Students earn rewards and points for each successful data transaction they partake in. This system incentivizes them to participate in the data exchange."
@@ -262,10 +290,10 @@ const ClientHFS = () => {
           <Box mx={{ md: "8rem", base: "1.5rem" }} textAlign={"center"}>
             <Text
               as={"p"}
-              className="gradient"
               lineHeight={{ md: "75px", base: "30px" }}
               fontWeight={"700"}
               fontSize={{ md: "3.75rem", base: "1.5rem" }}
+              color="#1d1d1f"
             >
               Control your data, earn rewards – hushh for students makes your
               data work for you.
@@ -323,8 +351,10 @@ const ClientHFS = () => {
               gap={"2rem"}
               color={"#0D0D25"}
               p={{ md: "2rem", base: "1rem" }}
-              bg={"white"}
+              bg={"#ffffff"}
               borderRadius={"1.75rem"}
+              border={"1px solid #e5e5ea"}
+              boxShadow={"0 8px 24px rgba(0,0,0,0.06)"}
             >
               <Text
                 fontWeight={"700"}
@@ -350,14 +380,16 @@ const ClientHFS = () => {
               gap={"2rem"}
               p={{ md: "2rem", base: "1rem" }}
               borderRadius={"1.75rem"}
-              background="linear-gradient(265.3deg, #E54D60 8.81%, #A342FF 94.26%)"
+              bg={"#ffffff"}
+              border={"1px solid #e5e5ea"}
+              boxShadow={"0 8px 24px rgba(0,0,0,0.06)"}
             >
               <Text
                 fontWeight={"700"}
                 fontSize={{ md: "1.75rem", base: "1rem" }}
                 lineHeight={{ md: "38.53px" }}
                 marginBottom={{ base: "0.75rem", md: "1rem" }}
-                color={"white"}
+                color={"#1d1d1f"}
               >
                 Business
               </Text>
@@ -366,7 +398,7 @@ const ClientHFS = () => {
                 fontSize={{ md: "1rem", base: "0.5rem" }}
                 lineHeight={{ md: "22.41px" }}
                 marginBottom={{ base: "1.25rem", md: "3rem" }}
-                color={"white"}
+                color={"#6e6e73"}
               >
                 Purchase valuable student data for various purposes, benefiting
                 from access to targeted data. Access to valuable student data
@@ -379,8 +411,10 @@ const ClientHFS = () => {
               gap={"2rem"}
               color={"#0D0D25"}
               p={{ md: "2rem", base: "1rem" }}
-              bg={"white"}
+              bg={"#ffffff"}
               borderRadius={"1.75rem"}
+              border={"1px solid #e5e5ea"}
+              boxShadow={"0 8px 24px rgba(0,0,0,0.06)"}
             >
               <Text
                 fontWeight={"700"}

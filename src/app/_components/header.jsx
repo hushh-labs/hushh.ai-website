@@ -124,6 +124,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
 
   let menuRef = useRef();
   let hamburgerRef = useRef();
+  const closeDropdownTimeoutRef = useRef(null);
 
   useEffect(() => {
     let handler = (e) => {
@@ -336,6 +337,32 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
     }
   };
 
+  // Hover intent utilities for desktop dropdowns
+  const openDropdown = (menuKey) => {
+    if (closeDropdownTimeoutRef.current) {
+      clearTimeout(closeDropdownTimeoutRef.current);
+      closeDropdownTimeoutRef.current = null;
+    }
+    setActiveDropdown(menuKey);
+  };
+
+  const scheduleCloseDropdown = () => {
+    if (closeDropdownTimeoutRef.current) {
+      clearTimeout(closeDropdownTimeoutRef.current);
+    }
+    closeDropdownTimeoutRef.current = setTimeout(() => {
+      setActiveDropdown(null);
+    }, 200);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (closeDropdownTimeoutRef.current) {
+        clearTimeout(closeDropdownTimeoutRef.current);
+      }
+    };
+  }, []);
+
            const renderDropdownMenu = (menuKey, menuData) => {
       // Check if this is the solutions dropdown to apply grid layout
       const isSolutionsDropdown = menuKey === 'solutions';
@@ -350,11 +377,8 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
             boxShadow: "0 20px 60px rgba(0, 0, 0, 0.12), 0 8px 25px rgba(0, 0, 0, 0.08)",
             backdropFilter: "blur(20px)",
           }}
-          onMouseEnter={() => setActiveDropdown(menuKey)}
-          onMouseLeave={() => {
-            // Add small delay to prevent accidental closes when clicking
-            setTimeout(() => setActiveDropdown(null), 100);
-          }}
+          onMouseEnter={() => openDropdown(menuKey)}
+          onMouseLeave={scheduleCloseDropdown}
         >
           {/* Dropdown Arrow */}
           <div 
@@ -460,10 +484,8 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                   {/* Products Dropdown */}
                   <div 
                     className="relative group"
-                    onMouseEnter={() => setActiveDropdown('products')}
-                    onMouseLeave={() => {
-                      setTimeout(() => setActiveDropdown(null), 50);
-                    }}
+                    onMouseEnter={() => openDropdown('products')}
+                    onMouseLeave={scheduleCloseDropdown}
                   >
                     <button
                       className="text-gray-800 text-xs lg:text-sm xl:text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-2 xl:px-3 nav-button whitespace-nowrap"
@@ -477,10 +499,8 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                   {/* Solutions Dropdown */}
                   <div 
                     className="relative group"
-                    onMouseEnter={() => setActiveDropdown('solutions')}
-                    onMouseLeave={() => {
-                      setTimeout(() => setActiveDropdown(null), 50);
-                    }}
+                    onMouseEnter={() => openDropdown('solutions')}
+                    onMouseLeave={scheduleCloseDropdown}
                   >
                     <button
                       className="text-gray-800 text-xs lg:text-sm xl:text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-2 xl:px-3 nav-button whitespace-nowrap"
@@ -504,10 +524,8 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                   {/* Developers Dropdown */}
                   <div 
                     className="relative group"
-                    onMouseEnter={() => setActiveDropdown('developers')}
-                    onMouseLeave={() => {
-                      setTimeout(() => setActiveDropdown(null), 50);
-                    }}
+                    onMouseEnter={() => openDropdown('developers')}
+                    onMouseLeave={scheduleCloseDropdown}
                   >
                     <button
                       className="text-gray-800 text-xs lg:text-sm xl:text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-2 xl:px-3 nav-button whitespace-nowrap"
@@ -521,10 +539,8 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                   {/* Why Hushh Dropdown */}
                   <div 
                     className="relative group"
-                    onMouseEnter={() => setActiveDropdown('whyHushh')}
-                    onMouseLeave={() => {
-                      setTimeout(() => setActiveDropdown(null), 50);
-                    }}
+                    onMouseEnter={() => openDropdown('whyHushh')}
+                    onMouseLeave={scheduleCloseDropdown}
                   >
                     <button
                       className="text-gray-800 text-xs lg:text-sm xl:text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-2 xl:px-3 nav-button whitespace-nowrap"
@@ -538,10 +554,8 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                   {/* Community Dropdown */}
                   <div 
                     className="relative group"
-                    onMouseEnter={() => setActiveDropdown('community')}
-                    onMouseLeave={() => {
-                      setTimeout(() => setActiveDropdown(null), 50);
-                    }}
+                    onMouseEnter={() => openDropdown('community')}
+                    onMouseLeave={scheduleCloseDropdown}
                   >
                     <button
                       className="text-gray-800 text-xs lg:text-sm xl:text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-2 xl:px-3 nav-button whitespace-nowrap"
@@ -555,10 +569,8 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                   {/* Company Dropdown */}
                   <div 
                     className="relative group"
-                    onMouseEnter={() => setActiveDropdown('company')}
-                    onMouseLeave={() => {
-                      setTimeout(() => setActiveDropdown(null), 50);
-                    }}
+                    onMouseEnter={() => openDropdown('company')}
+                    onMouseLeave={scheduleCloseDropdown}
                   >
                     <button
                       className="text-gray-800 text-xs lg:text-sm xl:text-sm font-medium hover:text-blue-600 transition-colors duration-200 flex items-center space-x-1 py-4 px-2 xl:px-3 nav-button whitespace-nowrap"
