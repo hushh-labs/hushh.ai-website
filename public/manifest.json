@@ -1,0 +1,183 @@
+{
+  "name": "Hushh AI - Privacy-First Data Monetization Platform",
+  "short_name": "Hushh AI",
+  "description": "Control your data, monetize your insights, and enjoy personalized experiences with Hushh. The leading privacy-first platform for data sovereignty and ethical AI personalization.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#007AFF",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en-US",
+  "dir": "ltr",
+  
+  "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-96x96.png", 
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128", 
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  
+  "screenshots": [
+    {
+      "src": "/screenshots/hushh-desktop-1280x720.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Hushh AI Platform Dashboard"
+    },
+    {
+      "src": "/screenshots/hushh-mobile-428x926.png", 
+      "sizes": "428x926",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Hushh AI Mobile Experience"
+    }
+  ],
+  
+  "categories": [
+    "business",
+    "productivity",
+    "utilities",
+    "privacy",
+    "finance"
+  ],
+  
+  "shortcuts": [
+    {
+      "name": "Hushh Wallet",
+      "short_name": "Wallet",
+      "description": "Access your personal data wallet",
+      "url": "/products/hushh-wallet-app",
+      "icons": [
+        {
+          "src": "/icons/wallet-shortcut-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Developer API",
+      "short_name": "API Docs",
+      "description": "Access developer documentation",
+      "url": "/developerApi",
+      "icons": [
+        {
+          "src": "/icons/api-shortcut-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Vibe Search",
+      "short_name": "Search",
+      "description": "AI-powered private search",
+      "url": "/products/hushh-vibe-search",
+      "icons": [
+        {
+          "src": "/icons/search-shortcut-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Contact Us",
+      "short_name": "Contact",
+      "description": "Get in touch with our team",
+      "url": "/contact-us",
+      "icons": [
+        {
+          "src": "/icons/contact-shortcut-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  
+  "prefer_related_applications": false,
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://www.hushh.ai/manifest.json"
+    },
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=ai.hushh.app",
+      "id": "ai.hushh.app"
+    },
+    {
+      "platform": "itunes",
+      "url": "https://apps.apple.com/app/hushh-ai/idXXXXXXX",
+      "id": "idXXXXXXX"
+    }
+  ],
+  
+  "serviceworker": {
+    "src": "/sw.js",
+    "scope": "/",
+    "use_cache": true
+  },
+  
+  "protocol_handlers": [
+    {
+      "protocol": "hushh",
+      "url": "/?handler=%s"
+    }
+  ],
+  
+  "edge_side_panel": {
+    "preferred_width": 320
+  },
+  
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  
+  "handle_links": "preferred",
+  
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7"
+}
