@@ -1,0 +1,84 @@
+{
+	"info": {
+		"_postman_id": "535768df-347a-4db7-bbf7-c6a70ba0e281",
+		"name": "Agents collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44791865",
+		"_collection_link": "https://mahesh-5637604.postman.co/workspace/Agents~daab4cf6-c8e8-4eab-808a-1ac50743dbf6/collection/44791865-535768df-347a-4db7-bbf7-c6a70ba0e281?action=share&source=collection_link&creator=44791865"
+	},
+	"item": [
+		{
+			"name": "Brand Agent",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"jsonrpc\": \"2.0\",\n  \"id\": \"task12\",\n  \"method\": \"tasks/send\",\n  \"params\": {\n    \"sessionId\": \"session456\",\n    \"message\": {\n      \"role\": \"user\",\n      \"parts\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"can you fetch all the details of this user having  Phone:(815) 529-0244\"\n        }\n      ]\n    }\n  }\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://a2a-crm-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/crm-agent",
+					"protocol": "https",
+					"host": [
+						"a2a-crm-agent-app-bt5gn1",
+						"7y6hwo",
+						"usa-e2",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"crm-agent"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Hushh Agent",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"jsonrpc\": \"2.0\",\n  \"id\": \"task124\",\n  \"method\": \"tasks/send\",\n  \"params\": {\n    \"sessionId\": \"session456\",\n    \"message\": {\n      \"role\": \"user\",\n      \"parts\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Can you fetch all the details of the user with phone number 425 555 234?\"\n        }\n      ]\n    }\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://a2a-supabase-headless-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/supabase-agent",
+					"protocol": "https",
+					"host": [
+						"a2a-supabase-headless-agent-app-bt5gn1",
+						"7y6hwo",
+						"usa-e2",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"supabase-agent"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

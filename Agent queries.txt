@@ -1,0 +1,32 @@
+Query user details:
+
+Can you fetch all the details of the user with phone number (637) 940-5403?
+Can you fetch all the intentions of the user with phone number (637) 940-5403?
+Can you fetch all the wants of the user with phone number (637) 940-5403?
+Can you fetch all the desires of the user with phone number (637) 940-5403?
+what about the fitness details of the user with phone number (637) 940-540 ?
+What is the Education level of the user with phone number (637) 940-5403?
+What is the occupation of the user with phone number (637) 940-5403?
+Can you fetch all the past purchase intents of the user with phone number (637) 940-5403?
+Can you fetch all the future purchase intents of the user with phone number (637) 940-5403? If no data is available, please forecast based on past purchase history.
+Can you fetch all the needs of the user with phone number (637) 940-5403?
+Can you fetch all the purchase intent details of the user with phone number (637) 940-5403?
+Can you fetch the marital status of the user with phone number (637) 940-5403?
+Can you fetch the contact details of the user with phone number (637) 940-5403?
+Does the user with phone: (637) 940-5403 likes tea or coffee?
+what about the fitness details of the user with phone number (637) 940-540 ?
+
+
+creating a user profile:
+
+can you create a user profile with below details: Full Name: Karlos Mende Email: caarlos.mendes71@example.com Phone: (208) 555-9164?
+
+updating the user profile:
+
+can you update the full name to Karlos for the user having phone: (208) 555-9164 and User ID: c0c37784-3097-47ae-9e0a-21a4e3c48f1d?
+Can you update the user’s need to grocery, with the following details:
+Full Name: Aiden Hernandez
+Email: aiden.hernandez401@proton.me
+Phone: (637) 940-5403
+
+
