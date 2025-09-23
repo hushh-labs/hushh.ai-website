@@ -788,7 +788,7 @@ const ClientHushhWallet = () => {
         </Stack>
       </ContentWrapper>
 
-      <WalletFaq />
+      {/* <WalletFaq /> */}
       <ContactForm />
 <DownloadModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
     </>
