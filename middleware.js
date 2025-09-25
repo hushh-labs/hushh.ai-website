@@ -8,6 +8,11 @@ export default withAuth(
       return NextResponse.redirect(new URL('/products/personal-data-agent', req.url))
     }
 
+    // Handle redirect from /voice to Hushh Voice external URL
+    if (req.nextUrl.pathname === '/voice') {
+      return NextResponse.redirect('https://hushhvoice-2.onrender.com/')
+    }
+
     // Continue with auth middleware for protected routes
     return NextResponse.next()
   },
@@ -16,6 +21,11 @@ export default withAuth(
       authorized: ({ token, req }) => {
         // Allow /pda redirect without authentication
         if (req.nextUrl.pathname === '/pda') {
+          return true
+        }
+        
+        // Allow /voice redirect without authentication
+        if (req.nextUrl.pathname === '/voice') {
           return true
         }
         
@@ -33,6 +43,7 @@ export default withAuth(
 export const config = { 
   matcher: [
     "/pda",
+    "/voice",
     "/developer-Api/content"
   ] 
 }

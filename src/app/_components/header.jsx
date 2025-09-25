@@ -27,6 +27,7 @@ import HushhGrid from '../_components/svg/icons/girdLogo.svg';
 import HushhLink from '../_components/svg/icons/linkLogo.svg';
 import HushhVault from '../_components/svg/icons/vaultLogo.svg';
 import HushhPDA from '../_components/svg/icons/pdaLogo.svg';
+import HushhVoice from '../_components/svg/icons/vaultLogo.svg'; // Temporary placeholder icon
 import SearchModal from "./features/SearchModal";
 import { useDisclosure } from "@chakra-ui/react";
 
@@ -185,6 +186,12 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
           description: "Visualize and organize your data",
           href: "/products/hushh-grid",
           icon: HushhGrid
+        },
+        {
+          name: "Hushh Voice",
+          description: "Your private, consent-first AI copilot",
+          href: "/voice",
+          icon: HushhVoice
         }
       ]
     },
