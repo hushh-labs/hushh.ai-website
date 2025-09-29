@@ -194,13 +194,10 @@ const UserAvatar = () => {
   };
 
   const handleProfileClick = () => {
-    // Prefer modern UX: route to dedicated social onboarding setup if not completed; else to profile
-    try {
-      const completed = typeof window !== 'undefined' && localStorage.getItem('hushh_social_profile_completed') === 'true';
-      if (!completed) {
-        return router.push('/social-onboarding');
-      }
-    } catch {}
+    // If user is not registered (no Hushh ID), go to registration. Otherwise, go to profile.
+    if (userExists === false) {
+      return navigateToRegistration();
+    }
     navigateToProfile();
   };
 
