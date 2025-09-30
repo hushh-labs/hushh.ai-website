@@ -1,35 +1,27 @@
 'use client'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import Image from 'next/image'
 import {
   Box,
   Button,
   Container,
   Flex,
-  FormControl,
-  FormLabel,
   Heading,
   HStack,
-  Radio,
-  RadioGroup,
   Stack,
   Text,
-  Textarea,
-  VStack,
   useToast,
   IconButton,
   Divider,
   Spinner,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
 } from '@chakra-ui/react'
 import { CopyIcon, RepeatIcon } from '@chakra-ui/icons'
 import { useAuth } from '../context/AuthContext'
-import HushhLogoS from '../_components/svg/hushhLogoS.svg'
 import ContentWrapper from '../_components/layout/ContentWrapper'
+import AgentSidebar from './agents/AgentSidebar'
+import ChatThread from './agents/ChatThread'
+import JsonRpcComposer from './agents/JsonRpcComposer'
+import EmailComposer from './agents/EmailComposer'
+import WhatsappComposer from './agents/WhatsappComposer'
 
 // Derive initials from an email address (first + last letter from local-part tokens)
 function initialsFromEmail(email) {
@@ -49,7 +41,6 @@ export default function A2AAgentClient() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const toast = useToast()
-  const listRef = useRef(null)
   const [messages, setMessages] = useState([]) // { id, role: 'user'|'agent', content, agent? }
   const { user, isAuthenticated } = useAuth()
 
@@ -112,10 +103,10 @@ export default function A2AAgentClient() {
     setLoading(false)
   }, [])
 
-  const send = useCallback(async () => {
-    if (!canSend) return
-    const text = prompt.trim()
-    const userMsg = { role: 'user', content: text, id: `u-${Date.now()}` }
+  const sendText = useCallback(async (text) => {
+    const trimmed = (text || '').trim()
+    if (!trimmed || loading) return
+    const userMsg = { role: 'user', content: trimmed, id: `u-${Date.now()}` }
     setMessages(prev => [...prev, userMsg])
     setPrompt('')
     setLoading(true)
@@ -124,7 +115,7 @@ export default function A2AAgentClient() {
       const res = await fetch(`/api/a2a/${agent}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({ text: trimmed }),
       })
       const json = await res.json()
       if (!res.ok) {
@@ -142,17 +133,45 @@ export default function A2AAgentClient() {
     } finally {
       setLoading(false)
     }
-  }, [agent, canSend, prompt, toast, extractText])
+  }, [agent, loading, toast, extractText])
 
-  useEffect(() => {
-    if (!listRef.current) return
-    listRef.current.scrollTop = listRef.current.scrollHeight
-  }, [messages, loading])
+  const sendPayload = useCallback(async (payload, previewText) => {
+    if (!payload || loading) return
+    const preview = typeof previewText === 'string' && previewText.trim() ? previewText.trim() : JSON.stringify(payload, null, 2)
+    const userMsg = { role: 'user', content: preview, id: `u-${Date.now()}` }
+    setMessages(prev => [...prev, userMsg])
+    setLoading(true)
+    setError('')
+    try {
+      const res = await fetch(`/api/a2a/${agent}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ payload }),
+      })
+      const json = await res.json()
+      if (!res.ok) {
+        setError(json?.error || 'Request failed')
+        toast({ title: 'Request failed', status: 'error', duration: 3000 })
+      }
+      const content = extractText(json?.data) || extractText(json)
+      const asstMsg = { role: 'agent', content: content || (json?.error ? `Error: ${json.error}` : 'No response'), agent, id: `a-${Date.now()}` }
+      setMessages(prev => [...prev, asstMsg])
+    } catch (e) {
+      setError(e?.message || 'Network error')
+      const asstMsg = { role: 'agent', content: 'Network error. Please try again.', agent, id: `a-${Date.now()}` }
+      setMessages(prev => [...prev, asstMsg])
+      toast({ title: 'Network error', status: 'error', duration: 3000 })
+    } finally {
+      setLoading(false)
+    }
+  }, [agent, loading, toast, extractText])
+
+  // Layout-only. Scrolling handled inside ChatThread.
 
   return (
     <ContentWrapper>
-    <Box bg="#f5f5f7" color="gray.900" minH="calc(100vh - 6rem)">
-      <Container maxW="7xl" py={{ base: 6, md: 8 }}>
+    <Box bg="#f5f5f7" color="gray.900" minH="calc(100vh - 2rem)">
+      <Container minW="100%" py={{ base: 6, md: 8 }}>
         <Flex direction="column" gap={4} height="calc(100vh - 8rem)">
           <Flex align={{ base: 'flex-start', md: 'center' }} justify="space-between" wrap="wrap" gap={3}>
             <Box>
@@ -182,84 +201,40 @@ export default function A2AAgentClient() {
             </AccordionItem>
           </Accordion> */}
 
-          <Flex flex="1" minH={0}>
-            <Box ref={listRef} bg="white" borderRadius="20px" borderWidth="1px" borderColor="gray.200" p={{ base: 3, md: 4 }} flex="1" overflowY="auto" aria-live="polite">
-              <VStack align="stretch" spacing={3}>
-                {messages.length === 0 && !loading && (
-                  <Text color="gray.500">Start by asking a question below.</Text>
-                )}
-                {messages.map(m => (
-                  <HStack key={m.id} align="flex-start" spacing={3}>
-                    {m.role === 'user' ? (
-                      <Box w={8} h={8} borderRadius="full" bg="gray.800" color="white" display="flex" alignItems="center" justifyContent="center" fontWeight="600" fontSize="xs">
-                        {userInitials}
-                      </Box>
-                    ) : (
-                      <Box w={8} h={8} borderRadius="full" overflow="hidden" bg="gray.900">
-                        <Image src={HushhLogoS} alt="Hushh Agent" width={32} height={32} />
-                      </Box>
-                    )}
-                    <Box flex="1" bg={m.role === 'user' ? 'white' : 'gray.50'} borderWidth="1px" borderColor="gray.200" borderRadius="14px" px={{ base: 3, md: 4 }} py={{ base: 2, md: 3 }}>
-                      <Text fontSize="sm" color="gray.500" mb={1}>{m.role === 'user' ? 'You' : (m.agent === 'hushh' ? 'Hushh Agent' : 'Brand Agent')}</Text>
-                      <Text whiteSpace="pre-wrap" lineHeight="1.7">{m.content}</Text>
-                    </Box>
-                  </HStack>
-                ))}
-                {loading && (
-                  <HStack align="center" spacing={3}>
-                    <Box w={8} h={8} borderRadius="full" overflow="hidden" bg={'gray.900'}>
-                      <Image src={HushhLogoS} alt="Hushh Agent" width={32} height={32} />
-                    </Box>
-                    <HStack bg="gray.50" borderWidth="1px" borderColor="gray.200" borderRadius="12px" px={{ base: 3, md: 4 }} py={{ base: 2, md: 3 }}>
-                      <Spinner size="sm" />
-                      <Text color="gray.600">Waiting for agent…</Text>
-                    </HStack>
-                  </HStack>
-                )}
-                {error && !loading && (
-                  <Text color="red.600">{error}</Text>
-                )}
-              </VStack>
-            </Box>
-          </Flex>
-
-          <Box position="sticky" bottom="0" bg="#f5f5f7" pb={2}>
-            <Box borderWidth="1px" borderColor="gray.200" borderRadius="16px" p={4} bg="white">
-              <Stack direction={{ base: 'column', md: 'row' }} spacing={4} align="flex-end">
-                <FormControl maxW={{ md: 'xs' }}>
-                  <FormLabel fontWeight="600">Agent</FormLabel>
-                  <RadioGroup value={agent} onChange={setAgent} aria-label="Select agent">
-                    <HStack spacing={6}>
-                      <Radio value="brand">Brand</Radio>
-                      <Radio value="hushh">Hushh</Radio>
-                    </HStack>
-                  </RadioGroup>
-                </FormControl>
-                <FormControl>
-                  <FormLabel fontWeight="600">Your message</FormLabel>
-                  <Textarea
-                    placeholder="Message A2A Agent…"
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault()
-                        if (!loading && canSend) send()
-                      }
-                    }}
-                    rows={2}
-                    bg="white"
-                    borderRadius="12px"
+          <Flex flex="1" minH={0} gap={3} direction={{ base: 'column', md: 'row' }}>
+            <AgentSidebar selected={agent} onSelect={setAgent} />
+            <Flex direction="column" flex="1" minH={0} gap={3}>
+              {(agent === 'brand' || agent === 'hushh' || agent === 'public') && (
+                <ChatThread messages={messages} loading={loading} error={error} userInitials={userInitials} />
+              )}
+              <Box>
+                {agent === 'email' ? (
+                  <EmailComposer
+                    disabled={loading}
+                    onSubmit={(payload) => sendPayload(payload, `Send email to ${payload.to}`)}
                   />
-                </FormControl>
-                <HStack spacing={2}>
-                  <Button onClick={send} isLoading={loading} isDisabled={!canSend} bg="gray.900" color="white" _hover={{ bg: 'black' }} borderRadius="12px">Send</Button>
+                ) : agent === 'whatsapp' ? (
+                  <WhatsappComposer
+                    disabled={loading}
+                    onSubmit={(payload) => sendPayload(payload, `WhatsApp to ${payload.to} using template ${payload.template?.name}`)}
+                  />
+                ) : (
+                  <JsonRpcComposer
+                    value={prompt}
+                    disabled={loading}
+                    onChange={setPrompt}
+                    onSubmit={(text) => sendText(text)}
+                  />
+                )}
+                <HStack mt={2} justify="flex-end">
                   <Button onClick={reset} variant="outline" leftIcon={<RepeatIcon />} borderRadius="12px">Reset</Button>
                   <IconButton aria-label="Copy last response" icon={<CopyIcon />} onClick={onCopy} variant="ghost" />
                 </HStack>
-              </Stack>
-            </Box>
-          </Box>
+              </Box>
+            </Flex>
+          </Flex>
+
+          {/* Composer moved into right content column so sidebar remains visible */}
 
           <Divider />
           <Text color="gray.500" fontSize="sm">Requests are proxied server-side using the required JSON-RPC body.</Text>

@@ -1,0 +1,42 @@
+{
+	"info": {
+		"_postman_id": "5dd7bad0-8df2-495d-9285-f8575a73d691",
+		"name": "Hushh Agent",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44791865",
+		"_collection_link": "https://mahesh-5637604.postman.co/workspace/Hushh-Agents~daab4cf6-c8e8-4eab-808a-1ac50743dbf6/collection/44791865-5dd7bad0-8df2-495d-9285-f8575a73d691?action=share&source=collection_link&creator=44791865"
+	},
+	"item": [
+		{
+			"name": "Hushh Agent",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"jsonrpc\": \"2.0\",\n  \"id\": \"task124\",\n  \"method\": \"tasks/send\",\n  \"params\": {\n    \"sessionId\": \"session456\",\n    \"message\": {\n      \"role\": \"user\",\n      \"parts\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"can you update the state to Bihar for the details of user with phone: +919346661428 and user id d6f5fca9-924b-492e-95f6-55e81d405174  ??\"\n        }\n      ]\n    }\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://a2a-supabase-headless-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/supabase-agent",
+					"protocol": "https",
+					"host": [
+						"a2a-supabase-headless-agent-app-bt5gn1",
+						"7y6hwo",
+						"usa-e2",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"supabase-agent"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
