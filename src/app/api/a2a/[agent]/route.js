@@ -3,11 +3,11 @@ import { NextResponse } from "next/server";
 
 // Map agent slug => upstream URL from environment vars
 const AGENT_URLS = {
-  brand: process.env.A2A_BRAND_AGENT_URL, // e.g. https://.../crm-agent
-  hushh: process.env.A2A_HUSHH_AGENT_URL, // e.g. https://.../supabase-agent
-  public: process.env.A2A_PUBLIC_DATA_AGENT_URL, // e.g. https://.../public-data-agent
-  whatsapp: process.env.A2A_WHATSAPP_AGENT_URL, // e.g. https://.../sendMessageToWhatsapp
-  email: process.env.A2A_EMAIL_AGENT_URL, // e.g. https://.../sendMail
+  brand: process.env.A2A_BRAND_AGENT_URL || 'https://a2a-crm-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/crm-agent', // e.g. https://.../crm-agent
+  hushh: process.env.A2A_HUSHH_AGENT_URL || 'https://a2a-supabase-headless-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/supabase-agent', // e.g. https://.../supabase-agent
+  public: process.env.A2A_PUBLIC_DATA_AGENT_URL || 'https://a2a-public-data-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/public-data-agent', // e.g. https://.../public-data-agent
+  whatsapp: process.env.A2A_WHATSAPP_AGENT_URL || 'https://a2a-whatsapp-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/sendMessageToWhatsapp', // e.g. https://.../sendMessageToWhatsapp
+  email: process.env.A2A_EMAIL_AGENT_URL || 'https://a2a-email-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/sendMail', // e.g. https://.../sendMail
 };
 
 export async function POST(req, { params }) {
@@ -61,7 +61,7 @@ export async function POST(req, { params }) {
     });
 
     const data = await res.json().catch(() => ({}));
-    return NextResponse.json({ upstreamStatus: res.status, data });
+    return NextResponse.json({ upstreamUrl: upstream, upstreamStatus: res.status, data });
   } catch (err) {
     return NextResponse.json({ error: err?.message ?? "Unknown error" }, { status: 500 });
   }
