@@ -1,5 +1,5 @@
 'use client'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import {
   Box,
   Container,
@@ -12,6 +12,14 @@ import {
   Badge,
   Button,
   SimpleGrid,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  useToast,
 } from '@chakra-ui/react'
 
 // Helper function to extract data from API responses
@@ -51,6 +59,10 @@ const getField = (data, ...keys) => {
 }
 
 export default function ResultsDisplay({ userData, agentResults, onBack }) {
+  const [showRawData, setShowRawData] = useState(false)
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const toast = useToast()
+  
   // Extract and parse all data
   const parsedData = useMemo(() => extractUserData(agentResults, userData), [agentResults, userData])
   
@@ -69,6 +81,65 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
       responseTime: avgResponseTime ? `${Math.round(avgResponseTime)}ms` : '10ms'
     }
   }, [parsedData, agentResults])
+
+  // Export results as JSON
+  const handleExportResults = () => {
+    try {
+      const exportData = {
+        userData,
+        parsedData,
+        metadata,
+        agentResults,
+        exportDate: new Date().toISOString(),
+      }
+      
+      const dataStr = JSON.stringify(exportData, null, 2)
+      const dataBlob = new Blob([dataStr], { type: 'application/json' })
+      const url = URL.createObjectURL(dataBlob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `profile-analysis-${userData.fullName.replace(/\s+/g, '-')}-${Date.now()}.json`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+      
+      toast({
+        title: 'Results Exported',
+        description: 'Your profile analysis has been downloaded as JSON',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      })
+    } catch (error) {
+      toast({
+        title: 'Export Failed',
+        description: error.message || 'Failed to export results',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      })
+    }
+  }
+
+  // Show raw data modal
+  const handleShowRawData = () => {
+    onOpen()
+  }
+
+  // Clear data and go back
+  const handleClearData = () => {
+    if (window.confirm('Are you sure you want to clear all data and start over?')) {
+      onBack?.()
+      toast({
+        title: 'Data Cleared',
+        description: 'All analysis data has been cleared',
+        status: 'info',
+        duration: 2000,
+        isClosable: true,
+      })
+    }
+  }
 
   const InfoCard = ({ label, value }) => (
     <Box
@@ -120,37 +191,40 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
               New Analysis
             </Button>
             <Button
+              onClick={handleExportResults}
               variant="outline"
               borderColor="gray.700"
               color="white"
-              _hover={{ bg: 'gray.900' }}
+              _hover={{ bg: 'gray.900', borderColor: 'green.500' }}
               borderRadius="8px"
               px={6}
               size={{ base: 'sm', md: 'md' }}
             >
-              Export Results
+              📥 Export Results
             </Button>
             <Button
+              onClick={handleShowRawData}
               variant="outline"
               borderColor="gray.700"
               color="white"
-              _hover={{ bg: 'gray.900' }}
+              _hover={{ bg: 'gray.900', borderColor: 'blue.500' }}
               borderRadius="8px"
               px={6}
               size={{ base: 'sm', md: 'md' }}
             >
-              Show Raw Data
+              🔍 Show Raw Data
             </Button>
             <Button
+              onClick={handleClearData}
               variant="outline"
               borderColor="gray.700"
               color="white"
-              _hover={{ bg: 'gray.900' }}
+              _hover={{ bg: 'red.900', borderColor: 'red.500' }}
               borderRadius="8px"
               px={6}
               size={{ base: 'sm', md: 'md' }}
             >
-              Clear Data
+              🗑️ Clear Data
             </Button>
           </HStack>
 
@@ -389,6 +463,104 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
           </Box>
         </VStack>
       </Container>
+
+      {/* Raw Data Modal */}
+      <Modal isOpen={isOpen} onClose={onClose} size="6xl" scrollBehavior="inside">
+        <ModalOverlay bg="blackAlpha.800" backdropFilter="blur(10px)" />
+        <ModalContent bg="gray.900" color="white" maxH="90vh">
+          <ModalHeader borderBottomWidth="1px" borderBottomColor="gray.700">
+            <VStack align="start" spacing={1}>
+              <Heading fontSize="xl">Raw API Response Data</Heading>
+              <Text fontSize="sm" color="gray.400" fontWeight="normal">
+                Complete JSON response from all agent APIs
+              </Text>
+            </VStack>
+          </ModalHeader>
+          <ModalCloseButton color="white" />
+          <ModalBody py={6}>
+            <VStack align="stretch" spacing={6}>
+              <Box>
+                <Heading fontSize="md" mb={3} color="green.400">User Data</Heading>
+                <Box
+                  bg="black"
+                  p={4}
+                  borderRadius="8px"
+                  borderWidth="1px"
+                  borderColor="gray.700"
+                  overflow="auto"
+                  maxH="200px"
+                >
+                  <pre style={{ fontSize: '12px', margin: 0 }}>
+                    {JSON.stringify(userData, null, 2)}
+                  </pre>
+                </Box>
+              </Box>
+
+              <Box>
+                <Heading fontSize="md" mb={3} color="blue.400">Parsed Data</Heading>
+                <Box
+                  bg="black"
+                  p={4}
+                  borderRadius="8px"
+                  borderWidth="1px"
+                  borderColor="gray.700"
+                  overflow="auto"
+                  maxH="200px"
+                >
+                  <pre style={{ fontSize: '12px', margin: 0 }}>
+                    {JSON.stringify(parsedData, null, 2)}
+                  </pre>
+                </Box>
+              </Box>
+
+              <Box>
+                <Heading fontSize="md" mb={3} color="purple.400">Agent Results</Heading>
+                {Object.entries(agentResults).map(([agent, result]) => (
+                  <Box key={agent} mb={4}>
+                    <HStack mb={2}>
+                      <Badge colorScheme={result.success ? 'green' : 'red'}>
+                        {agent.toUpperCase()}
+                      </Badge>
+                      <Text fontSize="sm" color="gray.400">
+                        {result.responseTime}
+                      </Text>
+                    </HStack>
+                    <Box
+                      bg="black"
+                      p={4}
+                      borderRadius="8px"
+                      borderWidth="1px"
+                      borderColor={result.success ? 'green.900' : 'red.900'}
+                      overflow="auto"
+                      maxH="300px"
+                    >
+                      <pre style={{ fontSize: '12px', margin: 0 }}>
+                        {JSON.stringify(result, null, 2)}
+                      </pre>
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+
+              <Box>
+                <Heading fontSize="md" mb={3} color="yellow.400">Metadata</Heading>
+                <Box
+                  bg="black"
+                  p={4}
+                  borderRadius="8px"
+                  borderWidth="1px"
+                  borderColor="gray.700"
+                  overflow="auto"
+                >
+                  <pre style={{ fontSize: '12px', margin: 0 }}>
+                    {JSON.stringify(metadata, null, 2)}
+                  </pre>
+                </Box>
+              </Box>
+            </VStack>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Box>
   )
 }
