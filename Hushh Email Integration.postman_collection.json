@@ -1,0 +1,42 @@
+{
+	"info": {
+		"_postman_id": "807848b9-2456-475b-a285-32ef2e7f5f09",
+		"name": "Hushh Email Integration",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44791865",
+		"_collection_link": "https://mahesh-5637604.postman.co/workspace/Agents~daab4cf6-c8e8-4eab-808a-1ac50743dbf6/collection/44791865-807848b9-2456-475b-a285-32ef2e7f5f09?action=share&source=collection_link&creator=44791865"
+	},
+	"item": [
+		{
+			"name": "sendMail",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"to\": \"maheshkmarreddysabbella@gmail.com\",\r\n  \"subject\": \"Profile Incomplete – Action Required ‼️\",\r\n  \"body\": \"<html>\\n<head>\\n<meta charset='UTF-8'>\\n<meta name='viewport' content='width=device-width, initial-scale=1.0'>\\n<style>\\nbody { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }\\n.container { max-width: 600px; margin: 40px auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1); }\\nh1 { color: #333333; }\\np { color: #555555; line-height: 1.5; }\\n.button { display: inline-block; margin-top: 20px; padding: 12px 24px; background-color: #007bff; color: #ffffff !important; text-decoration: none; border-radius: 5px; font-weight: bold; }\\n.footer { margin-top: 30px; font-size: 12px; color: #888888; text-align: center; }\\n</style>\\n</head>\\n<body>\\n<div class='container'>\\n<h1>Hi Mahesh kumar reddy sabbella,</h1>\\n<p>We noticed that some fields in your profile are missing. To enjoy a complete experience, please update your profile by clicking the button below:</p>\\n<a href='https://example.com/update-profile' class='button'>Update Profile</a>\\n<p>If you have already updated your profile, you can ignore this message.</p>\\n<div class='footer'>&copy; 2025 Hushh AI. All rights reserved.</div>\\n</div>\\n</body>\\n</html>\",\r\n  \"mimeType\": \"text/html\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hushh-email-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/sendMail",
+					"protocol": "https",
+					"host": [
+						"hushh-email-app-bt5gn1",
+						"7y6hwo",
+						"usa-e2",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"sendMail"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

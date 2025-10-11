@@ -1,0 +1,42 @@
+{
+	"info": {
+		"_postman_id": "0b0b0eb0-9526-438d-b520-eb9e0da3db55",
+		"name": "Hushh Public Data Agent",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44791865",
+		"_collection_link": "https://mahesh-5637604.postman.co/workspace/Agents~daab4cf6-c8e8-4eab-808a-1ac50743dbf6/collection/44791865-0b0b0eb0-9526-438d-b520-eb9e0da3db55?action=share&source=collection_link&creator=44791865"
+	},
+	"item": [
+		{
+			"name": "OpenAI Agent",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"jsonrpc\": \"2.0\",\r\n  \"id\": \"task124\",\r\n  \"method\": \"tasks/send\",\r\n  \"params\": {\r\n    \"sessionId\": \"session456\",\r\n    \"message\": {\r\n      \"role\": \"user\",\r\n      \"parts\": [\r\n        {\r\n          \"type\": \"text\",\r\n          \"text\": \"Can you provide me with a detailed JSON profile of Narendra Modi that includes all possible fields such as full name, phone, email, address, age, gender, marital status, household size, children count, education level, occupation, income bracket, home ownership, city tier, transport, diet preference, favorite cuisine, coffee or tea choice, fitness routine, gym membership, shopping preference, grocery store type, fashion style, tech affinity, primary device, favorite social platform, social media usage time, content preference, sports interest, gaming preference, travel frequency, eco-friendliness, sleep chronotype, needs, wants, desires, and 24h/48h/72h intents with category, budget, time window, and confidence. The output should strictly be in JSON format. If some information is not available from public sources, please generate reasonable and relevant placeholder data instead of leaving fields blank, while keeping it realistic and respectful.\"\r\n        }\r\n      ]\r\n    }\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hushh-open-ai-agent-ap-bt5gn1.7y6hwo.usa-e2.cloudhub.io/public-data-agent",
+					"protocol": "https",
+					"host": [
+						"hushh-open-ai-agent-ap-bt5gn1",
+						"7y6hwo",
+						"usa-e2",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"public-data-agent"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

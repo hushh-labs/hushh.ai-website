@@ -1,0 +1,82 @@
+{
+	"info": {
+		"_postman_id": "623335fd-3925-4081-a635-4e71979e3418",
+		"name": "Hushh Whatsapp integration",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44791865",
+		"_collection_link": "https://mahesh-5637604.postman.co/workspace/Hushh-Agents~daab4cf6-c8e8-4eab-808a-1ac50743dbf6/collection/44791865-623335fd-3925-4081-a635-4e71979e3418?action=share&source=collection_link&creator=44791865"
+	},
+	"item": [
+		{
+			"name": "Whatsapp Cloud API",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer EAAT3oJUYUDQBPqJOrU4lY7dOaFOmlQsiGunaeACpfaf92PlBFmNwzxJDCbsd9PaMZBQlRHZCepZCZAldz8AZB9anrQRZAoVYoxRx8aQ1vUxL2sXZAohVZBJMJzk43ZCUEfnPoLJCLpdcvQi4UltrKGxUw2dHH4ZBFOLlNZC9oVMJhpKvQtoePZC45eC4WNdK6oeo4AZDZD"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"messaging_product\": \"whatsapp\",\r\n  \"to\": \"919346661428\",\r\n  \"type\": \"template\",\r\n  \"template\": {\r\n    \"name\": \"hello_world\",\r\n    \"language\": {\r\n      \"code\": \"en_US\"\r\n    }\r\n  }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://graph.facebook.com/v22.0/829639396896769/messages",
+					"protocol": "https",
+					"host": [
+						"graph",
+						"facebook",
+						"com"
+					],
+					"path": [
+						"v22.0",
+						"829639396896769",
+						"messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Mulesoft API for Whatsapp",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"messaging_product\": \"whatsapp\",\r\n  \"to\": \"+919346661428\",\r\n  \"type\": \"template\",\r\n  \"template\": {\r\n    \"name\": \"profile_update\",\r\n    \"language\": { \"code\": \"en\" },\r\n    \"components\": [\r\n      {\r\n        \"type\": \"body\",\r\n        \"parameters\": [\r\n          { \"type\": \"text\", \"text\": \"Mahesh\", \"parameter_name\": \"customer_name\" },\r\n          { \"type\": \"text\", \"text\": \"email\", \"parameter_name\": \"missing_field1\" },\r\n          { \"type\": \"text\", \"text\": \"email\", \"parameter_name\": \"missing_field\" }\r\n        ]\r\n      }\r\n    ]\r\n  }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hushh-whatsapp-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/sendMessageToWhatsapp",
+					"protocol": "https",
+					"host": [
+						"hushh-whatsapp-app-bt5gn1",
+						"7y6hwo",
+						"usa-e2",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"sendMessageToWhatsapp"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
