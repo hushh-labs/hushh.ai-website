@@ -15,10 +15,8 @@ import {
 export default function AnalyzingLoader({ progress = 0, currentAgent = '' }) {
   const agents = [
     { id: 'brand', name: 'Brand Agent', status: progress > 0 ? 'completed' : 'pending' },
-    { id: 'hushh', name: 'Hushh Agent', status: progress > 20 ? 'completed' : progress > 0 ? 'processing' : 'pending' },
-    { id: 'public', name: 'Public Data Agent', status: progress > 40 ? 'completed' : progress > 20 ? 'processing' : 'pending' },
-    { id: 'whatsapp', name: 'WhatsApp Agent', status: progress > 60 ? 'completed' : progress > 40 ? 'processing' : 'pending' },
-    { id: 'email', name: 'Email Agent', status: progress > 80 ? 'completed' : progress > 60 ? 'processing' : 'pending' },
+    { id: 'hushh', name: 'Hushh Agent', status: progress > 33 ? 'completed' : progress > 0 ? 'processing' : 'pending' },
+    { id: 'public', name: 'Public Data Agent', status: progress > 66 ? 'completed' : progress > 33 ? 'processing' : 'pending' },
   ]
 
   return (

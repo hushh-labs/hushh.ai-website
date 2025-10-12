@@ -143,7 +143,9 @@ export default function AgentSignInClient() {
     })
 
     try {
-      const agents = ['brand', 'hushh', 'public', 'whatsapp', 'email']
+      // Only call data retrieval agents (Brand, Hushh, Public Data)
+      // WhatsApp and Email are for notifications, not data retrieval
+      const agents = ['brand', 'hushh', 'public']
       const resultMap = {}
       
       // Call agents sequentially to show progress
@@ -167,7 +169,7 @@ export default function AgentSignInClient() {
       
       toast({
         title: 'Analysis Complete',
-        description: `Successfully retrieved data from ${successCount} out of ${agents.length} agents`,
+        description: `Successfully retrieved data from ${successCount} out of ${agents.length} data agents`,
         status: successCount > 0 ? 'success' : 'warning',
         duration: 5000,
         isClosable: true,
