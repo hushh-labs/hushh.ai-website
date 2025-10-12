@@ -14,8 +14,6 @@ import {
 import { WarningIcon } from '@chakra-ui/icons'
 
 const DataSourceCard = ({ agentName, agentType, result }) => {
-  if (!result) return null // Don't render if agent wasn't called
-  
   const isFailed = !result?.success
   const responseTime = result?.responseTime || 'N/A'
   const dataFields = result?.success && result?.data ? Object.keys(result.data).length : 0
@@ -94,11 +92,12 @@ const DataSourceCard = ({ agentName, agentType, result }) => {
 }
 
 export default function DataSourceComparison({ agentResults }) {
-  // Only show data retrieval agents
   const agentInfo = {
-    brand: { name: 'Brand Agent', type: 'CRM Intelligence' },
-    hushh: { name: 'Hushh Agent', type: 'Supabase Data' },
-    public: { name: 'Public Data Agent', type: 'Open Data Enrichment' },
+    brand: { name: 'Brand Agent', type: 'CRM Agent' },
+    hushh: { name: 'Hushh Agent', type: 'Supabase Proxy' },
+    public: { name: 'Public Data Agent', type: 'Public Data Agent' },
+    whatsapp: { name: 'WhatsApp Agent', type: 'WhatsApp CRM' },
+    email: { name: 'Email Agent', type: 'Email Integration' },
   }
 
   return (
@@ -115,7 +114,7 @@ export default function DataSourceComparison({ agentResults }) {
             DATA SOURCE COMPARISON
           </Heading>
 
-          <SimpleGrid columns={{ base: 1, md: 3 }} gap={6}>
+          <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
             {Object.entries(agentResults).map(([agentId, result]) => {
               const info = agentInfo[agentId]
               if (!info) return null

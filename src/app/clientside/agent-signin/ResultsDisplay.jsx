@@ -29,8 +29,6 @@ const extractUserData = (agentResults, userData) => {
   // Combine all agent data
   Object.entries(agentResults).forEach(([agent, result]) => {
     if (result.success && result.data) {
-      console.log(`Processing ${agent} agent:`, result.data)
-      
       // Handle different response structures
       let responseData = result.data?.result?.status?.message?.parts?.[0]?.text || 
                          result.data?.result?.response?.parts?.[0]?.text || 
@@ -47,38 +45,12 @@ const extractUserData = (agentResults, userData) => {
             .trim()
           
           const parsed = JSON.parse(cleanedData)
-          console.log(`Parsed ${agent} data:`, parsed)
           
           // Handle userProfile wrapper
           if (parsed.userProfile) {
-            // Merge userProfile data, preserving intents array if it exists
-            Object.keys(parsed.userProfile).forEach(key => {
-              // Don't overwrite intents array with intents object or vice versa
-              if (key === 'intents' && allData.intents) {
-                // Keep the array format if we have it, or the first intents structure
-                if (Array.isArray(parsed.userProfile.intents)) {
-                  allData.intents = parsed.userProfile.intents
-                } else if (!Array.isArray(allData.intents)) {
-                  allData.intents = parsed.userProfile.intents
-                }
-              } else {
-                allData[key] = parsed.userProfile[key]
-              }
-            })
+            Object.assign(allData, parsed.userProfile)
           } else if (typeof parsed === 'object' && parsed !== null) {
-            // Merge top-level data
-            Object.keys(parsed).forEach(key => {
-              if (key === 'intents' && allData.intents) {
-                // Prefer array format for intents
-                if (Array.isArray(parsed.intents)) {
-                  allData.intents = parsed.intents
-                } else if (!Array.isArray(allData.intents)) {
-                  allData.intents = parsed.intents
-                }
-              } else {
-                allData[key] = parsed[key]
-              }
-            })
+            Object.assign(allData, parsed)
           }
         } catch (e) {
           console.error(`Failed to parse JSON from ${agent}:`, e)
@@ -86,36 +58,13 @@ const extractUserData = (agentResults, userData) => {
       } else if (typeof responseData === 'object' && responseData !== null) {
         // If already an object, handle userProfile wrapper
         if (responseData.userProfile) {
-          Object.keys(responseData.userProfile).forEach(key => {
-            if (key === 'intents' && allData.intents) {
-              if (Array.isArray(responseData.userProfile.intents)) {
-                allData.intents = responseData.userProfile.intents
-              } else if (!Array.isArray(allData.intents)) {
-                allData.intents = responseData.userProfile.intents
-              }
-            } else {
-              allData[key] = responseData.userProfile[key]
-            }
-          })
+          Object.assign(allData, responseData.userProfile)
         } else {
-          Object.keys(responseData).forEach(key => {
-            if (key === 'intents' && allData.intents) {
-              if (Array.isArray(responseData.intents)) {
-                allData.intents = responseData.intents
-              } else if (!Array.isArray(allData.intents)) {
-                allData.intents = responseData.intents
-              }
-            } else {
-              allData[key] = responseData[key]
-            }
-          })
+          Object.assign(allData, responseData)
         }
       }
     }
   })
-  
-  console.log('Final merged data:', allData)
-  console.log('Intents structure:', allData.intents)
   
   return allData
 }
@@ -512,39 +461,23 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
                       <Badge colorScheme="green" fontSize="xs" px={2} py={1}>24 HOURS</Badge>
                       <Text fontSize="sm" color="gray.400">Category</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {(() => {
-                          if (Array.isArray(parsedData.intents) && parsedData.intents[0]) {
-                            return parsedData.intents[0].category || 'Not available'
-                          }
-                          return getField(parsedData, 'intents.24h.category', 'intent24h.category')
-                        })()}
+                        {getField(parsedData, 'intents.24h.category', 'intent24h.category') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[0] ? parsedData.intents[0].category : 'Not available')}
                       </Text>
                       <Text fontSize="sm" color="gray.400">Budget</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {(() => {
-                          if (Array.isArray(parsedData.intents) && parsedData.intents[0]) {
-                            return parsedData.intents[0].budget || 'Not available'
-                          }
-                          return getField(parsedData, 'intents.24h.budget', 'intent24h.budget')
-                        })()}
+                        {getField(parsedData, 'intents.24h.budget', 'intent24h.budget') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[0] ? parsedData.intents[0].budget : 'Not available')}
                       </Text>
                       <Text fontSize="sm" color="gray.400">Time Window</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {(() => {
-                          if (Array.isArray(parsedData.intents) && parsedData.intents[0]) {
-                            return parsedData.intents[0].timeWindow || 'Not available'
-                          }
-                          return getField(parsedData, 'intents.24h.timeWindow', 'intent24h.timeWindow', 'intents.24h.time_window')
-                        })()}
+                        {getField(parsedData, 'intents.24h.timeWindow', 'intent24h.timeWindow', 'intents.24h.time_window') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[0] ? parsedData.intents[0].timeWindow : 'Not available')}
                       </Text>
                       <Text fontSize="sm" color="gray.400">Confidence</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {(() => {
-                          if (Array.isArray(parsedData.intents) && parsedData.intents[0]) {
-                            return parsedData.intents[0].confidence || 'Not available'
-                          }
-                          return getField(parsedData, 'intents.24h.confidence', 'intent24h.confidence')
-                        })()}
+                        {getField(parsedData, 'intents.24h.confidence', 'intent24h.confidence') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[0] ? parsedData.intents[0].confidence : 'Not available')}
                       </Text>
                     </VStack>
                   </Box>
@@ -561,39 +494,23 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
                       <Badge colorScheme="blue" fontSize="xs" px={2} py={1}>48 HOURS</Badge>
                       <Text fontSize="sm" color="gray.400">Category</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {(() => {
-                          if (Array.isArray(parsedData.intents) && parsedData.intents[1]) {
-                            return parsedData.intents[1].category || 'Not available'
-                          }
-                          return getField(parsedData, 'intents.48h.category', 'intent48h.category')
-                        })()}
+                        {getField(parsedData, 'intents.48h.category', 'intent48h.category') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[1] ? parsedData.intents[1].category : 'Not available')}
                       </Text>
                       <Text fontSize="sm" color="gray.400">Budget</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {(() => {
-                          if (Array.isArray(parsedData.intents) && parsedData.intents[1]) {
-                            return parsedData.intents[1].budget || 'Not available'
-                          }
-                          return getField(parsedData, 'intents.48h.budget', 'intent48h.budget')
-                        })()}
+                        {getField(parsedData, 'intents.48h.budget', 'intent48h.budget') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[1] ? parsedData.intents[1].budget : 'Not available')}
                       </Text>
                       <Text fontSize="sm" color="gray.400">Time Window</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {(() => {
-                          if (Array.isArray(parsedData.intents) && parsedData.intents[1]) {
-                            return parsedData.intents[1].timeWindow || 'Not available'
-                          }
-                          return getField(parsedData, 'intents.48h.timeWindow', 'intent48h.timeWindow', 'intents.48h.time_window')
-                        })()}
+                        {getField(parsedData, 'intents.48h.timeWindow', 'intent48h.timeWindow', 'intents.48h.time_window') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[1] ? parsedData.intents[1].timeWindow : 'Not available')}
                       </Text>
                       <Text fontSize="sm" color="gray.400">Confidence</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {(() => {
-                          if (Array.isArray(parsedData.intents) && parsedData.intents[1]) {
-                            return parsedData.intents[1].confidence || 'Not available'
-                          }
-                          return getField(parsedData, 'intents.48h.confidence', 'intent48h.confidence')
-                        })()}
+                        {getField(parsedData, 'intents.48h.confidence', 'intent48h.confidence') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[1] ? parsedData.intents[1].confidence : 'Not available')}
                       </Text>
                     </VStack>
                   </Box>
@@ -610,39 +527,23 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
                       <Badge colorScheme="purple" fontSize="xs" px={2} py={1}>72 HOURS</Badge>
                       <Text fontSize="sm" color="gray.400">Category</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {(() => {
-                          if (Array.isArray(parsedData.intents) && parsedData.intents[2]) {
-                            return parsedData.intents[2].category || 'Not available'
-                          }
-                          return getField(parsedData, 'intents.72h.category', 'intent72h.category')
-                        })()}
+                        {getField(parsedData, 'intents.72h.category', 'intent72h.category') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[2] ? parsedData.intents[2].category : 'Not available')}
                       </Text>
                       <Text fontSize="sm" color="gray.400">Budget</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {(() => {
-                          if (Array.isArray(parsedData.intents) && parsedData.intents[2]) {
-                            return parsedData.intents[2].budget || 'Not available'
-                          }
-                          return getField(parsedData, 'intents.72h.budget', 'intent72h.budget')
-                        })()}
+                        {getField(parsedData, 'intents.72h.budget', 'intent72h.budget') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[2] ? parsedData.intents[2].budget : 'Not available')}
                       </Text>
                       <Text fontSize="sm" color="gray.400">Time Window</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {(() => {
-                          if (Array.isArray(parsedData.intents) && parsedData.intents[2]) {
-                            return parsedData.intents[2].timeWindow || 'Not available'
-                          }
-                          return getField(parsedData, 'intents.72h.timeWindow', 'intent72h.timeWindow', 'intents.72h.time_window')
-                        })()}
+                        {getField(parsedData, 'intents.72h.timeWindow', 'intent72h.timeWindow', 'intents.72h.time_window') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[2] ? parsedData.intents[2].timeWindow : 'Not available')}
                       </Text>
                       <Text fontSize="sm" color="gray.400">Confidence</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {(() => {
-                          if (Array.isArray(parsedData.intents) && parsedData.intents[2]) {
-                            return parsedData.intents[2].confidence || 'Not available'
-                          }
-                          return getField(parsedData, 'intents.72h.confidence', 'intent72h.confidence')
-                        })()}
+                        {getField(parsedData, 'intents.72h.confidence', 'intent72h.confidence') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[2] ? parsedData.intents[2].confidence : 'Not available')}
                       </Text>
                     </VStack>
                   </Box>
