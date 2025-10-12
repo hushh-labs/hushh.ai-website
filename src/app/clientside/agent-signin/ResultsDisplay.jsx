@@ -286,6 +286,7 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
               BASIC INFORMATION
             </Heading>
             <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} gap={4}>
+              {/* <InfoCard label="User ID" value={getField(parsedData, 'userID', 'user_id', 'userId', 'id')} /> */}
               <InfoCard label="Full Name" value={userData?.fullName || getField(parsedData, 'fullName', 'full_name', 'name', 'fullname')} />
               <InfoCard label="Email" value={userData?.email || getField(parsedData, 'email', 'email_address', 'emailAddress')} />
               <InfoCard label="Phone" value={userData ? `${userData.countryCode} ${userData.phoneNumber}` : getField(parsedData, 'phone', 'phoneNumber', 'phone_number', 'phoneNumber')} />
@@ -468,6 +469,11 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
                         {getField(parsedData, 'intents.24h.budget', 'intent24h.budget') || 
                          (Array.isArray(parsedData.intents) && parsedData.intents[0] ? parsedData.intents[0].budget : 'Not available')}
                       </Text>
+                      <Text fontSize="sm" color="gray.400">Time Window</Text>
+                      <Text fontSize="md" color="white" fontWeight="500">
+                        {getField(parsedData, 'intents.24h.timeWindow', 'intent24h.timeWindow', 'intents.24h.time_window') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[0] ? parsedData.intents[0].timeWindow : 'Not available')}
+                      </Text>
                       <Text fontSize="sm" color="gray.400">Confidence</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
                         {getField(parsedData, 'intents.24h.confidence', 'intent24h.confidence') || 
@@ -496,6 +502,11 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
                         {getField(parsedData, 'intents.48h.budget', 'intent48h.budget') || 
                          (Array.isArray(parsedData.intents) && parsedData.intents[1] ? parsedData.intents[1].budget : 'Not available')}
                       </Text>
+                      <Text fontSize="sm" color="gray.400">Time Window</Text>
+                      <Text fontSize="md" color="white" fontWeight="500">
+                        {getField(parsedData, 'intents.48h.timeWindow', 'intent48h.timeWindow', 'intents.48h.time_window') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[1] ? parsedData.intents[1].timeWindow : 'Not available')}
+                      </Text>
                       <Text fontSize="sm" color="gray.400">Confidence</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
                         {getField(parsedData, 'intents.48h.confidence', 'intent48h.confidence') || 
@@ -523,6 +534,11 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
                       <Text fontSize="md" color="white" fontWeight="500">
                         {getField(parsedData, 'intents.72h.budget', 'intent72h.budget') || 
                          (Array.isArray(parsedData.intents) && parsedData.intents[2] ? parsedData.intents[2].budget : 'Not available')}
+                      </Text>
+                      <Text fontSize="sm" color="gray.400">Time Window</Text>
+                      <Text fontSize="md" color="white" fontWeight="500">
+                        {getField(parsedData, 'intents.72h.timeWindow', 'intent72h.timeWindow', 'intents.72h.time_window') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[2] ? parsedData.intents[2].timeWindow : 'Not available')}
                       </Text>
                       <Text fontSize="sm" color="gray.400">Confidence</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
