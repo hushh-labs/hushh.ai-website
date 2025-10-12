@@ -30,19 +30,38 @@ const extractUserData = (agentResults, userData) => {
   Object.entries(agentResults).forEach(([agent, result]) => {
     if (result.success && result.data) {
       // Handle different response structures
-      const responseData = result.data?.result?.response?.parts?.[0]?.text || 
-                          result.data?.data || 
-                          result.data
+      let responseData = result.data?.result?.status?.message?.parts?.[0]?.text || 
+                         result.data?.result?.response?.parts?.[0]?.text || 
+                         result.data?.data || 
+                         result.data
       
+      // If responseData is a string, try to parse it as JSON
       if (typeof responseData === 'string') {
         try {
-          const parsed = JSON.parse(responseData)
-          Object.assign(allData, parsed)
-        } catch {
-          // If not JSON, skip
+          // Remove markdown code blocks if present
+          const cleanedData = responseData
+            .replace(/```json\n?/g, '')
+            .replace(/```\n?/g, '')
+            .trim()
+          
+          const parsed = JSON.parse(cleanedData)
+          
+          // Handle userProfile wrapper
+          if (parsed.userProfile) {
+            Object.assign(allData, parsed.userProfile)
+          } else if (typeof parsed === 'object' && parsed !== null) {
+            Object.assign(allData, parsed)
+          }
+        } catch (e) {
+          console.error(`Failed to parse JSON from ${agent}:`, e)
         }
-      } else if (typeof responseData === 'object') {
-        Object.assign(allData, responseData)
+      } else if (typeof responseData === 'object' && responseData !== null) {
+        // If already an object, handle userProfile wrapper
+        if (responseData.userProfile) {
+          Object.assign(allData, responseData.userProfile)
+        } else {
+          Object.assign(allData, responseData)
+        }
       }
     }
   })
@@ -50,12 +69,38 @@ const extractUserData = (agentResults, userData) => {
   return allData
 }
 
-// Helper to get field value
+// Helper to get field value (supports nested objects)
 const getField = (data, ...keys) => {
   for (const key of keys) {
-    if (data[key]) return data[key]
+    // Handle nested object notation (e.g., "address.city")
+    if (key.includes('.')) {
+      const parts = key.split('.')
+      let value = data
+      for (const part of parts) {
+        if (value && value[part] !== undefined) {
+          value = value[part]
+        } else {
+          value = null
+          break
+        }
+      }
+      if (value !== null && value !== undefined) return value
+    } else {
+      // Direct key access
+      if (data[key] !== undefined && data[key] !== null && data[key] !== '') {
+        return data[key]
+      }
+    }
   }
   return 'Not available'
+}
+
+// Helper to format array values
+const formatArrayValue = (value) => {
+  if (Array.isArray(value)) {
+    return value.join(', ')
+  }
+  return value
 }
 
 export default function ResultsDisplay({ userData, agentResults, onBack }) {
@@ -241,10 +286,10 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
               BASIC INFORMATION
             </Heading>
             <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} gap={4}>
-              <InfoCard label="Full Name" value={userData?.fullName || getField(parsedData, 'fullName', 'full_name', 'name')} />
-              <InfoCard label="Email" value={userData?.email || getField(parsedData, 'email', 'email_address')} />
-              <InfoCard label="Phone" value={userData?.phoneNumber || getField(parsedData, 'phone', 'phoneNumber', 'phone_number')} />
-              <InfoCard label="Age" value={getField(parsedData, 'age', 'age_range')} />
+              <InfoCard label="Full Name" value={userData?.fullName || getField(parsedData, 'fullName', 'full_name', 'name', 'fullname')} />
+              <InfoCard label="Email" value={userData?.email || getField(parsedData, 'email', 'email_address', 'emailAddress')} />
+              <InfoCard label="Phone" value={userData ? `${userData.countryCode} ${userData.phoneNumber}` : getField(parsedData, 'phone', 'phoneNumber', 'phone_number', 'phoneNumber')} />
+              <InfoCard label="Age" value={getField(parsedData, 'age', 'age_range', 'ageRange')} />
               <InfoCard label="Gender" value={getField(parsedData, 'gender', 'sex')} />
             </Grid>
           </Box>
@@ -262,9 +307,11 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
               LOCATION
             </Heading>
             <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} gap={4}>
-              <InfoCard label="Address" value={getField(parsedData, 'address', 'street_address', 'location')} />
-              <InfoCard label="City" value={getField(parsedData, 'city', 'town')} />
-              <InfoCard label="State" value={getField(parsedData, 'state', 'province', 'region')} />
+              <InfoCard label="Address" value={getField(parsedData, 'address.street', 'street', 'address', 'street_address', 'location')} />
+              <InfoCard label="City" value={getField(parsedData, 'address.city', 'city', 'town')} />
+              <InfoCard label="State" value={getField(parsedData, 'address.state', 'state', 'province', 'region')} />
+              <InfoCard label="Postal Code" value={getField(parsedData, 'address.postalCode', 'address.zipCode', 'postalCode', 'zipCode', 'postal_code', 'zip_code')} />
+              <InfoCard label="Country" value={getField(parsedData, 'address.country', 'country')} />
             </Grid>
           </Box>
 
@@ -301,8 +348,10 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
             </Heading>
             <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} gap={4}>
               <InfoCard label="Occupation" value={getField(parsedData, 'occupation', 'job', 'profession', 'job_title')} />
-              <InfoCard label="Education" value={getField(parsedData, 'education', 'education_level', 'degree')} />
+              <InfoCard label="Education" value={getField(parsedData, 'educationLevel', 'education', 'education_level', 'degree')} />
               <InfoCard label="Income Bracket" value={getField(parsedData, 'incomeBracket', 'income_bracket', 'income', 'salary_range')} />
+              <InfoCard label="Home Ownership" value={getField(parsedData, 'homeOwnership', 'home_ownership')} />
+              <InfoCard label="City Tier" value={getField(parsedData, 'cityTier', 'city_tier')} />
             </Grid>
           </Box>
 
@@ -321,8 +370,15 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
             <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} gap={4}>
               <InfoCard label="Diet Preference" value={getField(parsedData, 'dietPreference', 'diet_preference', 'diet', 'dietary_restrictions')} />
               <InfoCard label="Favorite Cuisine" value={getField(parsedData, 'favoriteCuisine', 'favorite_cuisine', 'cuisine_preference')} />
+              <InfoCard label="Coffee or Tea" value={getField(parsedData, 'coffeeOrTeaChoice', 'coffee_or_tea_choice', 'beverage_preference')} />
               <InfoCard label="Fitness Routine" value={getField(parsedData, 'fitnessRoutine', 'fitness_routine', 'exercise', 'workout_frequency')} />
+              <InfoCard label="Gym Membership" value={getField(parsedData, 'gymMembership', 'gym_membership')} />
+              <InfoCard label="Shopping Preference" value={getField(parsedData, 'shoppingPreference', 'shopping_preference')} />
+              <InfoCard label="Grocery Store Type" value={getField(parsedData, 'groceryStoreType', 'grocery_store_type')} />
+              <InfoCard label="Fashion Style" value={getField(parsedData, 'fashionStyle', 'fashion_style')} />
+              <InfoCard label="Transport" value={getField(parsedData, 'transport', 'transportation')} />
               <InfoCard label="Sleep Chronotype" value={getField(parsedData, 'sleepChronotype', 'sleep_chronotype', 'sleep_pattern')} />
+              <InfoCard label="Eco-Friendliness" value={getField(parsedData, 'ecoFriendliness', 'eco_friendliness', 'environmental_awareness')} />
             </Grid>
           </Box>
 
@@ -342,6 +398,8 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
               <InfoCard label="Tech Affinity" value={getField(parsedData, 'techAffinity', 'tech_affinity', 'technology_adoption')} />
               <InfoCard label="Primary Device" value={getField(parsedData, 'primaryDevice', 'primary_device', 'device')} />
               <InfoCard label="Favorite Social Platform" value={getField(parsedData, 'favoriteSocialPlatform', 'favorite_social_platform', 'social_media')} />
+              <InfoCard label="Social Media Usage Time" value={getField(parsedData, 'socialMediaUsageTime', 'social_media_usage_time')} />
+              <InfoCard label="Content Preference" value={getField(parsedData, 'contentPreference', 'content_preference')} />
             </Grid>
           </Box>
 
@@ -376,14 +434,106 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
             >
               INTENT ANALYSIS
             </Heading>
-            <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} gap={4}>
-              <InfoCard label="Needs" value={getField(parsedData, 'needs', 'user_needs')} />
-              <InfoCard label="Wants" value={getField(parsedData, 'wants', 'user_wants')} />
-              <InfoCard label="Desires" value={getField(parsedData, 'desires', 'user_desires')} />
-              <InfoCard label="Intent 24h" value={getField(parsedData, 'intent24h', 'intent_24h', 'shortTermIntent')} />
-              <InfoCard label="Intent 48h" value={getField(parsedData, 'intent48h', 'intent_48h', 'mediumTermIntent')} />
-              <InfoCard label="Intent 72h" value={getField(parsedData, 'intent72h', 'intent_72h', 'longTermIntent')} />
-            </Grid>
+            <VStack align="stretch" spacing={4}>
+              {/* Needs, Wants, Desires */}
+              <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={4}>
+                <InfoCard label="Needs" value={formatArrayValue(getField(parsedData, 'needs', 'user_needs'))} />
+                <InfoCard label="Wants" value={formatArrayValue(getField(parsedData, 'wants', 'user_wants'))} />
+                <InfoCard label="Desires" value={formatArrayValue(getField(parsedData, 'desires', 'user_desires'))} />
+              </Grid>
+
+              {/* Intent Timeline */}
+              <Box>
+                <Text fontSize="md" fontWeight="600" color="gray.300" mb={3}>
+                  Intent Timeline
+                </Text>
+                <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={4}>
+                  {/* 24h Intent */}
+                  <Box
+                    bg="rgba(255, 255, 255, 0.03)"
+                    borderWidth="1px"
+                    borderColor="rgba(255, 255, 255, 0.1)"
+                    borderRadius="12px"
+                    p={4}
+                  >
+                    <VStack align="start" spacing={2}>
+                      <Badge colorScheme="green" fontSize="xs" px={2} py={1}>24 HOURS</Badge>
+                      <Text fontSize="sm" color="gray.400">Category</Text>
+                      <Text fontSize="md" color="white" fontWeight="500">
+                        {getField(parsedData, 'intents.24h.category', 'intent24h.category') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[0] ? parsedData.intents[0].category : 'Not available')}
+                      </Text>
+                      <Text fontSize="sm" color="gray.400">Budget</Text>
+                      <Text fontSize="md" color="white" fontWeight="500">
+                        {getField(parsedData, 'intents.24h.budget', 'intent24h.budget') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[0] ? parsedData.intents[0].budget : 'Not available')}
+                      </Text>
+                      <Text fontSize="sm" color="gray.400">Confidence</Text>
+                      <Text fontSize="md" color="white" fontWeight="500">
+                        {getField(parsedData, 'intents.24h.confidence', 'intent24h.confidence') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[0] ? parsedData.intents[0].confidence : 'Not available')}
+                      </Text>
+                    </VStack>
+                  </Box>
+
+                  {/* 48h Intent */}
+                  <Box
+                    bg="rgba(255, 255, 255, 0.03)"
+                    borderWidth="1px"
+                    borderColor="rgba(255, 255, 255, 0.1)"
+                    borderRadius="12px"
+                    p={4}
+                  >
+                    <VStack align="start" spacing={2}>
+                      <Badge colorScheme="blue" fontSize="xs" px={2} py={1}>48 HOURS</Badge>
+                      <Text fontSize="sm" color="gray.400">Category</Text>
+                      <Text fontSize="md" color="white" fontWeight="500">
+                        {getField(parsedData, 'intents.48h.category', 'intent48h.category') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[1] ? parsedData.intents[1].category : 'Not available')}
+                      </Text>
+                      <Text fontSize="sm" color="gray.400">Budget</Text>
+                      <Text fontSize="md" color="white" fontWeight="500">
+                        {getField(parsedData, 'intents.48h.budget', 'intent48h.budget') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[1] ? parsedData.intents[1].budget : 'Not available')}
+                      </Text>
+                      <Text fontSize="sm" color="gray.400">Confidence</Text>
+                      <Text fontSize="md" color="white" fontWeight="500">
+                        {getField(parsedData, 'intents.48h.confidence', 'intent48h.confidence') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[1] ? parsedData.intents[1].confidence : 'Not available')}
+                      </Text>
+                    </VStack>
+                  </Box>
+
+                  {/* 72h Intent */}
+                  <Box
+                    bg="rgba(255, 255, 255, 0.03)"
+                    borderWidth="1px"
+                    borderColor="rgba(255, 255, 255, 0.1)"
+                    borderRadius="12px"
+                    p={4}
+                  >
+                    <VStack align="start" spacing={2}>
+                      <Badge colorScheme="purple" fontSize="xs" px={2} py={1}>72 HOURS</Badge>
+                      <Text fontSize="sm" color="gray.400">Category</Text>
+                      <Text fontSize="md" color="white" fontWeight="500">
+                        {getField(parsedData, 'intents.72h.category', 'intent72h.category') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[2] ? parsedData.intents[2].category : 'Not available')}
+                      </Text>
+                      <Text fontSize="sm" color="gray.400">Budget</Text>
+                      <Text fontSize="md" color="white" fontWeight="500">
+                        {getField(parsedData, 'intents.72h.budget', 'intent72h.budget') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[2] ? parsedData.intents[2].budget : 'Not available')}
+                      </Text>
+                      <Text fontSize="sm" color="gray.400">Confidence</Text>
+                      <Text fontSize="md" color="white" fontWeight="500">
+                        {getField(parsedData, 'intents.72h.confidence', 'intent72h.confidence') || 
+                         (Array.isArray(parsedData.intents) && parsedData.intents[2] ? parsedData.intents[2].confidence : 'Not available')}
+                      </Text>
+                    </VStack>
+                  </Box>
+                </Grid>
+              </Box>
+            </VStack>
           </Box>
 
           {/* ANALYSIS METADATA */}

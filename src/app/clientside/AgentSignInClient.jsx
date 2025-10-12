@@ -23,11 +23,17 @@ export default function AgentSignInClient() {
       const startTime = Date.now()
       let body = {}
       
+      // Build full phone number with country code
+      const fullPhoneNumber = `${userData.countryCode} ${userData.phoneNumber}`
+      
+      // Custom prompt template for detailed JSON profile
+      const detailedPrompt = `Can you provide me with a detailed JSON profile of ${userData.fullName} having email ${userData.email} and phone ${fullPhoneNumber} that includes all possible fields such as user ID, full name, phone, email, address, age, gender, marital status, household size, children count, education level, occupation, income bracket, home ownership, city tier, transport, diet preference, favorite cuisine, coffee or tea choice, fitness routine, gym membership, shopping preference, grocery store type, fashion style, tech affinity, primary device, favorite social platform, social media usage time, content preference, sports interest, gaming preference, travel frequency, eco-friendliness, sleep chronotype, needs, wants, desires, and 24h/48h/72h intents with category, budget, time window, and confidence. The output should strictly be in JSON format. If some information is not available from public sources, please generate reasonable and relevant placeholder data instead of leaving fields blank, while keeping it realistic and respectful.`
+      
       // Build the appropriate payload for each agent type
       switch (agent) {
         case 'brand':
           body = {
-            text: `Fetch all details for user with email ${userData.email}, phone ${userData.phoneNumber}, and name ${userData.fullName}`,
+            text: detailedPrompt,
             sessionId,
             id,
           }
@@ -35,7 +41,7 @@ export default function AgentSignInClient() {
           
         case 'hushh':
           body = {
-            text: `Get user profile information for ${userData.fullName} with email ${userData.email} and phone number ${userData.phoneNumber}`,
+            text: detailedPrompt,
             sessionId,
             id,
           }
@@ -43,7 +49,7 @@ export default function AgentSignInClient() {
           
         case 'public':
           body = {
-            text: `Enrich public data for user ${userData.fullName} with email ${userData.email}`,
+            text: detailedPrompt,
             sessionId,
             id,
           }
@@ -51,9 +57,11 @@ export default function AgentSignInClient() {
           
         case 'whatsapp':
           // WhatsApp agent sends a message notification
+          // Remove the + and spaces from phone number for WhatsApp
+          const whatsappPhone = `${userData.countryCode}${userData.phoneNumber}`.replace(/[^0-9]/g, '')
           body = {
             messaging_product: 'whatsapp',
-            to: userData.phoneNumber,
+            to: whatsappPhone,
             type: 'template',
             template: {
               name: 'hello_world',

@@ -19,6 +19,7 @@ export default function UserDetailsForm({ onSubmit }) {
   const [formData, setFormData] = useState({
     email: '',
     fullName: '',
+    countryCode: '+91',
     phoneNumber: '',
   })
   const [errors, setErrors] = useState({})
@@ -39,6 +40,11 @@ export default function UserDetailsForm({ onSubmit }) {
 
   const validateFullName = (name) => {
     return name.trim().length >= 2
+  }
+
+  const validateCountryCode = (code) => {
+    const codeRegex = /^\+[0-9]{1,4}$/
+    return codeRegex.test(code)
   }
 
   const handleChange = (field, value) => {
@@ -65,6 +71,12 @@ export default function UserDetailsForm({ onSubmit }) {
       newErrors.fullName = 'Full name is required'
     } else if (!validateFullName(formData.fullName)) {
       newErrors.fullName = 'Name must be at least 2 characters'
+    }
+
+    if (!formData.countryCode.trim()) {
+      newErrors.countryCode = 'Country code is required'
+    } else if (!validateCountryCode(formData.countryCode)) {
+      newErrors.countryCode = 'Please enter a valid country code (e.g., +91)'
     }
     
     if (!formData.phoneNumber.trim()) {
@@ -186,6 +198,36 @@ export default function UserDetailsForm({ onSubmit }) {
                 <FormErrorMessage>{errors.fullName}</FormErrorMessage>
               </FormControl>
 
+              <FormControl isInvalid={!!errors.countryCode}>
+                <FormLabel fontWeight="600" color="gray.300">
+                  Country Code
+                </FormLabel>
+                <Input
+                  type="text"
+                  placeholder="+91"
+                  value={formData.countryCode}
+                  onChange={(e) => {
+                    const value = e.target.value
+                    if (value === '' || value === '+' || /^\+[0-9]{0,4}$/.test(value)) {
+                      handleChange('countryCode', value)
+                    }
+                  }}
+                  size="lg"
+                  borderRadius="12px"
+                  bg="rgba(255, 255, 255, 0.05)"
+                  borderColor="rgba(255, 255, 255, 0.1)"
+                  color="white"
+                  _placeholder={{ color: 'gray.500' }}
+                  _hover={{ borderColor: 'rgba(255, 255, 255, 0.2)' }}
+                  _focus={{ bg: 'rgba(255, 255, 255, 0.08)', borderColor: 'green.400' }}
+                  maxLength={5}
+                />
+                <FormErrorMessage>{errors.countryCode}</FormErrorMessage>
+                <Text fontSize="xs" color="gray.500" mt={1}>
+                  Country calling code (e.g., +91 for India, +1 for USA)
+                </Text>
+              </FormControl>
+
               <FormControl isInvalid={!!errors.phoneNumber}>
                 <FormLabel fontWeight="600" color="gray.300">
                   Phone Number
@@ -206,7 +248,7 @@ export default function UserDetailsForm({ onSubmit }) {
                 />
                 <FormErrorMessage>{errors.phoneNumber}</FormErrorMessage>
                 <Text fontSize="xs" color="gray.500" mt={1}>
-                  Enter phone number in E.164 format without + (e.g., 919876543210)
+                  Enter phone number without country code (e.g., 9876543210)
                 </Text>
               </FormControl>
 
