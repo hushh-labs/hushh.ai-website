@@ -1,6 +1,10 @@
 /* eslint-env node */
 import { NextResponse } from "next/server";
 
+// Configure function timeout (for Vercel deployment)
+export const maxDuration = 60; // 60 seconds for Pro plan, 10 for Hobby
+export const dynamic = 'force-dynamic';
+
 // Map agent slug => upstream URL (from Postman collections - verified working)
 const AGENT_URLS = {
   brand: 'https://a2a-crm-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/crm-agent',
@@ -13,9 +17,13 @@ const AGENT_URLS = {
 // WhatsApp Cloud API Bearer Token (from Postman collection)
 const WHATSAPP_BEARER_TOKEN = 'EAAT3oJUYUDQBPqJOrU4lY7dOaFOmlQsiGunaeACpfaf92PlBFmNwzxJDCbsd9PaMZBQlRHZCepZCZAldz8AZB9anrQRZAoVYoxRx8aQ1vUxL2sXZAohVZBJMJzk43ZCUEfnPoLJCLpdcvQi4UltrKGxUw2dHH4ZBFOLlNZC9oVMJhpKvQtoePZC45eC4WNdK6oeo4AZDZD';
 
+// Timeout for agent API calls (50 seconds to leave buffer for Vercel)
+const AGENT_TIMEOUT = 50000;
+
 export async function POST(req, { params }) {
+  const agent = params?.agent?.toLowerCase();
+  
   try {
-    const agent = params?.agent?.toLowerCase();
     const upstream = AGENT_URLS[agent];
     if (!upstream) {
       return NextResponse.json({ error: `Unknown agent '${agent}'` }, { status: 400 });
@@ -68,16 +76,50 @@ export async function POST(req, { params }) {
       headers.Authorization = `Bearer ${WHATSAPP_BEARER_TOKEN}`;
     }
 
-    const res = await fetch(upstream, {
-      method: "POST",
-      headers,
-      body: JSON.stringify(payload),
-    });
+    // Create AbortController for timeout handling
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), AGENT_TIMEOUT);
 
-    const data = await res.json().catch(() => ({}));
-    return NextResponse.json({ upstreamUrl: upstream, upstreamStatus: res.status, data });
+    try {
+      const res = await fetch(upstream, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      const data = await res.json().catch(() => ({}));
+      return NextResponse.json({ 
+        upstreamUrl: upstream, 
+        upstreamStatus: res.status, 
+        data,
+        timestamp: new Date().toISOString()
+      });
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+      
+      // Handle timeout specifically
+      if (fetchError.name === 'AbortError') {
+        return NextResponse.json({ 
+          error: `Agent timeout after ${AGENT_TIMEOUT/1000}s`,
+          upstreamUrl: upstream,
+          upstreamStatus: 408,
+          data: {},
+          timeout: true
+        }, { status: 408 });
+      }
+      
+      throw fetchError;
+    }
   } catch (err) {
-    return NextResponse.json({ error: err?.message ?? "Unknown error" }, { status: 500 });
+    console.error(`Error in /api/a2a/${agent}:`, err);
+    return NextResponse.json({ 
+      error: err?.message ?? "Unknown error",
+      agent,
+      timestamp: new Date().toISOString()
+    }, { status: 500 });
   }
 }
 
