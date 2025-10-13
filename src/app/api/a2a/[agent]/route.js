@@ -1,13 +1,13 @@
 /* eslint-env node */
 import { NextResponse } from "next/server";
 
-// Map agent slug => upstream URL from environment vars
+// Map agent slug => upstream URL (hardcoded for consistent behavior)
 const AGENT_URLS = {
-  brand: process.env.A2A_BRAND_AGENT_URL || 'https://a2a-crm-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/crm-agent', // e.g. https://.../crm-agent
-  hushh: process.env.A2A_HUSHH_AGENT_URL || 'https://a2a-supabase-headless-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/supabase-agent', // e.g. https://.../supabase-agent
-  public: process.env.A2A_PUBLIC_DATA_AGENT_URL || 'https://a2a-public-data-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/public-data-agent', // e.g. https://.../public-data-agent
-  whatsapp: process.env.A2A_WHATSAPP_AGENT_URL || 'https://a2a-whatsapp-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/sendMessageToWhatsapp', // e.g. https://.../sendMessageToWhatsapp
-  email: process.env.A2A_EMAIL_AGENT_URL || 'https://a2a-email-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/sendMail', // e.g. https://.../sendMail
+  brand: 'https://a2a-crm-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/crm-agent',
+  hushh: 'https://a2a-supabase-headless-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/supabase-agent',
+  public: 'https://a2a-public-data-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/public-data-agent',
+  whatsapp: 'https://a2a-whatsapp-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/sendMessageToWhatsapp',
+  email: 'https://a2a-email-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/sendMail',
 };
 
 export async function POST(req, { params }) {
