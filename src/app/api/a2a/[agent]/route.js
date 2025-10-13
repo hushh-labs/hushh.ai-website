@@ -14,7 +14,10 @@ const AGENT_URLS = {
   email: 'https://hushh-email-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/sendMail',
 };
 
-// WhatsApp Cloud API Bearer Token (from Postman collection)
+// Optional: Facebook Graph API endpoint for WhatsApp Cloud API (used when provider === 'facebook')
+const FACEBOOK_WHATSAPP_URL = 'https://graph.facebook.com/v22.0/829639396896769/messages';
+
+// WhatsApp Cloud API Bearer Token (used only when provider === 'facebook')
 const WHATSAPP_BEARER_TOKEN = 'EAAT3oJUYUDQBPqJOrU4lY7dOaFOmlQsiGunaeACpfaf92PlBFmNwzxJDCbsd9PaMZBQlRHZCepZCZAldz8AZB9anrQRZAoVYoxRx8aQ1vUxL2sXZAohVZBJMJzk43ZCUEfnPoLJCLpdcvQi4UltrKGxUw2dHH4ZBFOLlNZC9oVMJhpKvQtoePZC45eC4WNdK6oeo4AZDZD';
 
 // Timeout for agent API calls (50 seconds to leave buffer for Vercel)
@@ -24,7 +27,7 @@ export async function POST(req, { params }) {
   const agent = params?.agent?.toLowerCase();
   
   try {
-    const upstream = AGENT_URLS[agent];
+    let upstream = AGENT_URLS[agent];
     if (!upstream) {
       return NextResponse.json({ error: `Unknown agent '${agent}'` }, { status: 400 });
     }
@@ -50,6 +53,33 @@ export async function POST(req, { params }) {
       }
     }
 
+    // Provider selection for WhatsApp: 'facebook' (Graph API) or 'mulesoft' (CloudHub proxy)
+    // Priority: explicit body.provider -> infer from template/language -> default 'mulesoft'
+    let whatsappProvider = 'mulesoft';
+    if (agent === 'whatsapp') {
+      const explicitProvider = (body?.provider || body?.payload?.provider || '').toLowerCase();
+      const templateName = body?.template?.name || body?.payload?.template?.name || customPayload?.template?.name;
+      const langCode = body?.template?.language?.code || body?.payload?.template?.language?.code || customPayload?.template?.language?.code;
+      if (explicitProvider === 'facebook' || explicitProvider === 'mulesoft') {
+        whatsappProvider = explicitProvider;
+      } else if (templateName === 'hello_world' || langCode === 'en_US') {
+        whatsappProvider = 'facebook';
+      }
+
+      // Choose upstream based on provider
+      if (whatsappProvider === 'facebook') {
+        upstream = FACEBOOK_WHATSAPP_URL;
+      } else {
+        upstream = AGENT_URLS.whatsapp; // Mulesoft
+      }
+
+      // Normalize phone number format per provider
+      if (customPayload?.to) {
+        const digitsOnly = String(customPayload.to).replace(/[^0-9]/g, '');
+        customPayload.to = whatsappProvider === 'mulesoft' ? `+${digitsOnly}` : digitsOnly;
+      }
+    }
+
     // Default JSON-RPC payload for "ai chain" style agents. For non-JSON-RPC
     // services like WhatsApp or Email, callers should pass a custom `payload`.
     const payload = customPayload ?? {
@@ -65,14 +95,14 @@ export async function POST(req, { params }) {
       },
     };
 
-    // Build headers - WhatsApp needs Authorization Bearer token
+    // Build headers
     const headers = {
       "Content-Type": "application/json",
       Accept: "application/json",
     };
     
-    // Add Authorization header for WhatsApp Cloud API
-    if (agent === 'whatsapp') {
+    // Add Authorization header only when calling Facebook Graph API
+    if (agent === 'whatsapp' && upstream === FACEBOOK_WHATSAPP_URL) {
       headers.Authorization = `Bearer ${WHATSAPP_BEARER_TOKEN}`;
     }
 
