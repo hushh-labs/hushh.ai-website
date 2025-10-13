@@ -1,12 +1,12 @@
-// Agent API URLs Configuration
-// These URLs are called directly from the browser (client-side)
+// Agent API URLs Configuration (from verified Postman collections)
+// These URLs match the working Postman collection endpoints
 
 export const AGENT_API_URLS = {
   brand: 'https://a2a-crm-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/crm-agent',
   hushh: 'https://a2a-supabase-headless-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/supabase-agent',
-  public: 'https://a2a-public-data-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/public-data-agent',
-  whatsapp: 'https://a2a-whatsapp-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/sendMessageToWhatsapp',
-  email: 'https://a2a-email-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/sendMail',
+  public: 'https://hushh-open-ai-agent-ap-bt5gn1.7y6hwo.usa-e2.cloudhub.io/public-data-agent',
+  whatsapp: 'https://hushh-whatsapp-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/sendMessageToWhatsapp',
+  email: 'https://hushh-email-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/sendMail',
 };
 
 // Helper function to get agent URL

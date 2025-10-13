@@ -1,13 +1,13 @@
 /* eslint-env node */
 import { NextResponse } from "next/server";
 
-// Map agent slug => upstream URL (hardcoded for consistent behavior)
+// Map agent slug => upstream URL (from Postman collections - verified working)
 const AGENT_URLS = {
   brand: 'https://a2a-crm-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/crm-agent',
   hushh: 'https://a2a-supabase-headless-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/supabase-agent',
-  public: 'https://a2a-public-data-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/public-data-agent',
-  whatsapp: 'https://a2a-whatsapp-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/sendMessageToWhatsapp',
-  email: 'https://a2a-email-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/sendMail',
+  public: 'https://hushh-open-ai-agent-ap-bt5gn1.7y6hwo.usa-e2.cloudhub.io/public-data-agent',
+  whatsapp: 'https://hushh-whatsapp-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/sendMessageToWhatsapp',
+  email: 'https://hushh-email-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/sendMail',
 };
 
 export async function POST(req, { params }) {
