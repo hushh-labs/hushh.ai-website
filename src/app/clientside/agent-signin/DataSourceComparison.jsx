@@ -92,12 +92,11 @@ const DataSourceCard = ({ agentName, agentType, result }) => {
 }
 
 export default function DataSourceComparison({ agentResults }) {
+  // Only profile fetching agents (removed whatsapp and email)
   const agentInfo = {
     brand: { name: 'Brand Agent', type: 'CRM Agent' },
     hushh: { name: 'Hushh Agent', type: 'Supabase Proxy' },
     public: { name: 'Public Data Agent', type: 'Public Data Agent' },
-    whatsapp: { name: 'WhatsApp Agent', type: 'WhatsApp CRM' },
-    email: { name: 'Email Agent', type: 'Email Integration' },
   }
 
   return (

@@ -29,7 +29,7 @@ export default function AgentSignInClient() {
       // Custom prompt template for detailed JSON profile
       const detailedPrompt = `Can you provide me with a detailed JSON profile of ${userData.fullName} having email ${userData.email} and phone ${fullPhoneNumber} that includes all possible fields such as user ID, full name, phone, email, address, age, gender, marital status, household size, children count, education level, occupation, income bracket, home ownership, city tier, transport, diet preference, favorite cuisine, coffee or tea choice, fitness routine, gym membership, shopping preference, grocery store type, fashion style, tech affinity, primary device, favorite social platform, social media usage time, content preference, sports interest, gaming preference, travel frequency, eco-friendliness, sleep chronotype, needs, wants, desires, and 24h/48h/72h intents with category, budget, time window, and confidence. The output should strictly be in JSON format. If some information is not available from public sources, please generate reasonable and relevant placeholder data instead of leaving fields blank, while keeping it realistic and respectful.`
       
-      // Build the appropriate payload for each agent type
+      // Build the appropriate payload for profile fetching agents only
       switch (agent) {
         case 'brand':
         case 'hushh':
@@ -38,37 +38,6 @@ export default function AgentSignInClient() {
             text: detailedPrompt,
             sessionId,
             id,
-          }
-          break
-          
-        case 'whatsapp':
-          // WhatsApp agent sends a message notification
-          const whatsappPhone = `${userData.countryCode}${userData.phoneNumber}`.replace(/[^0-9]/g, '')
-          body = {
-            messaging_product: 'whatsapp',
-            to: whatsappPhone,
-            type: 'template',
-            template: {
-              name: 'hello_world',
-              language: { code: 'en_US' },
-              components: [
-                {
-                  type: 'body',
-                  parameters: [
-                    { type: 'text', text: userData.fullName }
-                  ]
-                }
-              ]
-            }
-          }
-          break
-          
-        case 'email':
-          body = {
-            to: userData.email,
-            subject: 'Profile Analysis Complete - Hushh.ai',
-            body: `<html><body><h2>Hello ${userData.fullName}!</h2><p>Your profile analysis has been completed successfully. Thank you for using Hushh.ai agents.</p></body></html>`,
-            mimeType: 'text/html',
           }
           break
           
@@ -131,7 +100,8 @@ export default function AgentSignInClient() {
     })
 
     try {
-      const agents = ['brand', 'hushh', 'public', 'whatsapp', 'email']
+      // Only profile fetching agents (removed whatsapp and email)
+      const agents = ['brand', 'hushh', 'public']
       const resultMap = {}
       
       // Call agents sequentially to show progress
