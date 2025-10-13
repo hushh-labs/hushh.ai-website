@@ -22,7 +22,6 @@ import ChatThread from './agents/ChatThread'
 import JsonRpcComposer from './agents/JsonRpcComposer'
 import EmailComposer from './agents/EmailComposer'
 import WhatsappComposer from './agents/WhatsappComposer'
-import { getAgentUrl, buildJsonRpcPayload } from '../../lib/config/agentConfig'
 
 // Derive initials from an email address (first + last letter from local-part tokens)
 function initialsFromEmail(email) {
@@ -113,25 +112,20 @@ export default function A2AAgentClient() {
     setLoading(true)
     setError('')
     try {
-      // Get the direct agent URL and build payload
-      const agentUrl = getAgentUrl(agent)
-      const payload = buildJsonRpcPayload(trimmed)
-      
-      // Call the agent API directly (no proxy)
-      const res = await fetch(agentUrl, {
+      // Call via Next.js API proxy
+      const res = await fetch(`/api/a2a/${agent}`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ text: trimmed }),
       })
       const json = await res.json()
       if (!res.ok) {
         setError(json?.error || 'Request failed')
         toast({ title: 'Request failed', status: 'error', duration: 3000 })
       }
-      const content = extractText(json?.result) || extractText(json?.data) || extractText(json)
+      const content = extractText(json?.data) || extractText(json)
       const asstMsg = { role: 'agent', content: content || (json?.error ? `Error: ${json.error}` : 'No response'), agent, id: `a-${Date.now()}` }
       setMessages(prev => [...prev, asstMsg])
     } catch (e) {
@@ -152,24 +146,20 @@ export default function A2AAgentClient() {
     setLoading(true)
     setError('')
     try {
-      // Get the direct agent URL
-      const agentUrl = getAgentUrl(agent)
-      
-      // Call the agent API directly (no proxy) with custom payload
-      const res = await fetch(agentUrl, {
+      // Call via Next.js API proxy with custom payload
+      const res = await fetch(`/api/a2a/${agent}`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ payload }),
       })
       const json = await res.json()
       if (!res.ok) {
         setError(json?.error || 'Request failed')
         toast({ title: 'Request failed', status: 'error', duration: 3000 })
       }
-      const content = extractText(json?.result) || extractText(json?.data) || extractText(json)
+      const content = extractText(json?.data) || extractText(json)
       const asstMsg = { role: 'agent', content: content || (json?.error ? `Error: ${json.error}` : 'No response'), agent, id: `a-${Date.now()}` }
       setMessages(prev => [...prev, asstMsg])
     } catch (e) {

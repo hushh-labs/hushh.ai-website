@@ -6,7 +6,6 @@ import ResultsDisplay from './agent-signin/ResultsDisplay'
 import DataSourceComparison from './agent-signin/DataSourceComparison'
 import AnalyzingLoader from './agent-signin/AnalyzingLoader'
 import ContentWrapper from '../_components/layout/ContentWrapper'
-import { getAgentUrl, buildJsonRpcPayload, buildWhatsappPayload, buildEmailPayload } from '../../lib/config/agentConfig'
 
 export default function AgentSignInClient() {
   const [currentStep, setCurrentStep] = useState('form') // 'form', 'analyzing', 'results'
@@ -15,14 +14,14 @@ export default function AgentSignInClient() {
   const [analysisProgress, setAnalysisProgress] = useState(0)
   const toast = useToast()
 
-  // Call all agent APIs with user details - DIRECT API CALLS
+  // Call all agent APIs with user details via Next.js proxy
   const callAgentAPI = useCallback(async (agent, userData) => {
     const sessionId = `session-${Date.now()}`
     const id = `task-${Math.random().toString(36).slice(2)}`
     
     try {
       const startTime = Date.now()
-      let payload = {}
+      let body = {}
       
       // Build full phone number with country code
       const fullPhoneNumber = `${userData.countryCode} ${userData.phoneNumber}`
@@ -35,41 +34,55 @@ export default function AgentSignInClient() {
         case 'brand':
         case 'hushh':
         case 'public':
-          // Use JSON-RPC format for AI agents
-          payload = buildJsonRpcPayload(detailedPrompt, sessionId, id)
+          body = {
+            text: detailedPrompt,
+            sessionId,
+            id,
+          }
           break
           
         case 'whatsapp':
           // WhatsApp agent sends a message notification
-          const whatsappPhone = `${userData.countryCode}${userData.phoneNumber}`
-          payload = buildWhatsappPayload(whatsappPhone, 'hello_world', userData.fullName)
+          const whatsappPhone = `${userData.countryCode}${userData.phoneNumber}`.replace(/[^0-9]/g, '')
+          body = {
+            messaging_product: 'whatsapp',
+            to: whatsappPhone,
+            type: 'template',
+            template: {
+              name: 'hello_world',
+              language: { code: 'en_US' },
+              components: [
+                {
+                  type: 'body',
+                  parameters: [
+                    { type: 'text', text: userData.fullName }
+                  ]
+                }
+              ]
+            }
+          }
           break
           
         case 'email':
-          // Email agent sends a notification email
-          payload = buildEmailPayload(
-            userData.email,
-            'Profile Analysis Complete - Hushh.ai',
-            `<html><body><h2>Hello ${userData.fullName}!</h2><p>Your profile analysis has been completed successfully. Thank you for using Hushh.ai agents.</p></body></html>`,
-            'text/html'
-          )
+          body = {
+            to: userData.email,
+            subject: 'Profile Analysis Complete - Hushh.ai',
+            body: `<html><body><h2>Hello ${userData.fullName}!</h2><p>Your profile analysis has been completed successfully. Thank you for using Hushh.ai agents.</p></body></html>`,
+            mimeType: 'text/html',
+          }
           break
           
         default:
           throw new Error(`Unknown agent: ${agent}`)
       }
       
-      // Get the direct agent URL
-      const agentUrl = getAgentUrl(agent)
-      
-      // Call the agent API directly (no proxy)
-      const response = await fetch(agentUrl, {
+      // Call via Next.js API proxy
+      const response = await fetch(`/api/a2a/${agent}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(body),
       })
       
       const responseTime = `${Date.now() - startTime}ms`
@@ -81,15 +94,16 @@ export default function AgentSignInClient() {
           data: result,
           error: result.error || `Request failed with status ${response.status}`,
           responseTime,
-          agentUrl, // Include the actual URL for debugging
+          upstreamUrl: result.upstreamUrl, // Show actual agent URL
         }
       }
       
       return {
         success: true,
-        data: result.result || result.data || result,
+        data: result.data || result,
         responseTime,
-        agentUrl, // Include the actual URL for debugging
+        upstreamUrl: result.upstreamUrl, // Show actual agent URL
+        upstreamStatus: result.upstreamStatus,
       }
     } catch (error) {
       console.error(`Error calling ${agent} agent:`, error)
