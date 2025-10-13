@@ -6,6 +6,7 @@ import ResultsDisplay from './agent-signin/ResultsDisplay'
 import DataSourceComparison from './agent-signin/DataSourceComparison'
 import AnalyzingLoader from './agent-signin/AnalyzingLoader'
 import ContentWrapper from '../_components/layout/ContentWrapper'
+import { getAgentUrl, buildJsonRpcPayload, buildWhatsappPayload, buildEmailPayload } from '../../lib/config/agentConfig'
 
 export default function AgentSignInClient() {
   const [currentStep, setCurrentStep] = useState('form') // 'form', 'analyzing', 'results'
@@ -14,14 +15,14 @@ export default function AgentSignInClient() {
   const [analysisProgress, setAnalysisProgress] = useState(0)
   const toast = useToast()
 
-  // Call all agent APIs with user details
+  // Call all agent APIs with user details - DIRECT API CALLS
   const callAgentAPI = useCallback(async (agent, userData) => {
     const sessionId = `session-${Date.now()}`
     const id = `task-${Math.random().toString(36).slice(2)}`
     
     try {
       const startTime = Date.now()
-      let body = {}
+      let payload = {}
       
       // Build full phone number with country code
       const fullPhoneNumber = `${userData.countryCode} ${userData.phoneNumber}`
@@ -32,90 +33,63 @@ export default function AgentSignInClient() {
       // Build the appropriate payload for each agent type
       switch (agent) {
         case 'brand':
-          body = {
-            text: detailedPrompt,
-            sessionId,
-            id,
-          }
-          break
-          
         case 'hushh':
-          body = {
-            text: detailedPrompt,
-            sessionId,
-            id,
-          }
-          break
-          
         case 'public':
-          body = {
-            text: detailedPrompt,
-            sessionId,
-            id,
-          }
+          // Use JSON-RPC format for AI agents
+          payload = buildJsonRpcPayload(detailedPrompt, sessionId, id)
           break
           
         case 'whatsapp':
           // WhatsApp agent sends a message notification
-          // Remove the + and spaces from phone number for WhatsApp
-          const whatsappPhone = `${userData.countryCode}${userData.phoneNumber}`.replace(/[^0-9]/g, '')
-          body = {
-            messaging_product: 'whatsapp',
-            to: whatsappPhone,
-            type: 'template',
-            template: {
-              name: 'hello_world',
-              language: { code: 'en_US' },
-              components: [
-                {
-                  type: 'body',
-                  parameters: [
-                    { type: 'text', text: userData.fullName }
-                  ]
-                }
-              ]
-            }
-          }
+          const whatsappPhone = `${userData.countryCode}${userData.phoneNumber}`
+          payload = buildWhatsappPayload(whatsappPhone, 'hello_world', userData.fullName)
           break
           
         case 'email':
           // Email agent sends a notification email
-          body = {
-            to: userData.email,
-            subject: 'Profile Analysis Complete - Hushh.ai',
-            body: `<html><body><h2>Hello ${userData.fullName}!</h2><p>Your profile analysis has been completed successfully. Thank you for using Hushh.ai agents.</p></body></html>`,
-            mimeType: 'text/html',
-          }
+          payload = buildEmailPayload(
+            userData.email,
+            'Profile Analysis Complete - Hushh.ai',
+            `<html><body><h2>Hello ${userData.fullName}!</h2><p>Your profile analysis has been completed successfully. Thank you for using Hushh.ai agents.</p></body></html>`,
+            'text/html'
+          )
           break
           
         default:
           throw new Error(`Unknown agent: ${agent}`)
       }
       
-      const response = await fetch(`/api/a2a/${agent}`, {
+      // Get the direct agent URL
+      const agentUrl = getAgentUrl(agent)
+      
+      // Call the agent API directly (no proxy)
+      const response = await fetch(agentUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
-        body: JSON.stringify(body),
+        body: JSON.stringify(payload),
       })
       
       const responseTime = `${Date.now() - startTime}ms`
-      const result = await response.json()
+      const result = await response.json().catch(() => ({}))
       
       if (!response.ok) {
         return {
           success: false,
           data: result,
-          error: result.error || 'Request failed',
+          error: result.error || `Request failed with status ${response.status}`,
           responseTime,
+          agentUrl, // Include the actual URL for debugging
         }
       }
       
       return {
         success: true,
-        data: result.data || result,
+        data: result.result || result.data || result,
         responseTime,
+        agentUrl, // Include the actual URL for debugging
       }
     } catch (error) {
       console.error(`Error calling ${agent} agent:`, error)
