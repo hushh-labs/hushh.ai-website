@@ -26,14 +26,22 @@ import {
 const extractUserData = (agentResults, userData) => {
   const allData = {}
   
+  console.log('🔍 Extracting data from agent results:', agentResults)
+  
   // Combine all agent data
   Object.entries(agentResults).forEach(([agent, result]) => {
+    console.log(`📊 Processing ${agent} agent:`, result)
+    
     if (result.success && result.data) {
-      // Handle different response structures
+      // Handle different response structures - JSON-RPC format
       let responseData = result.data?.result?.status?.message?.parts?.[0]?.text || 
+                         result.data?.result?.artifacts?.[0]?.parts?.[0]?.text ||
+                         result.data?.result?.message?.parts?.[0]?.text ||
                          result.data?.result?.response?.parts?.[0]?.text || 
                          result.data?.data || 
                          result.data
+      
+      console.log(`📝 Extracted response data from ${agent}:`, responseData)
       
       // If responseData is a string, try to parse it as JSON
       if (typeof responseData === 'string') {
@@ -44,28 +52,38 @@ const extractUserData = (agentResults, userData) => {
             .replace(/```\n?/g, '')
             .trim()
           
+          console.log(`🧹 Cleaned data from ${agent}:`, cleanedData.substring(0, 200))
+          
           const parsed = JSON.parse(cleanedData)
+          console.log(`✅ Parsed JSON from ${agent}:`, parsed)
           
           // Handle userProfile wrapper
           if (parsed.userProfile) {
             Object.assign(allData, parsed.userProfile)
+            console.log(`📦 Merged userProfile from ${agent}`)
           } else if (typeof parsed === 'object' && parsed !== null) {
             Object.assign(allData, parsed)
+            console.log(`📦 Merged direct object from ${agent}`)
           }
         } catch (e) {
-          console.error(`Failed to parse JSON from ${agent}:`, e)
+          console.error(`❌ Failed to parse JSON from ${agent}:`, e, '\nData:', responseData?.substring(0, 500))
         }
       } else if (typeof responseData === 'object' && responseData !== null) {
         // If already an object, handle userProfile wrapper
         if (responseData.userProfile) {
           Object.assign(allData, responseData.userProfile)
+          console.log(`📦 Merged object userProfile from ${agent}`)
         } else {
           Object.assign(allData, responseData)
+          console.log(`📦 Merged direct object from ${agent}`)
         }
       }
+    } else {
+      console.warn(`⚠️ ${agent} agent failed or has no data:`, result)
     }
   })
   
+  console.log('✨ Final merged data:', allData)
   return allData
 }
 

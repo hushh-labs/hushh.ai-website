@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Agent API Transparency Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; }
+        .section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        .success { background: #d4edda; border-color: #c3e6cb; }
+        .info { background: #d1ecf1; border-color: #bee5eb; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        pre { background: #f8f9fa; padding: 15px; border-radius: 4px; overflow-x: auto; }
+        .url { color: #0066cc; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>��� Agent API Transparency Test</h1>
+    
+    <div class="section info">
+        <h2>What You'll See in DevTools Network Tab:</h2>
+        <p class="url">POST https://www.hushh.ai/api/a2a/hushh</p>
+        <p>☝️ This is CORRECT! This is your Next.js proxy endpoint.</p>
+    </div>
+
+    <div class="section info">
+        <h2>What the Response Will Show:</h2>
+        <pre>{
+  "upstreamUrl": "https://a2a-supabase-headless-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/supabase-agent",
+  "upstreamStatus": 200,
+  "data": { ... agent response ... }
+}</pre>
+        <p>☝️ The <strong>upstreamUrl</strong> field shows the ACTUAL agent service URL that was called!</p>
+    </div>
+
+    <div class="section success">
+        <h2>Test It Yourself:</h2>
+        <p>1. Open DevTools (F12) → Network tab</p>
+        <p>2. Click the button below</p>
+        <p>3. Check the Network tab - you'll see the proxy URL</p>
+        <p>4. Click on the request → Response tab - you'll see the actual agent URL in <strong>upstreamUrl</strong></p>
+        <br>
+        <button onclick="testAgent()">Test Hushh Agent</button>
+        <div id="result" style="margin-top: 20px;"></div>
+    </div>
+
+    <script>
+        async function testAgent() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>⏳ Calling agent... Check Network tab!</p>';
+            
+            try {
+                // Browser calls the Next.js proxy
+                const response = await fetch('/api/a2a/hushh', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: 'Test message from browser' })
+                });
+                
+                const result = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <h3>✅ Success! Check Network Tab & Response Below:</h3>
+                    <p><strong>Browser Called:</strong> <span class="url">/api/a2a/hushh</span> (your proxy)</p>
+                    <p><strong>Proxy Called:</strong> <span class="url">${result.upstreamUrl}</span></p>
+                    <p><strong>Agent Status:</strong> ${result.upstreamStatus}</p>
+                    <details>
+                        <summary><strong>Full Response (click to expand)</strong></summary>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    </details>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: red;">❌ Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

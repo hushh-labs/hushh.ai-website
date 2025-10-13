@@ -10,6 +10,9 @@ const AGENT_URLS = {
   email: 'https://hushh-email-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/sendMail',
 };
 
+// WhatsApp Cloud API Bearer Token (from Postman collection)
+const WHATSAPP_BEARER_TOKEN = 'EAAT3oJUYUDQBPqJOrU4lY7dOaFOmlQsiGunaeACpfaf92PlBFmNwzxJDCbsd9PaMZBQlRHZCepZCZAldz8AZB9anrQRZAoVYoxRx8aQ1vUxL2sXZAohVZBJMJzk43ZCUEfnPoLJCLpdcvQi4UltrKGxUw2dHH4ZBFOLlNZC9oVMJhpKvQtoePZC45eC4WNdK6oeo4AZDZD';
+
 export async function POST(req, { params }) {
   try {
     const agent = params?.agent?.toLowerCase();
@@ -54,9 +57,20 @@ export async function POST(req, { params }) {
       },
     };
 
+    // Build headers - WhatsApp needs Authorization Bearer token
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    
+    // Add Authorization header for WhatsApp Cloud API
+    if (agent === 'whatsapp') {
+      headers.Authorization = `Bearer ${WHATSAPP_BEARER_TOKEN}`;
+    }
+
     const res = await fetch(upstream, {
       method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      headers,
       body: JSON.stringify(payload),
     });
 
