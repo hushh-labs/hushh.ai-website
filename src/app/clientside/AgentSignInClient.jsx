@@ -14,7 +14,7 @@ export default function AgentSignInClient() {
   const [analysisProgress, setAnalysisProgress] = useState(0)
   const toast = useToast()
 
-  // Call all agent APIs with user details
+  // Call all agent APIs with user details via Next.js proxy
   const callAgentAPI = useCallback(async (agent, userData) => {
     const sessionId = `session-${Date.now()}`
     const id = `task-${Math.random().toString(36).slice(2)}`
@@ -32,21 +32,7 @@ export default function AgentSignInClient() {
       // Build the appropriate payload for each agent type
       switch (agent) {
         case 'brand':
-          body = {
-            text: detailedPrompt,
-            sessionId,
-            id,
-          }
-          break
-          
         case 'hushh':
-          body = {
-            text: detailedPrompt,
-            sessionId,
-            id,
-          }
-          break
-          
         case 'public':
           body = {
             text: detailedPrompt,
@@ -57,7 +43,6 @@ export default function AgentSignInClient() {
           
         case 'whatsapp':
           // WhatsApp agent sends a message notification
-          // Remove the + and spaces from phone number for WhatsApp
           const whatsappPhone = `${userData.countryCode}${userData.phoneNumber}`.replace(/[^0-9]/g, '')
           body = {
             messaging_product: 'whatsapp',
@@ -79,7 +64,6 @@ export default function AgentSignInClient() {
           break
           
         case 'email':
-          // Email agent sends a notification email
           body = {
             to: userData.email,
             subject: 'Profile Analysis Complete - Hushh.ai',
@@ -92,6 +76,7 @@ export default function AgentSignInClient() {
           throw new Error(`Unknown agent: ${agent}`)
       }
       
+      // Call via Next.js API proxy
       const response = await fetch(`/api/a2a/${agent}`, {
         method: 'POST',
         headers: {
@@ -101,14 +86,15 @@ export default function AgentSignInClient() {
       })
       
       const responseTime = `${Date.now() - startTime}ms`
-      const result = await response.json()
+      const result = await response.json().catch(() => ({}))
       
       if (!response.ok) {
         return {
           success: false,
           data: result,
-          error: result.error || 'Request failed',
+          error: result.error || `Request failed with status ${response.status}`,
           responseTime,
+          upstreamUrl: result.upstreamUrl, // Show actual agent URL
         }
       }
       
@@ -116,6 +102,8 @@ export default function AgentSignInClient() {
         success: true,
         data: result.data || result,
         responseTime,
+        upstreamUrl: result.upstreamUrl, // Show actual agent URL
+        upstreamStatus: result.upstreamStatus,
       }
     } catch (error) {
       console.error(`Error calling ${agent} agent:`, error)

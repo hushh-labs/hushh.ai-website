@@ -112,9 +112,12 @@ export default function A2AAgentClient() {
     setLoading(true)
     setError('')
     try {
+      // Call via Next.js API proxy
       const res = await fetch(`/api/a2a/${agent}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ text: trimmed }),
       })
       const json = await res.json()
@@ -143,9 +146,12 @@ export default function A2AAgentClient() {
     setLoading(true)
     setError('')
     try {
+      // Call via Next.js API proxy with custom payload
       const res = await fetch(`/api/a2a/${agent}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ payload }),
       })
       const json = await res.json()
