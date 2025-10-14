@@ -42,10 +42,12 @@ export async function POST(req, { params }) {
     // For Email/WhatsApp agents, allow top-level payloads (Postman-style) without a "payload" wrapper.
     if (!customPayload) {
       if (agent === 'email' && (typeof body?.to === 'string') && (typeof body?.subject === 'string') && (typeof body?.body === 'string')) {
+        // Normalize email payload
+        const to = String(body.to).trim();
         customPayload = {
-          to: body.to,
-          subject: body.subject,
-          body: body.body,
+          to,
+          subject: String(body.subject),
+          body: String(body.body),
           mimeType: body?.mimeType || 'text/html',
         };
       } else if (agent === 'whatsapp' && (typeof body?.messaging_product === 'string') && (typeof body?.to === 'string') && (typeof body?.type === 'string')) {
@@ -106,6 +108,11 @@ export async function POST(req, { params }) {
       headers.Authorization = `Bearer ${WHATSAPP_BEARER_TOKEN}`;
     }
 
+    // Ensure UTF-8 for email payloads (HTML content and unicode subject)
+    if (agent === 'email') {
+      headers["Content-Type"] = "application/json; charset=utf-8";
+    }
+
     // Create AbortController for timeout handling
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), AGENT_TIMEOUT);
@@ -120,12 +127,21 @@ export async function POST(req, { params }) {
 
       clearTimeout(timeoutId);
 
-      const data = await res.json().catch(() => ({}));
-      return NextResponse.json({ 
-        upstreamUrl: upstream, 
-        upstreamStatus: res.status, 
+      // Try to parse JSON; otherwise include raw text for debugging
+      const contentType = res.headers.get('content-type') || '';
+      let data;
+      if (contentType.includes('application/json')) {
+        data = await res.json().catch(() => ({}));
+      } else {
+        const text = await res.text().catch(() => '');
+        data = text ? { message: text } : {};
+      }
+
+      return NextResponse.json({
+        upstreamUrl: upstream,
+        upstreamStatus: res.status,
         data,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     } catch (fetchError) {
       clearTimeout(timeoutId);
