@@ -192,6 +192,12 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
           description: "Your private, consent-first AI copilot",
           href: "/voice",
           icon: HushhVoice
+        },
+        {
+          name: "Hushh Intelligence",
+          description: "Advanced AI intelligence platform for data insights",
+          href: "/intelligence-portal",
+          icon: HushhFlow
         }
       ]
     },
@@ -371,16 +377,17 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
   }, []);
 
            const renderDropdownMenu = (menuKey, menuData) => {
-      // Check if this is the solutions dropdown to apply grid layout
+      // Check if this is the solutions or products dropdown to apply grid layout
       const isSolutionsDropdown = menuKey === 'solutions';
+      const isProductsDropdown = menuKey === 'products';
       
       return (
         <div
           className="dropdown-menu absolute top-full left-0 bg-white shadow-2xl border border-gray-100 z-50 rounded-2xl mt-2"
           style={{
             animation: "fadeInDown 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-            minWidth: isSolutionsDropdown ? "800px" : "280px",
-            maxWidth: isSolutionsDropdown ? "900px" : "380px",
+            minWidth: isSolutionsDropdown ? "800px" : isProductsDropdown ? "600px" : "280px",
+            maxWidth: isSolutionsDropdown ? "900px" : isProductsDropdown ? "700px" : "380px",
             boxShadow: "0 20px 60px rgba(0, 0, 0, 0.12), 0 8px 25px rgba(0, 0, 0, 0.08)",
             backdropFilter: "blur(20px)",
           }}
@@ -397,7 +404,11 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
           
           <div className="relative bg-white rounded-2xl overflow-hidden">
             <div className="px-4 py-4">
-              <div className={isSolutionsDropdown ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" : "space-y-1"}>
+              <div className={
+                isSolutionsDropdown ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" :
+                isProductsDropdown ? "grid grid-cols-1 md:grid-cols-2 gap-3" :
+                "space-y-1"
+              }>
                 {menuData.items.map((item, index) => (
                   <div
                     key={index}
@@ -411,8 +422,12 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                       router.push(item.href);
                     }}
                   >
-                    <div className={isSolutionsDropdown ? "flex flex-col items-start text-left space-y-2" : "flex items-center space-x-3"}>
-                      {/* Only show icons for non-solutions dropdowns */}
+                    <div className={
+                      isSolutionsDropdown ? "flex flex-col items-start text-left space-y-2" :
+                      isProductsDropdown ? "flex flex-col items-start text-left space-y-2" :
+                      "flex items-center space-x-3"
+                    }>
+                      {/* Show icons for products and other dropdowns (not solutions) */}
                       {item.icon && menuKey !== 'solutions' && (
                         <div className="flex-shrink-0">
                           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center group-hover:from-blue-100 group-hover:to-indigo-100 transition-all duration-200">
