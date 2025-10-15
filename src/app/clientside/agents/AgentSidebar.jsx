@@ -5,7 +5,8 @@ import { Box, VStack, Text, Button, HStack, useColorModeValue } from '@chakra-ui
 const AGENTS = [
   { id: 'brand', name: 'Brand Agent', description: 'CRM user intelligence' },
   { id: 'hushh', name: 'Hushh Agent', description: 'Headless Supabase agent' },
-  { id: 'public', name: 'Public Data Agent', description: 'Open data enrichment' },
+  { id: 'public', name: 'Public Data Agent', description: 'OpenAI data enrichment' },
+  { id: 'gemini', name: 'Gemini Agent', description: 'Gemini AI data enrichment' },
   { id: 'whatsapp', name: 'WhatsApp CRM Agent', description: 'Send WhatsApp messages' },
   { id: 'email', name: 'Email Integration Agent', description: 'Send transactional emails' },
 ]
@@ -17,19 +18,18 @@ export default function AgentSidebar({ selected, onSelect }) {
 
   return (
     <Box
-      w={{ base: '100%', md: 72 }}
+      w={{ base: '100%', md: '280px' }}
       flexShrink={0}
-      borderRightWidth={{ base: 0, md: '1px' }}
-      borderColor="gray.200"
       bg="white"
-      borderRadius={{ base: '16px', md: '20px' }}
-      p={3}
-      height={{ base: 'auto', md: '100%' }}
-      position={{ base: 'relative', md: 'sticky' }}
-      top={{ base: 0, md: 0 }}
-      overflowY={{ base: 'visible', md: 'auto' }}
+      borderRadius="16px"
+      p={4}
+      height="fit-content"
+      shadow="sm"
     >
-      <VStack align="stretch" spacing={1} role="tablist" aria-label="Agents">
+      <Text fontSize="xs" fontWeight="700" color="gray.500" textTransform="uppercase" mb={3} px={2}>
+        Select Agent
+      </Text>
+      <VStack align="stretch" spacing={2} role="tablist" aria-label="Agents">
         {AGENTS.map(a => {
           const isActive = selected === a.id
           return (

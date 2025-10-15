@@ -13,6 +13,9 @@ import {
   IconButton,
   Divider,
   Spinner,
+  Select,
+  FormControl,
+  FormLabel,
 } from '@chakra-ui/react'
 import { CopyIcon, RepeatIcon } from '@chakra-ui/icons'
 import { useAuth } from '../context/AuthContext'
@@ -22,6 +25,16 @@ import ChatThread from './agents/ChatThread'
 import JsonRpcComposer from './agents/JsonRpcComposer'
 import EmailComposer from './agents/EmailComposer'
 import WhatsappComposer from './agents/WhatsappComposer'
+
+// Agent configurations
+const AGENTS = [
+  { id: 'brand', name: 'Brand Agent', description: 'CRM user intelligence' },
+  { id: 'hushh', name: 'Hushh Agent', description: 'Headless Supabase agent' },
+  { id: 'public', name: 'Public Data Agent', description: 'OpenAI data enrichment' },
+  { id: 'gemini', name: 'Gemini Agent', description: 'Gemini AI data enrichment' },
+  { id: 'whatsapp', name: 'WhatsApp CRM Agent', description: 'Send WhatsApp messages' },
+  { id: 'email', name: 'Email Integration Agent', description: 'Send transactional emails' },
+]
 
 // Derive initials from an email address (first + last letter from local-part tokens)
 function initialsFromEmail(email) {
@@ -176,18 +189,67 @@ export default function A2AAgentClient() {
 
   return (
     <ContentWrapper>
-    <Box bg="#f5f5f7" color="gray.900" minH="calc(100vh - 2rem)">
-      <Container minW="100%" py={{ base: 6, md: 8 }}>
-        <Flex direction="column" gap={4} height="calc(100vh - 8rem)">
-          <Flex align={{ base: 'flex-start', md: 'center' }} justify="space-between" wrap="wrap" gap={3}>
-            <Box>
-              <Heading as="h1" size="lg" color="gray.900" fontWeight="700" fontFamily="'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">A2A Agents</Heading>
-              <Text color="gray.600" fontSize="sm">Ask the Brand or Hushh agents. Only the main answer text is shown.</Text>
-            </Box>
-            <HStack>
-              <Button as="a" href="https://a2a-interaction-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/ui/index.html" target="_blank" rel="noopener noreferrer" variant="outline" borderRadius="12px">Interaction Agent UI</Button>
-            </HStack>
-          </Flex>
+    <Box bg="#f5f5f7" color="gray.900" minH="100vh">
+      <Container minW={'100%'} py={{ base: 3, md: 4 }} px={{ base: 3, md: 4 }} h="100vh">
+        <Flex direction="column" gap={{ base: 3, md: 3 }} h="100%">
+          {/* Header */}
+          <Box
+            bg="white"
+            p={{ base: 4, md: 6 }}
+            borderRadius={{ base: '12px', md: '16px' }}
+            shadow="sm"
+            flexShrink={0}
+          >
+            <Flex 
+              direction={{ base: 'column', md: 'row' }}
+              align={{ base: 'flex-start', md: 'center' }} 
+              justify="space-between" 
+              gap={3}
+            >
+              <Box>
+                <Heading 
+                  as="h1" 
+                  size={{ base: 'md', md: 'lg' }} 
+                  color="gray.900" 
+                  fontWeight="700" 
+                  fontFamily="'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+                >
+                  A2A Agents
+                </Heading>
+                <Text color="gray.600" fontSize={{ base: 'xs', md: 'sm' }} mt={1}>
+                  Chat with Brand, Hushh, Public Data, or Gemini agents
+                </Text>
+              </Box>
+             
+            </Flex>
+
+            {/* Mobile Agent Selector */}
+            <FormControl mt={4} display={{ base: 'block', md: 'none' }}>
+              <FormLabel fontSize="sm" fontWeight="600" color="gray.700" mb={2}>
+                Select Agent
+              </FormLabel>
+              <Select
+                value={agent}
+                onChange={(e) => setAgent(e.target.value)}
+                bg="gray.50"
+                borderColor="gray.200"
+                borderRadius="12px"
+                fontSize="sm"
+                fontWeight="500"
+                _focus={{
+                  borderColor: 'gray.900',
+                  bg: 'white',
+                  boxShadow: '0 0 0 1px #1a202c'
+                }}
+              >
+                {AGENTS.map(a => (
+                  <option key={a.id} value={a.id}>
+                    {a.name} - {a.description}
+                  </option>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
 
           {/* <Accordion allowToggle borderRadius="12px" bg="white" borderWidth="1px" borderColor="gray.200">
             <AccordionItem border="0">
@@ -207,13 +269,41 @@ export default function A2AAgentClient() {
             </AccordionItem>
           </Accordion> */}
 
-          <Flex flex="1" minH={0} gap={3} direction={{ base: 'column', md: 'row' }}>
-            <AgentSidebar selected={agent} onSelect={setAgent} />
-            <Flex direction="column" flex="1" minH={0} gap={3}>
-              {(agent === 'brand' || agent === 'hushh' || agent === 'public') && (
-                <ChatThread messages={messages} loading={loading} error={error} userInitials={userInitials} />
+          {/* Main Content */}
+          <Flex flex="1" minH={0} gap={{ base: 0, md: 4 }} direction={{ base: 'column', md: 'row' }} overflow="hidden">
+            {/* Desktop Sidebar - Sticky */}
+            <Box 
+              display={{ base: 'none', md: 'block' }}
+              position={{ base: 'relative', md: 'sticky' }}
+              top={0}
+              alignSelf="flex-start"
+              h="fit-content"
+              maxH="calc(100vh - 200px)"
+              overflowY="auto"
+            >
+              <AgentSidebar selected={agent} onSelect={setAgent} />
+            </Box>
+
+            {/* Chat Area - Full Height */}
+            <Flex direction="column" flex="1" minH={0} gap={3} w="100%" h="100%">
+              {(agent === 'brand' || agent === 'hushh' || agent === 'public' || agent === 'gemini') && (
+                <Box 
+                  flex="1" 
+                  minH={0}
+                  overflow="hidden"
+                >
+                  <ChatThread messages={messages} loading={loading} error={error} userInitials={userInitials} />
+                </Box>
               )}
-              <Box>
+
+              {/* Input Area - Fixed at Bottom */}
+              <Box 
+                bg="white" 
+                borderRadius={{ base: '12px', md: '16px' }}
+                p={{ base: 3, md: 4 }} 
+                shadow="md"
+                flexShrink={0}
+              >
                 {agent === 'email' ? (
                   <EmailComposer
                     disabled={loading}
@@ -230,20 +320,13 @@ export default function A2AAgentClient() {
                     disabled={loading}
                     onChange={setPrompt}
                     onSubmit={(text) => sendText(text)}
+                    onReset={reset}
                   />
                 )}
-                <HStack mt={2} justify="flex-end">
-                  <Button onClick={reset} variant="outline" leftIcon={<RepeatIcon />} borderRadius="12px">Reset</Button>
-                  <IconButton aria-label="Copy last response" icon={<CopyIcon />} onClick={onCopy} variant="ghost" />
-                </HStack>
               </Box>
             </Flex>
           </Flex>
 
-          {/* Composer moved into right content column so sidebar remains visible */}
-
-          <Divider />
-          <Text color="gray.500" fontSize="sm">Requests are proxied server-side using the required JSON-RPC body.</Text>
         </Flex>
       </Container>
     </Box>
