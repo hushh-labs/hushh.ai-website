@@ -406,7 +406,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
             <div className="px-4 py-4">
               <div className={
                 isSolutionsDropdown ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" :
-                isProductsDropdown ? "grid grid-cols-1 md:grid-cols-2 gap-3" :
+                isProductsDropdown ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" :
                 "space-y-1"
               }>
                 {menuData.items.map((item, index) => (
@@ -453,12 +453,9 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                         <div className="text-xs text-gray-500 mt-0.5 leading-relaxed group-hover:text-gray-600 transition-colors duration-200">
                           {item.description}
                         </div>
+                        
                       </div>
-                      {!isSolutionsDropdown && (
-                        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                          <ChevronRightIcon className="w-4 h-4 text-blue-500" />
-                        </div>
-                      )}
+                     
                     </div>
                   </div>
                 ))}
@@ -893,7 +890,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                                className="block mobile-menu-item cursor-pointer"
                              >
                                <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                                 {item.icon && (
+                                 {/* {item.icon && (
                                    <div className="flex-shrink-0 mt-1">
                                      <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                                        <Image 
@@ -906,7 +903,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
                                        />
                                      </div>
                                    </div>
-                                 )}
+                                 )} */}
                                  <div>
                                    <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
                                    <p className="text-xs text-gray-500 mt-1">{item.description}</p>
