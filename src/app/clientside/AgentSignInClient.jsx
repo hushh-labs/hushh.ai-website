@@ -34,6 +34,8 @@ export default function AgentSignInClient() {
         case 'brand':
         case 'hushh':
         case 'public':
+        case 'gemini':
+        case 'gemini-proxy':
           body = {
             text: detailedPrompt,
             sessionId,
@@ -101,7 +103,7 @@ export default function AgentSignInClient() {
 
     try {
       // Only profile fetching agents (removed whatsapp and email)
-      const agents = ['brand', 'hushh', 'public']
+      const agents = ['brand', 'hushh', 'public', 'gemini']
       const resultMap = {}
       
       // Call agents sequentially to show progress

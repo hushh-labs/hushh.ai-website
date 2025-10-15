@@ -13,11 +13,12 @@ import {
 } from '@chakra-ui/react'
 
 export default function AnalyzingLoader({ progress = 0, currentAgent = '' }) {
-  // Three profile fetching agents (removed whatsapp and email)
+  // Four profile fetching agents (removed whatsapp and email)
   const agents = [
     { id: 'brand', name: 'Brand Agent', status: progress > 0 ? 'completed' : 'pending' },
-    { id: 'hushh', name: 'Hushh Agent', status: progress > 33 ? 'completed' : progress > 0 ? 'processing' : 'pending' },
-    { id: 'public', name: 'Public Data Agent', status: progress > 66 ? 'completed' : progress > 33 ? 'processing' : 'pending' },
+    { id: 'hushh', name: 'Hushh Agent', status: progress > 25 ? 'completed' : progress > 0 ? 'processing' : 'pending' },
+    { id: 'public', name: 'Public Data Agent', status: progress > 50 ? 'completed' : progress > 25 ? 'processing' : 'pending' },
+    { id: 'gemini', name: 'Gemini Agent', status: progress > 75 ? 'completed' : progress > 50 ? 'processing' : 'pending' },
   ]
 
   return (
@@ -52,9 +53,10 @@ export default function AnalyzingLoader({ progress = 0, currentAgent = '' }) {
             
             {/* Step indicator for mobile */}
             <HStack spacing={2} pt={2} display={{ base: 'flex', md: 'none' }}>
-              <Box w={8} h={1} bg="green.400" borderRadius="full" />
-              <Box w={8} h={1} bg="green.400" borderRadius="full" />
-              <Box w={8} h={1} bg="gray.700" borderRadius="full" />
+              <Box w={6} h={1} bg={progress > 0 ? "green.400" : "gray.700"} borderRadius="full" />
+              <Box w={6} h={1} bg={progress > 25 ? "green.400" : "gray.700"} borderRadius="full" />
+              <Box w={6} h={1} bg={progress > 50 ? "green.400" : "gray.700"} borderRadius="full" />
+              <Box w={6} h={1} bg={progress > 75 ? "green.400" : "gray.700"} borderRadius="full" />
             </HStack>
           </VStack>
 

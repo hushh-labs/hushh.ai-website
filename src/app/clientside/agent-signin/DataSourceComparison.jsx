@@ -96,7 +96,9 @@ export default function DataSourceComparison({ agentResults }) {
   const agentInfo = {
     brand: { name: 'Brand Agent', type: 'CRM Agent' },
     hushh: { name: 'Hushh Agent', type: 'Supabase Proxy' },
-    public: { name: 'Public Data Agent', type: 'Public Data Agent' },
+    public: { name: 'Public Data Agent', type: 'OpenAI Public Data Agent' },
+    gemini: { name: 'Gemini Agent', type: 'Gemini Public Data Agent' },
+    'gemini-proxy': { name: 'Gemini Proxy Agent', type: 'Gemini Proxy Agent' },
   }
 
   return (
@@ -113,7 +115,7 @@ export default function DataSourceComparison({ agentResults }) {
             DATA SOURCE COMPARISON
           </Heading>
 
-          <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} gap={6}>
             {Object.entries(agentResults).map(([agentId, result]) => {
               const info = agentInfo[agentId]
               if (!info) return null
@@ -128,6 +130,10 @@ export default function DataSourceComparison({ agentResults }) {
               )
             })}
           </SimpleGrid>
+          
+          <Text fontSize="xs" color="gray.500" textAlign="center" mt={2}>
+            💡 Gemini AI data is prioritized in the profile analysis above
+          </Text>
         </VStack>
       </Container>
     </Box>

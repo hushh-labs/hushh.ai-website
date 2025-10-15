@@ -10,6 +10,8 @@ const AGENT_URLS = {
   brand: 'https://a2a-crm-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/crm-agent',
   hushh: 'https://a2a-supabase-headless-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/supabase-agent',
   public: 'https://hushh-open-ai-agent-ap-bt5gn1.7y6hwo.usa-e2.cloudhub.io/public-data-agent',
+  gemini: 'https://hushh-geminiai-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/public-data-agent',
+  'gemini-proxy': 'https://hushh-geminiai-proxy-bt5gn1.7y6hwo.usa-e2.cloudhub.io/public-data-agent',
   whatsapp: 'https://hushh-whatsapp-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/sendMessageToWhatsapp',
   email: 'https://hushh-email-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/sendMail',
 };

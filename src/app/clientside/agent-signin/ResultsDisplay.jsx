@@ -28,8 +28,16 @@ const extractUserData = (agentResults, userData) => {
   
   console.log('🔍 Extracting data from agent results:', agentResults)
   
-  // Combine all agent data
-  Object.entries(agentResults).forEach(([agent, result]) => {
+  // Process agents in priority order: brand -> hushh -> public -> gemini (last = highest priority)
+  const priorityOrder = ['brand', 'hushh', 'public', 'gemini', 'gemini-proxy']
+  const sortedEntries = Object.entries(agentResults).sort((a, b) => {
+    const indexA = priorityOrder.indexOf(a[0])
+    const indexB = priorityOrder.indexOf(b[0])
+    return (indexA === -1 ? 999 : indexA) - (indexB === -1 ? 999 : indexB)
+  })
+  
+  // Combine all agent data with Gemini taking priority (processed last)
+  sortedEntries.forEach(([agent, result]) => {
     console.log(`📊 Processing ${agent} agent:`, result)
     
     if (result.success && result.data) {
@@ -60,10 +68,10 @@ const extractUserData = (agentResults, userData) => {
           // Handle userProfile wrapper
           if (parsed.userProfile) {
             Object.assign(allData, parsed.userProfile)
-            console.log(`📦 Merged userProfile from ${agent}`)
+            console.log(`📦 Merged userProfile from ${agent}`, Object.keys(parsed.userProfile))
           } else if (typeof parsed === 'object' && parsed !== null) {
             Object.assign(allData, parsed)
-            console.log(`📦 Merged direct object from ${agent}`)
+            console.log(`📦 Merged direct object from ${agent}`, Object.keys(parsed))
           }
         } catch (e) {
           console.error(`❌ Failed to parse JSON from ${agent}:`, e, '\nData:', responseData?.substring(0, 500))
@@ -72,10 +80,10 @@ const extractUserData = (agentResults, userData) => {
         // If already an object, handle userProfile wrapper
         if (responseData.userProfile) {
           Object.assign(allData, responseData.userProfile)
-          console.log(`📦 Merged object userProfile from ${agent}`)
+          console.log(`📦 Merged object userProfile from ${agent}`, Object.keys(responseData.userProfile))
         } else {
           Object.assign(allData, responseData)
-          console.log(`📦 Merged direct object from ${agent}`)
+          console.log(`📦 Merged direct object from ${agent}`, Object.keys(responseData))
         }
       }
     } else {
@@ -84,6 +92,14 @@ const extractUserData = (agentResults, userData) => {
   })
   
   console.log('✨ Final merged data:', allData)
+  console.log('📋 Available fields:', Object.keys(allData))
+  console.log('🔑 Total fields extracted:', Object.keys(allData).length)
+  
+  // Log specific important fields for debugging
+  console.log('🏋️ Gym Membership field:', allData.gymMembership || allData.gym_membership || allData.GymMembership || 'NOT FOUND')
+  console.log('👤 Full Name field:', allData.fullName || allData.full_name || allData.name || 'NOT FOUND')
+  console.log('📧 Email field:', allData.email || allData.Email || 'NOT FOUND')
+  
   return allData
 }
 
@@ -235,9 +251,20 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
             >
               Analysis Complete
             </Heading>
-            <Text color="gray.400" fontSize={{ base: 'sm', md: 'md' }}>
+            <Text color="gray.400" fontSize={{ base: 'sm', md: 'md' }} mb={2}>
               Comprehensive profile intelligence generated from multiple data sources
             </Text>
+            {agentResults.gemini?.success && (
+              <Badge 
+                colorScheme="white" 
+                fontSize="xs" 
+                px={3} 
+                py={1} 
+                borderRadius="full"
+              >
+                ✨ Enhanced with Gemini AI and Open AI
+              </Badge>
+            )}
           </Box>
 
           {/* Action Buttons */}
@@ -305,11 +332,11 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
             </Heading>
             <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} gap={4}>
               {/* <InfoCard label="User ID" value={getField(parsedData, 'userID', 'user_id', 'userId', 'id')} /> */}
-              <InfoCard label="Full Name" value={userData?.fullName || getField(parsedData, 'fullName', 'full_name', 'name', 'fullname')} />
-              <InfoCard label="Email" value={userData?.email || getField(parsedData, 'email', 'email_address', 'emailAddress')} />
-              <InfoCard label="Phone" value={userData ? `${userData.countryCode} ${userData.phoneNumber}` : getField(parsedData, 'phone', 'phoneNumber', 'phone_number', 'phoneNumber')} />
-              <InfoCard label="Age" value={getField(parsedData, 'age', 'age_range', 'ageRange')} />
-              <InfoCard label="Gender" value={getField(parsedData, 'gender', 'sex')} />
+              <InfoCard label="Full Name" value={userData?.fullName || getField(parsedData, 'fullName', 'full_name', 'name', 'fullname', 'Name', 'FullName')} />
+              <InfoCard label="Email" value={userData?.email || getField(parsedData, 'email', 'email_address', 'emailAddress', 'Email', 'EmailAddress')} />
+              <InfoCard label="Phone" value={userData ? `${userData.countryCode} ${userData.phoneNumber}` : getField(parsedData, 'phone', 'phoneNumber', 'phone_number', 'Phone', 'PhoneNumber', 'contact', 'mobile')} />
+              <InfoCard label="Age" value={getField(parsedData, 'age', 'age_range', 'ageRange', 'Age', 'AgeRange')} />
+              <InfoCard label="Gender" value={getField(parsedData, 'gender', 'sex', 'Gender', 'Sex')} />
             </Grid>
           </Box>
 
@@ -326,11 +353,11 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
               LOCATION
             </Heading>
             <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} gap={4}>
-              <InfoCard label="Address" value={getField(parsedData, 'address.street', 'street', 'address', 'street_address', 'location')} />
-              <InfoCard label="City" value={getField(parsedData, 'address.city', 'city', 'town')} />
-              <InfoCard label="State" value={getField(parsedData, 'address.state', 'state', 'province', 'region')} />
-              <InfoCard label="Postal Code" value={getField(parsedData, 'address.postalCode', 'address.zipCode', 'postalCode', 'zipCode', 'postal_code', 'zip_code')} />
-              <InfoCard label="Country" value={getField(parsedData, 'address.country', 'country')} />
+              <InfoCard label="Address" value={getField(parsedData, 'address.street', 'address.Street', 'street', 'Street', 'address', 'Address', 'street_address', 'streetAddress', 'location', 'Location')} />
+              <InfoCard label="City" value={getField(parsedData, 'address.city', 'address.City', 'city', 'City', 'town', 'Town')} />
+              <InfoCard label="State" value={getField(parsedData, 'address.state', 'address.State', 'state', 'State', 'province', 'Province', 'region', 'Region')} />
+              <InfoCard label="Postal Code" value={getField(parsedData, 'address.postalCode', 'address.PostalCode', 'address.zipCode', 'address.ZipCode', 'postalCode', 'PostalCode', 'zipCode', 'ZipCode', 'postal_code', 'zip_code', 'pincode', 'Pincode')} />
+              <InfoCard label="Country" value={getField(parsedData, 'address.country', 'address.Country', 'country', 'Country', 'nation', 'Nation')} />
             </Grid>
           </Box>
 
@@ -347,9 +374,9 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
               DEMOGRAPHICS
             </Heading>
             <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} gap={4}>
-              <InfoCard label="Marital Status" value={getField(parsedData, 'maritalStatus', 'marital_status', 'relationship_status')} />
-              <InfoCard label="Household Size" value={getField(parsedData, 'householdSize', 'household_size', 'family_size')} />
-              <InfoCard label="Children Count" value={getField(parsedData, 'childrenCount', 'children_count', 'number_of_children')} />
+              <InfoCard label="Marital Status" value={getField(parsedData, 'maritalStatus', 'marital_status', 'MaritalStatus', 'relationship_status', 'relationshipStatus', 'RelationshipStatus', 'marital', 'Marital')} />
+              <InfoCard label="Household Size" value={getField(parsedData, 'householdSize', 'household_size', 'HouseholdSize', 'family_size', 'familySize', 'FamilySize', 'household', 'Household')} />
+              <InfoCard label="Children Count" value={getField(parsedData, 'childrenCount', 'children_count', 'ChildrenCount', 'number_of_children', 'numberOfChildren', 'NumberOfChildren', 'kids', 'Kids')} />
             </Grid>
           </Box>
 
@@ -366,11 +393,11 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
               PROFESSIONAL
             </Heading>
             <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} gap={4}>
-              <InfoCard label="Occupation" value={getField(parsedData, 'occupation', 'job', 'profession', 'job_title')} />
-              <InfoCard label="Education" value={getField(parsedData, 'educationLevel', 'education', 'education_level', 'degree')} />
-              <InfoCard label="Income Bracket" value={getField(parsedData, 'incomeBracket', 'income_bracket', 'income', 'salary_range')} />
-              <InfoCard label="Home Ownership" value={getField(parsedData, 'homeOwnership', 'home_ownership')} />
-              <InfoCard label="City Tier" value={getField(parsedData, 'cityTier', 'city_tier')} />
+              <InfoCard label="Occupation" value={getField(parsedData, 'occupation', 'Occupation', 'job', 'Job', 'profession', 'Profession', 'job_title', 'jobTitle', 'JobTitle', 'career', 'Career', 'work', 'Work')} />
+              <InfoCard label="Education" value={getField(parsedData, 'educationLevel', 'education_level', 'EducationLevel', 'education', 'Education', 'degree', 'Degree', 'qualification', 'Qualification')} />
+              <InfoCard label="Income Bracket" value={getField(parsedData, 'incomeBracket', 'income_bracket', 'IncomeBracket', 'income', 'Income', 'salary_range', 'salaryRange', 'SalaryRange', 'salary', 'Salary')} />
+              <InfoCard label="Home Ownership" value={getField(parsedData, 'homeOwnership', 'home_ownership', 'HomeOwnership', 'homeowner', 'Homeowner', 'housing', 'Housing')} />
+              <InfoCard label="City Tier" value={getField(parsedData, 'cityTier', 'city_tier', 'CityTier', 'tier', 'Tier')} />
             </Grid>
           </Box>
 
@@ -387,17 +414,17 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
               LIFESTYLE
             </Heading>
             <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} gap={4}>
-              <InfoCard label="Diet Preference" value={getField(parsedData, 'dietPreference', 'diet_preference', 'diet', 'dietary_restrictions')} />
-              <InfoCard label="Favorite Cuisine" value={getField(parsedData, 'favoriteCuisine', 'favorite_cuisine', 'cuisine_preference')} />
-              <InfoCard label="Coffee or Tea" value={getField(parsedData, 'coffeeOrTeaChoice', 'coffee_or_tea_choice', 'beverage_preference')} />
-              <InfoCard label="Fitness Routine" value={getField(parsedData, 'fitnessRoutine', 'fitness_routine', 'exercise', 'workout_frequency')} />
-              <InfoCard label="Gym Membership" value={getField(parsedData, 'gymMembership', 'gym_membership')} />
-              <InfoCard label="Shopping Preference" value={getField(parsedData, 'shoppingPreference', 'shopping_preference')} />
-              <InfoCard label="Grocery Store Type" value={getField(parsedData, 'groceryStoreType', 'grocery_store_type')} />
-              <InfoCard label="Fashion Style" value={getField(parsedData, 'fashionStyle', 'fashion_style')} />
-              <InfoCard label="Transport" value={getField(parsedData, 'transport', 'transportation')} />
-              <InfoCard label="Sleep Chronotype" value={getField(parsedData, 'sleepChronotype', 'sleep_chronotype', 'sleep_pattern')} />
-              <InfoCard label="Eco-Friendliness" value={getField(parsedData, 'ecoFriendliness', 'eco_friendliness', 'environmental_awareness')} />
+              <InfoCard label="Diet Preference" value={getField(parsedData, 'dietPreference', 'diet_preference', 'DietPreference', 'diet', 'Diet', 'dietary_restrictions', 'dietaryRestrictions', 'DietaryRestrictions', 'foodPreference', 'food_preference')} />
+              <InfoCard label="Favorite Cuisine" value={getField(parsedData, 'favoriteCuisine', 'favorite_cuisine', 'FavoriteCuisine', 'cuisine_preference', 'cuisinePreference', 'CuisinePreference', 'cuisine', 'Cuisine')} />
+              <InfoCard label="Coffee or Tea" value={getField(parsedData, 'coffeeOrTeaChoice', 'coffee_or_tea_choice', 'CoffeeOrTeaChoice', 'beverage_preference', 'beveragePreference', 'BeveragePreference', 'drink_preference', 'drinkPreference')} />
+              <InfoCard label="Fitness Routine" value={getField(parsedData, 'fitnessRoutine', 'fitness_routine', 'FitnessRoutine', 'exercise', 'Exercise', 'workout_frequency', 'workoutFrequency', 'WorkoutFrequency', 'workout', 'Workout')} />
+              <InfoCard label="Gym Membership" value={getField(parsedData, 'gymMembership', 'gym_membership', 'GymMembership', 'gym', 'Gym', 'membership', 'Membership', 'fitness_membership', 'fitnessMembership')} />
+              <InfoCard label="Shopping Preference" value={getField(parsedData, 'shoppingPreference', 'shopping_preference', 'ShoppingPreference', 'shopping', 'Shopping', 'retail_preference', 'retailPreference')} />
+              <InfoCard label="Grocery Store Type" value={getField(parsedData, 'groceryStoreType', 'grocery_store_type', 'GroceryStoreType', 'grocery', 'Grocery', 'store_type', 'storeType', 'StoreType')} />
+              <InfoCard label="Fashion Style" value={getField(parsedData, 'fashionStyle', 'fashion_style', 'FashionStyle', 'fashion', 'Fashion', 'style', 'Style', 'clothing_style', 'clothingStyle')} />
+              <InfoCard label="Transport" value={getField(parsedData, 'transport', 'Transport', 'transportation', 'Transportation', 'vehicle', 'Vehicle', 'travel_mode', 'travelMode')} />
+              <InfoCard label="Sleep Chronotype" value={getField(parsedData, 'sleepChronotype', 'sleep_chronotype', 'SleepChronotype', 'sleep_pattern', 'sleepPattern', 'SleepPattern', 'chronotype', 'Chronotype', 'sleep', 'Sleep')} />
+              <InfoCard label="Eco-Friendliness" value={getField(parsedData, 'ecoFriendliness', 'eco_friendliness', 'EcoFriendliness', 'environmental_awareness', 'environmentalAwareness', 'EnvironmentalAwareness', 'sustainability', 'Sustainability', 'eco', 'Eco')} />
             </Grid>
           </Box>
 
@@ -414,11 +441,11 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
               TECHNOLOGY
             </Heading>
             <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} gap={4}>
-              <InfoCard label="Tech Affinity" value={getField(parsedData, 'techAffinity', 'tech_affinity', 'technology_adoption')} />
-              <InfoCard label="Primary Device" value={getField(parsedData, 'primaryDevice', 'primary_device', 'device')} />
-              <InfoCard label="Favorite Social Platform" value={getField(parsedData, 'favoriteSocialPlatform', 'favorite_social_platform', 'social_media')} />
-              <InfoCard label="Social Media Usage Time" value={getField(parsedData, 'socialMediaUsageTime', 'social_media_usage_time')} />
-              <InfoCard label="Content Preference" value={getField(parsedData, 'contentPreference', 'content_preference')} />
+              <InfoCard label="Tech Affinity" value={getField(parsedData, 'techAffinity', 'tech_affinity', 'TechAffinity', 'technology_adoption', 'technologyAdoption', 'TechnologyAdoption', 'tech', 'Tech', 'technology', 'Technology')} />
+              <InfoCard label="Primary Device" value={getField(parsedData, 'primaryDevice', 'primary_device', 'PrimaryDevice', 'device', 'Device', 'main_device', 'mainDevice')} />
+              <InfoCard label="Favorite Social Platform" value={getField(parsedData, 'favoriteSocialPlatform', 'favorite_social_platform', 'FavoriteSocialPlatform', 'social_media', 'socialMedia', 'SocialMedia', 'social_platform', 'socialPlatform', 'platform', 'Platform')} />
+              <InfoCard label="Social Media Usage Time" value={getField(parsedData, 'socialMediaUsageTime', 'social_media_usage_time', 'SocialMediaUsageTime', 'usage_time', 'usageTime', 'UsageTime', 'screen_time', 'screenTime', 'ScreenTime')} />
+              <InfoCard label="Content Preference" value={getField(parsedData, 'contentPreference', 'content_preference', 'ContentPreference', 'content', 'Content', 'media_preference', 'mediaPreference')} />
             </Grid>
           </Box>
 
@@ -435,9 +462,9 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
               INTERESTS
             </Heading>
             <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} gap={4}>
-              <InfoCard label="Sports Interest" value={getField(parsedData, 'sportsInterest', 'sports_interest', 'favorite_sport')} />
-              <InfoCard label="Gaming Preference" value={getField(parsedData, 'gamingPreference', 'gaming_preference', 'gaming')} />
-              <InfoCard label="Travel Frequency" value={getField(parsedData, 'travelFrequency', 'travel_frequency', 'travel')} />
+              <InfoCard label="Sports Interest" value={getField(parsedData, 'sportsInterest', 'sports_interest', 'SportsInterest', 'favorite_sport', 'favoriteSport', 'FavoriteSport', 'sports', 'Sports', 'sport', 'Sport')} />
+              <InfoCard label="Gaming Preference" value={getField(parsedData, 'gamingPreference', 'gaming_preference', 'GamingPreference', 'gaming', 'Gaming', 'game_preference', 'gamePreference', 'games', 'Games')} />
+              <InfoCard label="Travel Frequency" value={getField(parsedData, 'travelFrequency', 'travel_frequency', 'TravelFrequency', 'travel', 'Travel', 'trip_frequency', 'tripFrequency')} />
             </Grid>
           </Box>
 
@@ -456,9 +483,9 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
             <VStack align="stretch" spacing={4}>
               {/* Needs, Wants, Desires */}
               <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={4}>
-                <InfoCard label="Needs" value={formatArrayValue(getField(parsedData, 'needs', 'user_needs'))} />
-                <InfoCard label="Wants" value={formatArrayValue(getField(parsedData, 'wants', 'user_wants'))} />
-                <InfoCard label="Desires" value={formatArrayValue(getField(parsedData, 'desires', 'user_desires'))} />
+                <InfoCard label="Needs" value={formatArrayValue(getField(parsedData, 'needs', 'Needs', 'user_needs', 'userNeeds', 'UserNeeds', 'requirements', 'Requirements'))} />
+                <InfoCard label="Wants" value={formatArrayValue(getField(parsedData, 'wants', 'Wants', 'user_wants', 'userWants', 'UserWants', 'preferences', 'Preferences'))} />
+                <InfoCard label="Desires" value={formatArrayValue(getField(parsedData, 'desires', 'Desires', 'user_desires', 'userDesires', 'UserDesires', 'wishes', 'Wishes'))} />
               </Grid>
 
               {/* Intent Timeline */}
