@@ -190,7 +190,7 @@ export default function Header({backgroundColor, textColor, borderBottom}) {
         {
           name: "Hushh Voice",
           description: "Your private, consent-first AI copilot",
-          href: "/voice",
+          href: "/hushh-voice",
           icon: HushhVoice
         },
         {
