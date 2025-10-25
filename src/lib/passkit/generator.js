@@ -1,4 +1,3 @@
-import { PKPass } from 'passkit-generator';
 import path from 'path';
 import crypto from 'crypto';
 import { APPLE_WALLET_CONFIG, decodeBase64 } from './config';
@@ -12,6 +11,8 @@ import { APPLE_WALLET_CONFIG, decodeBase64 } from './config';
  * @returns {Promise<Buffer>} - Pass buffer
  */
 export async function generateAppleWalletPass(userData) {
+  // Dynamic import to prevent build-time loading
+  const { PKPass } = await import('passkit-generator');
   try {
     const { fullName, handle, uid } = userData;
 

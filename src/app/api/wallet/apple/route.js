@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
-import { generateAppleWalletPass } from '../../../../lib/passkit/generator';
+
+// Force dynamic rendering - this is an API route
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 /**
  * POST /api/wallet/apple
@@ -27,6 +30,9 @@ export async function POST(request) {
     }
 
     console.log('Generating Apple Wallet pass for:', fullName);
+
+    // Dynamic import to prevent build-time loading
+    const { generateAppleWalletPass } = await import('../../../../lib/passkit/generator');
 
     // Generate the pass
     const passData = await generateAppleWalletPass({

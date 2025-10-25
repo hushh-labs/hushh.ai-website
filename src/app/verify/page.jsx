@@ -5,6 +5,10 @@ import { useSearchParams } from 'next/navigation';
 import { Box, Container, Heading, Text, VStack, Spinner, Icon } from '@chakra-ui/react';
 import { CheckCircleIcon, WarningIcon } from '@chakra-ui/icons';
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 function VerifyContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');

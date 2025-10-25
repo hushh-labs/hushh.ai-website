@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 
+// Force dynamic rendering - this is an API route
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/wallet/verify?token=<qrToken>
  * Verify a Hushh Social Card by QR token

@@ -12,6 +12,14 @@ const nextConfig = {
     removeConsole: true,
   },
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+  experimental: {
+    optimizePackageImports: ['@chakra-ui/react', '@chakra-ui/icons'],
+  },
+  // Reduce build time by limiting concurrent builds
+  onDemandEntries: {
+    maxInactiveAge: 25 * 1000,
+    pagesBufferLength: 2,
+  },
   images: {
     remotePatterns: [
       {
