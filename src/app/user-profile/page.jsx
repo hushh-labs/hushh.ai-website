@@ -44,6 +44,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useAuth } from "../context/AuthContext";
+import AppleWalletButton from "../_components/AppleWalletButton";
 import { 
   FiUser, 
   FiMail, 
@@ -461,6 +462,17 @@ const UserProfile = () => {
               <HStack spacing={3}>
                 {!isEditing ? (
                   <>
+                    {/* Apple Wallet Button */}
+                    <AppleWalletButton 
+                      userData={{
+                        first_name: userData.first_name,
+                        last_name: userData.last_name,
+                        hushh_id: userData.hushh_id,
+                        email: user?.email,
+                        uid: user?.id
+                      }}
+                      size="lg"
+                    />
                     {/* <Button
                       onClick={() => setIsEditing(true)}
                       bg="linear-gradient(135deg, #0071E3, #BB62FC)"
@@ -620,6 +632,18 @@ const UserProfile = () => {
               
               {/* Action Buttons - Mobile */}
               <VStack spacing={3} w="full">
+                {/* Apple Wallet Button - Mobile */}
+                <AppleWalletButton 
+                  userData={{
+                    first_name: userData.first_name,
+                    last_name: userData.last_name,
+                    hushh_id: userData.hushh_id,
+                    email: user?.email,
+                    uid: user?.id
+                  }}
+                  size="lg"
+                  fullWidth={true}
+                />
                 {!isEditing ? (
                   <>
                     {/* <Button

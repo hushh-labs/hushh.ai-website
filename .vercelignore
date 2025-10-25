@@ -1,0 +1,39 @@
+# Vercel Ignore - Speed up deployments by excluding unnecessary files
+
+# Documentation
+*.md
+!README.md
+APPLE_WALLET_*.md
+IMPLEMENTATION_SUMMARY.md
+
+# Test files
+test-apple-wallet.js
+*.test.js
+*.spec.js
+
+# Development files
+.vscode
+.idea
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Certificate source files (keep only the PEM files)
+passkit/certs/*.base64
+*.p12
+*.cer
+
+# Postman collections
+*.postman_collection.json
+
+# Large assets not needed for build
+public/blogs/*.docx
+public/assets/*.pdf
+
