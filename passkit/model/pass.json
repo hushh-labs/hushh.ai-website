@@ -1,0 +1,19 @@
+{
+  "formatVersion": 1,
+  "passTypeIdentifier": "pass.com.hushh.wallet",
+  "teamIdentifier": "WVDK9JW99C",
+  "organizationName": "HushOne, Inc.",
+  "description": "Hushh Social Card",
+  "logoText": "Hushh",
+  "foregroundColor": "rgb(17, 17, 17)",
+  "backgroundColor": "rgb(255, 255, 255)",
+  "labelColor": "rgb(17, 17, 17)",
+  "generic": {
+    "primaryFields": [],
+    "secondaryFields": [],
+    "auxiliaryFields": [],
+    "backFields": []
+  },
+  "barcodes": []
+}
+
