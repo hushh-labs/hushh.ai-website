@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Box, Container, Heading, Text, VStack, Spinner, Icon } from '@chakra-ui/react';
 import { CheckCircleIcon, WarningIcon } from '@chakra-ui/icons';
 
-export default function VerifyPage() {
+function VerifyContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
   
@@ -146,3 +146,25 @@ export default function VerifyPage() {
   );
 }
 
+export default function VerifyPage() {
+  return (
+    <Suspense fallback={
+      <Box 
+        minH="100vh" 
+        bg="white" 
+        display="flex" 
+        alignItems="center" 
+        justifyContent="center"
+      >
+        <VStack spacing={4}>
+          <Spinner size="xl" color="gray.800" thickness="3px" />
+          <Text fontSize="lg" color="gray.600">
+            Loading verification...
+          </Text>
+        </VStack>
+      </Box>
+    }>
+      <VerifyContent />
+    </Suspense>
+  );
+}

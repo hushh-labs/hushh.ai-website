@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { generateAppleWalletPass } from '@/lib/passkit/generator';
+import { generateAppleWalletPass } from '../../../../lib/passkit/generator';
 
 /**
  * POST /api/wallet/apple
