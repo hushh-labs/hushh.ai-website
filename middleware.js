@@ -13,6 +13,11 @@ export default withAuth(
       return NextResponse.redirect('https://hushhvoice-2.onrender.com/')
     }
 
+    // Handle redirect from /hushhwallet to Hushh Wallet external URL
+    if (req.nextUrl.pathname === '/hushhwallet') {
+      return NextResponse.redirect('https://hushh-wallet-app.vercel.app')
+    }
+
     // Continue with auth middleware for protected routes
     return NextResponse.next()
   },
@@ -26,6 +31,11 @@ export default withAuth(
         
         // Allow /voice redirect without authentication
         if (req.nextUrl.pathname === '/voice') {
+          return true
+        }
+        
+        // Allow /hushhwallet redirect without authentication
+        if (req.nextUrl.pathname === '/hushhwallet') {
           return true
         }
         
@@ -44,6 +54,7 @@ export const config = {
   matcher: [
     "/pda",
     "/voice",
+    "/hushhwallet",
     "/developer-Api/content"
   ] 
 }
