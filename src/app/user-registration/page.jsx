@@ -50,10 +50,16 @@ const MotionCard = motion(Card);
 // Force this page to be dynamic to handle OAuth parameters
 export const dynamic = 'force-dynamic';
 
-// API configuration - Updated to use new Hushh API
-const API_BASE_URL = "https://hushh-api-53407187172.us-central1.run.app/api";
-const API_HEADERS = {
-  'Content-Type': 'application/json'
+const HUSHH_DEMO_STORAGE_KEY = 'hushhDemoProfile';
+
+const generateRandomHushhId = () => {
+  const characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let result = '';
+  for (let i = 0; i < 14; i += 1) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    result += characters[randomIndex];
+  }
+  return result;
 };
 
 const UserRegistrationContent = () => {
@@ -209,27 +215,19 @@ const UserRegistrationContent = () => {
 
   const checkExistingUser = async (email) => {
     try {
-      console.log('Checking if user exists:', email);
+      console.log('Checking if user exists locally:', email);
       setIsCheckingUser(true);
-      
-      // Use the new Hushh API endpoint to check if user already exists
-      const response = await fetch(
-        `https://hushh-api-53407187172.us-central1.run.app/api/check-user?email=${email}`,
-        { 
-          method: 'GET',
-          headers: API_HEADERS 
-        }
-      );
-      
-      if (response.ok) {
-        const data = await response.json();
-        console.log('API Response:', data);
-        
-        // Check if user exists based on the API response structure
-        if (data && data.exists) {
-          // User already exists, redirect to profile page instead of update mode
-          console.log('User found, redirecting to profile page:', data);
-          
+
+      if (typeof window === 'undefined') {
+        return;
+      }
+
+      const storedProfile = window.localStorage.getItem(HUSHH_DEMO_STORAGE_KEY);
+
+      if (storedProfile) {
+        const parsedProfile = JSON.parse(storedProfile);
+
+        if (parsedProfile?.email && parsedProfile.email === email) {
           toast({
             title: "Welcome back!",
             description: "Your profile already exists. Redirecting to your profile page.",
@@ -237,42 +235,17 @@ const UserRegistrationContent = () => {
             duration: 3000,
             isClosable: true,
           });
-          
+
           setTimeout(() => {
             router.push('/user-profile');
           }, 1500);
-          
-          /* COMMENTED OUT UPDATE MODE LOGIC
-          setIsUpdateMode(true);
-          setUserId(userData.hushh_id);
-          
-          // Populate form fields with existing data - Only updatable fields
-          setFirstName(userData.first_name || "");
-          setLastName(userData.last_name || "");
-          setPhoneNumber(userData.phone_number || "");
-          setUserCoins(userData.user_coins || 0);
-          setInvestorType(userData.investor_type || "");
-          
-          // Store read-only fields for display purposes
-          setGender(userData.gender || "");
-          setCountry(userData.country || "");
-          setCity(userData.city || "");
-          setDateOfBirth(userData.dob || "");
-          setReasonForUsingHushh(userData.reason_for_using || "");
-          
-          console.log('User found, switched to update mode:', userData);
-          */
-        } else {
-          console.log('User not found, staying in registration mode');
+          return;
         }
-      } else {
-        console.error('API request failed:', response.status, response.statusText);
-        const errorData = await response.json().catch(() => null);
-        console.error('Error details:', errorData);
       }
+
+      console.log('User not found in local storage, continuing with registration');
     } catch (error) {
       console.error("Error checking existing user:", error);
-      // Continue with registration form even if API check fails
     } finally {
       setIsCheckingUser(false);
     }
@@ -326,144 +299,51 @@ const UserRegistrationContent = () => {
     setError(null);
 
     try {
-      // Create user data object for registration only
-      const userData = {
+      const hushhId = generateRandomHushhId();
+      const registrationTimestamp = new Date().toISOString();
+
+      const profilePayload = {
+        hushh_id: hushhId,
         first_name: firstName,
         last_name: lastName,
         email: userEmail,
         phone_number: phoneNumber,
+        phone: phoneNumber,
         investor_type: investorType,
         gender: gender,
         country: country,
         city: city,
         dob: dateOfBirth,
         reason_for_using: reasonForUsingHushh,
+        reason_for_using_hushhTech: reasonForUsingHushh,
+        user_coins: 0,
+        accountCreation: registrationTimestamp,
       };
 
-      /* COMMENTED OUT UPDATE MODE LOGIC
-      // Create user data object with only updatable fields - exact same as tech version
-      const userData = {
-        first_name: firstName,
-        last_name: lastName,
-        email: userEmail,
-        phone_number: phoneNumber,
-        investor_type: investorType,
-      };
-
-      // If updating, include user_coins
-      if (isUpdateMode) {
-        userData.user_coins = userCoins;
-      } else {
-        // For new users, include all required fields
-        userData.gender = gender;
-        userData.country = country;
-        userData.city = city;
-        userData.dob = dateOfBirth;
-        userData.reason_for_using = reasonForUsingHushh;
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(HUSHH_DEMO_STORAGE_KEY, JSON.stringify(profilePayload));
       }
 
-      let response;
-      
-      if (isUpdateMode && userId) {
-        // Update existing user with PATCH request - only updatable fields
-        response = await fetch(
-          `https://rpmzykoxqnbozgdoqbpc.supabase.co/rest/v1/users?hushh_id=eq.${userId}`,
-          {
-            method: 'PATCH',
-            headers: API_HEADERS,
-            body: JSON.stringify(userData)
-          }
-        );
-        
-        // If email has been changed, update the Supabase auth email as well
-        if (userEmail !== initialEmail && config.supabaseClient) {
-          try {
-            await config.supabaseClient.auth.updateUser({ email: userEmail });
-            toast({
-              title: "Email Update",
-              description: "Your email has been updated. Please check your new email for a confirmation link.",
-              status: "info",
-              duration: 5000,
-              isClosable: true,
-            });
-          } catch (emailError) {
-            console.error("Error updating email in auth:", emailError);
-            toast({
-              title: "Warning",
-              description: "Your profile was updated, but there was an issue updating your email. Please try again later.",
-              status: "warning",
-              duration: 5000,
-              isClosable: true,
-            });
-          }
-        } else {
-          toast({
-            title: "🎉 Profile Updated",
-            description: "Your profile has been updated successfully!",
-            status: "success",
-            duration: 3000,
-            isClosable: true,
-          });
-        }
-      } else {
-        // Create new user with POST request
-        response = await fetch(
-          "https://rpmzykoxqnbozgdoqbpc.supabase.co/rest/v1/users",
-          {
-            method: 'POST',
-            headers: API_HEADERS,
-            body: JSON.stringify(userData)
-          }
-        );
-        
-        toast({
-          title: "🎉 Registration Complete",
-          description: "Your profile has been created successfully! Welcome to Hushh.",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-        });
-      }
-      */
+      console.log('✅ Stored demo profile data locally:', profilePayload);
 
-      // Registration mode only - POST request using new API
-      const response = await fetch(
-        `https://hushh-api-53407187172.us-central1.run.app/api/hushhtech-wrapper`,
-        {
-          method: 'POST',
-          headers: API_HEADERS,
-          body: JSON.stringify(userData)
-        }
-      );
-      
-      if (response.ok) {
-        const responseData = await response.json();
-        console.log('Registration successful:', responseData);
-        
-        toast({
-          title: "🎉 Registration Complete",
-          description: "Your profile has been created successfully! Welcome to Hushh.",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-        });
-        
-        // Dispatch custom event to trigger UserAvatar refresh
-        console.log('🔥 Dispatching user registration complete event');
+      toast({
+        title: "🎉 Registration Complete",
+        description: `Your demo Hushh ID ${hushhId} is ready! Redirecting to your profile...`,
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+      });
+
+      if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('userRegistrationComplete', {
-          detail: { email: userEmail }
+          detail: { email: userEmail, hushhId }
         }));
-        
-        // Redirect to home page after successful registration
-        setTimeout(() => {
-          router.push("/");
-        }, 2000);
-      } else {
-        const errorData = await response.json().catch(() => null);
-        console.error('Registration failed:', response.status, errorData);
-        throw new Error(`Registration failed: ${response.status}`);
       }
-      
+
+      setTimeout(() => {
+        router.push('/user-profile');
+      }, 1500);
+
     } catch (err) {
       console.error("Registration error:", err);
       setError(`An unexpected error occurred. Please try again later. Registration failed.`);

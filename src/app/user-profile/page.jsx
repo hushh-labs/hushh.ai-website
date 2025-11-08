@@ -34,6 +34,7 @@ import {
   useColorModeValue,
   InputGroup,
   InputLeftElement,
+  IconButton,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -44,20 +45,21 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useAuth } from "../context/AuthContext";
-import { 
-  FiUser, 
-  FiMail, 
-  FiPhone, 
-  FiMapPin, 
-  FiCalendar, 
-  FiEdit3, 
-  FiShield, 
-  FiClock, 
+import {
+  FiUser,
+  FiMail,
+  FiPhone,
+  FiMapPin,
+  FiCalendar,
+  FiEdit3,
+  FiShield,
+  FiClock,
   FiCheck,
   FiSettings,
   FiLogOut,
   FiSave,
-  FiX
+  FiX,
+  FiCreditCard
 } from "react-icons/fi";
 import { BiUser, BiMale, BiFemale } from "react-icons/bi";
 import { IoLocationOutline } from "react-icons/io5";
@@ -66,22 +68,16 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import HushhLogo from "../_components/svg/hushhLogoS.svg";
 import ContentWrapper from "../_components/layout/ContentWrapper";
+import { QRCode } from "react-qrcode-logo";
 
 const MotionBox = motion(Box);
 const MotionCard = motion(Card);
-
-// API configuration - Using the same API configuration as UserRegistration
-const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJwbXp5a294cW5ib3pnZG9xYnBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5Mjc5NzEsImV4cCI6MjAxNzUwMzk3MX0.3GwG8YQKwZSWfGgTBEEA47YZAZ-Nr4HiirYPWiZtpZ0";
-const API_BASE_URL = "https://hushh-api-53407187172.us-central1.run.app";
-const API_HEADERS = {
-  'api_key': API_KEY,
-  'Authorization': `Bearer ${API_KEY}`,
-  'Content-Type': 'application/json'
-};
+const HUSHH_DEMO_STORAGE_KEY = 'hushhDemoProfile';
+const HUSHH_PROFILE_QR_LINK = 'https://www.hushh.ai/user-profile';
 
 const UserProfile = () => {
   const router = useRouter();
-  const { user, session, loading: authLoading, signOut } = useAuth();
+  const { user, loading: authLoading, signOut } = useAuth();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   
@@ -90,6 +86,9 @@ const UserProfile = () => {
   const [error, setError] = useState(null);
   const [userData, setUserData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [showQrCard, setShowQrCard] = useState(false);
+  const [isGeneratingCard, setIsGeneratingCard] = useState(false);
+  const [cardGeneratedAt, setCardGeneratedAt] = useState(null);
   
   // Form fields for editing
   const [firstName, setFirstName] = useState("");
@@ -126,88 +125,86 @@ const UserProfile = () => {
     animate: { opacity: 1, y: 0 }
   };
 
+  const loadProfileFromStorage = (email) => {
+    try {
+      setIsLoadingProfile(true);
+
+      if (typeof window === 'undefined') {
+        return;
+      }
+
+      const storedProfile = window.localStorage.getItem(HUSHH_DEMO_STORAGE_KEY);
+
+      if (!storedProfile) {
+        console.log('❌ No stored profile found, redirecting to registration');
+        toast({
+          title: "Profile Not Found",
+          description: "Please complete your registration to generate a demo Hushh ID.",
+          status: "warning",
+          duration: 3000,
+          isClosable: true,
+        });
+        router.push('/user-registration');
+        return;
+      }
+
+      const profileData = JSON.parse(storedProfile);
+
+      if (email && profileData?.email && profileData.email !== email) {
+        console.warn('⚠️ Stored profile email does not match the authenticated user.');
+        toast({
+          title: "Profile Mismatch",
+          description: "We couldn't find a saved profile for this account. Please register first.",
+          status: "warning",
+          duration: 4000,
+          isClosable: true,
+        });
+        router.push('/user-registration');
+        return;
+      }
+
+      setUserData(profileData);
+      setFirstName(profileData.first_name || "");
+      setLastName(profileData.last_name || "");
+      setPhoneNumber(profileData.phone_number || profileData.phone || "");
+      setUserCoins(profileData.user_coins || 0);
+      setInvestorType(profileData.investor_type || "");
+      setGender(profileData.gender || "");
+      setCountry(profileData.country || "");
+      setCity(profileData.city || "");
+      setDateOfBirth(profileData.dob || "");
+      setReasonForUsingHushh(profileData.reason_for_using_hushhTech || profileData.reason_for_using || "");
+      setShowQrCard(false);
+      setCardGeneratedAt(null);
+
+      console.log('✅ Loaded demo profile from local storage:', profileData);
+    } catch (error) {
+      console.error('💥 Error loading profile from storage:', error);
+      toast({
+        title: "Profile Error",
+        description: "Failed to load your saved profile. Please try registering again.",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+      router.push('/user-registration');
+    } finally {
+      setIsLoadingProfile(false);
+    }
+  };
+
   useEffect(() => {
     if (authLoading) return;
-    
+
     if (!user) {
       router.push('/login');
       return;
     }
 
     if (user?.email) {
-      fetchUserProfile(user.email);
+      loadProfileFromStorage(user.email);
     }
   }, [user, authLoading, router]);
-
-  const fetchUserProfile = async (email) => {
-    try {
-      setIsLoadingProfile(true);
-      console.log('🔍 Fetching user profile for:', email);
-      
-      // Use the check-user API which returns both existence and full user data
-      const response = await fetch(
-        `https://hushh-api-53407187172.us-central1.run.app/api/check-user?email=${email}`,
-        { headers: API_HEADERS }
-      );
-      
-      if (response.ok) {
-        const data = await response.json();
-        console.log('✅ Profile API Response:', data);
-        
-        // Check if user exists and has data
-        if (data && (data.message === "User exists" || data.exists) && data.user) {
-          const profileData = data.user;
-          console.log('📝 User profile data found:', profileData);
-          setUserData(profileData);
-          
-          // Populate form fields for editing using the correct field names
-          setFirstName(profileData.first_name || "");
-          setLastName(profileData.last_name || "");
-          setPhoneNumber(profileData.phone_number || profileData.phone || "");
-          setUserCoins(profileData.user_coins || 0);
-          setInvestorType(profileData.investor_type || "");
-          setGender(profileData.gender || "");
-          setCountry(profileData.country || "");
-          setCity(profileData.city || "");
-          setDateOfBirth(profileData.dob || "");
-          setReasonForUsingHushh(profileData.reason_for_using_hushhTech);
-          
-          console.log('✅ Profile loaded successfully');
-        } else {
-          // User not found in database, redirect to registration
-          console.log('❌ User profile not found, redirecting to registration');
-          toast({
-            title: "Profile Not Found",
-            description: "Please complete your registration first.",
-            status: "warning",
-            duration: 3000,
-            isClosable: true,
-          });
-          router.push('/user-registration');
-        }
-      } else {
-        console.error('❌ Profile API request failed:', response.status, response.statusText);
-        toast({
-          title: "Error Loading Profile",
-          description: "Failed to load your profile. Please try again.",
-          status: "error",
-          duration: 4000,
-          isClosable: true,
-        });
-      }
-    } catch (error) {
-      console.error("💥 Error fetching user profile:", error);
-      toast({
-        title: "Profile Error",
-        description: `Failed to load profile: ${error.message}`,
-        status: "error",
-        duration: 4000,
-        isClosable: true,
-      });
-    } finally {
-      setIsLoadingProfile(false);
-    }
-  };
 
   const validateForm = () => {
     const newErrors = {};
@@ -237,10 +234,12 @@ const UserProfile = () => {
     setError(null);
 
     try {
-      const updateData = {
+      const updatedProfile = {
+        ...userData,
         first_name: firstName,
         last_name: lastName,
         phone_number: phoneNumber,
+        phone: phoneNumber,
         user_coins: userCoins,
         investor_type: investorType,
         gender: gender,
@@ -248,33 +247,24 @@ const UserProfile = () => {
         city: city,
         dob: dateOfBirth,
         reason_for_using: reasonForUsingHushh,
+        reason_for_using_hushhTech: reasonForUsingHushh,
       };
 
-      const response = await fetch(
-        `${API_BASE_URL}/users?hushh_id=eq.${userData.hushh_id}`,
-        {
-          method: 'PATCH',
-          headers: API_HEADERS,
-          body: JSON.stringify(updateData)
-        }
-      );
-      
-      if (response.ok) {
-        toast({
-          title: "✅ Profile Updated",
-          description: "Your profile has been updated successfully!",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-        });
-        
-        // Refresh user data
-        setUserData({ ...userData, ...updateData });
-        setIsEditing(false);
-      } else {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(HUSHH_DEMO_STORAGE_KEY, JSON.stringify(updatedProfile));
       }
-      
+
+      setUserData(updatedProfile);
+
+      toast({
+        title: "✅ Profile Updated",
+        description: "Your profile changes have been saved locally for this demo.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+
+      setIsEditing(false);
     } catch (err) {
       console.error("Profile update error:", err);
       setError(`An unexpected error occurred. Please try again later.`);
@@ -288,6 +278,39 @@ const UserProfile = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleGenerateCard = () => {
+    if (!userData?.hushh_id) {
+      toast({
+        title: "Hushh ID Missing",
+        description: "We couldn't find a Hushh ID for this profile. Please complete registration again.",
+        status: "warning",
+        duration: 4000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    setIsGeneratingCard(true);
+
+    setTimeout(() => {
+      setShowQrCard(true);
+      setIsGeneratingCard(false);
+      setCardGeneratedAt(new Date().toISOString());
+      toast({
+        title: "🎉 Hushh ID Card Ready",
+        description: "Scan the QR code to view your public profile link.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    }, 600);
+  };
+
+  const handleCloseCard = () => {
+    setShowQrCard(false);
+    setCardGeneratedAt(null);
   };
 
   const handleSignOut = async () => {
@@ -480,6 +503,26 @@ const UserProfile = () => {
                       Edit Profile
                     </Button> */}
                     <Button
+                      onClick={handleGenerateCard}
+                      bg="linear-gradient(135deg, #0071E3, #BB62FC)"
+                      color="white"
+                      leftIcon={<FiCreditCard />}
+                      size="lg"
+                      borderRadius="full"
+                      fontFamily="Inter, sans-serif"
+                      fontWeight="600"
+                      isLoading={isGeneratingCard}
+                      loadingText="Preparing..."
+                      _hover={{
+                        bg: "linear-gradient(135deg, #005bb5, #9a4fd1)",
+                        transform: "translateY(-2px)",
+                        boxShadow: "0 8px 25px rgba(0, 113, 227, 0.4)"
+                      }}
+                      transition="all 0.3s ease"
+                    >
+                      Generate Hushh ID Card
+                    </Button>
+                    <Button
                       onClick={() => router.push('/')}
                       variant="outline"
                       borderColor="rgba(255, 255, 255, 0.3)"
@@ -489,8 +532,8 @@ const UserProfile = () => {
                       borderRadius="full"
                       fontFamily="Inter, sans-serif"
                       fontWeight="600"
-                      _hover={{ 
-                        bg: "rgba(255, 255, 255, 0.1)", 
+                      _hover={{
+                        bg: "rgba(255, 255, 255, 0.1)",
                         borderColor: "rgba(255, 255, 255, 0.5)",
                         transform: "translateY(-2px)"
                       }}
@@ -642,6 +685,27 @@ const UserProfile = () => {
                       Edit Profile
                     </Button> */}
                     <Button
+                      onClick={handleGenerateCard}
+                      bg="linear-gradient(135deg, #0071E3, #BB62FC)"
+                      color="white"
+                      leftIcon={<FiCreditCard />}
+                      size="md"
+                      borderRadius="full"
+                      fontFamily="Inter, sans-serif"
+                      fontWeight="600"
+                      w="full"
+                      isLoading={isGeneratingCard}
+                      loadingText="Preparing..."
+                      _hover={{
+                        bg: "linear-gradient(135deg, #005bb5, #9a4fd1)",
+                        transform: "translateY(-2px)",
+                        boxShadow: "0 8px 25px rgba(0, 113, 227, 0.4)"
+                      }}
+                      transition="all 0.3s ease"
+                    >
+                      Generate Hushh ID Card
+                    </Button>
+                    <Button
                       onClick={() => router.push('/')}
                       variant="outline"
                       borderColor="rgba(255, 255, 255, 0.3)"
@@ -652,8 +716,8 @@ const UserProfile = () => {
                       fontFamily="Inter, sans-serif"
                       fontWeight="600"
                       w="full"
-                      _hover={{ 
-                        bg: "rgba(255, 255, 255, 0.1)", 
+                      _hover={{
+                        bg: "rgba(255, 255, 255, 0.1)",
                         borderColor: "rgba(255, 255, 255, 0.5)",
                         transform: "translateY(-2px)"
                       }}
@@ -717,6 +781,97 @@ const UserProfile = () => {
               </VStack>
             </VStack>
           </MotionCard>
+
+          {showQrCard && (
+            <MotionCard
+              variants={childVariants}
+              bg="linear-gradient(135deg, rgba(0,113,227,0.12) 0%, rgba(187,98,252,0.12) 100%)"
+              border="1px solid rgba(0, 113, 227, 0.2)"
+              borderRadius="2xl"
+              boxShadow="0 20px 45px rgba(0, 113, 227, 0.18)"
+              mb={8}
+            >
+              <CardBody p={{ base: 6, md: 8 }}>
+                <Flex justify="flex-end">
+                  <IconButton
+                    aria-label="Close Hushh ID card"
+                    icon={<FiX />}
+                    variant="ghost"
+                    onClick={handleCloseCard}
+                    color="rgba(0, 0, 0, 0.6)"
+                    _hover={{ bg: "rgba(0, 0, 0, 0.05)" }}
+                  />
+                </Flex>
+                <Flex
+                  direction={{ base: "column", md: "row" }}
+                  align="center"
+                  justify="space-between"
+                  gap={{ base: 8, md: 12 }}
+                >
+                  <VStack align="flex-start" spacing={4} maxW={{ base: "full", md: "sm" }}>
+                    <Badge
+                      bg="rgba(0, 113, 227, 0.12)"
+                      color="#005bb5"
+                      borderRadius="full"
+                      px={4}
+                      py={1}
+                      fontWeight="600"
+                    >
+                      Hushh Digital Identity Card
+                    </Badge>
+                    <Heading size="md" color="rgba(0, 0, 0, 0.85)">
+                      {userData.first_name} {userData.last_name}
+                    </Heading>
+                    <Text color="rgba(0, 0, 0, 0.6)">
+                      {user?.email}
+                    </Text>
+                    <HStack spacing={3} bg="white" px={4} py={2} borderRadius="lg" boxShadow="sm">
+                      <Icon as={FiShield} color="#0071E3" />
+                      <VStack align="flex-start" spacing={0}>
+                        <Text fontSize="xs" textTransform="uppercase" letterSpacing={0.8} color="rgba(0, 0, 0, 0.5)">
+                          Hushh ID
+                        </Text>
+                        <Text fontFamily="mono" fontWeight="bold" color="#1A1A1A">
+                          {userData.hushh_id}
+                        </Text>
+                      </VStack>
+                    </HStack>
+                    {cardGeneratedAt && (
+                      <Text fontSize="sm" color="rgba(0, 0, 0, 0.6)">
+                        Generated {new Date(cardGeneratedAt).toLocaleString()}
+                      </Text>
+                    )}
+                    <Text fontSize="sm" color="rgba(0, 0, 0, 0.6)">
+                      Share this card during your demo — scanning the QR code will open your profile at hushh.ai/user-profile.
+                    </Text>
+                  </VStack>
+
+                  <Box
+                    bg="white"
+                    borderRadius="2xl"
+                    p={6}
+                    boxShadow="lg"
+                    border="1px solid rgba(0, 0, 0, 0.05)"
+                  >
+                    <QRCode
+                      value={HUSHH_PROFILE_QR_LINK}
+                      size={180}
+                      bgColor="white"
+                      fgColor="#0F172A"
+                      eyeRadius={4}
+                      quietZone={12}
+                    />
+                    <Text mt={4} fontSize="sm" color="rgba(0, 0, 0, 0.6)" textAlign="center">
+                      Scan to view profile
+                    </Text>
+                    <Text fontSize="xs" color="rgba(0, 0, 0, 0.4)" textAlign="center">
+                      {HUSHH_PROFILE_QR_LINK}
+                    </Text>
+                  </Box>
+                </Flex>
+              </CardBody>
+            </MotionCard>
+          )}
 
           {/* Profile Details */}
           <Grid templateColumns={{ base: "1fr", lg: "1fr 2fr", md:'1fr 2fr' }} gap={{ base: 6, lg: 8 }}>
