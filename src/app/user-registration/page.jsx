@@ -56,6 +56,8 @@ const API_HEADERS = {
   'Content-Type': 'application/json'
 };
 
+const REGISTRATION_STORAGE_KEY = "hushh-demo-profile:last-submission";
+
 const UserRegistrationContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -336,6 +338,18 @@ const UserRegistrationContent = () => {
         reason_for_using: reasonForUsingHushh,
       };
 
+      if (typeof window !== "undefined") {
+        const storedUserData = {
+          ...userData,
+          savedAt: new Date().toISOString(),
+        };
+
+        window.localStorage.setItem(
+          REGISTRATION_STORAGE_KEY,
+          JSON.stringify(storedUserData),
+        );
+      }
+
       /* COMMENTED OUT UPDATE MODE LOGIC
       // Create user data object with only updatable fields - exact same as tech version
       const userData = {
@@ -449,17 +463,12 @@ const UserRegistrationContent = () => {
         window.dispatchEvent(new CustomEvent('userRegistrationComplete', {
           detail: { email: userEmail }
         }));
-        
-        // Redirect to home page after successful registration
-        setTimeout(() => {
-          router.push("/");
-        }, 2000);
       } else {
         const errorData = await response.json().catch(() => null);
         console.error('Registration failed:', response.status, errorData);
         throw new Error(`Registration failed: ${response.status}`);
       }
-      
+
     } catch (err) {
       console.error("Registration error:", err);
       setError(`An unexpected error occurred. Please try again later. Registration failed.`);
@@ -472,6 +481,7 @@ const UserRegistrationContent = () => {
       });
     } finally {
       setIsLoading(false);
+      router.push("/user-profile");
     }
   };
 

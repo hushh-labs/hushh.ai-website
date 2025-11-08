@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
   Box,
@@ -61,7 +61,8 @@ import {
   FiX,
   FiKey,
   FiCreditCard,
-  FiExternalLink
+  FiExternalLink,
+  FiShare2,
 } from "react-icons/fi";
 import { BiUser, BiMale, BiFemale } from "react-icons/bi";
 import { IoLocationOutline } from "react-icons/io5";
@@ -89,7 +90,8 @@ const UserProfile = () => {
   const { user, loading: authLoading, signOut } = useAuth();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  
+  const shareQrRef = useRef(null);
+
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingProfile, setIsLoadingProfile] = useState(true);
   const [error, setError] = useState(null);
@@ -98,6 +100,7 @@ const UserProfile = () => {
   const [demoHushhId, setDemoHushhId] = useState("");
   const [isGeneratingDemoId, setIsGeneratingDemoId] = useState(false);
   const [showQrCard, setShowQrCard] = useState(false);
+  const [isSharingCard, setIsSharingCard] = useState(false);
 
   // Form fields for editing
   const [firstName, setFirstName] = useState("");
@@ -135,8 +138,29 @@ const UserProfile = () => {
   };
 
   const hushhProfileLink = "https://www.hushh.ai/user-profile";
+  const registrationStorageKey = "hushh-demo-profile:last-submission";
   const storageKey = user?.email ? `hushh-demo-id:${user.email}` : "hushh-demo-id:guest";
   const hushhIdToDisplay = userData?.hushh_id || demoHushhId;
+  const profileEmail = user?.email || userData?.email || "";
+
+  const getStoredRegistrationData = () => {
+    if (typeof window === "undefined") {
+      return null;
+    }
+
+    const storedValue = window.localStorage.getItem(registrationStorageKey);
+
+    if (!storedValue) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(storedValue);
+    } catch (storageError) {
+      console.error("Failed to parse stored registration data:", storageError);
+      return null;
+    }
+  };
 
   const populateProfileForm = (profileData = {}) => {
     setUserData(profileData);
@@ -156,10 +180,9 @@ const UserProfile = () => {
     );
   };
 
-  const buildFallbackProfile = () => {
+  const buildFallbackProfile = (registrationData = null) => {
     const metadata = user?.user_metadata || {};
-
-    return {
+    const baseProfile = {
       first_name:
         metadata.first_name || metadata.given_name || metadata.full_name || "",
       last_name:
@@ -177,18 +200,37 @@ const UserProfile = () => {
         metadata.reason_for_using_hushhTech || metadata.reason_for_using || "",
       created_at: metadata.created_at || user?.created_at || new Date().toISOString(),
       accountCreation: metadata.accountCreation || user?.created_at || new Date().toISOString(),
+      email: metadata.email || user?.email || "",
       hushh_id: null,
+    };
+
+    if (!registrationData) {
+      return baseProfile;
+    }
+
+    return {
+      ...baseProfile,
+      ...registrationData,
+      hushh_id: registrationData.hushh_id ?? baseProfile.hushh_id ?? null,
+      email: registrationData.email || baseProfile.email,
     };
   };
 
   const activateFallbackProfile = (message) => {
-    const fallbackProfile = buildFallbackProfile();
+    const storedRegistration = getStoredRegistrationData();
+    const fallbackProfile = buildFallbackProfile(storedRegistration);
     populateProfileForm(fallbackProfile);
 
-    if (message) {
+    const fallbackMessage =
+      message ||
+      (storedRegistration
+        ? "We've loaded the details you entered during registration while the service is offline."
+        : null);
+
+    if (fallbackMessage) {
       toast({
         title: "Demo profile active",
-        description: message,
+        description: fallbackMessage,
         status: "info",
         duration: 4000,
         isClosable: true,
@@ -202,7 +244,7 @@ const UserProfile = () => {
     if (user?.email) {
       fetchUserProfile(user.email);
     } else {
-      activateFallbackProfile("You're viewing the demo profile. Sign in to load your saved details.");
+      activateFallbackProfile("You're viewing the demo profile. We've loaded any registration details you entered so you can keep recording.");
       setIsLoadingProfile(false);
     }
   }, [user?.email, authLoading]);
@@ -231,15 +273,15 @@ const UserProfile = () => {
           console.log('✅ Profile loaded successfully');
         } else {
           console.log('❌ User profile not found, loading fallback data');
-          activateFallbackProfile("We couldn't find your profile, so a demo profile is loaded for recording.");
+          activateFallbackProfile("We couldn't find your profile in the service, so your saved registration details are being used for this demo.");
         }
       } else {
         console.error('❌ Profile API request failed:', response.status, response.statusText);
-        activateFallbackProfile("The profile service is unavailable. You're viewing a demo profile.");
+        activateFallbackProfile("The profile service is unavailable. We've restored your registration details locally so you can keep going.");
       }
     } catch (error) {
       console.error("💥 Error fetching user profile:", error);
-      activateFallbackProfile("We couldn't reach the profile service. Demo data has been loaded.");
+      activateFallbackProfile("We couldn't reach the profile service. Your saved registration details are ready for the demo.");
     } finally {
       setIsLoadingProfile(false);
     }
@@ -333,6 +375,92 @@ const UserProfile = () => {
   };
 
   const handleHideQrCard = () => setShowQrCard(false);
+
+  const handleShareProfileCard = async () => {
+    if (!hushhIdToDisplay) {
+      toast({
+        title: "Generate a Hushh ID first",
+        description: "Create a demo Hushh ID before sharing the QR card.",
+        status: "info",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const qrInstance = shareQrRef.current;
+    const canvas = qrInstance?.canvasRef?.current || qrInstance;
+
+    if (!canvas || typeof canvas.toDataURL !== "function") {
+      toast({
+        title: "QR card unavailable",
+        description: "We couldn't access the QR code to share it. Please try again.",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    try {
+      setIsSharingCard(true);
+
+      const dataUrl = canvas.toDataURL("image/png");
+      const response = await fetch(dataUrl);
+      const blob = await response.blob();
+      const fileName = `hushh-id-${hushhIdToDisplay}.png`;
+      const file = new File([blob], fileName, { type: "image/png" });
+
+      const nav = navigator;
+
+      if (nav.share && nav.canShare && nav.canShare({ files: [file] })) {
+        await nav.share({
+          title: "Hushh ID Card",
+          text: "Scan this QR code to open the Hushh profile.",
+          files: [file],
+          url: hushhProfileLink,
+        });
+
+        toast({
+          title: "QR card shared",
+          description: "Your Hushh ID card has been shared successfully.",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        const downloadLink = document.createElement("a");
+        downloadLink.href = dataUrl;
+        downloadLink.download = fileName;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+
+        toast({
+          title: "QR card downloaded",
+          description: "Sharing isn't supported here, so we saved the QR code for you to share manually.",
+          status: "info",
+          duration: 4000,
+          isClosable: true,
+        });
+      }
+    } catch (shareError) {
+      console.error("Error sharing QR card:", shareError);
+      toast({
+        title: "Sharing unavailable",
+        description: "We couldn't share the QR card. Please try again later.",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+    } finally {
+      setIsSharingCard(false);
+    }
+  };
 
   const validateForm = () => {
     const newErrors = {};
@@ -511,6 +639,26 @@ const UserProfile = () => {
   return (
     <ContentWrapper includeHeaderSpacing={true}>
       <Box
+        position="fixed"
+        top="-9999px"
+        left="-9999px"
+        width="0"
+        height="0"
+        overflow="hidden"
+        aria-hidden="true"
+      >
+        <QRCode
+          ref={shareQrRef}
+          value={hushhProfileLink}
+          size={512}
+          bgColor="#FFFFFF"
+          fgColor="#111827"
+          qrStyle="dots"
+          eyeRadius={4}
+          quietZone={12}
+        />
+      </Box>
+      <Box
         minH="100vh"
         bg="white"
         py={{ base: 8, md: 12 }}
@@ -559,7 +707,7 @@ const UserProfile = () => {
                     {userData.first_name} {userData.last_name}
                   </Heading>
                   <Text color="rgba(0, 0, 0, 0.7)" fontSize="md">
-                    {user?.email}
+                    {profileEmail}
                   </Text>
                   <Badge 
                     bg="linear-gradient(135deg, #0071E3, #BB62FC)" 
@@ -656,6 +804,35 @@ const UserProfile = () => {
                         transition="all 0.3s ease"
                       >
                         Generate Hushh ID Card
+                      </Button>
+                    </Tooltip>
+                    <Tooltip
+                      label="Generate a demo Hushh ID first"
+                      placement="bottom"
+                      hasArrow
+                      isDisabled={Boolean(hushhIdToDisplay)}
+                      shouldWrapChildren
+                    >
+                      <Button
+                        onClick={handleShareProfileCard}
+                        bg="linear-gradient(135deg, #1D4ED8, #38BDF8)"
+                        color="white"
+                        leftIcon={<FiShare2 />}
+                        size="lg"
+                        borderRadius="full"
+                        fontFamily="Inter, sans-serif"
+                        fontWeight="600"
+                        isDisabled={!hushhIdToDisplay}
+                        isLoading={isSharingCard}
+                        loadingText="Preparing..."
+                        _hover={{
+                          bg: "linear-gradient(135deg, #1e3a8a, #0ea5e9)",
+                          transform: hushhIdToDisplay ? "translateY(-2px)" : 'none',
+                          boxShadow: hushhIdToDisplay ? "0 8px 25px rgba(37, 99, 235, 0.35)" : 'none'
+                        }}
+                        transition="all 0.3s ease"
+                      >
+                        Share Profile Card
                       </Button>
                     </Tooltip>
                     {/* <Button
@@ -774,12 +951,12 @@ const UserProfile = () => {
                   >
                     {userData.first_name} {userData.last_name}
                   </Heading>
-                  <Text 
-                    color="rgba(0, 0, 0, 0.7)" 
+                  <Text
+                    color="rgba(0, 0, 0, 0.7)"
                     fontSize={{ base: "sm", sm: "md" }}
                     wordBreak="break-word"
                   >
-                    {user?.email}
+                    {profileEmail}
                   </Text>
                   <Badge 
                     bg="linear-gradient(135deg, #0071E3, #BB62FC)" 
@@ -876,6 +1053,35 @@ const UserProfile = () => {
                         transition="all 0.3s ease"
                       >
                         Generate Hushh ID Card
+                      </Button>
+                    </Tooltip>
+                    <Tooltip
+                      label="Generate a demo Hushh ID first"
+                      placement="top"
+                      hasArrow
+                      isDisabled={Boolean(hushhIdToDisplay)}
+                      shouldWrapChildren
+                    >
+                      <Button
+                        onClick={handleShareProfileCard}
+                        bg="linear-gradient(135deg, #1D4ED8, #38BDF8)"
+                        color="white"
+                        leftIcon={<FiShare2 />}
+                        size="md"
+                        borderRadius="full"
+                        fontFamily="Inter, sans-serif"
+                        fontWeight="600"
+                        isDisabled={!hushhIdToDisplay}
+                        isLoading={isSharingCard}
+                        loadingText="Preparing..."
+                        _hover={{
+                          bg: "linear-gradient(135deg, #1e3a8a, #0ea5e9)",
+                          transform: hushhIdToDisplay ? "translateY(-2px)" : 'none',
+                          boxShadow: hushhIdToDisplay ? "0 8px 25px rgba(37, 99, 235, 0.35)" : 'none'
+                        }}
+                        transition="all 0.3s ease"
+                      >
+                        Share Profile Card
                       </Button>
                     </Tooltip>
                     {/* <Button
@@ -1009,7 +1215,7 @@ const UserProfile = () => {
                       {`${firstName || userData.first_name || ""} ${lastName || userData.last_name || ""}`.trim() || 'Your Name'}
                     </Heading>
                     <Text color="rgba(15, 23, 42, 0.7)" fontSize="md">
-                      {user?.email}
+                      {profileEmail}
                     </Text>
                     <HStack spacing={3} align="center">
                       <Badge
@@ -1295,7 +1501,7 @@ const UserProfile = () => {
                               Email Address
                             </FormLabel>
                             <Text fontSize="md" color="rgba(0, 0, 0, 0.8)" py={2} px={3} bg="rgba(0, 0, 0, 0.05)" borderRadius="lg" border="1px solid rgba(0, 0, 0, 0.1)">
-                              {user?.email}
+                              {profileEmail}
                             </Text>
                             <Text fontSize="xs" color="rgba(0, 0, 0, 0.5)" mt={1}>
                               Email cannot be changed here
