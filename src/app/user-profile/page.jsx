@@ -86,7 +86,7 @@ const API_HEADERS = {
 
 const UserProfile = () => {
   const router = useRouter();
-  const { user, session, loading: authLoading, signOut } = useAuth();
+  const { user, loading: authLoading, signOut } = useAuth();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   
@@ -135,7 +135,7 @@ const UserProfile = () => {
   };
 
   const hushhProfileLink = "https://www.hushh.ai/user-profile";
-  const storageKey = user?.email ? `hushh-demo-id:${user.email}` : null;
+  const storageKey = user?.email ? `hushh-demo-id:${user.email}` : "hushh-demo-id:guest";
   const hushhIdToDisplay = userData?.hushh_id || demoHushhId;
 
   const populateProfileForm = (profileData = {}) => {
@@ -199,15 +199,13 @@ const UserProfile = () => {
   useEffect(() => {
     if (authLoading) return;
 
-    if (!user) {
-      router.push('/login');
-      return;
-    }
-
     if (user?.email) {
       fetchUserProfile(user.email);
+    } else {
+      activateFallbackProfile("You're viewing the demo profile. Sign in to load your saved details.");
+      setIsLoadingProfile(false);
     }
-  }, [user, authLoading, router]);
+  }, [user?.email, authLoading]);
 
   const fetchUserProfile = async (email) => {
     try {
@@ -1175,16 +1173,18 @@ const UserProfile = () => {
                         🤫 Know About Hushh
                       </Button>
                       
-                      <Button
-                        leftIcon={<FiLogOut />}
-                        variant="outline"
-                        colorScheme="red"
-                        size="sm"
-                        w="full"
-                        onClick={handleSignOut}
-                      >
-                        Sign Out
-                      </Button>
+                      {user && (
+                        <Button
+                          leftIcon={<FiLogOut />}
+                          variant="outline"
+                          colorScheme="red"
+                          size="sm"
+                          w="full"
+                          onClick={handleSignOut}
+                        >
+                          Sign Out
+                        </Button>
+                      )}
                     </VStack>
                   </CardBody>
                 </MotionCard>
@@ -1536,24 +1536,26 @@ const UserProfile = () => {
       </Container>
 
       {/* Sign Out Confirmation Modal */}
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Confirm Sign Out</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Text>Are you sure you want to sign out of your account?</Text>
-          </ModalBody>
-          <ModalFooter>
-            <Button variant="ghost" mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button colorScheme="red" onClick={handleSignOut}>
-              Sign Out
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      {user && (
+        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Confirm Sign Out</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Text>Are you sure you want to sign out of your account?</Text>
+            </ModalBody>
+            <ModalFooter>
+              <Button variant="ghost" mr={3} onClick={onClose}>
+                Cancel
+              </Button>
+              <Button colorScheme="red" onClick={handleSignOut}>
+                Sign Out
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      )}
       </Box>
     </ContentWrapper>
   );
