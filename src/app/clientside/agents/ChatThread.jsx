@@ -1,12 +1,23 @@
 'use client'
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
-import { Box, VStack, HStack, Text, Spinner } from '@chakra-ui/react'
+import {
+  Box,
+  VStack,
+  HStack,
+  Text,
+  Spinner,
+  Tag,
+  usePrefersReducedMotion,
+  Icon,
+} from '@chakra-ui/react'
 import Image from 'next/image'
 import HushhLogoS from '../../_components/svg/hushhLogoS.svg'
 import MarkdownIt from 'markdown-it'
+import { FiAlertTriangle, FiMessageCircle } from 'react-icons/fi'
 
 export default function ChatThread({ messages, loading, error, userInitials }) {
   const listRef = useRef(null)
+  const prefersReducedMotion = usePrefersReducedMotion()
 
   const markdown = useMemo(() => {
     const md = new MarkdownIt({
@@ -25,117 +36,132 @@ export default function ChatThread({ messages, loading, error, userInitials }) {
 
   useEffect(() => {
     if (!listRef.current) return
-    listRef.current.scrollTop = listRef.current.scrollHeight
-  }, [messages, loading])
+    const behavior = prefersReducedMotion ? 'auto' : 'smooth'
+    listRef.current.scrollTo({ top: listRef.current.scrollHeight, behavior })
+  }, [messages, loading, prefersReducedMotion])
 
   return (
-    <Box 
-      ref={listRef} 
-      bg="white" 
-      borderRadius={{ base: '12px', md: '16px' }}
-      borderWidth="1px" 
-      borderColor="gray.200" 
-      p={{ base: 3, md: 4 }} 
+    <Box
+      ref={listRef}
+      bg="white"
+      borderRadius={{ base: '16px', md: '18px' }}
+      borderWidth="1px"
+      borderColor="gray.100"
+      p={{ base: 4, md: 5 }}
       h="100%"
-      overflowY="auto" 
+      overflowY="auto"
       aria-live="polite"
-      shadow="sm"
+      shadow="xl"
       css={{
         '&::-webkit-scrollbar': {
           width: '6px',
         },
         '&::-webkit-scrollbar-track': {
-          background: '#f1f1f1',
+          background: '#f1f5f9',
           borderRadius: '10px',
         },
         '&::-webkit-scrollbar-thumb': {
-          background: '#888',
+          background: '#cbd5f5',
           borderRadius: '10px',
         },
         '&::-webkit-scrollbar-thumb:hover': {
-          background: '#555',
+          background: '#94a3b8',
         },
       }}
     >
-      <VStack align="stretch" spacing={{ base: 3, md: 4 }}>
+      <VStack align="stretch" spacing={{ base: 4, md: 5 }}>
         {messages.length === 0 && !loading && (
-          <Box textAlign="center" py={{ base: 6, md: 8 }}>
-            <Text color="gray.500" fontSize={{ base: 'xs', md: 'sm' }}>
-              Start by asking a question below.
+          <VStack spacing={3} py={{ base: 8, md: 10 }} color="gray.500">
+            <Icon as={FiMessageCircle} boxSize={8} opacity={0.5} />
+            <Text fontSize={{ base: 'sm', md: 'md' }} fontWeight="600">
+              Start by sending a message
             </Text>
-          </Box>
+            <Text fontSize={{ base: 'xs', md: 'sm' }} maxW="sm" textAlign="center">
+              Use one of the curated prompts or type your own question to see agent responses here.
+            </Text>
+          </VStack>
         )}
-        {messages.map(m => (
-          <HStack key={m.id} align="flex-start" spacing={{ base: 2, md: 3 }} w="100%">
+        {messages.map((m) => (
+          <HStack key={m.id} align="flex-start" spacing={{ base: 3, md: 4 }} w="100%">
             {m.role === 'user' ? (
-              <Box 
-                w={{ base: 7, md: 8 }}
-                h={{ base: 7, md: 8 }}
-                minW={{ base: 7, md: 8 }}
-                borderRadius="full" 
-                bg="gray.800" 
-                color="white" 
-                display="flex" 
-                alignItems="center" 
-                justifyContent="center" 
-                fontWeight="600" 
-                fontSize="xs"
+              <Box
+                w={{ base: 9, md: 10 }}
+                h={{ base: 9, md: 10 }}
+                minW={{ base: 9, md: 10 }}
+                borderRadius="full"
+                bg="gray.900"
+                color="white"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                fontWeight="700"
+                fontSize="sm"
               >
                 {userInitials}
               </Box>
             ) : (
-              <Box 
-                w={{ base: 7, md: 8 }}
-                h={{ base: 7, md: 8 }}
-                minW={{ base: 7, md: 8 }}
-                borderRadius="full" 
-                overflow="hidden" 
+              <Box
+                w={{ base: 9, md: 10 }}
+                h={{ base: 9, md: 10 }}
+                minW={{ base: 9, md: 10 }}
+                borderRadius="full"
+                overflow="hidden"
                 bg="gray.900"
               >
-                <Image src={HushhLogoS} alt="Hushh Agent" width={32} height={32} />
+                <Image src={HushhLogoS} alt="Hushh Agent" width={40} height={40} />
               </Box>
             )}
             <Box
               flex="1"
-              bg={m.role === 'user' ? 'white' : 'gray.50'}
+              bg={m.role === 'user' ? 'rgba(99, 102, 241, 0.06)' : 'rgba(13, 148, 136, 0.08)'}
               borderWidth="1px"
-              borderColor={m.role === 'user' ? 'gray.200' : 'gray.300'}
-              borderRadius={{ base: '12px', md: '14px' }}
-              px={{ base: 3, md: 4 }}
-              py={{ base: 2, md: 3 }}
+              borderColor={m.role === 'user' ? 'rgba(99, 102, 241, 0.18)' : 'rgba(13, 148, 136, 0.2)'}
+              borderRadius={{ base: '18px', md: '20px' }}
+              px={{ base: 4, md: 5 }}
+              py={{ base: 3, md: 4 }}
               maxW="100%"
               overflow="hidden"
             >
               <Text
                 fontSize="xs"
                 color="gray.500"
-                mb={1}
-                fontWeight="600" 
+                mb={2}
+                fontWeight="700"
                 textTransform="uppercase"
                 letterSpacing="wide"
               >
                 {m.role === 'user'
                   ? 'You'
-                  : (m.agent === 'hushh'
+                  : m.agent === 'hushh'
                     ? 'Hushh Agent'
                     : m.agent === 'hushh-profile'
                       ? 'Supabase Profile Creation Agent'
                       : m.agent === 'hushh-profile-update'
                         ? 'Supabase Profile Update Agent'
                         : m.agent === 'brand'
-                        ? 'Brand Agent'
-                        : m.agent === 'public'
-                          ? 'Public Data Agent'
-                          : m.agent === 'gemini'
-                            ? 'Gemini Agent'
-                            : m.agent === 'whatsapp'
-                              ? 'WhatsApp Agent'
-                              : m.agent === 'email'
-                                ? 'Email Agent'
-                                : 'Agent')}
+                          ? 'Brand Agent'
+                          : m.agent === 'public'
+                            ? 'Public Data Agent'
+                            : m.agent === 'gemini'
+                              ? 'Gemini Agent'
+                              : m.agent === 'whatsapp'
+                                ? 'WhatsApp Agent'
+                                : m.agent === 'email'
+                                  ? 'Email Agent'
+                                  : 'Agent'}
               </Text>
+              <Tag
+                size="sm"
+                variant="subtle"
+                colorScheme={m.role === 'user' ? 'purple' : 'teal'}
+                borderRadius="full"
+                mb={3}
+                w="fit-content"
+              >
+                {m.role === 'user' ? 'Prompt' : 'Response'}
+              </Tag>
               <Box
-                lineHeight={{ base: '1.6', md: '1.7' }}
+                lineHeight={{ base: '1.65', md: '1.75' }}
                 fontSize={{ base: 'sm', md: 'sm' }}
                 color="gray.900"
                 wordBreak="break-word"
@@ -169,24 +195,24 @@ export default function ChatThread({ messages, loading, error, userInitials }) {
           </HStack>
         ))}
         {loading && (
-          <HStack align="center" spacing={{ base: 2, md: 3 }}>
-            <Box 
-              w={{ base: 7, md: 8 }}
-              h={{ base: 7, md: 8 }}
-              minW={{ base: 7, md: 8 }}
-              borderRadius="full" 
-              overflow="hidden" 
+          <HStack align="center" spacing={{ base: 3, md: 4 }}>
+            <Box
+              w={{ base: 9, md: 10 }}
+              h={{ base: 9, md: 10 }}
+              minW={{ base: 9, md: 10 }}
+              borderRadius="full"
+              overflow="hidden"
               bg="gray.900"
             >
-              <Image src={HushhLogoS} alt="Hushh Agent" width={32} height={32} />
+              <Image src={HushhLogoS} alt="Hushh Agent" width={40} height={40} />
             </Box>
-            <HStack 
-              bg="gray.50" 
-              borderWidth="1px" 
-              borderColor="gray.200" 
-              borderRadius="12px" 
-              px={{ base: 3, md: 4 }} 
-              py={{ base: 2, md: 3 }}
+            <HStack
+              bg="rgba(14, 165, 233, 0.12)"
+              borderWidth="1px"
+              borderColor="rgba(14, 165, 233, 0.25)"
+              borderRadius="18px"
+              px={{ base: 4, md: 5 }}
+              py={{ base: 3, md: 4 }}
             >
               <Spinner size="sm" color="gray.900" />
               <Text color="gray.600" fontSize={{ base: 'xs', md: 'sm' }}>
@@ -196,11 +222,21 @@ export default function ChatThread({ messages, loading, error, userInitials }) {
           </HStack>
         )}
         {error && !loading && (
-          <Text color="red.600">{error}</Text>
+          <HStack
+            spacing={3}
+            bg="rgba(248, 113, 113, 0.12)"
+            border="1px solid rgba(248, 113, 113, 0.3)"
+            borderRadius="16px"
+            px={{ base: 4, md: 5 }}
+            py={{ base: 3, md: 3 }}
+          >
+            <Icon as={FiAlertTriangle} color="red.500" />
+            <Text color="red.600" fontSize={{ base: 'sm', md: 'sm' }}>
+              {error}
+            </Text>
+          </HStack>
         )}
       </VStack>
     </Box>
   )
 }
-
-
