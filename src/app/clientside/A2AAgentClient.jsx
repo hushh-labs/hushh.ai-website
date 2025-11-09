@@ -25,7 +25,6 @@ import ChatThread from './agents/ChatThread'
 import JsonRpcComposer from './agents/JsonRpcComposer'
 import EmailComposer from './agents/EmailComposer'
 import WhatsappComposer from './agents/WhatsappComposer'
-import PromptSuggestionPanel from './agents/PromptSuggestionPanel'
 
 // Agent configurations
 const AGENTS = [
@@ -41,43 +40,31 @@ const AGENTS = [
 
 const CHAT_ENABLED_AGENTS = ['brand', 'hushh', 'hushh-profile', 'hushh-profile-update', 'public', 'gemini']
 
-const PROMPT_GUIDES = {
-  'hushh-profile': {
-    title: 'Supabase Profile Creation Agent',
-    description:
-      'Send a natural language instruction with the profile details you want to create. The agent will parse the message and call Supabase through MuleSoft to insert the record.',
-    highlights: ['Create new Supabase profiles', 'Understands structured or plain text', 'Backed by GPT-4.0 mini'],
-    prompts: [
-      {
-        label: 'Create a complete profile',
-        text:
-          'Can you create a user profile for Amitabh Bachchan with the following details: phone number +91 8266272888, email amitabh.bachchan@example.com, occupation Actor, and address in Mumbai? Include lifestyle preferences and intents if available.',
-      },
-      {
-        label: 'Onboard a new lead',
-        text:
-          'Please create a profile for Sundhar Pichai with email sundar.pichai@google.com, phone +1 4085551234, occupation CEO, city Mountain View, and country USA.',
-      },
-    ],
-  },
-  'hushh-profile-update': {
-    title: 'Supabase Profile Update Agent',
-    description:
-      'Describe the changes you need for an existing user. Mention identifiers like phone number or user ID along with the fields to update, and the agent will apply them through Supabase.',
-    highlights: ['Update Supabase records', 'Understands targeted changes', 'Backed by GPT-4.0 mini'],
-    prompts: [
-      {
-        label: 'Update state by phone & ID',
-        text:
-          'Can you update the state to AP for the user with phone +919346661428 and user ID d6f5fca9-924b-492e-95f6-55e81d405174?',
-      },
-      {
-        label: 'Correct contact details',
-        text:
-          'Please update Sundhar Pichai’s city to Mountain View and email to sundar.pichai@google.com in the database with phone +52 334i33 and user ID d72882hgdt7889.',
-      },
-    ],
-  },
+const PROMPT_TEMPLATES = {
+  'hushh-profile': [
+    {
+      label: 'Create a profile with full details',
+      text:
+        'Can you create a user profile with the details below? {"fullName":"Amitabh Bachchan","phone":"+91 8266272888","email":"amitabh.bachchan@example.com","address":{"street":"Juhu Circle","city":"Mumbai","state":"Maharashtra","postalCode":"400049","country":"India"},"age":80,"gender":"Male","maritalStatus":"Married","householdSize":4,"childrenCount":2,"educationLevel":"Master\'s Degree","occupation":"Actor","incomeBracket":"High","homeOwnership":"Owned","cityTier":"Tier 1","transport":"Car","dietPreference":"Vegetarian","favoriteCuisine":"Indian","coffeeOrTeaChoice":"Tea","fitnessRoutine":"Yoga and Walking","gymMembership":"No","shoppingPreference":"Online and Local Markets","groceryStoreType":"Supermarket","fashionStyle":"Formal and Traditional","techAffinity":"Moderate","primaryDevice":"Smartphone","favoriteSocialPlatform":"Twitter","socialMediaUsageTime":"1-2 hours/day","contentPreference":"Movies and News","sportsInterest":"Cricket","gamingPreference":"Casual Gaming","travelFrequency":"2-3 times a year","ecoFriendliness":"High","sleepChronotype":"Morning Person","needs":["Health","Recognition","Quality Time"],"wants":["Luxury Travel","New Gadgets"],"desires":["Creative Expression","Social Impact"],"intents":{"24h":{"category":"Health","budget":"Low","timeWindow":"Today","confidence":"High"},"48h":{"category":"Entertainment","budget":"Medium","timeWindow":"This Weekend","confidence":"Medium"},"72h":{"category":"Travel","budget":"High","timeWindow":"Next Month","confidence":"Low"}}}',
+    },
+    {
+      label: 'Onboard Sundhar Pichai',
+      text:
+        'Please create a profile for Sundhar Pichai with email sundar.pichai@google.com, phone +1 4085551234, occupation CEO, city Mountain View, and country USA.',
+    },
+  ],
+  'hushh-profile-update': [
+    {
+      label: 'Update state for an existing record',
+      text:
+        'Can you update the state to AP for the user with phone +919346661428 and user ID d6f5fca9-924b-492e-95f6-55e81d405174?',
+    },
+    {
+      label: 'Correct Sundhar Pichai\'s contact info',
+      text:
+        'Please update Sundhar Pichai’s city to Mountain View and email to sundar.pichai@google.com in the database having their +52 334i33 and user id d72882hgdt7889.',
+    },
+  ],
 }
 
 // Derive initials from an email address (first + last letter from local-part tokens)
@@ -102,6 +89,11 @@ export default function A2AAgentClient() {
   const { user } = useAuth()
 
   const userInitials = useMemo(() => initialsFromEmail(user?.email || 'you@hushh.ai'), [user?.email])
+
+  useEffect(() => {
+    const defaultTemplate = PROMPT_TEMPLATES[agent]?.[0]?.text || ''
+    setPrompt(defaultTemplate)
+  }, [agent])
 
   const extractText = useCallback((payload) => {
     if (!payload || typeof payload !== 'object') return ''
@@ -330,11 +322,52 @@ export default function A2AAgentClient() {
             <Flex direction="column" flex="1" minH={0} gap={3} w="100%" h="100%">
               {CHAT_ENABLED_AGENTS.includes(agent) && (
                 <Flex direction="column" flex="1" minH={0} gap={3}>
-                  {PROMPT_GUIDES[agent] && (
-                    <PromptSuggestionPanel
-                      {...PROMPT_GUIDES[agent]}
-                      onUsePrompt={(text) => setPrompt(text)}
-                    />
+                  {PROMPT_TEMPLATES[agent]?.length > 0 && (
+                    <Box
+                      bg="white"
+                      borderRadius={{ base: '12px', md: '16px' }}
+                      borderWidth="1px"
+                      borderColor="gray.200"
+                      shadow="sm"
+                      p={{ base: 3, md: 4 }}
+                    >
+                      <Stack spacing={3}>
+                        <Box>
+                          <Text fontWeight="700" fontSize={{ base: 'sm', md: 'sm' }} color="gray.800">
+                            Quick prompt examples
+                          </Text>
+                          <Text fontSize={{ base: 'xs', md: 'xs' }} color="gray.500" mt={1}>
+                            Click any example to load it into the message box. Edit as needed before sending.
+                          </Text>
+                        </Box>
+                        <Stack spacing={3}>
+                          {PROMPT_TEMPLATES[agent].map(({ label, text }) => (
+                            <Box
+                              key={label}
+                              borderWidth="1px"
+                              borderColor="gray.200"
+                              borderRadius="12px"
+                              p={{ base: 3, md: 3 }}
+                              bg="gray.50"
+                            >
+                              <Stack spacing={2}>
+                                <HStack justify="space-between" align="center">
+                                  <Text fontWeight="600" fontSize={{ base: 'sm', md: 'sm' }} color="gray.800">
+                                    {label}
+                                  </Text>
+                                  <Button size="xs" borderRadius="10px" onClick={() => setPrompt(text)}>
+                                    Load prompt
+                                  </Button>
+                                </HStack>
+                                <Text fontSize={{ base: 'xs', md: 'sm' }} color="gray.600" whiteSpace="pre-wrap">
+                                  {text}
+                                </Text>
+                              </Stack>
+                            </Box>
+                          ))}
+                        </Stack>
+                      </Stack>
+                    </Box>
                   )}
                   <Box
                     flex="1"
