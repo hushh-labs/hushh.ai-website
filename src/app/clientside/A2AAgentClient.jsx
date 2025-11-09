@@ -75,6 +75,38 @@ const PROMPT_TEMPLATES = {
         'Please update Sundhar Pichai’s city to Mountain View and email to sundar.pichai@google.com in the database having their +52 334i33 and user id d72882hgdt7889.',
     },
   ],
+  public: [
+    {
+      label: 'Enrich Sundhar Pichai\'s public profile',
+      text:
+        "Can you provide me with a detailed JSON profile of Sundhar Pichai with phone +1-555-0123 and email sundhar.pichai@example.com that includes every available field such as full name, phone, email, address, age, gender, marital status, household size, children count, education level, occupation, income bracket, home ownership, city tier, transport, diet preference, favorite cuisine, coffee or tea choice, fitness routine, gym membership, shopping preference, grocery store type, fashion style, tech affinity, primary device, favorite social platform, social media usage time, content preference, sports interest, gaming preference, travel frequency, eco-friendliness, sleep chronotype, needs, wants, desires, and intents for 24h, 48h, and 72h with category, budget, time window, and confidence?",
+    },
+    {
+      label: 'Draft JSON-RPC request payload',
+      text: `{
+  "jsonrpc": "2.0",
+  "id": "task124",
+  "method": "tasks/send",
+  "params": {
+    "sessionId": "session456",
+    "message": {
+      "role": "user",
+      "parts": [
+        {
+          "type": "text",
+          "text": "Generate a comprehensive userProfile JSON for a new lead using their name, email, and phone number."
+        }
+      ]
+    }
+  }
+}`,
+    },
+    {
+      label: 'Summarize integration workflow',
+      text:
+        'Outline the step-by-step workflow for how the OpenAI Public Data Agent enriches a profile inside Hushh, starting from the user input and ending with dashboard visualization.',
+    },
+  ],
 }
 
 // Derive initials from an email address (first + last letter from local-part tokens)
