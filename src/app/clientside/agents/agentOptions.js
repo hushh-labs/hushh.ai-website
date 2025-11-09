@@ -4,8 +4,8 @@ export const AGENT_OPTIONS = [
   {
     id: 'brand',
     name: 'Brand Agent',
-    description: 'CRM user intelligence',
-    tagline: 'Understand CRM profiles and surface conversational insights instantly.',
+    description: 'Salesforce CRM bridge for brand preferences',
+    tagline: 'Query user affinity data with natural language and sync it back securely.',
     accent: {
       gradient: 'linear(135deg, #6366F1 0%, #8B5CF6 100%)',
       softBg: 'rgba(99, 102, 241, 0.12)',

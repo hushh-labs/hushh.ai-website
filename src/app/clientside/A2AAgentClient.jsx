@@ -33,6 +33,24 @@ import WhatsappComposer from './agents/WhatsappComposer'
 import { AGENT_OPTIONS, CHAT_ENABLED_AGENT_IDS, getAgentOptionById } from './agents/agentOptions'
 
 const PROMPT_TEMPLATES = {
+  brand: [
+    {
+      label: 'Lookup user state by phone',
+      text: 'Can you get the state of the user having phone: +919346661428?'
+    },
+    {
+      label: 'Fetch full brand profile',
+      text: 'Can you fetch all the details of the user with phone number (637) 940-5403?'
+    },
+    {
+      label: 'Retrieve user wants and desires',
+      text: 'Can you fetch all the wants and desires of the user with phone number (637) 940-5403?'
+    },
+    {
+      label: 'Check lifestyle preference',
+      text: 'Does the user with phone number (637) 940-5403 like tea or coffee?'
+    },
+  ],
   'hushh-profile': [
     {
       label: 'Create a profile with full details',
