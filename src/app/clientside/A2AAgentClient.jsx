@@ -22,7 +22,7 @@ import {
   Tag,
   Tooltip,
 } from '@chakra-ui/react'
-import { FiCopy, FiEyeOff, FiSparkles, FiRotateCcw } from 'react-icons/fi'
+import { FiCopy, FiEyeOff, FiRotateCcw, FiZap } from 'react-icons/fi'
 import { useAuth } from '../context/AuthContext'
 import ContentWrapper from '../_components/layout/ContentWrapper'
 import AgentSidebar from './agents/AgentSidebar'
@@ -356,7 +356,7 @@ export default function A2AAgentClient() {
                     {hasPrompts && !showPromptPanel && (
                       <Button
                         size="sm"
-                        leftIcon={<FiSparkles />}
+                        leftIcon={<FiZap />}
                         borderRadius="12px"
                         onClick={() => setShowPromptPanel(true)}
                       >
@@ -471,7 +471,7 @@ export default function A2AAgentClient() {
                                   </Stack>
                                   <Button
                                     size="sm"
-                                    leftIcon={<FiSparkles />}
+                                    leftIcon={<FiZap />}
                                     borderRadius="12px"
                                     onClick={() => {
                                       setPrompt(text)
