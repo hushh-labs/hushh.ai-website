@@ -25,8 +25,7 @@ import ChatThread from './agents/ChatThread'
 import JsonRpcComposer from './agents/JsonRpcComposer'
 import EmailComposer from './agents/EmailComposer'
 import WhatsappComposer from './agents/WhatsappComposer'
-import ProfileCreationDoc from './agents/ProfileCreationDoc'
-import ProfileUpdateDoc from './agents/ProfileUpdateDoc'
+import PromptSuggestionPanel from './agents/PromptSuggestionPanel'
 
 // Agent configurations
 const AGENTS = [
@@ -41,6 +40,45 @@ const AGENTS = [
 ]
 
 const CHAT_ENABLED_AGENTS = ['brand', 'hushh', 'hushh-profile', 'hushh-profile-update', 'public', 'gemini']
+
+const PROMPT_GUIDES = {
+  'hushh-profile': {
+    title: 'Supabase Profile Creation Agent',
+    description:
+      'Send a natural language instruction with the profile details you want to create. The agent will parse the message and call Supabase through MuleSoft to insert the record.',
+    highlights: ['Create new Supabase profiles', 'Understands structured or plain text', 'Backed by GPT-4.0 mini'],
+    prompts: [
+      {
+        label: 'Create a complete profile',
+        text:
+          'Can you create a user profile for Amitabh Bachchan with the following details: phone number +91 8266272888, email amitabh.bachchan@example.com, occupation Actor, and address in Mumbai? Include lifestyle preferences and intents if available.',
+      },
+      {
+        label: 'Onboard a new lead',
+        text:
+          'Please create a profile for Sundhar Pichai with email sundar.pichai@google.com, phone +1 4085551234, occupation CEO, city Mountain View, and country USA.',
+      },
+    ],
+  },
+  'hushh-profile-update': {
+    title: 'Supabase Profile Update Agent',
+    description:
+      'Describe the changes you need for an existing user. Mention identifiers like phone number or user ID along with the fields to update, and the agent will apply them through Supabase.',
+    highlights: ['Update Supabase records', 'Understands targeted changes', 'Backed by GPT-4.0 mini'],
+    prompts: [
+      {
+        label: 'Update state by phone & ID',
+        text:
+          'Can you update the state to AP for the user with phone +919346661428 and user ID d6f5fca9-924b-492e-95f6-55e81d405174?',
+      },
+      {
+        label: 'Correct contact details',
+        text:
+          'Please update Sundhar Pichai’s city to Mountain View and email to sundar.pichai@google.com in the database with phone +52 334i33 and user ID d72882hgdt7889.',
+      },
+    ],
+  },
+}
 
 // Derive initials from an email address (first + last letter from local-part tokens)
 function initialsFromEmail(email) {
@@ -291,14 +329,13 @@ export default function A2AAgentClient() {
             {/* Chat Area - Full Height */}
             <Flex direction="column" flex="1" minH={0} gap={3} w="100%" h="100%">
               {CHAT_ENABLED_AGENTS.includes(agent) && (
-                ['hushh-profile', 'hushh-profile-update'].includes(agent) ? (
-                  <Flex direction="column" flex="1" minH={0} gap={3}>
-                    {agent === 'hushh-profile' ? <ProfileCreationDoc /> : <ProfileUpdateDoc />}
-                    <Box flex="1" minH={0} overflow="hidden">
-                      <ChatThread messages={messages} loading={loading} error={error} userInitials={userInitials} />
-                    </Box>
-                  </Flex>
-                ) : (
+                <Flex direction="column" flex="1" minH={0} gap={3}>
+                  {PROMPT_GUIDES[agent] && (
+                    <PromptSuggestionPanel
+                      {...PROMPT_GUIDES[agent]}
+                      onUsePrompt={(text) => setPrompt(text)}
+                    />
+                  )}
                   <Box
                     flex="1"
                     minH={0}
@@ -306,7 +343,7 @@ export default function A2AAgentClient() {
                   >
                     <ChatThread messages={messages} loading={loading} error={error} userInitials={userInitials} />
                   </Box>
-                )
+                </Flex>
               )}
 
               {/* Input Area - Fixed at Bottom */}
