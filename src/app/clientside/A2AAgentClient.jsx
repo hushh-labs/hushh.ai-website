@@ -25,16 +25,20 @@ import ChatThread from './agents/ChatThread'
 import JsonRpcComposer from './agents/JsonRpcComposer'
 import EmailComposer from './agents/EmailComposer'
 import WhatsappComposer from './agents/WhatsappComposer'
+import ProfileCreationDoc from './agents/ProfileCreationDoc'
 
 // Agent configurations
 const AGENTS = [
   { id: 'brand', name: 'Brand Agent', description: 'CRM user intelligence' },
   { id: 'hushh', name: 'Hushh Agent', description: 'Supabase data query agent' },
+  { id: 'hushh-profile', name: 'Hushh Profile Creation Agent', description: 'Supabase profile onboarding' },
   { id: 'public', name: 'Public Data Agent', description: 'OpenAI data enrichment' },
   { id: 'gemini', name: 'Gemini Agent', description: 'Gemini AI data enrichment' },
   { id: 'whatsapp', name: 'WhatsApp CRM Agent', description: 'Send WhatsApp messages' },
   { id: 'email', name: 'Email Integration Agent', description: 'Send transactional emails' },
 ]
+
+const CHAT_ENABLED_AGENTS = ['brand', 'hushh', 'hushh-profile', 'public', 'gemini']
 
 // Derive initials from an email address (first + last letter from local-part tokens)
 function initialsFromEmail(email) {
@@ -55,11 +59,9 @@ export default function A2AAgentClient() {
   const [error, setError] = useState('')
   const toast = useToast()
   const [messages, setMessages] = useState([]) // { id, role: 'user'|'agent', content, agent? }
-  const { user, isAuthenticated } = useAuth()
+  const { user } = useAuth()
 
   const userInitials = useMemo(() => initialsFromEmail(user?.email || 'you@hushh.ai'), [user?.email])
-
-  const canSend = prompt.trim().length > 0 && !loading
 
   const extractText = useCallback((payload) => {
     if (!payload || typeof payload !== 'object') return ''
@@ -217,7 +219,7 @@ export default function A2AAgentClient() {
                   A2A Agents
                 </Heading>
                 <Text color="gray.600" fontSize={{ base: 'xs', md: 'sm' }} mt={1}>
-                  Chat with Brand, Hushh, Public Data, or Gemini agents
+                  Chat with Brand, Hushh data query, Supabase profile creation, Public Data, or Gemini agents
                 </Text>
               </Box>
              
@@ -286,14 +288,23 @@ export default function A2AAgentClient() {
 
             {/* Chat Area - Full Height */}
             <Flex direction="column" flex="1" minH={0} gap={3} w="100%" h="100%">
-              {(agent === 'brand' || agent === 'hushh' || agent === 'public' || agent === 'gemini') && (
-                <Box 
-                  flex="1" 
-                  minH={0}
-                  overflow="hidden"
-                >
-                  <ChatThread messages={messages} loading={loading} error={error} userInitials={userInitials} />
-                </Box>
+              {CHAT_ENABLED_AGENTS.includes(agent) && (
+                agent === 'hushh-profile' ? (
+                  <Flex direction="column" flex="1" minH={0} gap={3}>
+                    <ProfileCreationDoc />
+                    <Box flex="1" minH={0} overflow="hidden">
+                      <ChatThread messages={messages} loading={loading} error={error} userInitials={userInitials} />
+                    </Box>
+                  </Flex>
+                ) : (
+                  <Box
+                    flex="1"
+                    minH={0}
+                    overflow="hidden"
+                  >
+                    <ChatThread messages={messages} loading={loading} error={error} userInitials={userInitials} />
+                  </Box>
+                )
               )}
 
               {/* Input Area - Fixed at Bottom */}

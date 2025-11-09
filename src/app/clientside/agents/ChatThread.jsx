@@ -114,7 +114,23 @@ export default function ChatThread({ messages, loading, error, userInitials }) {
                 textTransform="uppercase"
                 letterSpacing="wide"
               >
-                {m.role === 'user' ? 'You' : (m.agent === 'hushh' ? 'Hushh Agent' : m.agent === 'brand' ? 'Brand Agent' : m.agent === 'public' ? 'Public Data Agent' : m.agent === 'gemini' ? 'Gemini Agent' : m.agent === 'whatsapp' ? 'WhatsApp Agent' : m.agent === 'email' ? 'Email Agent' : 'Agent')}
+                {m.role === 'user'
+                  ? 'You'
+                  : (m.agent === 'hushh'
+                    ? 'Hushh Agent'
+                    : m.agent === 'hushh-profile'
+                      ? 'Supabase Profile Creation Agent'
+                      : m.agent === 'brand'
+                        ? 'Brand Agent'
+                        : m.agent === 'public'
+                          ? 'Public Data Agent'
+                          : m.agent === 'gemini'
+                            ? 'Gemini Agent'
+                            : m.agent === 'whatsapp'
+                              ? 'WhatsApp Agent'
+                              : m.agent === 'email'
+                                ? 'Email Agent'
+                                : 'Agent')}
               </Text>
               <Box
                 lineHeight={{ base: '1.6', md: '1.7' }}

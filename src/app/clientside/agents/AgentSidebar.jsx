@@ -5,6 +5,7 @@ import { Box, VStack, Text, Button, HStack, useColorModeValue } from '@chakra-ui
 const AGENTS = [
   { id: 'brand', name: 'Brand Agent', description: 'CRM user intelligence' },
   { id: 'hushh', name: 'Hushh Agent', description: 'Supabase data query agent' },
+  { id: 'hushh-profile', name: 'Hushh Profile Creation Agent', description: 'Supabase profile onboarding' },
   { id: 'public', name: 'Public Data Agent', description: 'OpenAI data enrichment' },
   { id: 'gemini', name: 'Gemini Agent', description: 'Gemini AI data enrichment' },
   { id: 'whatsapp', name: 'WhatsApp CRM Agent', description: 'Send WhatsApp messages' },
