@@ -26,19 +26,21 @@ import JsonRpcComposer from './agents/JsonRpcComposer'
 import EmailComposer from './agents/EmailComposer'
 import WhatsappComposer from './agents/WhatsappComposer'
 import ProfileCreationDoc from './agents/ProfileCreationDoc'
+import ProfileUpdateDoc from './agents/ProfileUpdateDoc'
 
 // Agent configurations
 const AGENTS = [
   { id: 'brand', name: 'Brand Agent', description: 'CRM user intelligence' },
   { id: 'hushh', name: 'Hushh Agent', description: 'Supabase data query agent' },
   { id: 'hushh-profile', name: 'Hushh Profile Creation Agent', description: 'Supabase profile onboarding' },
+  { id: 'hushh-profile-update', name: 'Hushh Profile Update Agent', description: 'Supabase profile maintenance' },
   { id: 'public', name: 'Public Data Agent', description: 'OpenAI data enrichment' },
   { id: 'gemini', name: 'Gemini Agent', description: 'Gemini AI data enrichment' },
   { id: 'whatsapp', name: 'WhatsApp CRM Agent', description: 'Send WhatsApp messages' },
   { id: 'email', name: 'Email Integration Agent', description: 'Send transactional emails' },
 ]
 
-const CHAT_ENABLED_AGENTS = ['brand', 'hushh', 'hushh-profile', 'public', 'gemini']
+const CHAT_ENABLED_AGENTS = ['brand', 'hushh', 'hushh-profile', 'hushh-profile-update', 'public', 'gemini']
 
 // Derive initials from an email address (first + last letter from local-part tokens)
 function initialsFromEmail(email) {
@@ -219,7 +221,7 @@ export default function A2AAgentClient() {
                   A2A Agents
                 </Heading>
                 <Text color="gray.600" fontSize={{ base: 'xs', md: 'sm' }} mt={1}>
-                  Chat with Brand, Hushh data query, Supabase profile creation, Public Data, or Gemini agents
+                  Chat with Brand, Hushh data query, Supabase profile creation, Supabase profile updates, Public Data, or Gemini agents
                 </Text>
               </Box>
              
@@ -289,9 +291,9 @@ export default function A2AAgentClient() {
             {/* Chat Area - Full Height */}
             <Flex direction="column" flex="1" minH={0} gap={3} w="100%" h="100%">
               {CHAT_ENABLED_AGENTS.includes(agent) && (
-                agent === 'hushh-profile' ? (
+                ['hushh-profile', 'hushh-profile-update'].includes(agent) ? (
                   <Flex direction="column" flex="1" minH={0} gap={3}>
-                    <ProfileCreationDoc />
+                    {agent === 'hushh-profile' ? <ProfileCreationDoc /> : <ProfileUpdateDoc />}
                     <Box flex="1" minH={0} overflow="hidden">
                       <ChatThread messages={messages} loading={loading} error={error} userInitials={userInitials} />
                     </Box>
