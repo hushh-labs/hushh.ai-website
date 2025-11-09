@@ -1,57 +1,81 @@
 'use client'
 import React from 'react'
-import { Box, VStack, Text, Button, HStack, useColorModeValue } from '@chakra-ui/react'
-
-const AGENTS = [
-  { id: 'brand', name: 'Brand Agent', description: 'CRM user intelligence' },
-  { id: 'hushh', name: 'Hushh Agent', description: 'Headless Supabase agent' },
-  { id: 'public', name: 'Public Data Agent', description: 'OpenAI data enrichment' },
-  { id: 'gemini', name: 'Gemini Agent', description: 'Gemini AI data enrichment' },
-  { id: 'whatsapp', name: 'WhatsApp CRM Agent', description: 'Send WhatsApp messages' },
-  { id: 'email', name: 'Email Integration Agent', description: 'Send transactional emails' },
-]
+import { Box, VStack, Text, HStack, Icon, Tag } from '@chakra-ui/react'
+import { AGENT_OPTIONS } from './agentOptions'
 
 export default function AgentSidebar({ selected, onSelect }) {
-  const activeBg = useColorModeValue('gray.900', 'gray.100')
-  const activeColor = useColorModeValue('white', 'gray.900')
-  const hoverBg = useColorModeValue('gray.100', 'gray.700')
-
   return (
     <Box
-      w={{ base: '100%', md: '280px' }}
+      w={{ base: '100%', md: '300px' }}
       flexShrink={0}
-      bg="white"
-      borderRadius="16px"
-      p={4}
-      height="fit-content"
-      shadow="sm"
+      bg="transparent"
     >
       <Text fontSize="xs" fontWeight="700" color="gray.500" textTransform="uppercase" mb={3} px={2}>
         Select Agent
       </Text>
-      <VStack align="stretch" spacing={2} role="tablist" aria-label="Agents">
-        {AGENTS.map(a => {
+      <VStack align="stretch" spacing={3} role="tablist" aria-label="Agents">
+        {AGENT_OPTIONS.map((a) => {
           const isActive = selected === a.id
           return (
-            <Button
+            <Box
               key={a.id}
-              onClick={() => onSelect?.(a.id)}
-              justifyContent="flex-start"
-              variant="ghost"
-              borderRadius="12px"
-              px={3}
-              py={3}
-              bg={isActive ? activeBg : 'transparent'}
-              color={isActive ? activeColor : 'inherit'}
-              _hover={{ bg: isActive ? activeBg : hoverBg }}
               role="tab"
               aria-selected={isActive}
+              tabIndex={0}
+              onClick={() => onSelect?.(a.id)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault()
+                  onSelect?.(a.id)
+                }
+              }}
+              cursor="pointer"
+              _focus={{ boxShadow: 'outline' }}
+              transition="all 0.2s ease"
             >
-              <VStack align="start" spacing={0}>
-                <Text fontWeight="700" fontSize="sm">{a.name}</Text>
-                <Text fontSize="xs" opacity={0.7}>{a.description}</Text>
-              </VStack>
-            </Button>
+              <Box
+                borderRadius="18px"
+                p={{ base: 4, md: 4 }}
+                bg={isActive ? 'white' : 'rgba(255,255,255,0.7)'}
+                borderWidth={isActive ? '2px' : '1px'}
+                borderColor={isActive ? a.accent.softBg || 'gray.200' : 'gray.100'}
+                boxShadow={isActive ? 'xl' : 'sm'}
+                _hover={{ transform: 'translateY(-2px)', boxShadow: 'xl' }}
+              >
+                <HStack align="flex-start" spacing={4}>
+                  <Box
+                    w={10}
+                    h={10}
+                    borderRadius="full"
+                    bg={a.accent?.softBg || 'gray.100'}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    color={a.accent?.softText || 'gray.700'}
+                  >
+                    {a.icon ? <Icon as={a.icon} /> : null}
+                  </Box>
+                  <VStack align="stretch" spacing={1}>
+                    <HStack spacing={2} align="center" justify="space-between">
+                      <Text fontWeight="700" fontSize="sm" color="gray.800">
+                        {a.name}
+                      </Text>
+                      {isActive && (
+                        <Tag size="sm" bg={a.accent?.tagBg || 'gray.100'} color={a.accent?.tagColor || 'gray.700'} borderRadius="full">
+                          Active
+                        </Tag>
+                      )}
+                    </HStack>
+                    <Text fontSize="xs" color="gray.500">
+                      {a.description}
+                    </Text>
+                    <Text fontSize="xs" color="gray.400">
+                      {a.tagline}
+                    </Text>
+                  </VStack>
+                </HStack>
+              </Box>
+            </Box>
           )
         })}
       </VStack>

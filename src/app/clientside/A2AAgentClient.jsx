@@ -1,23 +1,28 @@
 'use client'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import {
+  Badge,
   Box,
   Button,
+  Collapse,
   Container,
+  Divider,
   Flex,
   Heading,
   HStack,
+  Icon,
+  Select,
+  SimpleGrid,
   Stack,
   Text,
+  useBreakpointValue,
   useToast,
-  IconButton,
-  Divider,
-  Spinner,
-  Select,
   FormControl,
   FormLabel,
+  Tag,
+  Tooltip,
 } from '@chakra-ui/react'
-import { CopyIcon, RepeatIcon } from '@chakra-ui/icons'
+import { FiCopy, FiEyeOff, FiSparkles, FiRotateCcw } from 'react-icons/fi'
 import { useAuth } from '../context/AuthContext'
 import ContentWrapper from '../_components/layout/ContentWrapper'
 import AgentSidebar from './agents/AgentSidebar'
@@ -25,16 +30,34 @@ import ChatThread from './agents/ChatThread'
 import JsonRpcComposer from './agents/JsonRpcComposer'
 import EmailComposer from './agents/EmailComposer'
 import WhatsappComposer from './agents/WhatsappComposer'
+import { AGENT_OPTIONS, CHAT_ENABLED_AGENT_IDS, getAgentOptionById } from './agents/agentOptions'
 
-// Agent configurations
-const AGENTS = [
-  { id: 'brand', name: 'Brand Agent', description: 'CRM user intelligence' },
-  { id: 'hushh', name: 'Hushh Agent', description: 'Headless Supabase agent' },
-  { id: 'public', name: 'Public Data Agent', description: 'OpenAI data enrichment' },
-  { id: 'gemini', name: 'Gemini Agent', description: 'Gemini AI data enrichment' },
-  { id: 'whatsapp', name: 'WhatsApp CRM Agent', description: 'Send WhatsApp messages' },
-  { id: 'email', name: 'Email Integration Agent', description: 'Send transactional emails' },
-]
+const PROMPT_TEMPLATES = {
+  'hushh-profile': [
+    {
+      label: 'Create a profile with full details',
+      text:
+        'Can you create a user profile with the details below? {"fullName":"Amitabh Bachchan","phone":"+91 8266272888","email":"amitabh.bachchan@example.com","address":{"street":"Juhu Circle","city":"Mumbai","state":"Maharashtra","postalCode":"400049","country":"India"},"age":80,"gender":"Male","maritalStatus":"Married","householdSize":4,"childrenCount":2,"educationLevel":"Master\'s Degree","occupation":"Actor","incomeBracket":"High","homeOwnership":"Owned","cityTier":"Tier 1","transport":"Car","dietPreference":"Vegetarian","favoriteCuisine":"Indian","coffeeOrTeaChoice":"Tea","fitnessRoutine":"Yoga and Walking","gymMembership":"No","shoppingPreference":"Online and Local Markets","groceryStoreType":"Supermarket","fashionStyle":"Formal and Traditional","techAffinity":"Moderate","primaryDevice":"Smartphone","favoriteSocialPlatform":"Twitter","socialMediaUsageTime":"1-2 hours/day","contentPreference":"Movies and News","sportsInterest":"Cricket","gamingPreference":"Casual Gaming","travelFrequency":"2-3 times a year","ecoFriendliness":"High","sleepChronotype":"Morning Person","needs":["Health","Recognition","Quality Time"],"wants":["Luxury Travel","New Gadgets"],"desires":["Creative Expression","Social Impact"],"intents":{"24h":{"category":"Health","budget":"Low","timeWindow":"Today","confidence":"High"},"48h":{"category":"Entertainment","budget":"Medium","timeWindow":"This Weekend","confidence":"Medium"},"72h":{"category":"Travel","budget":"High","timeWindow":"Next Month","confidence":"Low"}}}',
+    },
+    {
+      label: 'Onboard Sundhar Pichai',
+      text:
+        'Please create a profile for Sundhar Pichai with email sundar.pichai@google.com, phone +1 4085551234, occupation CEO, city Mountain View, and country USA.',
+    },
+  ],
+  'hushh-profile-update': [
+    {
+      label: 'Update state for an existing record',
+      text:
+        'Can you update the state to AP for the user with phone +919346661428 and user ID d6f5fca9-924b-492e-95f6-55e81d405174?',
+    },
+    {
+      label: 'Correct Sundhar Pichai\'s contact info',
+      text:
+        'Please update Sundhar Pichai’s city to Mountain View and email to sundar.pichai@google.com in the database having their +52 334i33 and user id d72882hgdt7889.',
+    },
+  ],
+}
 
 // Derive initials from an email address (first + last letter from local-part tokens)
 function initialsFromEmail(email) {
@@ -55,11 +78,22 @@ export default function A2AAgentClient() {
   const [error, setError] = useState('')
   const toast = useToast()
   const [messages, setMessages] = useState([]) // { id, role: 'user'|'agent', content, agent? }
-  const { user, isAuthenticated } = useAuth()
+  const { user } = useAuth()
+  const [showPromptPanel, setShowPromptPanel] = useState(true)
+
+  const activeAgent = useMemo(() => getAgentOptionById(agent) || AGENT_OPTIONS[0], [agent])
+  const accent = activeAgent?.accent || {}
+  const promptColumns = useBreakpointValue({ base: 1, md: 2 })
+  const hasAssistantReply = useMemo(() => messages.some((m) => m.role === 'agent'), [messages])
+  const hasPrompts = Boolean(PROMPT_TEMPLATES[agent]?.length)
 
   const userInitials = useMemo(() => initialsFromEmail(user?.email || 'you@hushh.ai'), [user?.email])
 
-  const canSend = prompt.trim().length > 0 && !loading
+  useEffect(() => {
+    const defaultTemplate = PROMPT_TEMPLATES[agent]?.[0]?.text || ''
+    setPrompt(defaultTemplate)
+    setShowPromptPanel(Boolean(PROMPT_TEMPLATES[agent]?.length))
+  }, [agent])
 
   const extractText = useCallback((payload) => {
     if (!payload || typeof payload !== 'object') return ''
@@ -114,7 +148,9 @@ export default function A2AAgentClient() {
     setMessages([])
     setError('')
     setLoading(false)
-  }, [])
+    setPrompt(PROMPT_TEMPLATES[agent]?.[0]?.text || '')
+    setShowPromptPanel(Boolean(PROMPT_TEMPLATES[agent]?.length))
+  }, [agent])
 
   const sendText = useCallback(async (text) => {
     const trimmed = (text || '').trim()
@@ -122,6 +158,7 @@ export default function A2AAgentClient() {
     const userMsg = { role: 'user', content: trimmed, id: `u-${Date.now()}` }
     setMessages(prev => [...prev, userMsg])
     setPrompt('')
+    setShowPromptPanel(false)
     setLoading(true)
     setError('')
     try {
@@ -158,6 +195,7 @@ export default function A2AAgentClient() {
     setMessages(prev => [...prev, userMsg])
     setLoading(true)
     setError('')
+    setShowPromptPanel(false)
     try {
       // Call via Next.js API proxy with custom payload
       const res = await fetch(`/api/a2a/${agent}`, {
@@ -185,151 +223,309 @@ export default function A2AAgentClient() {
     }
   }, [agent, loading, toast, extractText])
 
-  // Layout-only. Scrolling handled inside ChatThread.
-
   return (
     <ContentWrapper>
-    <Box bg="#f5f5f7" color="gray.900" minH="100vh">
-      <Container minW={'100%'} py={{ base: 3, md: 4 }} px={{ base: 3, md: 4 }} h="100vh">
-        <Flex direction="column" gap={{ base: 3, md: 3 }} h="100%">
-          {/* Header */}
-          <Box
-            bg="white"
-            p={{ base: 4, md: 6 }}
-            borderRadius={{ base: '12px', md: '16px' }}
-            shadow="sm"
-            flexShrink={0}
-          >
-            <Flex 
-              direction={{ base: 'column', md: 'row' }}
-              align={{ base: 'flex-start', md: 'center' }} 
-              justify="space-between" 
-              gap={3}
+      <Box
+        bgGradient="linear(180deg, #f4f6fb 0%, #eef2ff 100%)"
+        color="gray.900"
+        minH="100vh"
+        py={{ base: 6, lg: 8 }}
+      >
+        <Container maxW="7xl" px={{ base: 4, md: 6 }}>
+          <Flex direction="column" gap={{ base: 6, lg: 8 }} minH="full">
+            <Box
+              bg="white"
+              borderRadius={{ base: '16px', lg: '20px' }}
+              shadow="xl"
+              px={{ base: 5, md: 8 }}
+              py={{ base: 6, md: 8 }}
             >
-              <Box>
-                <Heading 
-                  as="h1" 
-                  size={{ base: 'md', md: 'lg' }} 
-                  color="gray.900" 
-                  fontWeight="700" 
-                  fontFamily="'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-                >
-                  A2A Agents
-                </Heading>
-                <Text color="gray.600" fontSize={{ base: 'xs', md: 'sm' }} mt={1}>
-                  Chat with Brand, Hushh, Public Data, or Gemini agents
-                </Text>
-              </Box>
-             
-            </Flex>
-
-            {/* Mobile Agent Selector */}
-            <FormControl mt={4} display={{ base: 'block', md: 'none' }}>
-              <FormLabel fontSize="sm" fontWeight="600" color="gray.700" mb={2}>
-                Select Agent
-              </FormLabel>
-              <Select
-                value={agent}
-                onChange={(e) => setAgent(e.target.value)}
-                bg="gray.50"
-                borderColor="gray.200"
-                borderRadius="12px"
-                fontSize="sm"
-                fontWeight="500"
-                _focus={{
-                  borderColor: 'gray.900',
-                  bg: 'white',
-                  boxShadow: '0 0 0 1px #1a202c'
-                }}
-              >
-                {AGENTS.map(a => (
-                  <option key={a.id} value={a.id}>
-                    {a.name} - {a.description}
-                  </option>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
-
-          {/* <Accordion allowToggle borderRadius="12px" bg="white" borderWidth="1px" borderColor="gray.200">
-            <AccordionItem border="0">
-              <h2>
-                <AccordionButton _expanded={{ bg: 'gray.50' }} borderRadius="12px">
-                  <Box as="span" flex="1" textAlign="left" fontWeight="600">How to add agents (Domain Interaction Agent)</Box>
-                  <AccordionIcon />
-                </AccordionButton>
-              </h2>
-              <AccordionPanel pb={4} color="gray.700">
-                <Text mb={2}>1) Open Interaction Agent UI and add agents:</Text>
-                <Text mb={2}>• Agent URL — Brand: https://a2a-crm-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/crm-agent</Text>
-                <Text mb={2}>• Agent URL — Hushh: https://a2a-supabase-headless-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/supabase-agent</Text>
-                <Text mb={2}>• Agent Type — mulesoft ai chain</Text>
-                <Text>2) Save and verify by sending a simple query from the UI.</Text>
-              </AccordionPanel>
-            </AccordionItem>
-          </Accordion> */}
-
-          {/* Main Content */}
-          <Flex flex="1" minH={0} gap={{ base: 0, md: 4 }} direction={{ base: 'column', md: 'row' }} overflow="hidden">
-            {/* Desktop Sidebar - Sticky */}
-            <Box 
-              display={{ base: 'none', md: 'block' }}
-              position={{ base: 'relative', md: 'sticky' }}
-              top={0}
-              alignSelf="flex-start"
-              h="fit-content"
-              maxH="calc(100vh - 200px)"
-              overflowY="auto"
-            >
-              <AgentSidebar selected={agent} onSelect={setAgent} />
+              <Stack spacing={{ base: 5, md: 6 }}>
+                <Flex direction={{ base: 'column', lg: 'row' }} justify="space-between" gap={{ base: 5, lg: 8 }}>
+                  <Box flex="1">
+                    <Text fontSize="xs" letterSpacing="widest" textTransform="uppercase" fontWeight="700" color="gray.500">
+                      Agent Control Center
+                    </Text>
+                    <Heading
+                      as="h1"
+                      size={{ base: 'lg', lg: 'xl' }}
+                      color="gray.900"
+                      fontWeight="700"
+                    >
+                      Orchestrate every Hushh automation from one place
+                    </Heading>
+                    <Text color="gray.600" fontSize={{ base: 'sm', md: 'md' }} mt={3} maxW="3xl">
+                      Choose an agent, drop in a natural language request, and receive Supabase-ready responses in seconds. Craft
+                      new profiles, update existing records, or enrich your customer view without leaving this workspace.
+                    </Text>
+                  </Box>
+                  <Box
+                    borderRadius="18px"
+                    p={{ base: 4, md: 5 }}
+                    w={{ base: 'full', lg: '320px' }}
+                    bgGradient={accent?.gradient || 'linear(135deg, #111827 0%, #1F2937 100%)'}
+                    color="white"
+                    shadow="lg"
+                  >
+                    <Stack spacing={4}>
+                      <HStack spacing={3} align="center">
+                        <Flex
+                          align="center"
+                          justify="center"
+                          w={{ base: 12, md: 12 }}
+                          h={{ base: 12, md: 12 }}
+                          borderRadius="full"
+                          bg="white"
+                          color="gray.900"
+                          shadow="sm"
+                        >
+                          {activeAgent?.icon ? <Icon as={activeAgent.icon} boxSize={6} /> : null}
+                        </Flex>
+                        <Box>
+                          <Text fontSize="xs" textTransform="uppercase" fontWeight="700" opacity={0.75}>
+                            Active Agent
+                          </Text>
+                          <Text fontWeight="700" fontSize={{ base: 'lg', md: 'xl' }}>
+                            {activeAgent?.name}
+                          </Text>
+                        </Box>
+                      </HStack>
+                      <Box bg="white" borderRadius="16px" px={4} py={3} color={accent?.softText || '#1F2937'} shadow="sm">
+                        <Text fontSize="sm" fontWeight="600" mb={1}>
+                          {activeAgent?.description}
+                        </Text>
+                        <Text fontSize="xs" opacity={0.85}>
+                          {activeAgent?.tagline}
+                        </Text>
+                      </Box>
+                    </Stack>
+                  </Box>
+                </Flex>
+                <Divider borderColor="gray.100" />
+                <Flex direction={{ base: 'column', md: 'row' }} gap={{ base: 3, md: 4 }} align={{ base: 'flex-start', md: 'center' }}>
+                  <FormControl display={{ base: 'block', md: 'none' }}>
+                    <FormLabel fontSize="sm" fontWeight="600" color="gray.700" mb={2}>
+                      Select Agent
+                    </FormLabel>
+                    <Select
+                      value={agent}
+                      onChange={(e) => setAgent(e.target.value)}
+                      bg="gray.50"
+                      borderColor="gray.200"
+                      borderRadius="12px"
+                      fontSize="sm"
+                      fontWeight="500"
+                      _focus={{
+                        borderColor: 'gray.900',
+                        bg: 'white',
+                        boxShadow: '0 0 0 1px #1a202c',
+                      }}
+                    >
+                      {AGENT_OPTIONS.map((a) => (
+                        <option key={a.id} value={a.id}>
+                          {a.name} — {a.description}
+                        </option>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <HStack spacing={3} flexWrap="wrap">
+                    <Tooltip
+                      label={hasAssistantReply ? 'Copy the most recent agent message' : 'Send a prompt first to enable copying'}
+                      hasArrow
+                    >
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        leftIcon={<FiCopy />}
+                        borderRadius="12px"
+                        onClick={onCopy}
+                        isDisabled={!hasAssistantReply}
+                      >
+                        Copy last response
+                      </Button>
+                    </Tooltip>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      leftIcon={<FiRotateCcw />}
+                      borderRadius="12px"
+                      onClick={reset}
+                    >
+                      Reset conversation
+                    </Button>
+                    {hasPrompts && !showPromptPanel && (
+                      <Button
+                        size="sm"
+                        leftIcon={<FiSparkles />}
+                        borderRadius="12px"
+                        onClick={() => setShowPromptPanel(true)}
+                      >
+                        Show prompt suggestions
+                      </Button>
+                    )}
+                  </HStack>
+                </Flex>
+              </Stack>
             </Box>
 
-            {/* Chat Area - Full Height */}
-            <Flex direction="column" flex="1" minH={0} gap={3} w="100%" h="100%">
-              {(agent === 'brand' || agent === 'hushh' || agent === 'public' || agent === 'gemini') && (
-                <Box 
-                  flex="1" 
-                  minH={0}
-                  overflow="hidden"
-                >
-                  <ChatThread messages={messages} loading={loading} error={error} userInitials={userInitials} />
-                </Box>
-              )}
-
-              {/* Input Area - Fixed at Bottom */}
-              <Box 
-                bg="white" 
-                borderRadius={{ base: '12px', md: '16px' }}
-                p={{ base: 3, md: 4 }} 
-                shadow="md"
-                flexShrink={0}
+            <Flex
+              flex="1"
+              minH={0}
+              gap={{ base: 6, lg: 8 }}
+              direction={{ base: 'column', lg: 'row' }}
+            >
+              <Box
+                display={{ base: 'none', lg: 'block' }}
+                position="sticky"
+                top={6}
+                alignSelf="flex-start"
+                minW="280px"
+                maxW="300px"
               >
-                {agent === 'email' ? (
-                  <EmailComposer
-                    disabled={loading}
-                    onSubmit={(payload) => sendPayload(payload, `Send email to ${payload.to}`)}
-                  />
-                ) : agent === 'whatsapp' ? (
-                  <WhatsappComposer
-                    disabled={loading}
-                    onSubmit={(payload) => sendPayload(payload, `WhatsApp to ${payload.to} using template ${payload.template?.name}`)}
-                  />
-                ) : (
-                  <JsonRpcComposer
-                    value={prompt}
-                    disabled={loading}
-                    onChange={setPrompt}
-                    onSubmit={(text) => sendText(text)}
-                    onReset={reset}
-                  />
-                )}
+                <AgentSidebar selected={agent} onSelect={setAgent} />
               </Box>
+
+              <Flex direction="column" flex="1" minH={0} gap={{ base: 4, md: 5 }}>
+                {CHAT_ENABLED_AGENT_IDS.includes(agent) && (
+                  <Flex direction="column" flex="1" minH={0} gap={{ base: 4, md: 5 }}>
+                    {hasPrompts && (
+                      <Collapse in={showPromptPanel} animateOpacity unmountOnExit>
+                        <Box
+                          bg="white"
+                          borderRadius={{ base: '14px', md: '18px' }}
+                          borderWidth="1px"
+                          borderColor="gray.100"
+                          shadow="lg"
+                          p={{ base: 4, md: 5 }}
+                        >
+                          <Stack spacing={{ base: 4, md: 5 }}>
+                            <HStack justify="space-between" align="flex-start">
+                              <Box>
+                                <HStack spacing={2}>
+                                  <Tag size="sm" bg={accent?.tagBg || 'gray.100'} color={accent?.tagColor || 'gray.700'}>
+                                    Supabase-ready prompt
+                                  </Tag>
+                                  <Badge colorScheme="gray" borderRadius="full" px={2} py={1} fontSize="0.6rem">
+                                    {PROMPT_TEMPLATES[agent].length} templates
+                                  </Badge>
+                                </HStack>
+                                <Text fontWeight="700" fontSize={{ base: 'md', md: 'lg' }} color="gray.800" mt={2}>
+                                  Quick start prompts
+                                </Text>
+                                <Text fontSize={{ base: 'sm', md: 'sm' }} color="gray.500" mt={1}>
+                                  Load a curated message to start your Supabase workflow faster. Edit anything in the composer before
+                                  you send.
+                                </Text>
+                              </Box>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                leftIcon={<FiEyeOff />}
+                                onClick={() => setShowPromptPanel(false)}
+                              >
+                                Hide
+                              </Button>
+                            </HStack>
+                            <SimpleGrid columns={promptColumns} spacing={{ base: 4, md: 5 }}>
+                              {PROMPT_TEMPLATES[agent].map(({ label, text }) => (
+                                <Box
+                                  key={label}
+                                  borderRadius="16px"
+                                  borderWidth="1px"
+                                  borderColor="gray.100"
+                                  bg={accent?.softBg || 'gray.50'}
+                                  shadow="sm"
+                                  p={{ base: 4, md: 5 }}
+                                  display="flex"
+                                  flexDirection="column"
+                                  gap={4}
+                                >
+                                  <Stack spacing={2}>
+                                    <Text fontWeight="700" fontSize="sm" color={accent?.softText || 'gray.700'}>
+                                      {label}
+                                    </Text>
+                                    <Box
+                                      fontSize={{ base: 'sm', md: 'sm' }}
+                                      color="gray.700"
+                                      bg="white"
+                                      borderRadius="12px"
+                                      borderWidth="1px"
+                                      borderColor="gray.100"
+                                      p={3}
+                                      maxH={{ base: '220px', md: '240px' }}
+                                      overflowY="auto"
+                                      sx={{
+                                        '&::-webkit-scrollbar': {
+                                          width: '6px',
+                                        },
+                                        '&::-webkit-scrollbar-thumb': {
+                                          background: '#CBD5F5',
+                                          borderRadius: '8px',
+                                        },
+                                      }}
+                                    >
+                                      <Text whiteSpace="pre-wrap" fontSize="xs" lineHeight="1.6">
+                                        {text}
+                                      </Text>
+                                    </Box>
+                                  </Stack>
+                                  <Button
+                                    size="sm"
+                                    leftIcon={<FiSparkles />}
+                                    borderRadius="12px"
+                                    onClick={() => {
+                                      setPrompt(text)
+                                      setShowPromptPanel(false)
+                                    }}
+                                  >
+                                    Use this prompt
+                                  </Button>
+                                </Box>
+                              ))}
+                            </SimpleGrid>
+                          </Stack>
+                        </Box>
+                      </Collapse>
+                    )}
+
+                    <Box flex="1" minH={0}>
+                      <ChatThread messages={messages} loading={loading} error={error} userInitials={userInitials} />
+                    </Box>
+                  </Flex>
+                )}
+
+                <Box
+                  bg="white"
+                  borderRadius={{ base: '16px', md: '18px' }}
+                  p={{ base: 4, md: 5 }}
+                  shadow="xl"
+                  flexShrink={0}
+                >
+                  {agent === 'email' ? (
+                    <EmailComposer
+                      disabled={loading}
+                      onSubmit={(payload) => sendPayload(payload, `Send email to ${payload.to}`)}
+                    />
+                  ) : agent === 'whatsapp' ? (
+                    <WhatsappComposer
+                      disabled={loading}
+                      onSubmit={(payload) => sendPayload(payload, `WhatsApp to ${payload.to} using template ${payload.template?.name}`)}
+                    />
+                  ) : (
+                    <JsonRpcComposer
+                      value={prompt}
+                      disabled={loading}
+                      onChange={setPrompt}
+                      onSubmit={(text) => sendText(text)}
+                      onReset={reset}
+                    />
+                  )}
+                </Box>
+              </Flex>
             </Flex>
           </Flex>
-
-        </Flex>
-      </Container>
-    </Box>
+        </Container>
+      </Box>
     </ContentWrapper>
   )
 }
