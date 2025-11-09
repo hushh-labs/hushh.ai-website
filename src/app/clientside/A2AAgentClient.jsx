@@ -1,5 +1,5 @@
 'use client'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   Box,
   Button,
@@ -10,14 +10,10 @@ import {
   Stack,
   Text,
   useToast,
-  IconButton,
-  Divider,
-  Spinner,
   Select,
   FormControl,
   FormLabel,
 } from '@chakra-ui/react'
-import { CopyIcon, RepeatIcon } from '@chakra-ui/icons'
 import { useAuth } from '../context/AuthContext'
 import ContentWrapper from '../_components/layout/ContentWrapper'
 import AgentSidebar from './agents/AgentSidebar'
@@ -87,12 +83,14 @@ export default function A2AAgentClient() {
   const toast = useToast()
   const [messages, setMessages] = useState([]) // { id, role: 'user'|'agent', content, agent? }
   const { user } = useAuth()
+  const [showPromptPanel, setShowPromptPanel] = useState(true)
 
   const userInitials = useMemo(() => initialsFromEmail(user?.email || 'you@hushh.ai'), [user?.email])
 
   useEffect(() => {
     const defaultTemplate = PROMPT_TEMPLATES[agent]?.[0]?.text || ''
     setPrompt(defaultTemplate)
+    setShowPromptPanel(Boolean(PROMPT_TEMPLATES[agent]?.length))
   }, [agent])
 
   const extractText = useCallback((payload) => {
@@ -148,7 +146,9 @@ export default function A2AAgentClient() {
     setMessages([])
     setError('')
     setLoading(false)
-  }, [])
+    setPrompt(PROMPT_TEMPLATES[agent]?.[0]?.text || '')
+    setShowPromptPanel(Boolean(PROMPT_TEMPLATES[agent]?.length))
+  }, [agent])
 
   const sendText = useCallback(async (text) => {
     const trimmed = (text || '').trim()
@@ -156,6 +156,7 @@ export default function A2AAgentClient() {
     const userMsg = { role: 'user', content: trimmed, id: `u-${Date.now()}` }
     setMessages(prev => [...prev, userMsg])
     setPrompt('')
+    setShowPromptPanel(false)
     setLoading(true)
     setError('')
     try {
@@ -192,6 +193,7 @@ export default function A2AAgentClient() {
     setMessages(prev => [...prev, userMsg])
     setLoading(true)
     setError('')
+    setShowPromptPanel(false)
     try {
       // Call via Next.js API proxy with custom payload
       const res = await fetch(`/api/a2a/${agent}`, {
@@ -223,67 +225,67 @@ export default function A2AAgentClient() {
 
   return (
     <ContentWrapper>
-    <Box bg="#f5f5f7" color="gray.900" minH="100vh">
-      <Container minW={'100%'} py={{ base: 3, md: 4 }} px={{ base: 3, md: 4 }} h="100vh">
-        <Flex direction="column" gap={{ base: 3, md: 3 }} h="100%">
-          {/* Header */}
-          <Box
-            bg="white"
-            p={{ base: 4, md: 6 }}
-            borderRadius={{ base: '12px', md: '16px' }}
-            shadow="sm"
-            flexShrink={0}
-          >
-            <Flex 
-              direction={{ base: 'column', md: 'row' }}
-              align={{ base: 'flex-start', md: 'center' }} 
-              justify="space-between" 
-              gap={3}
+      <Box bg="#f5f5f7" color="gray.900" minH="100vh">
+        <Container minW={'100%'} py={{ base: 3, md: 4 }} px={{ base: 3, md: 4 }} h="100vh">
+          <Flex direction="column" gap={{ base: 3, md: 3 }} h="100%">
+            {/* Header */}
+            <Box
+              bg="white"
+              p={{ base: 4, md: 6 }}
+              borderRadius={{ base: '12px', md: '16px' }}
+              shadow="sm"
+              flexShrink={0}
             >
-              <Box>
-                <Heading 
-                  as="h1" 
-                  size={{ base: 'md', md: 'lg' }} 
-                  color="gray.900" 
-                  fontWeight="700" 
-                  fontFamily="'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-                >
-                  A2A Agents
-                </Heading>
-                <Text color="gray.600" fontSize={{ base: 'xs', md: 'sm' }} mt={1}>
-                  Chat with Brand, Hushh data query, Supabase profile creation, Supabase profile updates, Public Data, or Gemini agents
-                </Text>
-              </Box>
-             
-            </Flex>
-
-            {/* Mobile Agent Selector */}
-            <FormControl mt={4} display={{ base: 'block', md: 'none' }}>
-              <FormLabel fontSize="sm" fontWeight="600" color="gray.700" mb={2}>
-                Select Agent
-              </FormLabel>
-              <Select
-                value={agent}
-                onChange={(e) => setAgent(e.target.value)}
-                bg="gray.50"
-                borderColor="gray.200"
-                borderRadius="12px"
-                fontSize="sm"
-                fontWeight="500"
-                _focus={{
-                  borderColor: 'gray.900',
-                  bg: 'white',
-                  boxShadow: '0 0 0 1px #1a202c'
-                }}
+              <Flex
+                direction={{ base: 'column', md: 'row' }}
+                align={{ base: 'flex-start', md: 'center' }}
+                justify="space-between"
+                gap={3}
               >
-                {AGENTS.map(a => (
-                  <option key={a.id} value={a.id}>
-                    {a.name} - {a.description}
-                  </option>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
+                <Box>
+                  <Heading
+                    as="h1"
+                    size={{ base: 'md', md: 'lg' }}
+                    color="gray.900"
+                    fontWeight="700"
+                    fontFamily="'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+                  >
+                    A2A Agents
+                  </Heading>
+                  <Text color="gray.600" fontSize={{ base: 'xs', md: 'sm' }} mt={1}>
+                    Chat with Brand, Hushh data query, Supabase profile creation, Supabase profile updates, Public Data, or Gemini agents
+                  </Text>
+                </Box>
+
+              </Flex>
+
+              {/* Mobile Agent Selector */}
+              <FormControl mt={4} display={{ base: 'block', md: 'none' }}>
+                <FormLabel fontSize="sm" fontWeight="600" color="gray.700" mb={2}>
+                  Select Agent
+                </FormLabel>
+                <Select
+                  value={agent}
+                  onChange={(e) => setAgent(e.target.value)}
+                  bg="gray.50"
+                  borderColor="gray.200"
+                  borderRadius="12px"
+                  fontSize="sm"
+                  fontWeight="500"
+                  _focus={{
+                    borderColor: 'gray.900',
+                    bg: 'white',
+                    boxShadow: '0 0 0 1px #1a202c'
+                  }}
+                >
+                  {AGENTS.map(a => (
+                    <option key={a.id} value={a.id}>
+                      {a.name} - {a.description}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
 
           {/* <Accordion allowToggle borderRadius="12px" bg="white" borderWidth="1px" borderColor="gray.200">
             <AccordionItem border="0">
@@ -322,7 +324,7 @@ export default function A2AAgentClient() {
             <Flex direction="column" flex="1" minH={0} gap={3} w="100%" h="100%">
               {CHAT_ENABLED_AGENTS.includes(agent) && (
                 <Flex direction="column" flex="1" minH={0} gap={3}>
-                  {PROMPT_TEMPLATES[agent]?.length > 0 && (
+                  {PROMPT_TEMPLATES[agent]?.length > 0 && showPromptPanel && (
                     <Box
                       bg="white"
                       borderRadius={{ base: '12px', md: '16px' }}
@@ -355,8 +357,15 @@ export default function A2AAgentClient() {
                                   <Text fontWeight="600" fontSize={{ base: 'sm', md: 'sm' }} color="gray.800">
                                     {label}
                                   </Text>
-                                  <Button size="xs" borderRadius="10px" onClick={() => setPrompt(text)}>
-                                    Load prompt
+                                  <Button
+                                    size="xs"
+                                    borderRadius="10px"
+                                    onClick={() => {
+                                      setPrompt(text)
+                                      setShowPromptPanel(false)
+                                    }}
+                                  >
+                                    Use prompt
                                   </Button>
                                 </HStack>
                                 <Text fontSize={{ base: 'xs', md: 'sm' }} color="gray.600" whiteSpace="pre-wrap">
@@ -368,6 +377,18 @@ export default function A2AAgentClient() {
                         </Stack>
                       </Stack>
                     </Box>
+                  )}
+                  {!showPromptPanel && PROMPT_TEMPLATES[agent]?.length > 0 && (
+                    <Button
+                      variant="ghost"
+                      size="xs"
+                      alignSelf="flex-start"
+                      px={2}
+                      colorScheme="gray"
+                      onClick={() => setShowPromptPanel(true)}
+                    >
+                      Show prompt suggestions
+                    </Button>
                   )}
                   <Box
                     flex="1"
@@ -410,9 +431,9 @@ export default function A2AAgentClient() {
             </Flex>
           </Flex>
 
-        </Flex>
-      </Container>
-    </Box>
+          </Flex>
+        </Container>
+      </Box>
     </ContentWrapper>
   )
 }
