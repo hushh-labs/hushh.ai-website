@@ -29,7 +29,7 @@ import WhatsappComposer from './agents/WhatsappComposer'
 // Agent configurations
 const AGENTS = [
   { id: 'brand', name: 'Brand Agent', description: 'CRM user intelligence' },
-  { id: 'hushh', name: 'Hushh Agent', description: 'Headless Supabase agent' },
+  { id: 'hushh', name: 'Hushh Agent', description: 'Supabase data query agent' },
   { id: 'public', name: 'Public Data Agent', description: 'OpenAI data enrichment' },
   { id: 'gemini', name: 'Gemini Agent', description: 'Gemini AI data enrichment' },
   { id: 'whatsapp', name: 'WhatsApp CRM Agent', description: 'Send WhatsApp messages' },
@@ -262,7 +262,7 @@ export default function A2AAgentClient() {
               <AccordionPanel pb={4} color="gray.700">
                 <Text mb={2}>1) Open Interaction Agent UI and add agents:</Text>
                 <Text mb={2}>• Agent URL — Brand: https://a2a-crm-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/crm-agent</Text>
-                <Text mb={2}>• Agent URL — Hushh: https://a2a-supabase-headless-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/supabase-agent</Text>
+                <Text mb={2}>• Agent URL — Hushh: https://hushh-supabase-query-agent-app-bubqpu.5sc6y6-2.usa-e2.cloudhub.io/supabase-query-agent</Text>
                 <Text mb={2}>• Agent Type — mulesoft ai chain</Text>
                 <Text>2) Save and verify by sending a simple query from the UI.</Text>
               </AccordionPanel>

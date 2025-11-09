@@ -8,7 +8,9 @@ export const dynamic = 'force-dynamic';
 // Map agent slug => upstream URL (from Postman collections - verified working)
 const AGENT_URLS = {
   brand: 'https://a2a-crm-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/crm-agent',
-  hushh: 'https://a2a-supabase-headless-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/supabase-agent',
+  // Legacy headless endpoint now returns 500s because its upstream Supabase call fails
+  // with a 400 that lacks a Content-Type header. Switch to the new Query Agent host.
+  hushh: 'https://hushh-supabase-query-agent-app-bubqpu.5sc6y6-2.usa-e2.cloudhub.io/supabase-query-agent',
   public: 'https://hushh-open-ai-agent-ap-bt5gn1.7y6hwo.usa-e2.cloudhub.io/public-data-agent',
   gemini: 'https://hushh-geminiai-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/public-data-agent',
   'gemini-proxy': 'https://hushh-geminiai-proxy-bt5gn1.7y6hwo.usa-e2.cloudhub.io/public-data-agent',
