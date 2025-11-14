@@ -53,23 +53,20 @@ const PROMPT_TEMPLATES = {
   ],
   hushh: [
     {
-      label: 'Understand the Supabase data query agent',
-      text:
-        '🧠 Hushh User Data Query Agent\n1. Overview\nThe Hushh User Data Query Agent is an intelligent interface that fetches user insights from Supabase just by passing the phone number. It acts as the bridge between brand-facing channels (chatbots, CRMs, WhatsApp) and Supabase via a MuleSoft-hosted JSON-RPC API that returns conversational answers. Model: OpenAI GPT-4.0 mini.\n2. Concept Example\nThink “Sundar Pichai Query Agent” — ask anything about him and the agent responds instantly. That is how this agent works for every user profile in your stack.',
+      label: 'Fetch complete Supabase profile',
+      text: 'Can you fetch all the details of the user with phone number (637) 940-5403?',
     },
     {
-      label: 'Reference API contract & request payload',
-      text: `3. API Details\nEndpoint: https://hushh-supabase-query-agent-app-bubqpu.5sc6y6-2.usa-e2.cloudhub.io/supabase-query-agent\nMethod: POST (HTTPS) following JSON-RPC 2.0.\n4. Request Structure\n{\n  "jsonrpc": "2.0",\n  "id": "task124",\n  "method": "tasks/send",\n  "params": {\n    "sessionId": "session456",\n    "message": {\n      "role": "user",\n      "parts": [\n        {\n          "type": "text",\n          "text": "Can you get the state of the user having phone: 91XXXXXXXX?"\n        }\n      ]\n    }\n  }\n}\nField summary: jsonrpc (version), id (task id), method (tasks/send), params.sessionId, params.message.role, params.message.parts[].`,
+      label: 'Check user intentions',
+      text: 'Can you fetch all the intentions of the user with phone number (637) 940-5403?',
     },
     {
-      label: 'Share sample response and capabilities',
-      text:
-        '5. Response Example\n{\n  "jsonrpc": "2.0",\n  "id": "task124",\n  "result": {\n    "id": "d75ee4f2-d963-43ad-bedd-254c669c6367",\n    "sessionId": "session456",\n    "status": {\n      "state": "completed",\n      "message": {\n        "role": "agent",\n        "parts": [{ "type": "text", "text": "The state of the user with the phone number 919346661428 is Bihar..." }]\n      },\n      "timestamp": "2025-10-06T07:48:12Z"\n    },\n    "artifacts": [{ "name": "Answer", "index": 0, "parts": [{ "type": "text", "text": "The state of the user..." }] }]\n  }\n}\n6. Example queries include fetching wants, needs, intents, desires, education, occupation, purchase intent (past/future), contact details, and lifestyle choices — all scoped to a phone number.',
+      label: 'Review wants data',
+      text: 'Can you fetch all the wants of the user with phone number (637) 940-5403?',
     },
     {
-      label: 'Explain execution model, workflow, and security',
-      text:
-        '7. How it works\n1) Brand agent sends an NL question with the phone number. 2) Hushh Query Agent interprets and fetches Supabase data. 3) Supabase data is converted to a conversational reply.\n8. Key Features\n✅ Single identifier querying, ✅ AI-driven understanding, ✅ Rich wants/needs/intents, ✅ Forecasting support, ✅ Seamless integration across chatbots/WhatsApp/CRMs, ✅ HTTPS-secured MuleSoft endpoint.\n9. Typical Workflow\nAsk “Can you fetch the occupation of the user having phone number (637) 940-5403?” → Agent queries Supabase → Responds “The occupation… is Software Engineer.”\n9. Security & Privacy\nAll traffic over HTTPS, only authorized MuleSoft flows, Supabase credentials stored securely in MCP.\n10. Versioning: 1.0.0 initial release.\n11. Summary\nTurns Supabase data into conversational intelligence — just ask in plain English.',
+      label: 'Inspect user desires',
+      text: 'Can you fetch all the desires of the user with phone number (637) 940-5403?',
     },
   ],
   'hushh-profile': [
