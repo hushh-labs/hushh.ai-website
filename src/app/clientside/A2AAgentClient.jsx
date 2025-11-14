@@ -51,6 +51,24 @@ const PROMPT_TEMPLATES = {
       text: 'Does the user with phone number (637) 940-5403 like tea or coffee?'
     },
   ],
+  hushh: [
+    {
+      label: 'Fetch Supabase user profile',
+      text: 'Can you fetch all the details of the user with phone number (637) 940-5403?',
+    },
+    {
+      label: 'Retrieve user intentions',
+      text: 'Can you fetch all the intentions of the user with phone number (637) 940-5403?',
+    },
+    {
+      label: 'Get user wants data',
+      text: 'Can you fetch all the wants of the user with phone number (637) 940-5403?',
+    },
+    {
+      label: 'Surface user desires',
+      text: 'Can you fetch all the desires of the user with phone number (637) 940-5403?',
+    },
+  ],
   'hushh-profile': [
     {
       label: 'Create a profile with full details',
