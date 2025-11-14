@@ -53,20 +53,30 @@ const PROMPT_TEMPLATES = {
   ],
   hushh: [
     {
-      label: 'Fetch complete Supabase profile',
-      text: 'Can you fetch all the details of the user with phone number (637) 940-5403?',
+      label: 'Profile and intent deep-dive',
+      text: `Can you fetch all the details of the user with phone number (637) 940-5403?
+Can you fetch all the intentions of the user with phone number (637) 940-5403?
+Can you fetch all the wants of the user with phone number (637) 940-5403?
+Can you fetch all the desires of the user with phone number (637) 940-5403?`,
     },
     {
-      label: 'Check user intentions',
-      text: 'Can you fetch all the intentions of the user with phone number (637) 940-5403?',
+      label: 'Lifestyle, education, and occupation',
+      text: `What about the fitness details of the user with phone number (637) 940-5403?
+What is the education level of the user with phone number (637) 940-5403?
+What is the occupation of the user with phone number (637) 940-5403?`,
     },
     {
-      label: 'Review wants data',
-      text: 'Can you fetch all the wants of the user with phone number (637) 940-5403?',
+      label: 'Needs and purchase intent forecasting',
+      text: `Can you fetch all the past purchase intents of the user?
+Can you fetch future purchase intents of the user?
+Can you fetch all the needs of the user?
+Can you fetch purchase intent details of the user?`,
     },
     {
-      label: 'Inspect user desires',
-      text: 'Can you fetch all the desires of the user with phone number (637) 940-5403?',
+      label: 'Identity, contact, and preferences',
+      text: `Can you fetch marital status of the user?
+Can you fetch contact details of the user?
+Does the user like tea or coffee?`,
     },
   ],
   'hushh-profile': [
