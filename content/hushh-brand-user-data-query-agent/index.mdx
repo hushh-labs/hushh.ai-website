@@ -1,0 +1,73 @@
+---
+title: "Hushh Brand User Data Query Agent"
+description: "Inside the AI-driven Brand User Data Query Agent that powers natural-language intelligence requests across the /agents catalog."
+image: "../../public/blogs/new/agentic-systems-demystified.png"
+publishedAt: "November 26, 2025"
+updatedAt: "November 26, 2025"
+author: "Hushh.ai Team"
+isPublished: true
+tags:
+- AI Agents
+- Data Intelligence
+- Personalization
+- MuleSoft
+---
+
+## 🧠 Hushh Brand User Data Query Agent
+
+The Hushh Brand User Data Query Agent is an intelligent, AI-driven interface that identifies and records a user’s brand preferences through natural conversations with the User Personal Agent. Acting as a bridge between agentic experiences and Salesforce CRM, it captures, processes, and stores favorite or frequently engaged brands in a structured, marketing-ready format. The API is hosted on MuleSoft CloudHub, hardened with HTTPS, and showcased alongside other orchestration patterns on [`/agents`](/agents).
+
+## 1. Overview
+
+- **Mission:** Deliver instant brand affinity insights whenever a partner agent asks.
+- **LLM Backbone:** `gpt-4.0-mini`.
+- **Stack:** MuleSoft CloudHub, Supabase, Salesforce CRM, JSON-RPC 2.0 messaging.
+- **Outcome:** Real-time personalization, segmentation, and intent prediction without manual lookups.
+
+## 2. Concept Example — Brand Agent ↔ Sundar Pichai Agent
+
+Imagine the Nike Brand Agent wants to tailor a concierge message for Sundar Pichai. Instead of performing manual searches, it simply asks the Hushh Brand Agent, “Tell me about Sundar’s lifestyle, purchase behavior, and brand preferences.” The Brand Agent then calls the Sundar Personal Agent, receives verified insights from Salesforce, and returns a contextualized answer. This conversational exchange transforms static CRM records into actionable intelligence for every brand assistant listed on [`/agents`](/agents).
+
+## 3. Example Queries
+
+| Query | Description |
+| --- | --- |
+| Can you fetch all the details of the user with phone number (637) 940-5403? | Returns the complete user profile from Supabase. |
+| Can you fetch all the intentions of the user with phone number (637) 940-5403? | Retrieves intent data such as interests or plans. |
+| Can you fetch all the wants of the user with phone number (637) 940-5403? | Provides key wants or goals captured from activity. |
+| Can you fetch all the desires of the user with phone number (637) 940-5403? | Delivers aspirational data or inferred preferences. |
+| What about the fitness details of the user with phone number (637) 940-5403? | Shares lifestyle and health context. |
+| What is the education level/occupation of the user? | Returns education and professional metadata. |
+| Can you fetch past or future purchase intents? | Summarizes historical and forecasted buying signals. |
+| Can you fetch all the needs/purchase intent details? | Produces a consolidated needs and intent overview. |
+| Does the user like tea or coffee? | Surfaces preference-level lifestyle markers. |
+
+## 4. How It Works
+
+1. A brand agent or chatbot sends a natural-language question containing the user’s phone number.
+2. The Hushh Brand Query Agent interprets the question using GPT-4.0 mini.
+3. It retrieves structured data from Supabase and enriches it with Salesforce CRM fields.
+4. The agent returns a conversational response plus machine-readable JSON so downstream systems can act immediately.
+
+## 5. Key Features
+
+- ✅ **Single Identifier Querying:** Fetch any user’s intelligence with only a phone number.
+- ✅ **AI-Driven Understanding:** Natural language questions map to structured Supabase and Salesforce queries.
+- ✅ **Rich User Intelligence:** Wants, needs, purchase history, and real-time intent insights.
+- ✅ **Forecasting Support:** Predicts future intent using historical signals and LLM reasoning.
+- ✅ **Seamless Integration:** Works with WhatsApp bots, branded chat surfaces, and enterprise CRMs.
+- ✅ **Secured Endpoint:** Hosted on MuleSoft CloudHub with HTTPS and credential management via MCP.
+
+## 6. Security & Privacy
+
+- All communication is TLS-encrypted.
+- Only authorized MuleSoft flows can create or mutate records.
+- Supabase credentials and secrets remain within the MCP-managed vaults.
+
+## SEO Spotlight & CTA
+
+Teams searching for “brand affinity AI agent,” “MuleSoft CloudHub personalization,” or “single identifier customer intelligence” will find this use case demonstrates Hushh.ai’s leadership. The Brand User Data Query Agent ties together agentic orchestration, CRM enrichment, and GPT-powered summarization—making it a flagship reference on [`/agents`](/agents). Explore the rest of the catalog to discover how these AI assistants collaborate for enterprise-grade personalization.
+
+## Summary
+
+The Hushh Brand User Data Query Agent transforms raw databases into an intelligent dialogue. Whether the question targets lifestyle, education, or purchase intent, you can just ask in plain English and receive verified insights instantly. Think of it as every brand’s personal intelligence assistant—always ready, forever synced with the Hushh data ecosystem.
