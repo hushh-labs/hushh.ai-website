@@ -69,6 +69,24 @@ Imagine a concierge assistant called “Sundar Pichai Query Agent.” When Nike�
 - Only approved MuleSoft flows can create or modify user records.
 - Supabase credentials remain within MCP-managed vaults for least-privilege access.
 
+## User Stories
+
+- **Support Champion:** Sundar Pichai fields a ticket asking, “Why was my last offer off-base?” She queries the agent via phone number, immediately seeing the user’s updated intents and adjusting the upsell to match their travel plans.
+- **Growth PM:** Manish Sainani tests a new referral perk. Each time a referred user signs up, he pings the agent to confirm lifestyle traits and see which perks resonate, letting him iterate messaging in hours, not weeks.
+- **Community Moderator:** Justin reviews a membership application with only a phone number. The agent summarizes the applicant’s interests and goals, helping her approve and route them to the right sub-community instantly.
+- **Account Strategist:** Mark prepares for quarterly reviews with enterprise clients. Before each meeting he runs a quick query to capture evolving needs, ensuring his presentation highlights the most relevant initiatives.
+- **Voice Assistant Designer:** Steve Jobs trains conversational scripts for a kiosk. She uses anonymized agent outputs to ensure intents and desires represented in the script match real customer motivations.
+
+## Architecture, Tips, and Story
+
+- **Fan-Out Responses:** Besides rendering a conversational answer, the agent publishes the raw JSON onto an event bus so analytics, CRM, and marketing automation subscribe without extra API calls.
+- **Latency Guardrails:** Requests exceeding 2 seconds trigger a lightweight fallback that returns previously cached context plus a notice about refresh status, keeping CS agents productive during spikes.
+- **Prompt Libraries:** Team-specific prompt variants (support vs. marketing vs. growth) live in Supabase, letting each stakeholder fine-tune outputs without code changes.
+
+### Customer Story Snapshot
+
+A telco pilot connected the User Data Query Agent to its WhatsApp concierge. When subscribers asked about upgrade eligibility, the bot fetched wants, needs, and device history instantly, allowing human reps to craft bespoke offers and shrinking resolution time by 35%.
+
 ## 8. Versioning
 
 | Version | Description |

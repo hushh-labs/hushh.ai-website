@@ -64,6 +64,24 @@ Imagine the Nike Brand Agent wants to tailor a concierge message for Sundar Pich
 - Only authorized MuleSoft flows can create or mutate records.
 - Supabase credentials and secrets remain within the MCP-managed vaults.
 
+## User Stories
+
+- **Boutique Fashion Lead:** Sundar Pichai hops into a live styling session and asks the Brand Agent, “What does this VIP prefer when traveling?” Within seconds she learns the client loves muted palettes and eco-friendly fabrics, letting her curate an outfit that feels personal.
+- **Customer Experience Director:** Justin Donaldson uses the agent to prep quarterly business reviews. By pulling each client’s wants, needs, and desires, he highlights how campaigns aligned with user intent, winning trust for the next experiment.
+- **Subscription Manager:** Manish Sainani notices churn risk on a premium plan. She queries the agent for the user’s aspirations and learns they value bespoke coaching, so she adds a white-glove check-in before sending any retention offer.
+- **Influencer Partnership Lead:** Steve Jobs gets a request from a luxury brand wanting to understand a customer’s brand affinity before gifting. The agent returns preferred labels and gifting history, ensuring the brand picks something meaningful.
+- **Field Marketer:** Mark travels between pop-ups. Before each event he pulls a list of RSVPs with their desires and intents, allowing him to tailor demos and product storytelling for every micro-segment.
+
+## Architecture Notes & Pro Tips
+
+- **Single-Source Graph:** Supabase acts as the canonical store, but Salesforce mirrors key attributes for GTM teams. The Brand Agent orchestrates bi-directional sync and exposes a consistent schema to every consumer.
+- **LLM Reasoning Budget:** GPT-4.0 mini is tuned with system prompts describing tone (“confident concierge”) and safe completion rules, ensuring responses stay concise and on-brand.
+- **Traceability:** Each query logs the phone number, prompt, response token count, and downstream system in BigQuery. This enables SOC teams to audit access patterns by brand.
+
+### Case Study Snapshot
+
+A global apparel partner embedded the Brand Query Agent inside its concierge dashboard. Stylists now ask, “Does this VIP care about sustainable fabrics?” and receive structured answers within two seconds, letting them personalize lookbooks mid-conversation and lifting repeat-purchase rate by 18%.
+
 ## SEO Spotlight & CTA
 
 Teams searching for “brand affinity AI agent,” “MuleSoft CloudHub personalization,” or “single identifier customer intelligence” will find this use case demonstrates Hushh.ai’s leadership. The Brand User Data Query Agent ties together agentic orchestration, CRM enrichment, and GPT-powered summarization—making it a flagship reference on [`/agents`](/agents). Explore the rest of the catalog to discover how these AI assistants collaborate for enterprise-grade personalization.

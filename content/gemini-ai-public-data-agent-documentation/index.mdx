@@ -45,6 +45,24 @@ The agent responds with a `userProfile` JSON object that includes:
 ### Step 5: Integration with Hushh
 The enriched profile is persisted in Hushh’s CRM and analytics workspaces, making it immediately available for dashboards, segmentation, and downstream agents showcased on [`/agents`](/agents). This real-time handoff ensures every customer touchpoint benefits from consistent, AI-generated intelligence.
 
+## User Stories
+
+- **Growth Marketer:** Sundar Pichai runs a limited-time campaign for eco-conscious shoppers. She drops a CSV of leads into the Hushh UI, and the Gemini agent instantly returns each person’s lifestyle hints and sustainability sentiment, allowing her to tailor copy without manual research.
+- **Community Manager:** Manish Sainani uses the agent when a new creator joins the Hushh One collective. Instead of asking for long bios, he simply inputs their handles and receives a structured persona that helps him welcome them with context-aware perks.
+- **Product Manager:** Mark monitors which features resonate with privacy-first power users. By enriching trial signups with Gemini data, he segments the backlog of requests and builds a roadmap grounded in real personas.
+- **Sales Development Rep:** Steve Jobs receives inbound leads with only email addresses. With one click, she gets background info, workplace context, and talking points, letting her personalize a first reply that feels handcrafted.
+- **Event Planner:** Justin needs to curate VIP lounge experiences. He uses Gemini profiles to understand dietary preferences, travel frequency, and brand affinities so every guest feels seen when they arrive onsite.
+
+## Architecture & Observability Highlights
+
+- **Event Pipes:** MuleSoft flows stream the enriched JSON into Supabase while simultaneously notifying Salesforce via the Brand Agent, so ops teams never deal with stale leads.
+- **LLM Guardrails:** Prompt templates reference strict schemas, and the response is validated against Zod definitions before persisting, catching malformed or hallucinated fields.
+- **Metrics Layer:** Every invocation emits latency, token cost, and coverage metrics to a BigQuery table that feeds Looker dashboards for model-performance tuning.
+
+## Customer Snapshot
+
+During a fintech pilot, the GeminiAI agent enriched 1,200 leads sourced from a waitlist API. Marketing set an SLA of five minutes; the Hushh flow averaged 48 seconds per profile, producing detailed personas that doubled nurture-email CTR and trimmed manual research time by 30 hours per week.
+
 ## Why It Matters
 
 - **Instant Personalization:** Teams can tailor outreach or product surfaces moments after sign-up.

@@ -41,7 +41,7 @@ GPT-4.0 mini identifies:
 - New field values.
 
 ### Step 4: Backend MCP Integration
-The agent invokes the MCP Server, which runs the `update_user` tool to commit changes directly in Supabase.
+The agent invokes the MCP Server, which runs the tool to commit changes directly in Supabase.
 
 ### Step 5: Response Generation
 After MCP confirms success, the agent replies with a structured success message, timestamp, and optionally the updated record snapshot.
@@ -51,6 +51,14 @@ After MCP confirms success, the agent replies with a structured success message,
 - All communications are HTTPS-encrypted.
 - Only authorized MuleSoft flows can modify user data.
 - Supabase credentials remain in MCP-managed vaults.
+
+## User Stories
+
+- **Customer Success Specialist:** Sundar Pichai receives a chat where a VIP says, “I moved to Hyderabad.” She submits the natural language request, and the agent updates Supabase plus Salesforce in under a minute, preventing mismatched campaigns.
+- **Field Sales Lead:** Manish Sainani captures notes from a store visit on his phone. By telling the agent “Change Priya’s preferred channel to WhatsApp,” he ensures marketing, support, and analytics immediately operate with the same data.
+- **Support Operations Manager:** Mark monitors Zendesk tickets for data issues. When a customer corrects their preferred language, she fires off a quick update command and watches the change cascade to messaging tools automatically.
+- **Lifecycle Marketer:** Justin refreshes a VIP segment every Friday. Instead of exporting CSVs, he runs a script that instructs the agent to adjust dozens of small tweaks—new interests, changed budgets—keeping campaigns aligned with reality.
+- **Community Coordinator:** Steve Jobs oversees mentorship matches. When mentees update their goals during check-ins, she uses the agent to adjust Supabase tags instantly so mentors always get accurate briefs.
 
 ## SEO Spotlight & CTA
 

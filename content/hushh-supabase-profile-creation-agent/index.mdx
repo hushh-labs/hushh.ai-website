@@ -50,6 +50,27 @@ Parsed attributes become a structured Supabase payload, mapped to the appropriat
 - Only authorized MuleSoft flows can create or mutate records.
 - Supabase credentials are kept inside MCP-managed vaults with least-privilege access.
 
+## User Stories
+
+- **Onboarding Specialist:** Sundar Pichai runs through a quick intake call with a new customer. Instead of forcing them through a form, she narrates the details aloud, the agent captures everything, and the Supabase record is ready before the call ends.
+- **Marketplace Admin:** Mark hosts community office hours. When a creator says “Here’s my updated address and audience focus,” he drops the info into the agent and instantly receives a fresh profile that syncs across the stack.
+- **Field Sales Associate:** Justin Donaldson travels with just her phone. After meeting a prospect at an event, she speaks the conversation details into the agent and sees a pristine record populate before she boards her flight home.
+- **Program Manager:** Manish Sainani runs accelerator cohorts. He uses the agent to log every founder’s background, motivation, and needs, ensuring mentors see a coherent profile without chasing spreadsheets.
+- **Partnership Ops Lead:** Steve Jobs handles channel partners submitting new leads via WhatsApp. She forwards their voice notes to the agent and receives fully structured Supabase entries—no manual transcription needed.
+
+### Customer Snapshot
+
+A premium bank replaced a 14-field onboarding form with this agent. Relationship managers now dictate a short brief and receive a Supabase record in under a minute—cutting onboarding time by 60% and boosting NPS.
+
+
+## Architecture Notes & Deployment Tips
+
+- **Schema Guards:** Outputs are validated against shared TypeScript schemas; missing fields trigger automated follow-ups before saving.
+- **Duplicate Protection:** Supabase RPC checks with hashed identifiers keep creation idempotent.
+- **Workflow Hooks:** Successful writes broadcast a `profile.created` event so CRM, analytics, and personalization services update instantly.
+
+
+
 ## SEO Spotlight & CTA
 
 This agent is ideal for queries like *Supabase profile automation*, *MuleSoft natural language data entry*, and *LLM-powered onboarding*. It showcases how Hushh.ai turns enterprise workflows into conversational experiences while keeping data governance intact. Explore the rest of the orchestration playbooks on [`/agents`](/agents) to see how profile creation connects with query agents, enrichment services, and personalization engines.
