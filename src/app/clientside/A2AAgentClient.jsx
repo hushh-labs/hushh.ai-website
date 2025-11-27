@@ -189,6 +189,61 @@ export default function A2AAgentClient() {
 
   const userInitials = useMemo(() => initialsFromEmail(user?.email || 'you@hushh.ai'), [user?.email])
 
+  const findAgentIdFromValue = useCallback((value) => {
+    if (!value || typeof value !== 'string') return null
+    const normalized = value.replace(/^#/, '').trim().toLowerCase()
+    if (!normalized) return null
+    const match = AGENT_OPTIONS.find((option) => {
+      const optionId = option.id?.toLowerCase()
+      const slug = option.slug?.toLowerCase()
+      return optionId === normalized || (slug && slug === normalized)
+    })
+    return match?.id || null
+  }, [])
+
+  const syncUrlWithAgent = useCallback((nextId) => {
+    if (typeof window === 'undefined') return
+    const searchParams = new URLSearchParams(window.location.search)
+    if (nextId) {
+      searchParams.set('agent', nextId)
+    } else {
+      searchParams.delete('agent')
+    }
+    const queryString = searchParams.toString()
+    const newUrl = `${window.location.pathname}${queryString ? `?${queryString}` : ''}${nextId ? `#${nextId}` : ''}`
+    window.history.replaceState(null, '', newUrl)
+  }, [])
+
+  const handleAgentSelect = useCallback((nextId) => {
+    if (!nextId) return
+    const match = getAgentOptionById(nextId)
+    if (!match) return
+    setAgent(nextId)
+    syncUrlWithAgent(nextId)
+  }, [syncUrlWithAgent])
+
+  useEffect(() => {
+    const applyUrlAgent = () => {
+      if (typeof window === 'undefined') return
+      const searchParams = new URLSearchParams(window.location.search)
+      const queryAgent = findAgentIdFromValue(searchParams.get('agent'))
+      const hashAgent = findAgentIdFromValue(window.location.hash)
+      const targetAgent = queryAgent || hashAgent
+      if (targetAgent) {
+        setAgent((prev) => prev === targetAgent ? prev : targetAgent)
+      }
+    }
+
+    applyUrlAgent()
+    window.addEventListener('hashchange', applyUrlAgent)
+    window.addEventListener('popstate', applyUrlAgent)
+
+    return () => {
+      window.removeEventListener('hashchange', applyUrlAgent)
+      window.removeEventListener('popstate', applyUrlAgent)
+    }
+  }, [findAgentIdFromValue])
+
   useEffect(() => {
     const defaultTemplate = PROMPT_TEMPLATES[agent]?.[0]?.text || ''
     setPrompt(defaultTemplate)
@@ -409,7 +464,7 @@ export default function A2AAgentClient() {
                     </FormLabel>
                     <Select
                       value={agent}
-                      onChange={(e) => setAgent(e.target.value)}
+                      onChange={(e) => handleAgentSelect(e.target.value)}
                       bg="gray.50"
                       borderColor="gray.200"
                       borderRadius="12px"
@@ -482,7 +537,7 @@ export default function A2AAgentClient() {
                 minW="280px"
                 maxW="300px"
               >
-                <AgentSidebar selected={agent} onSelect={setAgent} />
+                <AgentSidebar selected={agent} onSelect={handleAgentSelect} />
               </Box>
 
               <Flex direction="column" flex="1" minH={0} gap={{ base: 4, md: 5 }}>
@@ -503,7 +558,7 @@ export default function A2AAgentClient() {
                               <Box>
                                 <HStack spacing={2}>
                                   <Tag size="sm" bg={accent?.tagBg || 'gray.100'} color={accent?.tagColor || 'gray.700'}>
-                                    Supabase-ready prompt
+                                    Ready prompt
                                   </Tag>
                                   <Badge colorScheme="gray" borderRadius="full" px={2} py={1} fontSize="0.6rem">
                                     {PROMPT_TEMPLATES[agent].length} templates
