@@ -1,0 +1,61 @@
+---
+title: "Hushh Supabase Profile Update Agent Documentation"
+description: "How Hushh’s Supabase Profile Update Agent keeps CRM and personalization data accurate using natural-language commands over MuleSoft MCP."
+image: "../../public/blogs/new/profile_update_agent.png"
+publishedAt: "November 26, 2025"
+updatedAt: "November 26, 2025"
+author: "Hushh.ai Team"
+isPublished: true
+tags:
+- AI Agents
+- Supabase
+- Automation
+- MuleSoft
+---
+
+## Hushh Supabase Profile Update Agent Documentation
+
+The Hushh Supabase Profile Update Agent is an AI-powered automation service that corrects or modifies user data inside Supabase using natural language. Acting as an intelligent intermediary between the Hushh UI and Supabase, it parses update requests—like “Update the state to AP for user +919346661428 with ID d6f5fca9-924b-492e-95f6-55e81d405174”—and executes them safely through MuleSoft and the MCP Server. As part of our agent catalog on [`/agents`](/agents), it ensures CRM, analytics, and personalization modules stay perfectly in sync.
+
+## 1. Overview
+
+- **Mission:** Keep user records accurate without manual SQL or dashboard edits.
+- **LLM Backbone:** `gpt-4.0-mini`.
+- **Stack:** MuleSoft CloudHub, MCP Server, Supabase, JSON-RPC 2.0.
+- **Outcome:** Consistent customer intelligence across the entire Hushh ecosystem.
+
+## 2. Functional Workflow
+
+### Step 1: User Input (Hushh UI / System Request)
+A user, agent, or backend service issues a natural-language instruction, such as:  
+“Can you update the state to AP for the user with phone +919346661428 and user ID d6f5fca9-924b-492e-95f6-55e81d405174?”
+
+### Step 2: Agent Invocation (MuleSoft Flow)
+MuleSoft formats the request as a JSON-RPC 2.0 POST and calls the Supabase Update Agent endpoint, handling authentication and retries.
+
+### Step 3: Intent Extraction & Data Parsing
+GPT-4.0 mini identifies:
+
+- User ID and phone number.
+- Fields to update (state, email, address, etc.).
+- New field values.
+
+### Step 4: Backend MCP Integration
+The agent invokes the MCP Server, which runs the `update_user` tool to commit changes directly in Supabase.
+
+### Step 5: Response Generation
+After MCP confirms success, the agent replies with a structured success message, timestamp, and optionally the updated record snapshot.
+
+## 3. Security & Privacy
+
+- All communications are HTTPS-encrypted.
+- Only authorized MuleSoft flows can modify user data.
+- Supabase credentials remain in MCP-managed vaults.
+
+## SEO Spotlight & CTA
+
+Searching for *Supabase profile update automation*, *MuleSoft natural language data correction*, or *AI CRM synchronization*? This agent shows how Hushh.ai blends LLM intent parsing with governed data operations. Explore [`/agents`](/agents) to see how profile creation, update, and query capabilities work together for full-lifecycle intelligence.
+
+## Summary
+
+The Hushh Supabase Profile Update Agent keeps customer data evergreen. From correcting typos to updating entire demographic profiles, it turns natural-language instructions into audited database operations so marketing, CX, and analytics teams always trust their data. It’s the real-time editor for every Supabase-powered profile.

@@ -17,7 +17,9 @@ const MDXContent = ({ source }) => {
   const mutedTextColor = colorMode === 'light' ? "#6e6e73" : "#86868b";
   const linkColor = "#0066CC"; // Apple blue
   const borderColor = colorMode === 'light' ? "#e5e5e7" : "#333336";
-  const codeBgColor = colorMode === 'light' ? "#f5f5f7" : "#1A1A1A";
+  const codeBgColor = colorMode === 'light' ? "#f5f5f7" : "#f5f5f7";
+  const inlineCodeBg = colorMode === 'light' ? "rgba(15, 23, 42, 0.06)" : "rgba(148, 163, 184, 0.16)";
+  const inlineCodeColor = colorMode === 'light' ? "#0f172a" : "#e2e8f0";
   
   if (!source) {
     console.error("Warning: MDXContent received empty source");
@@ -92,6 +94,7 @@ const MDXContent = ({ source }) => {
             text-decoration: none;
             border-bottom: 1px solid rgba(0, 102, 204, 0.3);
             transition: all 0.2s;
+            background: none;
           }
           
           .mdx-content .prose a:hover {
@@ -127,7 +130,7 @@ const MDXContent = ({ source }) => {
           }
           
           .mdx-content .prose pre {
-            background: black;
+            background: ${codeBgColor};
             padding: 1rem;
             border-radius: 0.5rem;
             overflow-x: auto;
@@ -137,13 +140,23 @@ const MDXContent = ({ source }) => {
             border: 1px solid ${borderColor};
           }
           
-          .mdx-content .prose code {
-            background: black;
-            padding: 0.2rem 0.4rem;
-            border-radius: 0.25rem;
+          .mdx-content .prose code:not(pre code) {
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
             font-family: 'SF Mono', Menlo, Monaco, Consolas, monospace;
             font-size: 0.875em;
-            border: 1px solid ${borderColor};
+            color: ${inlineCodeColor};
+            border: none;
+          }
+
+          .mdx-content .prose pre code {
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            font-size: 0.9em;
+            color: inherit;
+            border: none;
           }
           
           .mdx-content .prose table {

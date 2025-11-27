@@ -1,0 +1,84 @@
+---
+title: "Hushh User Data Query Agent"
+description: "Meet the Hushh User Data Query Agent—an AI bridge between phone-number prompts and fully enriched Supabase intelligence."
+image: "../../public/blogs/new/user_data_query.png"
+publishedAt: "November 26, 2025"
+updatedAt: "November 26, 2025"
+author: "Hushh.ai Team"
+isPublished: true
+tags:
+- AI Agents
+- Customer Intelligence
+- MuleSoft
+- Supabase
+---
+
+## 🧠 Hushh User Data Query Agent
+
+The Hushh User Data Query Agent is an intelligent, AI-driven interface that retrieves complete user intelligence using a single identifier—their phone number. Acting as the connective tissue between branded chat surfaces, CRMs, WhatsApp agents, and the Supabase knowledge graph, it responds with structured, conversational insights that marketing and service teams can trust. Hosted on MuleSoft CloudHub with HTTPS-by-default security, it is now featured alongside other orchestration blueprints on [`/agents`](/agents).
+
+## 1. Overview
+
+- **Purpose:** Deliver instant, structured answers about any customer profile.
+- **LLM Backbone:** `gpt-4.0-mini`.
+- **Stack:** MuleSoft CloudHub, Supabase, Salesforce CRM extensions, JSON-RPC 2.0 requests.
+- **Outcome:** Personalized engagement without manual lookups or dashboard diving.
+
+## 2. Concept Example — “Sundar Pichai Query Agent”
+
+Imagine a concierge assistant called “Sundar Pichai Query Agent.” When Nike’s brand bot wants to know Sundar’s background, education, or lifestyle cues, it simply asks: “Tell me about Sundar Pichai’s preferences.” The Hushh User Data Query Agent routes that request, fetches verified data, and responds instantly. Every user in your CRM now has their own digital intelligence layer—discoverable through natural language and showcased on [`/agents`](/agents).
+
+## 3. Example Queries
+
+| Query | Description |
+| --- | --- |
+| Can you fetch all the details of the user with phone number (637) 940-5403? | Returns the complete Supabase profile. |
+| Can you fetch all the intentions/wants/desires of the user? | Surfaces intent, goals, and aspirational signals. |
+| What are the fitness details or lifestyle preferences? | Shares activity, health, and routine context. |
+| What is the education level/occupation of the user? | Provides academic and professional metadata. |
+| Can you fetch past or future purchase intents? | Summarizes historical and predicted buying signals. |
+| Can you fetch needs, purchase intent details, or marital status? | Consolidates needs-based intelligence and demographic data. |
+| Can you fetch contact details? | Returns verified contact info from Supabase. |
+| Does the user like tea or coffee? | Answers lifestyle micro-preferences for campaign tailoring. |
+
+## 4. How It Works
+
+1. A brand agent or chatbot submits a plain-language request with the user’s phone number.
+2. The Hushh Query Agent interprets the prompt, maps it to Supabase schemas, and enriches with Salesforce data when needed.
+3. The agent fetches structured results and uses GPT-4.0 mini to craft a conversational, human-readable summary.
+4. Both the narrative answer and raw JSON are returned so downstream systems can act immediately.
+
+## 5. Key Features
+
+- ✅ **Single Identifier Querying:** Phone number is all you need.
+- ✅ **AI-Driven Understanding:** Natural questions resolve to deterministic data calls.
+- ✅ **Rich User Intelligence:** Wants, needs, behavioral preferences, and consumption signals.
+- ✅ **Forecasting Support:** Infers future purchase intent from historical data plus LLM reasoning.
+- ✅ **Seamless Integration:** Fits into WhatsApp bots, web chat, CRMs, and any agent listed on [`/agents`](/agents).
+- ✅ **Secured Endpoint:** CloudHub hosting with HTTPS, token-based auth, and MCP secrets.
+
+## 6. Typical Workflow
+
+1. **Brand Agent asks:** “Can you fetch the occupation of the user with phone number (637) 940-5403)?”
+2. **Query Agent retrieves:** Pulls the occupation field from Supabase (and enriches with CRM attributes if available).
+3. **Response delivered:** “The occupation of the user with phone number (637) 940-5403 is Software Engineer,” plus a machine-readable payload for automation.
+
+## 7. Security & Privacy
+
+- All communication is TLS-encrypted.
+- Only approved MuleSoft flows can create or modify user records.
+- Supabase credentials remain within MCP-managed vaults for least-privilege access.
+
+## 8. Versioning
+
+| Version | Description |
+| --- | --- |
+| 1.0.0 | Initial release of the Hushh User Data Query Agent documentation. |
+
+## SEO Spotlight & CTA
+
+This agent is a strong fit for searches like *phone-number intelligence API*, *Supabase MuleSoft integration*, and *AI user data query agent*. It demonstrates how Hushh.ai unifies conversational UX, deterministic data access, and GPT summarization to accelerate personalization. Explore the rest of the orchestrated assistants on [`/agents`](/agents) to see how these capabilities compound across marketing, CX, and data teams.
+
+## Summary
+
+The Hushh User Data Query Agent transforms raw database access into an intelligent, conversational experience. Whether you need lifestyle cues, education history, or future purchase intent, just ask in natural language and the agent handles the rest. It’s your always-on data concierge, embedded across the Hushh ecosystem.

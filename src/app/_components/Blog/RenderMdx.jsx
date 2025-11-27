@@ -78,26 +78,24 @@ const CustomPre = (props) => {
 };
 
 const CustomCode = (props) => {
-  const { colorMode } = useColorMode();
-  
   const isInline = !props.className;
-  
+
   if (isInline) {
     return (
       <code
         {...props}
         style={{
-          backgroundColor: 'black',
-          padding: '0.2rem 0.4rem',
-          borderRadius: '4px',
+          backgroundColor: 'transparent',
+          padding: 0,
+          borderRadius: 0,
           fontSize: '0.9em',
           fontFamily: 'SF Mono, Menlo, Monaco, Consolas, monospace',
-          border: `1px solid ${colorMode === 'light' ? '#e5e5e7' : '#333336'}`,
+          border: 'none',
         }}
       />
     );
   }
-  
+
   return <code {...props} />;
 };
 
@@ -217,6 +215,10 @@ const RenderMdx = ({ blog }) => {
             display: grid;
             font-family: 'SF Mono', Menlo, Monaco, Consolas, monospace;
             letter-spacing: -0.01em;
+          }
+          
+          .apple-code-block pre code span {
+            color: ${colorMode === 'light' ? '#111827' : '#E5E7EB'} !important;
           }
           
           .apple-code-block pre code .line {

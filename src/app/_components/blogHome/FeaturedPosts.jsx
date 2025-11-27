@@ -8,7 +8,7 @@ import { format } from "date-fns";
 const FeaturedPosts = ({ blogs }) => {
   const sortedBlogs = sortBlogs(blogs);
   // Get posts 1-4 for the featured grid (first post is in hero section)
-  const featuredBlogs = sortedBlogs.slice(1, 5);
+  const featuredBlogs = sortedBlogs.slice(1, 15);
 
   return (
     <section className="w-full max-w-[1180px] mx-auto px-5 sm:px-6 mb-12">

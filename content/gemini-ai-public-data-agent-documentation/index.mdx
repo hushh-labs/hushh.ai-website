@@ -1,0 +1,54 @@
+---
+title: "GeminiAI Public Data Agent Documentation"
+description: "How Hushh’s GeminiAI agent enriches user profiles with public data and feeds the /agents ecosystem."
+image: "../../public/blogs/new/gemini_public_data.png"
+publishedAt: "November 26, 2025"
+updatedAt: "November 26, 2025"
+author: "Hushh.ai Team"
+isPublished: true
+tags:
+- AI Agents
+- Data Enrichment
+- GeminiAI
+- Integrations
+---
+
+## GeminiAI Public Data Agent Documentation
+
+The GeminiAI Public Data Agent is an AI-powered service within the Hushh platform that enriches user profiles using publicly available information. When a user shares basic identifiers like name, email, or phone number through the Hushh UI, this agent leverages GeminiAI’s intelligent retrieval and inference capabilities to assemble a detailed JSON profile. It directly powers our personalization, segmentation, and intent prediction modules—and is featured alongside other orchestrated agents on [`/agents`](/agents).
+
+## 1. Overview
+
+- **Purpose:** Generate complete, realistic user insights without manual effort.
+- **LLM Backbone:** `gemini-2.5-pro`.
+- **Output:** Structured JSON containing demographics, lifestyle, intents, and behavioral preferences.
+
+## 2. Functional Workflow
+
+### Step 1: User Input (Hushh UI)
+The customer provides their name, email, and phone number via the onboarding interface. This minimal dataset initiates an enrichment flow while keeping friction low.
+
+### Step 2: Agent Invocation (MuleSoft Flow)
+The Hushh backend, built on MuleSoft, wraps the payload in a JSON-RPC 2.0 POST request and calls the GeminiAI Agent endpoint. This ensures consistency with other multi-agent calls handled within the MCP ecosystem.
+
+### Step 3: Data Retrieval & Enrichment
+GeminiAI interprets the identifiers, applies natural-language inference, and enriches gaps by referencing public signals. When a data point is unavailable, it generates sensible placeholders so downstream systems can still operate on complete objects.
+
+### Step 4: Structured Response
+The agent responds with a `userProfile` JSON object that includes:
+
+- Demographics and geo markers.
+- Interests, lifestyle traits, and consumption habits.
+- Intent signals and propensity scores.
+- Behavioral preferences that feed personalization rules.
+
+### Step 5: Integration with Hushh
+The enriched profile is persisted in Hushh’s CRM and analytics workspaces, making it immediately available for dashboards, segmentation, and downstream agents showcased on [`/agents`](/agents). This real-time handoff ensures every customer touchpoint benefits from consistent, AI-generated intelligence.
+
+## Why It Matters
+
+- **Instant Personalization:** Teams can tailor outreach or product surfaces moments after sign-up.
+- **Better Segmentation:** Unified JSON profiles make it easier to group users by behavior or intent.
+- **Agent Ecosystem Harmony:** GeminiAI’s outputs become inputs for other orchestrated agents, keeping the /agents library cohesive.
+
+With the GeminiAI Public Data Agent, Hushh advances its mission to deliver privacy-conscious, intelligence-rich experiences from the very first interaction. Continuous tuning of `gemini-2.5-pro` prompts and MuleSoft orchestration keeps the pipeline resilient as new data sources and compliance requirements emerge.

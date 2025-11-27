@@ -1,0 +1,46 @@
+---
+title: "🤫 Hushh Agents Documentation"
+description: "A tour of the A2A-powered agents that fuel the HushhOne ecosystem—from public data enrichment to Supabase automation."
+image: "../../public/blogs/new/hushh_agents.png"
+publishedAt: "November 26, 2025"
+updatedAt: "November 26, 2025"
+author: "Hushh.ai Team"
+isPublished: true
+tags:
+- AI Agents
+- MuleSoft
+- Supabase
+- Data Orchestration
+---
+
+## 🤫 Hushh Agents Documentation
+
+Hushh, your personal data agent, introduces a suite of intelligent services that converse over MuleSoft’s A2A (Agent-to-Agent) protocol. Together, these agents form the digital backbone of the HushhOne platform, enabling secure, automated, and context-aware data exchange between user-facing experiences and backend systems. From discovering public insights to creating, updating, and querying Supabase records, each agent brings a unique superpower that keeps the ecosystem conversational, intelligent, and always in sync. Explore the highlights below, then dive into the dedicated docs linked throughout—or view them all on [`/agents`](/agents).
+
+## 🧠 OpenAI Public Data Agent
+
+The OpenAI Public Data Agent acts as a virtual researcher whenever a user signs up with minimal inputs. Powered by OpenAI’s language models, it fills in lifestyle, occupation, interests, and behavioral markers so every new user starts with a rich baseline profile—ready for recommendations, analytics, and personalized guidance. With user consent at the center, brands and subscribers can understand an individual more accurately while delivering better experiences.
+
+> 📄 OpenAI Agent Documentation (link placeholder for Supabase OpenAI agent doc)
+
+## 🧩 Supabase Profile Creation Agent
+
+When someone says, “Can you create my profile?” this agent translates the conversation into structured Supabase entries. MuleSoft handles the JSON-RPC invocation, GPT parses the intent, and Supabase receives a complete, normalized record. Onboarding becomes dialog-driven instead of form-driven, making it faster for both users and operators.
+
+> 📄 [Supabase Profile Creation Agent Documentation](/blog/hushh-supabase-profile-creation-agent)
+
+## 🔄 Supabase Profile Update Agent
+
+Profiles constantly evolve. The Supabase Profile Update Agent listens for instructions like “Change my city to Hyderabad” or “Update my contact number,” identifies the relevant fields, and commits the updates via MuleSoft MCP. This keeps CRM, analytics, and personalization modules aligned without manual data maintenance.
+
+> 📄 [Supabase Profile Update Agent Documentation](/blog/hushh-supabase-profile-update-agent)
+
+## 🔍 Supabase Profile Query Agent
+
+Need the full context on a user instantly? The Supabase Profile Query Agent is the detective that fetches complete JSON snapshots—demographics, preferences, lifestyle, and intents—based on a single identifier such as phone number. It supports brand assistants, customer success teams, and analytics flows by ensuring the right data is always available at the right time.
+
+> 📄 [Supabase Profile Query Agent Documentation](/blog/hushh-user-data-query-agent)
+
+## Bringing It All Together
+
+Each of these agents plugs into the A2A fabric to create a unified intelligence layer. Public data gets enriched, profiles are created and updated conversationally, and insights are always queryable. This is the foundation that allows HushhOne to deliver private-by-design, hyper-personalized experiences at scale. Explore more orchestration blueprints on [`/agents`](/agents) to see how these services collaborate behind the scenes.

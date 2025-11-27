@@ -1,0 +1,59 @@
+---
+title: "Hushh Supabase Profile Creation Agent Documentation"
+description: "How Hushh’s Supabase Profile Creation Agent turns natural-language instructions into structured Supabase records via MuleSoft MCP."
+image: "../../public/blogs/new/profile_creation_agent.png"
+publishedAt: "November 26, 2025"
+updatedAt: "November 26, 2025"
+author: "Hushh.ai Team"
+isPublished: true
+tags:
+- AI Agents
+- Supabase
+- Automation
+- MuleSoft
+---
+
+## Hushh Supabase Profile Creation Agent Documentation
+
+The Hushh Supabase Profile Creation Agent is an AI-powered automation service inside the Hushh platform that creates new user profiles in Supabase through natural language. Whether a human operator or another system says, “Create a profile for Amitabh Bachchan with phone number +91 8266272888, email amitabh.bachchan@example.com, occupation Actor, and address Mumbai,” this agent extracts the data, validates the fields, and writes a clean record to Supabase via MuleSoft and our MCP Server. Every detail becomes instantly available to personalization, analytics, and recommendation modules, and the use case now sits proudly in the [`/agents`](/agents) library.
+
+## 1. Overview
+
+- **Mission:** Turn unstructured inputs into structured Supabase entries without engineers in the loop.
+- **LLM Backbone:** `gpt-4.0-mini`.
+- **Stack:** MuleSoft CloudHub, MCP Server, Supabase, JSON-RPC 2.0.
+- **Outcome:** Accurate onboarding across the entire Hushh ecosystem.
+
+## 2. Functional Workflow
+
+### Step 1: User Input (Hushh UI / System Request)
+Someone issues a natural-language command such as:  
+“Create a profile for Amitabh Bachchan with phone number +91 8266272888, email amitabh.bachchan@example.com, occupation Actor, address Mumbai.”  
+The agent also accepts structured JSON payloads when invoked programmatically.
+
+### Step 2: Agent Invocation (MuleSoft Flow)
+The MuleSoft backend wraps the request in a JSON-RPC 2.0 POST and calls the Supabase Profile Creation Agent endpoint. MuleSoft handles authentication, retries, and routing so the API stays resilient.
+
+### Step 3: Intent Extraction & Data Parsing
+The agent uses GPT-4.0 mini to extract:
+
+- **Personal details:** Full name, age, gender, marital status.
+- **Contact info:** Phone, email, physical address.
+- **Demographics:** Occupation, education, income, lifestyle cues.
+- **Behavioral traits:** Preferences, interests, intents, and values.
+
+Parsed attributes become a structured Supabase payload, mapped to the appropriate tables and columns with validation logic to prevent duplicates.
+
+## 3. Security & Privacy
+
+- All traffic is HTTPS-encrypted.
+- Only authorized MuleSoft flows can create or mutate records.
+- Supabase credentials are kept inside MCP-managed vaults with least-privilege access.
+
+## SEO Spotlight & CTA
+
+This agent is ideal for queries like *Supabase profile automation*, *MuleSoft natural language data entry*, and *LLM-powered onboarding*. It showcases how Hushh.ai turns enterprise workflows into conversational experiences while keeping data governance intact. Explore the rest of the orchestration playbooks on [`/agents`](/agents) to see how profile creation connects with query agents, enrichment services, and personalization engines.
+
+## Summary
+
+The Hushh Supabase Profile Creation Agent converts natural language into repeatable, verifiable onboarding. By blending GPT parsing, MuleSoft orchestration, and Supabase persistence, it ensures every new user is captured once, enriched fast, and ready for downstream intelligence. It’s the AI intake desk for your next million customers.
