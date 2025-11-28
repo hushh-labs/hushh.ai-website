@@ -1,5 +1,11 @@
 import { NextResponse } from "next/server";
 
+const ALLOWED_HOSTS = new Set([
+  "hushh-plaid-api-app-bubqpu.5sc6y6-1.usa-e2.cloudhub.io",
+]);
+
+const ALLOWED_METHODS = new Set(["GET", "POST"]);
+
 export async function POST(request) {
   try {
     const { endpoint, method = "POST", payload } = await request.json();
@@ -9,8 +15,14 @@ export async function POST(request) {
     }
 
     const normalizedMethod = method?.toUpperCase() || "POST";
+    if (!ALLOWED_METHODS.has(normalizedMethod)) {
+      return NextResponse.json({ error: "HTTP method not allowed" }, { status: 405 });
+    }
 
     const url = new URL(endpoint);
+    if (!ALLOWED_HOSTS.has(url.host) || url.protocol !== "https:") {
+      return NextResponse.json({ error: "Endpoint host not allowed" }, { status: 403 });
+    }
     if (normalizedMethod === "GET" && payload) {
       Object.entries(payload).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
