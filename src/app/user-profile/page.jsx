@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
   Box,
@@ -41,29 +41,35 @@ import {
   ModalBody,
   ModalFooter,
   ModalCloseButton,
+  Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useAuth } from "../context/AuthContext";
-import { 
-  FiUser, 
-  FiMail, 
-  FiPhone, 
-  FiMapPin, 
-  FiCalendar, 
-  FiEdit3, 
-  FiShield, 
-  FiClock, 
+import {
+  FiUser,
+  FiMail,
+  FiPhone,
+  FiMapPin,
+  FiCalendar,
+  FiEdit3,
+  FiShield,
+  FiClock,
   FiCheck,
   FiSettings,
   FiLogOut,
   FiSave,
-  FiX
+  FiX,
+  FiKey,
+  FiCreditCard,
+  FiExternalLink,
+  FiShare2,
 } from "react-icons/fi";
 import { BiUser, BiMale, BiFemale } from "react-icons/bi";
 import { IoLocationOutline } from "react-icons/io5";
 import { MdWork, MdOutlineWorkOutline } from "react-icons/md";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { QRCode } from "react-qrcode-logo";
 import HushhLogo from "../_components/svg/hushhLogoS.svg";
 import ContentWrapper from "../_components/layout/ContentWrapper";
 
@@ -81,16 +87,21 @@ const API_HEADERS = {
 
 const UserProfile = () => {
   const router = useRouter();
-  const { user, session, loading: authLoading, signOut } = useAuth();
+  const { user, loading: authLoading, signOut } = useAuth();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  
+  const shareQrRef = useRef(null);
+
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingProfile, setIsLoadingProfile] = useState(true);
   const [error, setError] = useState(null);
   const [userData, setUserData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  
+  const [demoHushhId, setDemoHushhId] = useState("");
+  const [isGeneratingDemoId, setIsGeneratingDemoId] = useState(false);
+  const [showQrCard, setShowQrCard] = useState(false);
+  const [isSharingCard, setIsSharingCard] = useState(false);
+
   // Form fields for editing
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -126,18 +137,117 @@ const UserProfile = () => {
     animate: { opacity: 1, y: 0 }
   };
 
+  const hushhProfileLink = "https://www.hushh.ai/user-profile";
+  const registrationStorageKey = "hushh-demo-profile:last-submission";
+  const storageKey = user?.email ? `hushh-demo-id:${user.email}` : "hushh-demo-id:guest";
+  const hushhIdToDisplay = userData?.hushh_id || demoHushhId;
+  const profileEmail = user?.email || userData?.email || "";
+
+  const getStoredRegistrationData = () => {
+    if (typeof window === "undefined") {
+      return null;
+    }
+
+    const storedValue = window.localStorage.getItem(registrationStorageKey);
+
+    if (!storedValue) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(storedValue);
+    } catch (storageError) {
+      console.error("Failed to parse stored registration data:", storageError);
+      return null;
+    }
+  };
+
+  const populateProfileForm = (profileData = {}) => {
+    setUserData(profileData);
+    setFirstName(profileData.first_name || "");
+    setLastName(profileData.last_name || "");
+    setPhoneNumber(profileData.phone_number || profileData.phone || "");
+    setUserCoins(profileData.user_coins ?? 0);
+    setInvestorType(profileData.investor_type || "");
+    setGender(profileData.gender || "");
+    setCountry(profileData.country || "");
+    setCity(profileData.city || "");
+    setDateOfBirth(profileData.dob || "");
+    setReasonForUsingHushh(
+      profileData.reason_for_using_hushhTech ||
+      profileData.reason_for_using ||
+      ""
+    );
+  };
+
+  const buildFallbackProfile = (registrationData = null) => {
+    const metadata = user?.user_metadata || {};
+    const baseProfile = {
+      first_name:
+        metadata.first_name || metadata.given_name || metadata.full_name || "",
+      last_name:
+        metadata.last_name || metadata.family_name || metadata.surname || "",
+      phone_number: metadata.phone_number || metadata.phone || "",
+      user_coins: metadata.user_coins ?? 0,
+      investor_type: metadata.investor_type || "individual",
+      gender: metadata.gender || "",
+      country: metadata.country || "",
+      city: metadata.city || "",
+      dob: metadata.dob || metadata.date_of_birth || "",
+      reason_for_using:
+        metadata.reason_for_using || metadata.reason_for_using_hushhTech || "",
+      reason_for_using_hushhTech:
+        metadata.reason_for_using_hushhTech || metadata.reason_for_using || "",
+      created_at: metadata.created_at || user?.created_at || new Date().toISOString(),
+      accountCreation: metadata.accountCreation || user?.created_at || new Date().toISOString(),
+      email: metadata.email || user?.email || "",
+      hushh_id: null,
+    };
+
+    if (!registrationData) {
+      return baseProfile;
+    }
+
+    return {
+      ...baseProfile,
+      ...registrationData,
+      hushh_id: registrationData.hushh_id ?? baseProfile.hushh_id ?? null,
+      email: registrationData.email || baseProfile.email,
+    };
+  };
+
+  const activateFallbackProfile = (message) => {
+    const storedRegistration = getStoredRegistrationData();
+    const fallbackProfile = buildFallbackProfile(storedRegistration);
+    populateProfileForm(fallbackProfile);
+
+    const fallbackMessage =
+      message ||
+      (storedRegistration
+        ? "We've loaded the details you entered during registration while the service is offline."
+        : null);
+
+    if (fallbackMessage) {
+      toast({
+        title: "Demo profile active",
+        description: fallbackMessage,
+        status: "info",
+        duration: 4000,
+        isClosable: true,
+      });
+    }
+  };
+
   useEffect(() => {
     if (authLoading) return;
-    
-    if (!user) {
-      router.push('/login');
-      return;
-    }
 
     if (user?.email) {
       fetchUserProfile(user.email);
+    } else {
+      activateFallbackProfile("You're viewing the demo profile. We've loaded any registration details you entered so you can keep recording.");
+      setIsLoadingProfile(false);
     }
-  }, [user, authLoading, router]);
+  }, [user?.email, authLoading]);
 
   const fetchUserProfile = async (email) => {
     try {
@@ -158,54 +268,197 @@ const UserProfile = () => {
         if (data && (data.message === "User exists" || data.exists) && data.user) {
           const profileData = data.user;
           console.log('📝 User profile data found:', profileData);
-          setUserData(profileData);
-          
-          // Populate form fields for editing using the correct field names
-          setFirstName(profileData.first_name || "");
-          setLastName(profileData.last_name || "");
-          setPhoneNumber(profileData.phone_number || profileData.phone || "");
-          setUserCoins(profileData.user_coins || 0);
-          setInvestorType(profileData.investor_type || "");
-          setGender(profileData.gender || "");
-          setCountry(profileData.country || "");
-          setCity(profileData.city || "");
-          setDateOfBirth(profileData.dob || "");
-          setReasonForUsingHushh(profileData.reason_for_using_hushhTech);
-          
+          populateProfileForm(profileData);
+
           console.log('✅ Profile loaded successfully');
         } else {
-          // User not found in database, redirect to registration
-          console.log('❌ User profile not found, redirecting to registration');
-          toast({
-            title: "Profile Not Found",
-            description: "Please complete your registration first.",
-            status: "warning",
-            duration: 3000,
-            isClosable: true,
-          });
-          router.push('/user-registration');
+          console.log('❌ User profile not found, loading fallback data');
+          activateFallbackProfile("We couldn't find your profile in the service, so your saved registration details are being used for this demo.");
         }
       } else {
         console.error('❌ Profile API request failed:', response.status, response.statusText);
-        toast({
-          title: "Error Loading Profile",
-          description: "Failed to load your profile. Please try again.",
-          status: "error",
-          duration: 4000,
-          isClosable: true,
-        });
+        activateFallbackProfile("The profile service is unavailable. We've restored your registration details locally so you can keep going.");
       }
     } catch (error) {
       console.error("💥 Error fetching user profile:", error);
+      activateFallbackProfile("We couldn't reach the profile service. Your saved registration details are ready for the demo.");
+    } finally {
+      setIsLoadingProfile(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!storageKey) return;
+    if (typeof window === "undefined") return;
+
+    const storedId = window.localStorage.getItem(storageKey);
+    if (storedId) {
+      setDemoHushhId(storedId);
+    }
+  }, [storageKey]);
+
+  useEffect(() => {
+    if (!storageKey) return;
+    if (typeof window === "undefined") return;
+
+    if (userData?.hushh_id) {
+      window.localStorage.removeItem(storageKey);
+      if (demoHushhId) {
+        setDemoHushhId("");
+      }
+    }
+  }, [userData?.hushh_id, storageKey, demoHushhId]);
+
+  useEffect(() => {
+    if (!hushhIdToDisplay && showQrCard) {
+      setShowQrCard(false);
+    }
+  }, [hushhIdToDisplay, showQrCard]);
+
+  const generateRandomHushhId = () => {
+    const characters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    let result = "";
+
+    for (let index = 0; index < 14; index += 1) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      result += characters.charAt(randomIndex);
+    }
+
+    return result;
+  };
+
+  const handleGenerateDemoId = () => {
+    setIsGeneratingDemoId(true);
+
+    try {
+      const newId = generateRandomHushhId();
+      setDemoHushhId(newId);
+
+      if (typeof window !== "undefined" && storageKey) {
+        window.localStorage.setItem(storageKey, newId);
+      }
+
       toast({
-        title: "Profile Error",
-        description: `Failed to load profile: ${error.message}`,
+        title: "Demo Hushh ID ready",
+        description: "Use this identifier while the service is offline.",
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+      });
+    } catch (generationError) {
+      console.error("Error generating demo Hushh ID:", generationError);
+      toast({
+        title: "Generation error",
+        description: "We couldn't generate a demo Hushh ID. Please try again.",
         status: "error",
         duration: 4000,
         isClosable: true,
       });
     } finally {
-      setIsLoadingProfile(false);
+      setIsGeneratingDemoId(false);
+    }
+  };
+
+  const handleShowQrCard = () => {
+    if (!hushhIdToDisplay) {
+      toast({
+        title: "Generate a Hushh ID first",
+        description: "Create a demo Hushh ID to preview the card.",
+        status: "info",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    setShowQrCard(true);
+  };
+
+  const handleHideQrCard = () => setShowQrCard(false);
+
+  const handleShareProfileCard = async () => {
+    if (!hushhIdToDisplay) {
+      toast({
+        title: "Generate a Hushh ID first",
+        description: "Create a demo Hushh ID before sharing the QR card.",
+        status: "info",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const qrInstance = shareQrRef.current;
+    const canvas = qrInstance?.canvasRef?.current || qrInstance;
+
+    if (!canvas || typeof canvas.toDataURL !== "function") {
+      toast({
+        title: "QR card unavailable",
+        description: "We couldn't access the QR code to share it. Please try again.",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    try {
+      setIsSharingCard(true);
+
+      const dataUrl = canvas.toDataURL("image/png");
+      const response = await fetch(dataUrl);
+      const blob = await response.blob();
+      const fileName = `hushh-id-${hushhIdToDisplay}.png`;
+      const file = new File([blob], fileName, { type: "image/png" });
+
+      const nav = navigator;
+
+      if (nav.share && nav.canShare && nav.canShare({ files: [file] })) {
+        await nav.share({
+          title: "Hushh ID Card",
+          text: "Scan this QR code to open the Hushh profile.",
+          files: [file],
+          url: hushhProfileLink,
+        });
+
+        toast({
+          title: "QR card shared",
+          description: "Your Hushh ID card has been shared successfully.",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        const downloadLink = document.createElement("a");
+        downloadLink.href = dataUrl;
+        downloadLink.download = fileName;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+
+        toast({
+          title: "QR card downloaded",
+          description: "Sharing isn't supported here, so we saved the QR code for you to share manually.",
+          status: "info",
+          duration: 4000,
+          isClosable: true,
+        });
+      }
+    } catch (shareError) {
+      console.error("Error sharing QR card:", shareError);
+      toast({
+        title: "Sharing unavailable",
+        description: "We couldn't share the QR card. Please try again later.",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+    } finally {
+      setIsSharingCard(false);
     }
   };
 
@@ -227,6 +480,17 @@ const UserProfile = () => {
         title: "Validation Error",
         description: "Please fill in all required fields.",
         status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (!userData?.hushh_id) {
+      toast({
+        title: "Demo mode active",
+        description: "Profile updates are disabled while using the demo Hushh ID.",
+        status: "info",
         duration: 4000,
         isClosable: true,
       });
@@ -375,6 +639,26 @@ const UserProfile = () => {
   return (
     <ContentWrapper includeHeaderSpacing={true}>
       <Box
+        position="fixed"
+        top="-9999px"
+        left="-9999px"
+        width="0"
+        height="0"
+        overflow="hidden"
+        aria-hidden="true"
+      >
+        <QRCode
+          ref={shareQrRef}
+          value={hushhProfileLink}
+          size={512}
+          bgColor="#FFFFFF"
+          fgColor="#111827"
+          qrStyle="dots"
+          eyeRadius={4}
+          quietZone={12}
+        />
+      </Box>
+      <Box
         minH="100vh"
         bg="white"
         py={{ base: 8, md: 12 }}
@@ -423,7 +707,7 @@ const UserProfile = () => {
                     {userData.first_name} {userData.last_name}
                   </Heading>
                   <Text color="rgba(0, 0, 0, 0.7)" fontSize="md">
-                    {user?.email}
+                    {profileEmail}
                   </Text>
                   <Badge 
                     bg="linear-gradient(135deg, #0071E3, #BB62FC)" 
@@ -441,18 +725,30 @@ const UserProfile = () => {
                       <Text fontWeight="bold" color="#BB62FC" fontSize="sm">
                         Hushh ID:
                       </Text>
-                      <Badge 
-                        bg="linear-gradient(135deg, #0071E3, #BB62FC)" 
+                      <Badge
+                        bg="linear-gradient(135deg, #0071E3, #BB62FC)"
                         color="white"
-                        variant="solid" 
-                        px={3} 
-                        py={1} 
+                        variant="solid"
+                        px={3}
+                        py={1}
                         borderRadius="md"
                         fontFamily="mono"
                         fontSize="xs"
                       >
-                        {userData.hushh_id || 'N/A'}
+                        {hushhIdToDisplay || 'N/A'}
                       </Badge>
+                      {!userData?.hushh_id && hushhIdToDisplay && (
+                        <Badge
+                          bg="rgba(0, 113, 227, 0.1)"
+                          color="#0071E3"
+                          borderRadius="md"
+                          px={2}
+                          py={1}
+                          fontSize="xs"
+                        >
+                          Demo ID
+                        </Badge>
+                      )}
                     </HStack>
                   </Text>
                 </VStack>
@@ -461,6 +757,84 @@ const UserProfile = () => {
               <HStack spacing={3}>
                 {!isEditing ? (
                   <>
+                    {!userData?.hushh_id && (
+                      <Button
+                        onClick={handleGenerateDemoId}
+                        bg="linear-gradient(135deg, #0071E3, #BB62FC)"
+                        color="white"
+                        leftIcon={<FiKey />}
+                        size="lg"
+                        borderRadius="full"
+                        fontFamily="Inter, sans-serif"
+                        fontWeight="600"
+                        isLoading={isGeneratingDemoId}
+                        loadingText="Generating..."
+                        _hover={{
+                          bg: "linear-gradient(135deg, #005bb5, #9a4fd1)",
+                          transform: "translateY(-2px)",
+                          boxShadow: "0 8px 25px rgba(0, 113, 227, 0.4)"
+                        }}
+                        transition="all 0.3s ease"
+                      >
+                        {demoHushhId ? 'Regenerate Demo Hushh ID' : 'Generate Demo Hushh ID'}
+                      </Button>
+                    )}
+                    <Tooltip
+                      label="Generate a demo Hushh ID first"
+                      placement="bottom"
+                      hasArrow
+                      isDisabled={Boolean(hushhIdToDisplay)}
+                      shouldWrapChildren
+                    >
+                      <Button
+                        onClick={handleShowQrCard}
+                        bg="linear-gradient(135deg, #FF8A65, #FF4081)"
+                        color="white"
+                        leftIcon={<FiCreditCard />}
+                        size="lg"
+                        borderRadius="full"
+                        fontFamily="Inter, sans-serif"
+                        fontWeight="600"
+                        isDisabled={!hushhIdToDisplay}
+                        _hover={{
+                          bg: "linear-gradient(135deg, #ff7043, #f50057)",
+                          transform: hushhIdToDisplay ? "translateY(-2px)" : 'none',
+                          boxShadow: hushhIdToDisplay ? "0 8px 25px rgba(255, 128, 82, 0.35)" : 'none'
+                        }}
+                        transition="all 0.3s ease"
+                      >
+                        Generate Hushh ID Card
+                      </Button>
+                    </Tooltip>
+                    <Tooltip
+                      label="Generate a demo Hushh ID first"
+                      placement="bottom"
+                      hasArrow
+                      isDisabled={Boolean(hushhIdToDisplay)}
+                      shouldWrapChildren
+                    >
+                      <Button
+                        onClick={handleShareProfileCard}
+                        bg="linear-gradient(135deg, #1D4ED8, #38BDF8)"
+                        color="white"
+                        leftIcon={<FiShare2 />}
+                        size="lg"
+                        borderRadius="full"
+                        fontFamily="Inter, sans-serif"
+                        fontWeight="600"
+                        isDisabled={!hushhIdToDisplay}
+                        isLoading={isSharingCard}
+                        loadingText="Preparing..."
+                        _hover={{
+                          bg: "linear-gradient(135deg, #1e3a8a, #0ea5e9)",
+                          transform: hushhIdToDisplay ? "translateY(-2px)" : 'none',
+                          boxShadow: hushhIdToDisplay ? "0 8px 25px rgba(37, 99, 235, 0.35)" : 'none'
+                        }}
+                        transition="all 0.3s ease"
+                      >
+                        Share Profile Card
+                      </Button>
+                    </Tooltip>
                     {/* <Button
                       onClick={() => setIsEditing(true)}
                       bg="linear-gradient(135deg, #0071E3, #BB62FC)"
@@ -577,12 +951,12 @@ const UserProfile = () => {
                   >
                     {userData.first_name} {userData.last_name}
                   </Heading>
-                  <Text 
-                    color="rgba(0, 0, 0, 0.7)" 
+                  <Text
+                    color="rgba(0, 0, 0, 0.7)"
                     fontSize={{ base: "sm", sm: "md" }}
                     wordBreak="break-word"
                   >
-                    {user?.email}
+                    {profileEmail}
                   </Text>
                   <Badge 
                     bg="linear-gradient(135deg, #0071E3, #BB62FC)" 
@@ -602,18 +976,30 @@ const UserProfile = () => {
                         Hushh ID:
                       </Text>
                     </HStack>
-                    <Badge 
-                      bg="linear-gradient(135deg, #0071E3, #BB62FC)" 
+                    <Badge
+                      bg="linear-gradient(135deg, #0071E3, #BB62FC)"
                       color="white"
-                      variant="solid" 
-                      px={2} 
-                      py={1} 
+                      variant="solid"
+                      px={2}
+                      py={1}
                       borderRadius="md"
                       fontFamily="mono"
                       fontSize="xs"
                     >
-                      {userData.hushh_id || 'N/A'}
+                      {hushhIdToDisplay || 'N/A'}
                     </Badge>
+                    {!userData?.hushh_id && hushhIdToDisplay && (
+                      <Badge
+                        bg="rgba(0, 113, 227, 0.08)"
+                        color="#0071E3"
+                        borderRadius="md"
+                        px={2}
+                        py={0.5}
+                        fontSize="2xs"
+                      >
+                        Demo ID
+                      </Badge>
+                    )}
                   </VStack>
                 </VStack>
               </VStack>
@@ -622,6 +1008,82 @@ const UserProfile = () => {
               <VStack spacing={3} w="full">
                 {!isEditing ? (
                   <>
+                    {!userData?.hushh_id && (
+                      <Button
+                        onClick={handleGenerateDemoId}
+                        bg="linear-gradient(135deg, #0071E3, #BB62FC)"
+                        color="white"
+                        leftIcon={<FiKey />}
+                        size="md"
+                        w="full"
+                        borderRadius="full"
+                        fontFamily="Inter, sans-serif"
+                        fontWeight="600"
+                        isLoading={isGeneratingDemoId}
+                        loadingText="Generating..."
+                        _hover={{
+                          bg: "linear-gradient(135deg, #005bb5, #9a4fd1)",
+                        }}
+                        transition="all 0.3s ease"
+                      >
+                        {demoHushhId ? 'Regenerate Demo Hushh ID' : 'Generate Demo Hushh ID'}
+                      </Button>
+                    )}
+                    <Tooltip
+                      label="Generate a demo Hushh ID first"
+                      placement="top"
+                      hasArrow
+                      isDisabled={Boolean(hushhIdToDisplay)}
+                      shouldWrapChildren
+                    >
+                      <Button
+                        onClick={handleShowQrCard}
+                        bg="linear-gradient(135deg, #FF8A65, #FF4081)"
+                        color="white"
+                        leftIcon={<FiCreditCard />}
+                        size="md"
+                        w="full"
+                        borderRadius="full"
+                        fontFamily="Inter, sans-serif"
+                        fontWeight="600"
+                        isDisabled={!hushhIdToDisplay}
+                        _hover={{
+                          bg: "linear-gradient(135deg, #ff7043, #f50057)",
+                        }}
+                        transition="all 0.3s ease"
+                      >
+                        Generate Hushh ID Card
+                      </Button>
+                    </Tooltip>
+                    <Tooltip
+                      label="Generate a demo Hushh ID first"
+                      placement="top"
+                      hasArrow
+                      isDisabled={Boolean(hushhIdToDisplay)}
+                      shouldWrapChildren
+                    >
+                      <Button
+                        onClick={handleShareProfileCard}
+                        bg="linear-gradient(135deg, #1D4ED8, #38BDF8)"
+                        color="white"
+                        leftIcon={<FiShare2 />}
+                        size="md"
+                        borderRadius="full"
+                        fontFamily="Inter, sans-serif"
+                        fontWeight="600"
+                        isDisabled={!hushhIdToDisplay}
+                        isLoading={isSharingCard}
+                        loadingText="Preparing..."
+                        _hover={{
+                          bg: "linear-gradient(135deg, #1e3a8a, #0ea5e9)",
+                          transform: hushhIdToDisplay ? "translateY(-2px)" : 'none',
+                          boxShadow: hushhIdToDisplay ? "0 8px 25px rgba(37, 99, 235, 0.35)" : 'none'
+                        }}
+                        transition="all 0.3s ease"
+                      >
+                        Share Profile Card
+                      </Button>
+                    </Tooltip>
                     {/* <Button
                       onClick={() => setIsEditing(true)}
                       bg="linear-gradient(135deg, #0071E3, #BB62FC)"
@@ -718,6 +1180,127 @@ const UserProfile = () => {
             </VStack>
           </MotionCard>
 
+          {showQrCard && (
+            <MotionCard
+              variants={childVariants}
+              bg="linear-gradient(135deg, rgba(0, 113, 227, 0.08) 0%, rgba(187, 98, 252, 0.12) 100%)"
+              borderRadius="2xl"
+              border="1px solid rgba(0, 0, 0, 0.08)"
+              boxShadow="0 18px 40px rgba(15, 23, 42, 0.12)"
+              mb={{ base: 8, md: 10 }}
+            >
+              <CardBody p={{ base: 6, md: 10 }}>
+                <Flex
+                  direction={{ base: "column", md: "row" }}
+                  align="center"
+                  justify="space-between"
+                  gap={{ base: 6, md: 12 }}
+                >
+                  <VStack align="flex-start" spacing={4} maxW={{ base: "full", md: "50%" }}>
+                    <Badge
+                      bg="rgba(0, 113, 227, 0.2)"
+                      color="#0B3C8C"
+                      borderRadius="full"
+                      px={3}
+                      py={1}
+                      fontSize="xs"
+                    >
+                      Hushh ID Card Preview
+                    </Badge>
+                    <Heading
+                      size="lg"
+                      color="#0F172A"
+                      fontFamily="Inter, sans-serif"
+                    >
+                      {`${firstName || userData.first_name || ""} ${lastName || userData.last_name || ""}`.trim() || 'Your Name'}
+                    </Heading>
+                    <Text color="rgba(15, 23, 42, 0.7)" fontSize="md">
+                      {profileEmail}
+                    </Text>
+                    <HStack spacing={3} align="center">
+                      <Badge
+                        bg="white"
+                        color="#0B3C8C"
+                        borderRadius="md"
+                        px={3}
+                        py={1}
+                        fontFamily="mono"
+                        fontSize="sm"
+                        boxShadow="inset 0 0 0 1px rgba(0, 113, 227, 0.3)"
+                      >
+                        Hushh ID: {hushhIdToDisplay}
+                      </Badge>
+                      {!userData?.hushh_id && hushhIdToDisplay && (
+                        <Badge
+                          bg="rgba(255, 255, 255, 0.6)"
+                          color="#F97316"
+                          borderRadius="md"
+                          px={2}
+                          py={1}
+                          fontSize="xs"
+                        >
+                          Demo Mode
+                        </Badge>
+                      )}
+                    </HStack>
+                    <Text color="rgba(15, 23, 42, 0.8)" fontSize="sm">
+                      Scan the QR code to open your profile on hushh.ai.
+                    </Text>
+                    <HStack spacing={3} flexWrap="wrap">
+                      <Button
+                        as={Link}
+                        href={hushhProfileLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        variant="ghost"
+                        colorScheme="blue"
+                        leftIcon={<FiExternalLink />}
+                      >
+                        Open profile link
+                      </Button>
+                      <Button
+                        onClick={handleHideQrCard}
+                        variant="outline"
+                        colorScheme="gray"
+                        leftIcon={<FiX />}
+                      >
+                        Close preview
+                      </Button>
+                    </HStack>
+                  </VStack>
+
+                  <VStack spacing={4} align="center">
+                    <Box
+                      bg="white"
+                      borderRadius="3xl"
+                      boxShadow="0 20px 45px rgba(15, 23, 42, 0.18)"
+                      p={{ base: 4, md: 6 }}
+                      border="1px solid rgba(0, 0, 0, 0.05)"
+                    >
+                      <QRCode
+                        value={hushhProfileLink}
+                        size={200}
+                        bgColor="transparent"
+                        fgColor="#111827"
+                        qrStyle="dots"
+                        eyeRadius={4}
+                        quietZone={12}
+                      />
+                    </Box>
+                    <Text
+                      fontSize="sm"
+                      color="rgba(15, 23, 42, 0.7)"
+                      fontFamily="mono"
+                      textAlign="center"
+                    >
+                      hushh.ai/user-profile
+                    </Text>
+                  </VStack>
+                </Flex>
+              </CardBody>
+            </MotionCard>
+          )}
+
           {/* Profile Details */}
           <Grid templateColumns={{ base: "1fr", lg: "1fr 2fr", md:'1fr 2fr' }} gap={{ base: 6, lg: 8 }}>
              {/* Sidebar */}
@@ -796,16 +1379,18 @@ const UserProfile = () => {
                         🤫 Know About Hushh
                       </Button>
                       
-                      <Button
-                        leftIcon={<FiLogOut />}
-                        variant="outline"
-                        colorScheme="red"
-                        size="sm"
-                        w="full"
-                        onClick={handleSignOut}
-                      >
-                        Sign Out
-                      </Button>
+                      {user && (
+                        <Button
+                          leftIcon={<FiLogOut />}
+                          variant="outline"
+                          colorScheme="red"
+                          size="sm"
+                          w="full"
+                          onClick={handleSignOut}
+                        >
+                          Sign Out
+                        </Button>
+                      )}
                     </VStack>
                   </CardBody>
                 </MotionCard>
@@ -916,7 +1501,7 @@ const UserProfile = () => {
                               Email Address
                             </FormLabel>
                             <Text fontSize="md" color="rgba(0, 0, 0, 0.8)" py={2} px={3} bg="rgba(0, 0, 0, 0.05)" borderRadius="lg" border="1px solid rgba(0, 0, 0, 0.1)">
-                              {user?.email}
+                              {profileEmail}
                             </Text>
                             <Text fontSize="xs" color="rgba(0, 0, 0, 0.5)" mt={1}>
                               Email cannot be changed here
@@ -991,10 +1576,10 @@ const UserProfile = () => {
                           Hushh ID
                         </FormLabel>
                         <Text fontSize="md" color="rgba(0, 0, 0, 0.8)" py={2} px={3} bg="rgba(0, 0, 0, 0.05)" borderRadius="lg" border="1px solid rgba(0, 0, 0, 0.1)" fontFamily="mono">
-                          {userData.hushh_id || "Not available"}
+                          {hushhIdToDisplay || "Not available"}
                         </Text>
                         <Text fontSize="xs" color="rgba(0, 0, 0, 0.5)" mt={1}>
-                          Your unique Hushh identifier
+                          {userData?.hushh_id ? "Your unique Hushh identifier" : "Demo identifier generated for recording"}
                         </Text>
                       </FormControl>
 
@@ -1157,24 +1742,26 @@ const UserProfile = () => {
       </Container>
 
       {/* Sign Out Confirmation Modal */}
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Confirm Sign Out</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Text>Are you sure you want to sign out of your account?</Text>
-          </ModalBody>
-          <ModalFooter>
-            <Button variant="ghost" mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button colorScheme="red" onClick={handleSignOut}>
-              Sign Out
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      {user && (
+        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Confirm Sign Out</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Text>Are you sure you want to sign out of your account?</Text>
+            </ModalBody>
+            <ModalFooter>
+              <Button variant="ghost" mr={3} onClick={onClose}>
+                Cancel
+              </Button>
+              <Button colorScheme="red" onClick={handleSignOut}>
+                Sign Out
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      )}
       </Box>
     </ContentWrapper>
   );

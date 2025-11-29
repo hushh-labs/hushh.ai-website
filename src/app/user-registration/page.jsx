@@ -56,10 +56,12 @@ const API_HEADERS = {
   'Content-Type': 'application/json'
 };
 
+const REGISTRATION_STORAGE_KEY = "hushh-demo-profile:last-submission";
+
 const UserRegistrationContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { user, session, loading: authLoading } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const toast = useToast();
   
   const [isLoading, setIsLoading] = useState(false);
@@ -194,18 +196,13 @@ const UserRegistrationContent = () => {
 
   useEffect(() => {
     if (authLoading || isProcessingAuth || !mounted) return;
-    
-    if (!user) {
-      router.push('/login');
-      return;
-    }
 
     if (user?.email) {
       setUserEmail(user.email);
       // setInitialEmail(user.email); // Store the initial email - COMMENTED OUT FOR UPDATE MODE
       checkExistingUser(user.email);
     }
-  }, [user, authLoading, isProcessingAuth, router, mounted]);
+  }, [user?.email, authLoading, isProcessingAuth, mounted]);
 
   const checkExistingUser = async (email) => {
     try {
@@ -281,6 +278,7 @@ const UserRegistrationContent = () => {
   const validateForm = () => {
     const newErrors = {};
     
+    if (!userEmail.trim()) newErrors.email = "Email is required";
     if (!firstName.trim()) newErrors.firstName = "First name is required";
     if (!lastName.trim()) newErrors.lastName = "Last name is required";
     if (!phoneNumber.trim()) newErrors.phoneNumber = "Phone number is required";
@@ -339,6 +337,18 @@ const UserRegistrationContent = () => {
         dob: dateOfBirth,
         reason_for_using: reasonForUsingHushh,
       };
+
+      if (typeof window !== "undefined") {
+        const storedUserData = {
+          ...userData,
+          savedAt: new Date().toISOString(),
+        };
+
+        window.localStorage.setItem(
+          REGISTRATION_STORAGE_KEY,
+          JSON.stringify(storedUserData),
+        );
+      }
 
       /* COMMENTED OUT UPDATE MODE LOGIC
       // Create user data object with only updatable fields - exact same as tech version
@@ -453,17 +463,12 @@ const UserRegistrationContent = () => {
         window.dispatchEvent(new CustomEvent('userRegistrationComplete', {
           detail: { email: userEmail }
         }));
-        
-        // Redirect to home page after successful registration
-        setTimeout(() => {
-          router.push("/");
-        }, 2000);
       } else {
         const errorData = await response.json().catch(() => null);
         console.error('Registration failed:', response.status, errorData);
         throw new Error(`Registration failed: ${response.status}`);
       }
-      
+
     } catch (err) {
       console.error("Registration error:", err);
       setError(`An unexpected error occurred. Please try again later. Registration failed.`);
@@ -476,6 +481,7 @@ const UserRegistrationContent = () => {
       });
     } finally {
       setIsLoading(false);
+      router.push("/user-profile");
     }
   };
 
@@ -650,7 +656,7 @@ const UserRegistrationContent = () => {
                   {/* Contact Fields */}
                   <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4} w="full">
                     <GridItem>
-                      <FormControl>
+                      <FormControl isInvalid={errors.email}>
                         <FormLabel color="gray.700" fontWeight="600">
                           <Icon as={FiMail} mr={2} />
                           Email Address
@@ -666,6 +672,7 @@ const UserRegistrationContent = () => {
                           _hover={{ borderColor: "gray.300" }}
                           _focus={{ borderColor: "blue.500", boxShadow: "0 0 0 1px #3182CE" }}
                         />
+                        <FormErrorMessage>{errors.email}</FormErrorMessage>
                       </FormControl>
                     </GridItem>
                     <GridItem>
