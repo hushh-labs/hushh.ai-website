@@ -48,7 +48,14 @@ export async function POST(request) {
       data = text;
     }
 
-    return NextResponse.json({ status: response.status, methodUsed: normalizedMethod, data });
+    return NextResponse.json(
+      {
+        status: response.status,
+        methodUsed: normalizedMethod,
+        data,
+      },
+      { status: response.ok ? 200 : response.status }
+    );
   } catch (error) {
     return NextResponse.json({ error: error.message || "Proxy error" }, { status: 500 });
   }
