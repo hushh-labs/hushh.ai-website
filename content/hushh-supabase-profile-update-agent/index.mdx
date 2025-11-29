@@ -60,6 +60,13 @@ After MCP confirms success, the agent replies with a structured success message,
 - **Lifecycle Marketer:** Jack refreshes a VIP segment every Friday. Instead of exporting CSVs, he runs a script that instructs the agent to adjust dozens of small tweaks—new interests, changed budgets—keeping campaigns aligned with reality.
 - **Community Coordinator:** Michael oversees mentorship matches. When mentees update their goals during check-ins, she uses the agent to adjust Supabase tags instantly so mentors always get accurate briefs.
 
+## Day 0 Story — Sundar Pichai KYC Refresh
+
+1. **Intake complete:** After the Profile Creation Agent stores Sundar’s minimal record and Gemini adds public data, compliance leads trigger the Profile Update Agent with a simple prompt: “Confirm Sundar Pichai’s investor accreditation using his phone +1 650-555-9001.”
+2. **Targeted field updates:** The agent parses the request, locks onto Sundar’s MCP alias, and patches accreditation flags, risk scores, and preferred verification channel in Supabase as soon as MuleSoft validates the supporting docs.
+3. **Cross-system sync:** The same response pushes updates to Salesforce and the regulated KYC investor schema, ensuring downstream trading or allocation flows see the amended facts.
+4. **Audit-ready trail:** Every change is tied to Sundar’s personal endpoint (`https://hushh.ai/profile/phone/+16505559001`), so reviewers can replay the Day 0 journey from minimal inputs through enriched KYC proof in one log view.
+
 ## SEO Spotlight & CTA
 
 Searching for *Supabase profile update automation*, *MuleSoft natural language data correction*, or *AI CRM synchronization*? This agent shows how Hushh.ai blends LLM intent parsing with governed data operations. Explore [`/agents`](/agents) to see how profile creation, update, and query capabilities work together for full-lifecycle intelligence.

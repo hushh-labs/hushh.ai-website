@@ -87,6 +87,14 @@ Imagine a concierge assistant called “Sundar Pichai Query Agent.” When Nike�
 
 A telco pilot connected the User Data Query Agent to its WhatsApp concierge. When subscribers asked about upgrade eligibility, the bot fetched wants, needs, and device history instantly, allowing human reps to craft bespoke offers and shrinking resolution time by 35%.
 
+## Day 0 Story — Sundar Pichai Concierge View
+
+1. **Creation & enrichment:** Sundar’s minimal intake (name, phone, email) flows through the Supabase Profile Creation Agent. GeminiAI Public Data Agent enriches the record with executive bio, investing behavior, and lifestyle cues.
+2. **KYC polishing:** The Supabase Profile Update Agent patches accreditation proof, preferred contact channel, and travel cadence, locking the information against Sundar’s MCP alias (`https://hushh.ai/profile/sundar-pichai`).
+3. **Endpoint promotion:** MuleSoft publishes the alias internally as both a phone-based URL (`https://hushh.ai/profile/phone/+16505559001`) and an MCP tool descriptor. Any agent can now request “Sundar’s wants” without juggling IDs.
+4. **Concierge response:** When Sundar’s dedicated WhatsApp concierge poses “What matters most to Sundar Pichai right now?”, the User Data Query Agent fans out to Supabase, Salesforce, and cached Gemini outputs, returning a conversational summary plus machine-readable JSON for the bot and the KYC investor workspace.
+5. **Day 0 complete:** Within minutes of the first input, Sundar has a searchable, AI-enriched profile that every support, sales, and investor-relations workflow can query safely.
+
 ## 8. Versioning
 
 | Version | Description |
