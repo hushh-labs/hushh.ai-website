@@ -18,6 +18,8 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
+  ModalFooter,
+  Code,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react'
@@ -137,10 +139,22 @@ const formatArrayValue = (value) => {
   return value
 }
 
+const encodeShareToken = (payload) => {
+  const json = JSON.stringify(payload)
+  let base64
+  if (typeof window === 'undefined') {
+    base64 = Buffer.from(json, 'utf8').toString('base64')
+  } else {
+    base64 = btoa(unescape(encodeURIComponent(json)))
+  }
+  return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/,'')
+}
+
 export default function ResultsDisplay({ userData, agentResults, onBack }) {
-  const [showRawData, setShowRawData] = useState(false)
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const rawDataDisclosure = useDisclosure()
+  const shareDisclosure = useDisclosure()
   const toast = useToast()
+  const [shareLinks, setShareLinks] = useState({ token: '', viewer: '', api: '' })
   
   // Extract and parse all data
   const parsedData = useMemo(() => extractUserData(agentResults, userData), [agentResults, userData])
@@ -203,7 +217,7 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
 
   // Show raw data modal
   const handleShowRawData = () => {
-    onOpen()
+    rawDataDisclosure.onOpen()
   }
 
   // Clear data and go back
@@ -218,6 +232,59 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
         isClosable: true,
       })
     }
+  }
+
+  const handleCreateShareLink = () => {
+    const sharePayload = {
+      fullName: userData?.fullName || parsedData.fullName || parsedData.name || '',
+      email: userData?.email || parsedData.email || '',
+      phone: userData ? `${userData.countryCode} ${userData.phoneNumber}` : (parsedData.phone || parsedData.phoneNumber || ''),
+      source: 'intelligence-portal',
+    }
+
+    if (!sharePayload.fullName && !sharePayload.email && !sharePayload.phone) {
+      toast({
+        title: 'Add user details first',
+        description: 'We need at least a name, email, or phone to create a public link.',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+      })
+      return
+    }
+
+    const token = encodeShareToken(sharePayload)
+    const origin = typeof window !== 'undefined' ? window.location.origin : ''
+    const viewer = `${origin}/pda/public?token=${token}`
+    const api = `${origin}/api/pda/public?token=${token}`
+    setShareLinks({ token, viewer, api })
+    shareDisclosure.onOpen()
+    toast({
+      title: 'Public PDA endpoint ready',
+      description: 'Copy the viewer link or API endpoint to share with your team.',
+      status: 'success',
+      duration: 3500,
+      isClosable: true,
+    })
+  }
+
+  const copyShareValue = (value, label) => {
+    if (!value) return
+    navigator?.clipboard?.writeText(value).then(() => {
+      toast({
+        title: `${label} copied`,
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+      })
+    }).catch(() => {
+      toast({
+        title: `Could not copy ${label}`,
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      })
+    })
   }
 
   const InfoCard = ({ label, value }) => (
@@ -291,6 +358,18 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
               size={{ base: 'sm', md: 'md' }}
             >
               📥 Export Results
+            </Button>
+            <Button
+              onClick={handleCreateShareLink}
+              variant="outline"
+              borderColor="gray.700"
+              color="white"
+              _hover={{ bg: 'gray.900', borderColor: 'teal.400' }}
+              borderRadius="8px"
+              px={6}
+              size={{ base: 'sm', md: 'md' }}
+            >
+              🌐 Create Public PDA Link
             </Button>
             <Button
               onClick={handleShowRawData}
@@ -675,8 +754,107 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
         </VStack>
       </Container>
 
+      {/* Share Modal */}
+      <Modal isOpen={shareDisclosure.isOpen} onClose={shareDisclosure.onClose} size="xl">
+        <ModalOverlay bg="blackAlpha.700" backdropFilter="blur(8px)" />
+        <ModalContent
+          bg="gray.50"
+          color="gray.900"
+          maxW={{ base: '92vw', md: '720px' }}
+          mx={{ base: 3, md: 'auto' }}
+          borderRadius="20px"
+          shadow="2xl"
+          overflow="hidden"
+        >
+          <ModalHeader borderBottomWidth="1px" borderBottomColor="gray.200">
+            <Heading fontSize={{ base: 'lg', md: 'xl' }} color="gray.900">Shareable public endpoint</Heading>
+            <Text fontSize="sm" color="gray.600" mt={1}>
+              Anyone with these links can fetch the MuleSoft PDA response as JSON or view it in a table.
+            </Text>
+          </ModalHeader>
+          <ModalCloseButton color="gray.600" />
+          <ModalBody py={5} px={{ base: 4, md: 6 }} overflowY="auto">
+            <VStack align="stretch" spacing={4}>
+              <Box>
+                <Text fontSize="xs" color="gray.600" mb={2} fontWeight="700" letterSpacing="wide">Public viewer</Text>
+                <Stack direction={{ base: 'column', md: 'row' }} spacing={3} align="stretch">
+                  <Code
+                    flex="1"
+                    p={3}
+                    bg="gray.100"
+                    color="gray.900"
+                    borderWidth="1px"
+                    borderColor="gray.200"
+                    borderRadius="12px"
+                    whiteSpace="pre-wrap"
+                    wordBreak="break-all"
+                  >
+                    {shareLinks.viewer || 'Not generated yet'}
+                  </Code>
+                  <Button size="sm" onClick={() => copyShareValue(shareLinks.viewer, 'Viewer link')} isDisabled={!shareLinks.viewer}>
+                    Copy
+                  </Button>
+                </Stack>
+              </Box>
+              <Box>
+                <Text fontSize="xs" color="gray.600" mb={2} fontWeight="700" letterSpacing="wide">JSON API endpoint</Text>
+                <Stack direction={{ base: 'column', md: 'row' }} spacing={3} align="stretch">
+                  <Code
+                    flex="1"
+                    p={3}
+                    bg="gray.100"
+                    color="gray.900"
+                    borderWidth="1px"
+                    borderColor="gray.200"
+                    borderRadius="12px"
+                    whiteSpace="pre-wrap"
+                    wordBreak="break-all"
+                  >
+                    {shareLinks.api || 'Not generated yet'}
+                  </Code>
+                  <Button size="sm" onClick={() => copyShareValue(shareLinks.api, 'API link')} isDisabled={!shareLinks.api}>
+                    Copy
+                  </Button>
+                </Stack>
+              </Box>
+              <Box>
+                <Text fontSize="xs" color="gray.600" mb={2} fontWeight="700" letterSpacing="wide">Share token</Text>
+                <Stack direction={{ base: 'column', md: 'row' }} spacing={3} align="stretch">
+                  <Code
+                    flex="1"
+                    p={3}
+                    bg="gray.100"
+                    color="gray.900"
+                    borderWidth="1px"
+                    borderColor="gray.200"
+                    borderRadius="12px"
+                    whiteSpace="pre-wrap"
+                    wordBreak="break-all"
+                  >
+                    {shareLinks.token || 'Not generated yet'}
+                  </Code>
+                  <Button size="sm" onClick={() => copyShareValue(shareLinks.token, 'Token')} isDisabled={!shareLinks.token}>
+                    Copy
+                  </Button>
+                </Stack>
+              </Box>
+            </VStack>
+          </ModalBody>
+          <ModalFooter borderTopWidth="1px" borderTopColor="gray.200" bg="gray.100">
+            <HStack spacing={3} w="full" justify="flex-end">
+              <Button variant="outline" borderColor="gray.300" onClick={shareDisclosure.onClose}>Close</Button>
+              {shareLinks.viewer && (
+                <Button as="a" href={shareLinks.viewer} target="_blank" rel="noreferrer" bg="green.500" color="white" _hover={{ bg: 'green.600' }}>
+                  Open public viewer
+                </Button>
+              )}
+            </HStack>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
       {/* Raw Data Modal */}
-      <Modal isOpen={isOpen} onClose={onClose} size="6xl" scrollBehavior="inside">
+      <Modal isOpen={rawDataDisclosure.isOpen} onClose={rawDataDisclosure.onClose} size="6xl" scrollBehavior="inside">
         <ModalOverlay bg="blackAlpha.800" backdropFilter="blur(10px)" />
         <ModalContent bg="gray.900" color="white" maxH="90vh">
           <ModalHeader borderBottomWidth="1px" borderBottomColor="gray.700">
