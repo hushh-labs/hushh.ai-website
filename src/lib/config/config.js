@@ -1,8 +1,9 @@
 import { createClient } from "@supabase/supabase-js";
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./supabaseEnv";
 
 const config = {
-  SUPABASE_URL: "https://gsqmwxqgqrgzhlhmbscg.supabase.co",
-  SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzcW13eHFncXJnemhsaG1ic2NnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg3NTk5ODYsImV4cCI6MjA1NDMzNTk4Nn0.a30I6aLvNNIS6coxJbgTeGBUmKR0NvTkZUDG5uyloFY",
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY,
   redirect_url: "https://hushh.ai/",
 };
 
@@ -19,4 +20,4 @@ function createSupabaseClient() {
 
 config.supabaseClient = createSupabaseClient();
 
-export default config; 
+export default config;
