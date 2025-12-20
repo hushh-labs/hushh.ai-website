@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 
 const ALLOWED_HOSTS = new Set([
   "hushh-plaid-api-app-bubqpu.5sc6y6-1.usa-e2.cloudhub.io",
+  "hushh-plaid-agent-app-bubqpu.5sc6y6-4.usa-e2.cloudhub.io",
+  "hushh-plaid-mcp-server-app-bubqpu.5sc6y6-4.usa-e2.cloudhub.io",
 ]);
 
 const ALLOWED_METHODS = new Set(["GET", "POST"]);
