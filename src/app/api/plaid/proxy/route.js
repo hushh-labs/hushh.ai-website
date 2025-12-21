@@ -37,6 +37,7 @@ export async function POST(request) {
       method: normalizedMethod,
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json, text/event-stream",
       },
       body:
         normalizedMethod === "GET" ? undefined : JSON.stringify(payload || {}),
