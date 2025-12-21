@@ -19,6 +19,7 @@ import {
   Divider,
   useToast,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import ContentWrapper from "../_components/layout/ContentWrapper";
 
 const ENDPOINTS = {
@@ -185,6 +186,14 @@ export default function PlaidIntegrationPage() {
               Use this sandbox console to create tokens, retrieve aggregated financial data, and synchronize it with
               Supabase—exactly how the production MuleSoft integration operates.
             </Text>
+            <Flex gap={3} flexWrap="wrap" justify="center">
+              <Button as={Link} href="/plaid-financial-profile-agent" colorScheme="blue" variant="solid">
+                Profile Creation Agent
+              </Button>
+              <Button as={Link} href="/plaid-financial-profile-update-agent" variant="outline" colorScheme="blue">
+                Profile Update Agent
+              </Button>
+            </Flex>
           </VStack>
 
           <Stack spacing={10}>
