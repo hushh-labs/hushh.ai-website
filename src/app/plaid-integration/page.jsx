@@ -33,6 +33,8 @@ const ENDPOINTS = {
     "https://hushh-plaid-api-app-bubqpu.5sc6y6-1.usa-e2.cloudhub.io/userFinancialData",
   pushUserFinancialData:
     "https://hushh-plaid-api-app-bubqpu.5sc6y6-1.usa-e2.cloudhub.io/userFinancialData",
+  createProfileAgent:
+    "https://hushh-plaid-agent-app-bubqpu.5sc6y6-4.usa-e2.cloudhub.io/plaid-agent",
 };
 
 const defaultPayload = {
@@ -46,6 +48,7 @@ export default function PlaidIntegrationPage() {
   const [credentials, setCredentials] = useState(defaultPayload);
   const [linkToken, setLinkToken] = useState("");
   const [responseLog, setResponseLog] = useState([]);
+  const [fetchedData, setFetchedData] = useState(null);
   const toast = useToast();
 
   const updateField = (key, value) => {
@@ -59,8 +62,15 @@ export default function PlaidIntegrationPage() {
     ]);
   };
 
-  const callPlaidApi = async ({ title, endpoint, method = "POST", body }) => {
-    if (!credentials.client_id || !credentials.secret) {
+  const callPlaidApi = async ({
+    title,
+    endpoint,
+    method = "POST",
+    body,
+    overrideMethod,
+    includeCredentials = true,
+  }) => {
+    if (includeCredentials && (!credentials.client_id || !credentials.secret)) {
       toast({
         title: "Credentials required",
         description: "Please enter client_id and secret before calling the API.",
@@ -69,18 +79,20 @@ export default function PlaidIntegrationPage() {
       });
       return;
     }
-    const payload = {
-      client_id: credentials.client_id,
-      secret: credentials.secret,
-      ...body,
-    };
+    const payload = includeCredentials
+      ? {
+          client_id: credentials.client_id,
+          secret: credentials.secret,
+          ...body,
+        }
+      : body || {};
     const normalizedMethod = method?.toUpperCase() || "POST";
 
     try {
       const res = await fetch("/api/plaid/proxy", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ endpoint, method: normalizedMethod, payload }),
+        body: JSON.stringify({ endpoint, method: normalizedMethod, payload, overrideMethod }),
       });
       const json = await res.json();
       pushLog(title, json);
@@ -146,28 +158,52 @@ export default function PlaidIntegrationPage() {
       });
       return;
     }
-    await callPlaidApi({
+    const result = await callPlaidApi({
       title: "Fetch Consolidated Financial Data",
       endpoint: ENDPOINTS.getUserFinancialData,
-      method: "GET",
-      body: { access_token: credentials.access_token },
+      method: "POST", // send body
+      overrideMethod: "GET", // signal GET to backend while keeping JSON body
+      body: { access_token: credentials.access_token, client_id: credentials.client_id, secret: credentials.secret },
     });
+    if (result?.data) {
+      setFetchedData(result.data);
+    }
   };
 
   const handlePushToSupabase = async () => {
-    if (!credentials.access_token) {
+    if (!fetchedData) {
       toast({
-        title: "Missing access token",
+        title: "No financial data",
+        description: "Fetch financial data first so we can push it to Supabase.",
         status: "info",
         duration: 3000,
       });
       return;
     }
+    const agentPayload = {
+      jsonrpc: "2.0",
+      id: `task-${Date.now()}`,
+      method: "tasks/send",
+      params: {
+        sessionId: `session-${Date.now()}`,
+        message: {
+          role: "user",
+          parts: [
+            {
+              type: "text",
+              text: `Create a user financial profile with the details below: ${JSON.stringify(fetchedData)}`,
+            },
+          ],
+        },
+      },
+    };
+
     await callPlaidApi({
-      title: "Push Data to Supabase",
-      endpoint: ENDPOINTS.pushUserFinancialData,
+      title: "Push Data to Supabase (Creation Agent)",
+      endpoint: ENDPOINTS.createProfileAgent,
       method: "POST",
-      body: { access_token: credentials.access_token },
+      body: agentPayload,
+      includeCredentials: false,
     });
   };
 

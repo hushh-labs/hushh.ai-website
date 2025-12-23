@@ -10,7 +10,7 @@ const ALLOWED_METHODS = new Set(["GET", "POST"]);
 
 export async function POST(request) {
   try {
-    const { endpoint, method = "POST", payload } = await request.json();
+    const { endpoint, method = "POST", payload, overrideMethod } = await request.json();
 
     if (!endpoint) {
       return NextResponse.json({ error: "Endpoint is required" }, { status: 400 });
@@ -38,9 +38,9 @@ export async function POST(request) {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json, text/event-stream",
+        ...(overrideMethod ? { "X-HTTP-Method-Override": overrideMethod } : {}),
       },
-      body:
-        normalizedMethod === "GET" ? undefined : JSON.stringify(payload || {}),
+      body: JSON.stringify(payload || {}),
     });
 
     const text = await response.text();
