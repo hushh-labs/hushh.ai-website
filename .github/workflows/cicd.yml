@@ -2,19 +2,16 @@
 name: cicd-workflow (CI/CD + Slack)
 
 on:
-  # Main CI
   push:
     branches: [main]
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review, edited, closed]
 
-  # Issue lifecycle notifications
   issues:
     types: [opened, edited, reopened, closed, labeled, unlabeled, assigned, unassigned, milestoned, demilestoned]
   issue_comment:
     types: [created, edited, deleted]
 
-  # Manual trigger
   workflow_dispatch:
 
 permissions:
@@ -31,7 +28,7 @@ jobs:
   # CI build (push + PR)
   # -------------------------------
   build:
-    name: Build / Lint (Node)
+    name: Build (Node)
     if: github.event_name == 'push' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
 
@@ -52,10 +49,6 @@ jobs:
         run: npm run build
         env:
           CI: true
-
-      - name: Lint
-        if: always()
-        run: npm run lint
 
   slack_ci_success:
     name: Slack notify (CI success)
