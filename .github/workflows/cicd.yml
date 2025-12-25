@@ -42,8 +42,11 @@ jobs:
           node-version: "18"
           cache: "npm"
 
-      - name: Install dependencies (legacy peer deps)
-        run: npm ci --legacy-peer-deps
+      # Fix for: "Cannot find native binding" (@napi-rs/simple-git optional dependency bug)
+      - name: Install dependencies (legacy peer deps + optional native deps fix)
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install --legacy-peer-deps
 
       - name: Build
         run: npm run build
