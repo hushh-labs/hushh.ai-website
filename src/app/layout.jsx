@@ -74,15 +74,6 @@ export const metadata = {
       },
     ],
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
-  },
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#000000' },
-  ],
   verification: {
     google: "2yMPgnyqy54zZFkGkUxbtKD_9R60gWhe5Hk-DTYff9M"
   },

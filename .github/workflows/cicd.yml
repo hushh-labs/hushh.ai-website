@@ -43,15 +43,16 @@ jobs:
           cache: "npm"
 
       # Fix for: "Cannot find native binding" (@napi-rs/simple-git optional dependency bug)
-      - name: Install dependencies (legacy peer deps + optional native deps fix)
+      - name: Install dependencies (clean, deterministic)
         run: |
-          rm -rf node_modules package-lock.json
-          npm install --legacy-peer-deps
+          npm ci --legacy-peer-deps
 
       - name: Build
         run: npm run build
         env:
           CI: true
+          # Make CI closer to a "minimal env" to catch missing NEXT_PUBLIC_* locally too
+          NEXT_TELEMETRY_DISABLED: 1
 
   slack_ci_success:
     name: Slack notify (CI success)
