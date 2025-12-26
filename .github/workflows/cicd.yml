@@ -45,7 +45,8 @@ jobs:
       # Fix for: "Cannot find native binding" (@napi-rs/simple-git optional dependency bug)
       - name: Install dependencies (clean, deterministic)
         run: |
-          npm ci --legacy-peer-deps
+          rm -rf node_modules package-lock.json
+          npm install --legacy-peer-deps
 
       - name: Build
         run: npm run build
