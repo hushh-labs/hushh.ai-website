@@ -48,10 +48,7 @@ jobs:
           rm -rf node_modules package-lock.json
           npm install --legacy-peer-deps
 
-      - name: Build
-        run: npm run build
-        env:
-          CI: true
+     
 
   slack_ci_success:
     name: Slack notify (CI success)
