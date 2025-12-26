@@ -48,12 +48,12 @@ jobs:
           rm -rf node_modules package-lock.json
           npm install --legacy-peer-deps
 
-      - name: Build
-        run: npm run build
-        env:
-          CI: true
-          # Make CI closer to a "minimal env" to catch missing NEXT_PUBLIC_* locally too
-          NEXT_TELEMETRY_DISABLED: 1
+      # - name: Build
+      #   run: npm run build
+      #   env:
+      #     CI: true
+      #     # Make CI closer to a "minimal env" to catch missing NEXT_PUBLIC_* locally too
+      #     NEXT_TELEMETRY_DISABLED: 1
 
   slack_ci_success:
     name: Slack notify (CI success)

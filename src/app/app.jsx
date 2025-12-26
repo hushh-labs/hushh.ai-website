@@ -1,6 +1,4 @@
-import { Viewport } from 'next';
-
-export const viewport: Viewport = {
+export const viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
@@ -10,3 +8,13 @@ export const viewport: Viewport = {
     { media: '(prefers-color-scheme: dark)', color: 'black' },
   ],
 };
+
+export default function RootLayout({
+  children,
+}) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}
