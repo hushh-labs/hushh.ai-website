@@ -26,41 +26,13 @@ import Head from "next/head";
 import BgAnimation from "../../../public/Gif/bgAnimation.gif";
 import VibeSearchGif from "../../../public/Gif/vibeSearchGIf.gif";
 // vibeSearchDemo_s1bdkh
-import { CldVideoPlayer, getCldOgImageUrl } from "next-cloudinary";
 import "next-cloudinary/dist/cld-video-player.css";
-import { Metadata } from "next";
+import dynamic from "next/dynamic";
 
-const url = getCldOgImageUrl({
-  src: "vibeSearchDemo_s1bdkh",
-});
-
-const ogImageUrl = getCldOgImageUrl({
-  src: "vibeSearchDemo_s1bdkh",
-  format: "jpg",
-});
-
-const twitterImageUrl = getCldOgImageUrl({
-  src: "vibeSearchDemo_s1bdkh",
-  format: "webp",
-});
-
-export const metadata = {
-  title: "Hushh Button Developer Walkthrough Video",
-  description: "A guide to hushh button features",
-  openGraph: {
-    images: [
-      {
-        width: 1200,
-        height: 627,
-        url: ogImageUrl,
-        src: "vibeSearchDemo_s1bdkh",
-      },
-    ],
-  },
-  // twitter: {
-  //   images: [twitterImageUrl],
-  // },
-};
+const CldVideoPlayer = dynamic(
+  () => import("next-cloudinary").then((mod) => mod.CldVideoPlayer),
+  { ssr: false }
+);
 
 const ClientVibeSearch = () => {
   const gradient = "linear-gradient(265.3deg, #E54D60 8.81%, #A342FF 94.26%)";
