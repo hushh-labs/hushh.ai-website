@@ -3,14 +3,22 @@
       "title": "User Guide",
     "display": "hidden"
     },
+    "investor-onboarding": {
+      "title": "Investor Onboarding",
+      "order": 2
+    },
+    "intelligence-portal": {
+      "title": "Intelligence Portal",
+      "order": 1
+    },
     "on-boarding": {
       "title": "On Boarding",
-      "order": 1
+      "order": 3
     },
 
     "rootEndpoints": {
       "title": "Endpoints",
-      "order": 2
+      "order": 4
     },
 
     "data-retrieval-insertion": {
@@ -20,11 +28,11 @@
 
     "support": {
       "title": "Support",
-      "order": 3
+      "order": 5
     },
     "additional-requirements": {
       "title": "Additional Requirements",
-      "order": 4
+      "order": 6
     }
   }
   

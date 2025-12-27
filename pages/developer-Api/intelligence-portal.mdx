@@ -1,0 +1,238 @@
+
+# Hushh Intelligence Portal — Post-Submit Results Guide (Agentic APIs)
+
+The **Hushh Intelligence Portal** is an internal workflow in this repo that:
+
+1. Collects a lead’s **Email**, **Full Name**, and **Phone**
+2. Calls multiple **agentic APIs** in sequence
+3. **Merges** all agent responses into one “best profile” (with **Gemini prioritized**)
+4. Renders the **Analysis Complete** results screen with a structured breakdown of user details
+
+This guide documents **exactly what is rendered after the user enters details** and how to reproduce the same behavior via APIs.
+
+Portal entry (opens in a new tab):
+<a href="https://hushh.ai/intelligence-portal" target="_blank" rel="noopener noreferrer">hushh.ai/intelligence-portal</a>
+
+---
+
+## 1) What happens after the user clicks “Analyze Profile”
+
+The UI collects:
+
+- `email`
+- `fullName`
+- `countryCode` (e.g., `+91`, `+1`)
+- `phoneNumber` (digits only; 10–15 digits)
+
+Then the portal generates a **single detailed prompt** asking an agent to return a **strict JSON** profile that includes (examples):
+
+- user ID, full name, email, phone
+- address, age, gender
+- demographics (marital status, children)
+- professional (occupation, education, income)
+- lifestyle (diet, cuisine, gym)
+- technology + interests
+- needs/wants/desires
+- intents for 24h / 48h / 72h
+
+---
+
+## 2) Which agents are called (and in what order)
+
+The portal calls these agents **sequentially** (so progress can be displayed):
+
+1. `brand` — Brand/CRM Agent
+2. `hushh` — Hushh (Supabase Query) Agent
+3. `public` — OpenAI Public Data Agent
+4. `gemini` — Gemini Public Data Agent
+
+> Note: In the results merge logic, agents are merged in order **brand → hushh → public → gemini** so **Gemini overwrites/fills last** (i.e., Gemini is prioritized).
+
+---
+
+## 3) How the portal calls agents (the exact API path)
+
+From the client, the portal calls the local proxy route:
+
+```http
+POST /api/a2a/{agent}
+Content-Type: application/json
+```
+
+So for example:
+
+- `/api/a2a/brand`
+- `/api/a2a/hushh`
+- `/api/a2a/public`
+- `/api/a2a/gemini`
+
+> If you’re calling from outside the app, use the fully-qualified site URL:
+> `https://hushh.ai/api/a2a/{agent}`
+
+### Request body
+
+The proxy accepts:
+
+```json
+{
+  "text": "<prompt>",
+  "sessionId": "session-1735...",
+  "id": "task-abc123"
+}
+```
+
+`sessionId` and `id` are optional.
+
+---
+
+## 4) Reproducing the portal with cURL (agent-by-agent)
+
+Use the same prompt text you’d send via the UI.
+
+### Public Data Agent
+
+```bash
+curl -X POST "https://hushh.ai/api/a2a/public" \
+  -H "Content-Type: application/json" \
+  -d "{\"text\":\"Can you provide me with a detailed JSON profile of John Doe having email john.doe@example.com and phone +1 4085551234. The output should strictly be in JSON format.\"}"
+```
+
+### Gemini Public Data Agent
+
+```bash
+curl -X POST "https://hushh.ai/api/a2a/gemini" \
+  -H "Content-Type: application/json" \
+  -d "{\"text\":\"Can you provide me with a detailed JSON profile of John Doe having email john.doe@example.com and phone +1 4085551234. The output should strictly be in JSON format.\"}"
+```
+
+### Hushh (Supabase Query) Agent
+
+```bash
+curl -X POST "https://hushh.ai/api/a2a/hushh" \
+  -H "Content-Type: application/json" \
+  -d "{\"text\":\"Can you fetch all the details of the user having email john.doe@example.com and phone +1 4085551234? Return JSON.\"}"
+```
+
+### Brand (CRM) Agent
+
+```bash
+curl -X POST "https://hushh.ai/api/a2a/brand" \
+  -H "Content-Type: application/json" \
+  -d "{\"text\":\"Create a JSON profile for John Doe (email john.doe@example.com, phone +1 4085551234) and summarize top preferences and intents.\"}"
+```
+
+---
+
+## 5) How the portal merges the agent outputs (important)
+
+After all agent calls finish, the portal:
+
+1. Extracts a text blob from common JSON-RPC response shapes (e.g., `result.status.message.parts[0].text`)
+2. Strips markdown fences like ```json
+3. Parses JSON
+4. If the JSON has a `userProfile` wrapper, it merges `userProfile`
+5. Merges agents in this order: `brand` → `hushh` → `public` → `gemini`
+
+This means:
+
+- If multiple agents provide the same field, the value from **Gemini wins** (because it merges last)
+- If a field is missing from some sources, later sources can fill it
+
+---
+
+## 6) What the “Analysis Complete” screen renders
+
+After merging, the portal renders these sections and fields.
+
+### BASIC INFORMATION
+
+- Full Name
+- Email
+- Phone
+- Age
+- Gender
+
+### LOCATION
+
+- Address
+- City
+- State
+- Postal Code
+- Country
+
+### DEMOGRAPHICS
+
+- Marital Status
+- Household Size
+- Children Count
+
+### PROFESSIONAL
+
+- Occupation
+- Education
+- Income Bracket
+- Home Ownership
+- City Tier
+
+### LIFESTYLE
+
+- Diet Preference
+- Favorite Cuisine
+- Coffee or Tea
+- Fitness Routine
+- Gym Membership
+- Shopping Preference
+- Grocery Store Type
+- Fashion Style
+- Transport
+- Sleep Chronotype
+- Eco-Friendliness
+
+### TECHNOLOGY
+
+- Tech Affinity
+- Primary Device
+- Favorite Social Platform
+- Social Media Usage Time
+- Content Preference
+
+### INTERESTS
+
+- Sports Interest
+- Gaming Preference
+- Travel Frequency
+
+### INTENT ANALYSIS
+
+- Needs (array)
+- Wants (array)
+- Desires (array)
+- Intent Timeline:
+  - 24 hours: category, budget, timeWindow, confidence
+  - 48 hours: category, budget, timeWindow, confidence
+  - 72 hours: category, budget, timeWindow, confidence
+
+### ANALYSIS METADATA
+
+- Confidence Score (from `confidence_score` / `confidence`)
+- Accuracy Score (from `accuracy_score` / `accuracy`)
+- Total Fields (count of keys in merged JSON)
+- Response Time (average across agents)
+
+---
+
+## 7) Viewing Raw Data (debugging)
+
+The portal also provides a **Show Raw Data** modal that displays:
+
+- The submitted user input
+- The merged/parsed profile JSON
+- The full per-agent result payloads
+- Metadata
+
+---
+
+## Next steps
+
+- Open the Intelligence Portal:
+  <a href="https://hushh.ai/intelligence-portal" target="_blank" rel="noopener noreferrer">hushh.ai/intelligence-portal</a>
