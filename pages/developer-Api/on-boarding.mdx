@@ -1,81 +1,45 @@
 import Onboarding from '../../src/app/_components/developerApiContent/onboarding'
-import { Callout } from 'nextra/components'
-import ValidateToken from '../../src/app/_components/developerApiContent/validateToken'
-import { Steps } from 'nextra/components'
+import { Callout, Steps } from 'nextra/components'
 import '../fonts.css'
 import ProfileSetup from '../../src/app/_components/developerApiContent/profileSetup'
 import GenerateApiKey from '../../src/app/_components/developerApiContent/generateApiKey'
 import SessionToken from '../../src/app/_components/developerApiContent/sessionToken'
 
 <Steps>
-### Sign Up
-Welcome to our Developer API On Boarding
-To access our API, you must first sign up for an account using the Google or Apple sign-in options provided below. Simply click on your preferred authentication method to get started. After successful authentication, you'll be able to generate your API key, which is essential for authenticating your API requests.
+### Sign up
+Create your developer account to access the Hushh Agentic Developer APIs.
 
-<Onboarding/>
+<Onboarding />
 
-<Callout type="info" emoji="ℹ️">
- You need to Sign Up to access API key first to proceed further and then can access Access Token
+<Callout type="info">
+Sign up first so you can generate your API key and session token.
 </Callout>
 
-### Profile Setup
-Please setup your profle to get started for using our developer APIs and this is compulsory step to proceed further as you ned to setup you whole profile 
-<ProfileSetup/>
+### Profile setup
+Complete your organization profile to unlock consent attribution.
 
-### Get Your API Key
+<ProfileSetup />
 
-You need an API key. You can obtain your API key by signing up for an account on our platform. Use this API key in the Authorization header of your HTTP requests.
+### Generate your API key
+Use this key for authenticated API requests.
 
-#### Access to your API key
+<GenerateApiKey />
 
-- **Generate a New API Key**: If you are setting up for the first time or need a new key, you can generate one. This will create a new API key that you can use immediately.
-
-<GenerateApiKey/>
-
-
-<Callout type="warning" emoji="⚠️">
- Make sure to never post your API publicly
+<Callout type="warning">
+Never share your API key publicly.
 </Callout>
-### Get Your Session Token
 
-After obtaining your API key, you'll need to generate a session token for secure API interactions. This token authenticates your requests and provides temporary access to our services. Session tokens expire after a set period for enhanced security.
+### Generate your session token
+Session tokens are required for secure agent calls.
 
-<SessionToken/>
-
-
-
-
-
-
-
-
-{/*
-### Get your session token
-
-To interact with our API securely, you need to obtain a session token. This token is essential for authenticating your requests and ensuring secure communication with our services. Follow these steps to get your session token:
-<SessionToken/>
-<Callout type="warning" emoji="⚠️">
- Make sure to never post your session token publicly
-</Callout>
-*/}
-
-
-
-
-
-
-
-
+<SessionToken />
 </Steps>
 
 ----
 
-
-
 ### Support
-If you have any questions or need assistance, please contact our support team 
-at sales@hushh.ai
+If you have questions, contact sales@hushh.ai or support@hushh.ai
 
 ----
 
-© Copyright 2024. HushOne Inc. All rights reserved.
+Copyright 2024. HushOne Inc. All rights reserved.

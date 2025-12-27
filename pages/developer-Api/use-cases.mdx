@@ -1,0 +1,62 @@
+---
+title: Use Cases
+---
+
+# Use Cases (Agentic APIs)
+
+This page focuses on developer-driven use cases for the Hushh Agentic Developer APIs.
+
+## Luxury clienteling (LVMH)
+
+- Cross-maison visibility into consented preferences
+- VIP outreach informed by Public and Gemini enrichment
+- Brand affinity signals mapped into CRM segments
+
+## Retail and telecom ecosystems (Reliance)
+
+- Unified profiles across Jio, retail, and digital products
+- Lower onboarding friction with Day 0 enrichment
+- Consent-led personalization at scale
+
+## Example workflow (Sundar Pichai)
+
+```http
+POST /api/a2a/hushh-profile
+Content-Type: application/json
+
+{
+  "text": "Create a profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001."
+}
+```
+
+```http
+POST /api/a2a/public
+Content-Type: application/json
+
+{
+  "text": "Provide a detailed JSON profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001."
+}
+```
+
+```http
+POST /api/a2a/gemini
+Content-Type: application/json
+
+{
+  "text": "Provide a detailed JSON profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001."
+}
+```
+
+```http
+POST /api/a2a/brand
+Content-Type: application/json
+
+{
+  "text": "Summarize likes, dislikes, and brand affinity for Sundar Pichai."
+}
+```
+
+## Implementation notes
+
+- MuleSoft orchestrates all agent calls using JSON-RPC 2.0
+- Plaid signals (if enabled) are added server side before brand normalization

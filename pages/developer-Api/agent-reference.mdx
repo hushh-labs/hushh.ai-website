@@ -1,0 +1,161 @@
+---
+title: Agent Reference
+---
+import { Callout } from 'nextra/components'
+
+# Agent Reference
+
+This page documents the core MuleSoft agents behind the Hushh Agentic Developer APIs.
+
+## A2A JSON-RPC 2.0 envelope
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "task-124",
+  "method": "tasks/send",
+  "params": {
+    "sessionId": "session-456",
+    "message": {
+      "role": "user",
+      "parts": [
+        {
+          "type": "text",
+          "text": "Provide a detailed JSON profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001."
+        }
+      ]
+    }
+  }
+}
+```
+
+<Callout type="info">
+For browser-based testing, use `/api/a2a/{agent}`. Use direct MuleSoft endpoints from your backend only.
+</Callout>
+
+## Integration flow in Hushh
+
+1) User submits name, email, and phone  
+2) MuleSoft constructs the JSON-RPC request  
+3) Agent responds with a `userProfile` JSON payload  
+4) DataWeave transforms and stores the profile in Hushh data stores  
+
+## Error handling
+
+| Code | Description | Resolution |
+| --- | --- | --- |
+| 400 | Invalid JSON-RPC format | Validate the request body schema |
+| 401 | Unauthorized | Check credentials or rotate keys |
+| 500 | Internal agent error | Retry with backoff or contact support |
+| TIMEOUT | Agent took too long | Reduce payload size or split requests |
+
+## OpenAI Public Data Agent
+
+- Purpose: enrich profiles from public signals
+- Model: GPT-4.0 mini
+- Proxy endpoint: `POST /api/a2a/public`
+- MuleSoft endpoint: `https://hushh-open-ai-agent-app-bubqpu.5sc6y6-3.usa-e2.cloudhub.io/public-data-agent`
+
+### Sample prompt (Sundar Pichai)
+
+```
+Provide a detailed JSON profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001.
+```
+
+### Sample response (trimmed)
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "task-124",
+  "result": {
+    "sessionId": "session-456",
+    "status": {
+      "state": "completed",
+      "message": {
+        "role": "agent",
+        "parts": [
+          {
+            "type": "text",
+            "text": {
+              "userProfile": {
+                "fullName": "Sundar Pichai",
+                "phone": "+1 6505559001",
+                "email": "sundar.pichai@example.com",
+                "city": "Mountain View",
+                "occupation": "CEO",
+                "dietPreference": "Vegetarian"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+```
+
+## Gemini Public Data Agent
+
+- Purpose: high-confidence enrichment and gap filling
+- Model: gemini-2.5-pro
+- Proxy endpoint: `POST /api/a2a/gemini`
+- MuleSoft endpoint: `https://hushh-gemini-ai-agent-app-bubqpu.5sc6y6-3.usa-e2.cloudhub.io/public-data-agent`
+
+## Supabase Profile Creation Agent
+
+- Purpose: create a structured profile from natural language
+- Proxy endpoint: `POST /api/a2a/hushh-profile`
+- MuleSoft endpoint: `https://hushh-supabase-agent-app-bubqpu.5sc6y6-2.usa-e2.cloudhub.io/supabase-agent`
+
+Example prompt:
+
+```
+Create a profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001.
+```
+
+## Supabase Profile Update Agent
+
+- Purpose: update profile fields with natural language
+- Proxy endpoint: `POST /api/a2a/hushh-profile-update`
+- MuleSoft endpoint: `https://hushh-supabase-agent-app-bubqpu.5sc6y6-2.usa-e2.cloudhub.io/supabase-agent`
+
+Example prompt:
+
+```
+Update the city for Sundar Pichai to Mountain View.
+```
+
+## Supabase Profile Query Agent
+
+- Purpose: fetch full profiles from Supabase
+- Proxy endpoint: `POST /api/a2a/hushh`
+- MuleSoft endpoint: `https://hushh-supabase-query-agent-app-bubqpu.5sc6y6-2.usa-e2.cloudhub.io/supabase-query-agent`
+
+Example prompt:
+
+```
+Fetch all details for Sundar Pichai with phone +1 6505559001.
+```
+
+## Brand User Data Query Agent
+
+- Purpose: retrieve brand preferences and CRM-ready insights
+- Model: GPT-4.0 mini
+- Proxy endpoint: `POST /api/a2a/brand`
+- MuleSoft endpoint: `https://hushh-brand-agent-app-bubqpu.5sc6y6-4.usa-e2.cloudhub.io/crm-agent`
+
+This agent acts as the bridge between brand assistants and CRM data, returning a conversational summary plus structured insights.
+
+Example prompt:
+
+```
+Summarize brand preferences and purchase intents for Sundar Pichai.
+```
+
+### Example queries
+
+- Fetch all details for Sundar Pichai with phone +1 6505559001.
+- Fetch all intents for Sundar Pichai with phone +1 6505559001.
+- Fetch all wants and desires for Sundar Pichai with phone +1 6505559001.
+- What is the occupation and education level for Sundar Pichai?

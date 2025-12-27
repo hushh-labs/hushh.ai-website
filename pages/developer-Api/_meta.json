@@ -1,38 +1,46 @@
 {
-  "user-on-boarding": {
-      "title": "User Guide",
+  "intelligence-portal": {
+    "title": "Intelligence Portal",
+    "order": 1
+  },
+  "brand-engineering-onboarding": {
+    "title": "Brand Engineering Onboarding",
+    "order": 2
+  },
+  "rootEndpoints": {
+    "title": "Agentic Endpoints",
+    "order": 3
+  },
+  "agent-reference": {
+    "title": "Agent Reference",
+    "order": 4
+  },
+  "data-retrieval-insertion": {
+    "title": "Profile Data and Enrichment",
+    "order": 5
+  },
+  "use-cases": {
+    "title": "Use Cases",
+    "order": 6
+  },
+  "additional-requirements": {
+    "title": "Additional Requirements",
+    "order": 7
+  },
+  "support": {
+    "title": "Support",
+    "order": 8
+  },
+  "on-boarding": {
+    "title": "Developer Console Setup",
     "display": "hidden"
-    },
-    "investor-onboarding": {
-      "title": "Investor Onboarding",
-      "order": 2
-    },
-    "intelligence-portal": {
-      "title": "Intelligence Portal",
-      "order": 1
-    },
-    "on-boarding": {
-      "title": "On Boarding",
-      "order": 3
-    },
-
-    "rootEndpoints": {
-      "title": "Endpoints",
-      "order": 4
-    },
-
-    "data-retrieval-insertion": {
-      "title": "Data Retrieval & Insertion",
-      "display": "hidden"
-    },
-
-    "support": {
-      "title": "Support",
-      "order": 5
-    },
-    "additional-requirements": {
-      "title": "Additional Requirements",
-      "order": 6
-    }
+  },
+  "user-on-boarding": {
+    "title": "Developer Onboarding",
+    "display": "hidden"
+  },
+  "investor-onboarding": {
+    "title": "Investor Onboarding",
+    "display": "hidden"
   }
-  
+}

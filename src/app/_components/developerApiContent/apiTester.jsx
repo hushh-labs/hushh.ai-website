@@ -17,8 +17,19 @@ import { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import axios from "axios";
 
-// Example Base URL
-const BASE_URL = "https://hushh-api-53407187172.us-central1.run.app";
+const FALLBACK_BASE_URL = "https://hushh.ai";
+
+const resolveBaseUrl = (endpointBaseUrl) => {
+  if (endpointBaseUrl) {
+    return endpointBaseUrl;
+  }
+
+  if (typeof window !== "undefined" && window.location?.origin) {
+    return window.location.origin;
+  }
+
+  return FALLBACK_BASE_URL;
+};
 
 /**
  * Generates a dummy JSON object based on the endpoint.requestBody definition.
@@ -44,8 +55,17 @@ function generateDummyData(requestBodyDefinition) {
     const fieldType = definition.type;
 
     if (fieldType === "string") {
-      // Provide a generic string placeholder
-      result[key] = `dummy_${key}`;
+      if (key === "text") {
+        result[key] =
+          "Provide a detailed JSON profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001.";
+      } else if (key === "sessionId") {
+        result[key] = "session-456";
+      } else if (key === "id") {
+        result[key] = "task-124";
+      } else {
+        // Provide a generic string placeholder
+        result[key] = `dummy_${key}`;
+      }
     } else if (fieldType === "number") {
       // Provide a generic numeric placeholder
       result[key] = 123;
@@ -110,7 +130,10 @@ const ApiSection = ({ endpoint, apiKey }) => {
   const handleSubmit = async () => {
     // Construct query string
     const queryString = new URLSearchParams(queryParams).toString();
-    const fullUrl = `${BASE_URL}${endpoint.path}${
+    const baseUrl = resolveBaseUrl(endpoint?.baseUrl);
+    const isAbsolutePath = /^https?:\/\//i.test(endpoint?.path || "");
+    const urlRoot = isAbsolutePath ? "" : baseUrl;
+    const fullUrl = `${urlRoot}${endpoint.path}${
       queryString ? "?" + queryString : ""
     }`;
     setRequestedUrl(fullUrl);
@@ -154,21 +177,27 @@ const ApiSection = ({ endpoint, apiKey }) => {
       p={4}
       borderWidth="1px"
       borderRadius="md"
+      borderColor="gray.200"
       bg="white"
-      shadow="md"
-      transition="all 0.3s ease"
-      _hover={{ transform: "translateY(-4px)", shadow: "lg" }}
+      shadow="sm"
+      transition="all 0.2s ease"
+      _hover={{ shadow: "md" }}
     >
       {/* Header */}
       <Flex justify="space-between" align="center" onClick={onToggle} cursor="pointer">
-        <Flex align="center">
-          <Badge colorScheme="green" mr={3}>
-            {endpoint?.method || "POST"}
-          </Badge>
-          <Text color="gray.500">{endpoint?.description}</Text>
+        <Flex align="center" gap={3}>
+          <Badge colorScheme="green">{endpoint?.method || "POST"}</Badge>
+          <Text fontFamily="mono" fontSize="sm" color="gray.800">
+            {endpoint?.path}
+          </Text>
         </Flex>
         <Icon as={isOpen ? FaChevronUp : FaChevronDown} boxSize={5} />
       </Flex>
+      {endpoint?.description && (
+        <Text mt={2} fontSize="sm" color="gray.500">
+          {endpoint.description}
+        </Text>
+      )}
 
       {/* Collapsible Content */}
       <Collapse in={isOpen} animateOpacity>
@@ -231,7 +260,7 @@ const ApiSection = ({ endpoint, apiKey }) => {
           {/* Send Request Button */}
           <button
             onClick={handleSubmit}
-            className=" bg-[#bd1e59] text-white inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary-foreground h-10 px-4 py-2 mt-4"
+            className="bg-[#0a2540] text-white inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 mt-4"
           >
             Send Request
           </button>

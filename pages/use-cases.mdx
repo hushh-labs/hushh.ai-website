@@ -4,66 +4,50 @@ title: "Use Cases"
 
 # Use Cases
 
-## 3.1 Retail Businesses
+These use cases show how Hushh Agentic Developer APIs deliver consented customer intelligence for enterprise brands.
 
-Leverage Hushh’s consent-driven, user-owned data to bring next-level personalization to your retail operations—be it luxury boutiques or global e-commerce platforms.
+## LVMH and luxury maisons
 
-### Precision Marketing
+### Clienteling and VIP personalization
+- Build a unified profile across maisons for high-value clients.
+- Trigger personalized outreach based on verified preferences and intents.
 
-- **Targeted Campaigns**: Send bespoke marketing materials based on users’ actual purchase history and browsing patterns.
-- **Dynamic Segmentation**: Segment customers by precise spend thresholds, preferred brands, or style preferences.
+### Private events and concierge
+- Use agent-enriched profiles to craft bespoke invitations.
+- Activate preferences for styling, beauty, and travel in real time.
 
-### Elevated Customer Experience
+## Reliance ecosystems
 
-- **Data-Backed Styling**: Use real-time fashion data (color, size, brand affinity) to showcase items that perfectly match each user’s style profile.
-- **Concierge-Level Service**: Offer “white glove” experiences in luxury retail, combining purchasing trends and browsing behaviors for truly VIP treatment.
-- **Personalized Upsells**: Suggest complementary products and accessories based on the user’s existing fashion, food, or travel interests.
+### Omnichannel segmentation
+- Unify customer context across retail, telecom, and digital services.
+- Improve loyalty performance with consented brand affinities.
 
-### Loyalty & Retention
+### New user acceleration
+- Reduce cold-start friction by enriching profiles on Day 0.
+- Personalize offers without long onboarding forms.
 
-- **Customized Rewards**: Craft loyalty programs that resonate with each user—offering perks on items they’ve shown interest in.
-- **Predictive Restocking**: Anticipate a user’s product needs (e.g., favorite cosmetics or subscription items) and proactively inform them of restocks or new arrivals.
-- **Ongoing Engagement**: Continually refresh recommendations using updated browsing and purchase data, keeping customers engaged over time.
+## Marketing and CRM teams
 
-#### Example:
-A high-end fashion retailer uses Hushh to gather receipt data from consenting customers. By analyzing each user’s preferences—like color choices and average spend—they send targeted invites to exclusive “Style Previews” and offer personalized styling sessions.
+### Precision targeting with consent
+- Translate profile signals into CRM-ready segments.
+- Improve response rates with relevant, respectful outreach.
 
----
+### Brand affinity scoring
+- Map purchases and preferences into brand-level insights.
+- Use agent output to power lifecycle campaigns.
 
-## 3.2 Application Developers
+## Example (Sundar Pichai onboarding)
 
-From indie devs to enterprise teams, Hushh’s APIs simplify data integration and compliance so you can focus on building amazing user experiences.
+1) Create a profile with the Supabase Profile Creation Agent  
+2) Enrich with OpenAI Public Data and Gemini Public Data agents  
+3) Normalize likes, dislikes, and affinities with the Brand agent  
+4) Activate in CRM or personalization systems
 
-### Consent-Driven Data
+## How it works
 
-- **No Legal Headaches**: Hushh handles explicit user opt-ins and data permissions, so you don’t have to build privacy frameworks from scratch.
-- **Seamless Data Flow**: Pull in relevant user data (health, receipts, brand surveys) directly into your app, ensuring clarity about where and how it’s used.
+- MuleSoft orchestrates A2A JSON-RPC calls to each agent
+- Public and Gemini agents enrich from consented identifiers
+- Supabase agents create, update, and query structured profiles
+- The Brand agent converts signals into CRM-ready insights
 
-### Personalization
-
-- **Hyper-Personalized Interactions**: Deliver tailored chat responses, custom dashboards, or recommended content based on each user’s unique data profile.
-- **Context-Aware Chatbots**: Enhance chatbot conversations with actual user preferences, allowing for more fluid, human-like interactions.
-- **In-App Recommendations**: Surface the most relevant product offers or article suggestions, using real-time brand preference updates.
-
-### Compliance & Privacy
-
-- **GDPR-Ready**: All data requests come via the Hushh platform, ensuring transparent, user-approved usage.
-- **Secure & Encrypted**: Robust encryption standards protect user data at rest and in transit.
-
-### Innovation & Scalability
-
-- **Ease of Integration**: Straightforward APIs and well-documented endpoints help you integrate advanced data insights into your app quickly.
-- **Agile Iterations**: As user preferences shift, your application can pull the latest data.
-
-#### Example:
-A fitness app developer wants to incorporate users’ dietary preferences (from Hushh’s Food Data) and receipts from health-related purchases. By cross-referencing both datasets, the app delivers specialized meal plans, daily health tips, and integrated shopping lists—drastically improving user engagement and satisfaction.
-
----
-
-## Key Takeaways
-
-- **Retail Businesses** can use Hushh to refine marketing strategies, elevate customer journeys, and power loyalty programs with data-driven insights.
-- **Application Developers** can safely tap into robust, user-consented data streams—without worrying about privacy violations—thereby creating apps that feel uniquely attuned to each user’s needs.
-
-### Ready to start building your next game-changing feature?
-Check out our [Quick Start](./quick-start.mdx) guide or jump into the [API Reference](./api-reference.mdx) to see how you can integrate Hushh APIs today.
+If you want a tailored walkthrough for LVMH or Reliance, contact sales@hushh.ai.
