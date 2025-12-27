@@ -2,70 +2,45 @@
 title: Support
 ---
 
-# 4. Support
-We’re here to ensure your journey with **Hushh Developer APIs** is as smooth as possible. Below you’ll find details on how to get in touch, answers to common questions, and links to further resources.
+# Support
 
----
+This section helps engineering and product teams troubleshoot integrations with Hushh Agentic Developer APIs.
 
-## 4.1 Contact Details
+## Contact
 
-📩 **Email**: [sales@hushh.ai](mailto:sales@hushh.ai)  
-Reach out for **technical support, partnership inquiries, or general questions** about using Hushh.
+- Sales and partnerships: sales@hushh.ai
+- Technical support: support@hushh.ai (Enterprise SLAs available by contract.)
 
-🌐 **Website**: [hushh.ai](https://hushh.ai)  
-Explore our website for the **latest news, product updates, and developer announcements**.
+## What to include in a support request
 
----
+Provide these fields so we can trace your agent calls quickly:
 
-## 4.2 FAQs
+- Organization name and environment (sandbox or production)
+- Endpoint path (for example `/api/a2a/public`)
+- `sessionId` and `id` from your JSON-RPC payload
+- Timestamp and timezone
+- Response snippet with `upstreamStatus` (if using `/api/a2a`)
 
-### **🔹 How do I switch from test mode to live mode?**
-Your **API key** determines whether requests are handled in **test or live mode**.  
-Once you’re ready for production, **generate or request a live-mode API key** and update your credentials accordingly.  
-> ⚠️ **Note:** Currently, our live mode is **not yet available**.
+## Common issues and fixes
 
-### **🔹 What if a user revokes consent after data has been retrieved?**
-If a user **revokes consent**, you must:
-- **Cease further data pulls** for that data scope.
-- **Delete or anonymize** any locally stored copies if requested by the user.
-- You **will not be able to access updated data** after consent has been revoked.
+### 400 Invalid JSON-RPC
+- Cause: malformed payload or missing `jsonrpc`, `method`, or `params`.
+- Fix: validate the JSON-RPC structure and resend.
 
-### **🔹 Do you store all user data permanently?**
-Hushh **respects user ownership**. Data is:
-✅ **Stored securely** only with explicit **user permission**.  
-✅ **Deleted upon user request**, adhering to **GDPR and similar regulations**.
+### 401 Unauthorized
+- Cause: invalid credentials or missing authorization in the MuleSoft flow.
+- Fix: rotate your API key in the console and retry.
 
-### **🔹 How do I handle token expiration?**
-If you receive a **token-expired** error:
-1. Call the **`/sessiontoken`** endpoint again.
-2. Use your **valid API key** and **email** to obtain a **new session token**.
+### 500 Internal Agent Error
+- Cause: upstream agent failed or timed out.
+- Fix: retry with exponential backoff and send the request ID to support if it persists.
 
-### **🔹 Can I cache data for offline usage?**
-✅ If your use case **requires caching**, ensure:
-- Users are **informed**.
-- You **comply with privacy regulations**.
-- Data is **only cached for a legitimate purpose** agreed upon by the user.
+### Timeout
+- Cause: payload too large or upstream agent latency.
+- Fix: reduce the prompt length or split the request into smaller tasks.
 
----
+## Debugging tips
 
-## 4.3 Further Resources
-
-📖 **Developer Guides & Quick Start**  
-Refer to our **[Getting Started](/getting-started)** section to kick off your integration journey.
-
-📌 **API Reference**  
-For in-depth **endpoint documentation, schemas, and code samples**, visit our **[API Reference](/api-reference)**.
-
-🔔 **Changelog / Release Notes**  
-Keep an eye on **Hushh’s update feed** (accessible via your **developer dashboard**) for:
-- **Feature releases**
-- **Bug fixes**
-- **New API endpoints**
-
----
-
-## **Need More Help?**
-If you can’t find answers in our **documentation or FAQs**, contact our support team at **[sales@hushh.ai](mailto:sales@hushh.ai)**.  
-💡 We’re always here to help you build **secure, compliant, and user-friendly solutions** with **Hushh Developer APIs**.
-
-🚀 **Happy Coding!**
+- Use `/api/a2a/{agent}` for browser-based testing in these docs.
+- Call direct MuleSoft endpoints from your backend only (no browser secrets).
+- Always include `sessionId` and `id` for end-to-end tracing.
