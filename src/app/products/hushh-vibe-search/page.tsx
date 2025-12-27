@@ -2,6 +2,7 @@ import React from "react";
 import ClientVibeSearch from "../../clientside/VibeSearch";
 import { siteMetadata } from "../../sitemetadata";
 import ContentWrapper from "../../_components/layout/ContentWrapper";
+
 export const metadata = {
   title: "Hushh Vibe Search | Find Perfect Items with One-Click Personalization",
   description:
