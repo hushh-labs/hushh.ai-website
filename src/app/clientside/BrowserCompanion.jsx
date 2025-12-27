@@ -24,41 +24,13 @@ import ContactForm from "../_components/features/contactForm";
 import BgAnimation from "../../../public/Gif/bgAnimation.gif";
 import BrowserGif from "../../../public/Gif/browserGifBg.gif";
 import TypingGIF from "../../../public/Gif/typing.gif";
-import { CldVideoPlayer, getCldOgImageUrl } from "next-cloudinary";
 import "next-cloudinary/dist/cld-video-player.css";
-import { Metadata } from "next";
+import dynamic from "next/dynamic";
 
-const url = getCldOgImageUrl({
-  src: "hushh_browser_companion_j2rfyq",
-});
-
-const ogImageUrl = getCldOgImageUrl({
-  src: "hushh_browser_companion_j2rfyq",
-  format: "jpg",
-});
-
-const twitterImageUrl = getCldOgImageUrl({
-  src: "hushh_browser_companion_j2rfyq",
-  format: "webp",
-});
-
-export const metadata = {
-  title: "Hushh Browser Companion",
-  description: "A guide to hushh browser companion features",
-  openGraph: {
-    images: [
-      {
-        width: 1200,
-        height: 627,
-        url: ogImageUrl,
-        src: "hushh_browser_companion_j2rfyq",
-      },
-    ],
-  },
-  // twitter: {
-  //   images: [twitterImageUrl],
-  // },
-};
+const CldVideoPlayer = dynamic(
+  () => import("next-cloudinary").then((mod) => mod.CldVideoPlayer),
+  { ssr: false }
+);
 
 const ClientBrowserCompanion = () => {
   const gradient = "linear-gradient(265.3deg, #E54D60 8.81%, #A342FF 94.26%)";

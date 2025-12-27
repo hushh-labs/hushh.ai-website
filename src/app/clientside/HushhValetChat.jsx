@@ -24,41 +24,13 @@ import ContactForm from "../_components/features/contactForm";
 import BgAnimation from "../../../public/Gif/bgAnimation.gif";
 import { useState, useEffect } from "react";
 import ValetChatGif from "../../../public/Gif/valeTChatBg.gif";
-import { CldVideoPlayer, getCldOgImageUrl } from "next-cloudinary";
 import "next-cloudinary/dist/cld-video-player.css";
-import { Metadata } from "next";
+import dynamic from "next/dynamic";
 
-const url = getCldOgImageUrl({
-  src: "Valet_Chat_Hushh_Research_and_Labs_pfjt3j",
-});
-
-const ogImageUrl = getCldOgImageUrl({
-  src: "Valet_Chat_Hushh_Research_and_Labs_pfjt3j",
-  format: "jpg",
-});
-
-const twitterImageUrl = getCldOgImageUrl({
-  src: "Valet_Chat_Hushh_Research_and_Labs_pfjt3j",
-  format: "webp",
-});
-
-export const metadata = {
-  title: "Hushh Valet Chat Walkthrough Video",
-  description: "A guide to hushh Valet Chat features",
-  openGraph: {
-    images: [
-      {
-        width: 1200,
-        height: 627,
-        url: ogImageUrl,
-        src: "Valet_Chat_Hushh_Research_and_Labs_pfjt3j",
-      },
-    ],
-  },
-  // twitter: {
-  //   images: [twitterImageUrl],
-  // },
-};
+const CldVideoPlayer = dynamic(
+  () => import("next-cloudinary").then((mod) => mod.CldVideoPlayer),
+  { ssr: false }
+);
 
 const ClientHushhValetChat = () => {
   const gradient = "linear-gradient(265.3deg, #E54D60 8.81%, #A342FF 94.26%)";
