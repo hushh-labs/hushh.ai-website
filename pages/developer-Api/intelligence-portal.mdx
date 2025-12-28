@@ -94,7 +94,7 @@ Use the same prompt text you’d send via the UI.
 ```bash
 curl -X POST "https://hushh.ai/api/a2a/public" \
   -H "Content-Type: application/json" \
-  -d "{\"text\":\"Can you provide me with a detailed JSON profile of John Doe having email john.doe@example.com and phone +1 4085551234. The output should strictly be in JSON format.\"}"
+  -d "{\"text\":\"Can you provide me with a detailed JSON profile of Sundar Pichai having email sundar.pichai@example.com and phone +1 6505559001. The output should strictly be in JSON format.\"}"
 ```
 
 ### Gemini Public Data Agent
@@ -102,7 +102,7 @@ curl -X POST "https://hushh.ai/api/a2a/public" \
 ```bash
 curl -X POST "https://hushh.ai/api/a2a/gemini" \
   -H "Content-Type: application/json" \
-  -d "{\"text\":\"Can you provide me with a detailed JSON profile of John Doe having email john.doe@example.com and phone +1 4085551234. The output should strictly be in JSON format.\"}"
+  -d "{\"text\":\"Can you provide me with a detailed JSON profile of Sundar Pichai having email sundar.pichai@example.com and phone +1 6505559001. The output should strictly be in JSON format.\"}"
 ```
 
 ### Hushh (Supabase Query) Agent
@@ -110,7 +110,7 @@ curl -X POST "https://hushh.ai/api/a2a/gemini" \
 ```bash
 curl -X POST "https://hushh.ai/api/a2a/hushh" \
   -H "Content-Type: application/json" \
-  -d "{\"text\":\"Can you fetch all the details of the user having email john.doe@example.com and phone +1 4085551234? Return JSON.\"}"
+  -d "{\"text\":\"Can you fetch all the details of the user having email sundar.pichai@example.com and phone +1 6505559001? Return JSON.\"}"
 ```
 
 ### Brand (CRM) Agent
@@ -118,7 +118,7 @@ curl -X POST "https://hushh.ai/api/a2a/hushh" \
 ```bash
 curl -X POST "https://hushh.ai/api/a2a/brand" \
   -H "Content-Type: application/json" \
-  -d "{\"text\":\"Create a JSON profile for John Doe (email john.doe@example.com, phone +1 4085551234) and summarize top preferences and intents.\"}"
+  -d "{\"text\":\"Create a JSON profile for Sundar Pichai (email sundar.pichai@example.com, phone +1 6505559001) and summarize top preferences and intents.\"}"
 ```
 
 ---
@@ -236,5 +236,4 @@ The portal also provides a **Show Raw Data** modal that displays:
 
 - Open the Intelligence Portal:
   <a style={{ color: "#1d4ed8", textDecoration: "underline", textDecorationColor: "#1d4ed8" }} href="https://hushh.ai/intelligence-portal" target="_blank" rel="noopener noreferrer">hushh.ai/intelligence-portal</a>
-
 

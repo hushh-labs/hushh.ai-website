@@ -1,94 +1,57 @@
 ---
-title: Additional Considerations
+title: Additional Requirements
 ---
 
-# 3. Additional Considerations
+# Additional Requirements
 
-Beyond basic endpoint usage, there are a few critical aspects to keep in mind when working with **Hushh Developer APIs**. These considerations help ensure that your integrations remain **seamless, secure, and fully compliant** with global data protection standards.
+These requirements keep Hushh Agentic Developer API integrations safe, reliable, and compliant.
 
-## 3.1 Consent Flow
+## Consent and governance
 
-### **Overview**
-Hushh places **user consent** at the heart of data sharing. Even if a user’s data exists in Hushh, your application **must explicitly request user permission** to access it. This ensures **privacy, transparency, and compliance** with regulations like **GDPR**.
+- Request explicit user consent before any enrichment or activation.
+- Respect consent scope and purpose limitations in your product UI.
+- Stop retrieval and activation when consent is revoked.
+- Store consent receipts for audit and compliance.
 
-### **Workflow Steps**
+## Security and privacy
 
-1. **Attempt Data Retrieval**
-   - If consent has already been granted, the API will return the requested data.
-   - If consent is missing, you receive a message:
-     > **"You don’t have permission to access the data. Please request consent from the user."**
+- Use HTTPS for all calls.
+- Store API keys and secrets in a secure vault.
+- Restrict Plaid calls to server-to-server traffic only.
 
-2. **Request Consent**
-   - Call the `POST /api/v1/request-consent` endpoint to prompt the user.
-   - The user sees your application’s details (**developer info, brand name, etc.**) and decides whether to accept or reject.
+## JSON-RPC and A2A protocol
 
-3. **Immediate 3-Minute Window**
-   - Hushh keeps the request **open for 3 minutes** for an **instant response**:
-     - ✅ **Consent Granted**: You can immediately access the data.
-     - ❌ **Consent Rejected**: You cannot access the data.
+All MuleSoft agent calls use JSON-RPC 2.0 with the A2A message envelope.
 
-4. **24-Hour Pending**
-   - If the user does not act within the **3-minute window**, the request remains **pending for 24 hours**.
-   - Your application will receive a message:
-     > **"Consent request sent and awaiting user acceptance. Please check again after 24 hours."**
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "task-124",
+  "method": "tasks/send",
+  "params": {
+    "sessionId": "session-456",
+    "message": {
+      "role": "user",
+      "parts": [
+        {
+          "type": "text",
+          "text": "Provide a detailed JSON profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001."
+        }
+      ]
+    }
+  }
+}
+```
 
-5. **Check Status**
-   - After **24 hours** (or anytime in between), check if the user has responded.
-   - Once **consent is granted**, subsequent **data retrieval calls should succeed**.
+## Reliability and timeouts
 
-### **Best Practices**
-✅ **Request Consent Only When Needed**: Avoid overwhelming the user with multiple consent prompts.  
-✅ **Provide Context**: Clarify why the data is needed and how it benefits the user.  
-✅ **Handle Pending Status Gracefully**: If consent is pending, inform the user that data will be available once they respond.
+- Use retries with exponential backoff on `500` and timeout errors.
+- Keep prompts concise to reduce agent latency.
+- Track `sessionId` and `id` for auditability.
 
----
+## Compliance
 
-## 3.2 Security & Privacy
-
-### **Data Protection**
-🔐 **Encryption in Transit**: All requests and responses with Hushh APIs occur over **HTTPS (TLS/SSL)** to prevent interception.  
-🔐 **Storage Encryption**: Sensitive data at rest is **encrypted** to mitigate unauthorized access within Hushh’s infrastructure.
-
-### **Key & Token Management**
-🔑 **API Key Security**: Never expose your API key in public repositories or client-side code. Treat it as a **secret**.  
-🔑 **Session Tokens**: Automatically **expire after a set time**. Re-generate as needed to maintain **secure communication**.  
-🔑 **Revocation**: If your key or token is **compromised**, revoke and regenerate credentials promptly.
-
-### **Access Control**
-✔️ **Granular Permissions**: Hushh enforces **user-level permissions** through explicit **consent checks**.  
-✔️ **Least Privilege**: Request **only the data your application truly needs**, reducing **risk in the event of unauthorized access**.
-
----
-
-## 3.3 GDPR & Compliance
-
-### **GDPR Commitment**
-Hushh is fully committed to the principles of the **General Data Protection Regulation (GDPR)**, ensuring that personal data is:
-
-- ✅ **Processed Lawfully, Fairly, and Transparently**
-- ✅ **Collected for Specified, Explicit, and Legitimate Purposes**
-- ✅ **Minimized** to what is necessary for your application’s legitimate purpose.
-- ✅ **Accurate and Up-to-Date**
-- ✅ **Stored Securely** with strong encryption and strict access controls.
-- ✅ **Retained Only as Necessary** for the purposes authorized by the user.
-
-### **User Rights**
-Under GDPR, users have the right to:
-
-🔹 **Withdraw Consent**: They can revoke data sharing at any point.  
-🔹 **Data Portability**: Users can request their data in a structured, commonly used format.  
-🔹 **Data Erasure**: They can ask to have their data removed or anonymized.
-
-### **Developer Responsibilities**
-🛡️ **Transparent Usage**: Clearly communicate to users **how and why** their data is being processed in your app.  
-🛡️ **Honoring Requests**: If users request **deletion or withdrawal of consent**, ensure your application **stops retrieving or storing** their data.  
-🛡️ **Data Minimization**: Only request **data relevant to your service** or product requirements.
-
----
-
-## **Final Notes**
-✅ By following the **Consent Flow, Security & Privacy, and GDPR guidelines**, you ensure a **safe, user-trusting environment**.  
-✅ For **compliance inquiries or security questions**, reach out to **[sales@hushh.ai](mailto:sales@hushh.ai)**.  
-✅ Stay updated with **evolving data protection regulations**, especially if your app serves multiple regions **globally**.  
-
-🚀 **With these considerations in mind, you're now prepared to build secure, privacy-focused, and regulation-compliant solutions on top of Hushh Developer APIs!**
+- Follow GDPR and regional privacy laws for data access and retention.
+- Collect only the data required for the agreed business purpose.
+- Maintain an audit log for consent, access, and activation.
+- Define a retention policy for derived profiles and purge on request.

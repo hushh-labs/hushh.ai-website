@@ -1,134 +1,71 @@
-# Onboarding
+# Developer Onboarding (Agentic APIs)
 
-### Sign Up Through the Console
+This guide walks developers through a first integration using the Hushh Agentic Developer APIs.
 
-1. **Visit our developer console**.
-2. **Choose a sign-up method**: Google or Apple.
-3. **Authorize the connection** and complete any remaining sign-up steps (e.g., verifying your email).
-
----
-
-### Complete Your Profile
-
-- **Enter developer or company details** in the console (e.g., organization name, website, usage goals).
-- **Save profile preferences** to simplify future requests for higher data limits or advanced features.
-
-> **Tip:** A thorough profile ensures tailored experiences and efficient support.
-
----
-
-### Generate Your API Credentials
-
-1. Navigate to the **"API Keys"** section in the console.
-2. Click **"Generate Key"** to receive a unique API key for your environment (test or live).
-3. **Securely store** your API key (e.g., environment variables or a secure vault).
-
----
-
-### Get a Session Token
-
-1. Exchange your API key and email for a session token by calling:
-
-   ```bash
-   POST /sessiontoken
-   ```
-
-2. Use the session token in request headers for data retrieval or insertion endpoints:
-
-   ```bash
-   Authorization: Bearer <token>
-   ```
-
-> **Why?** The session token is short-lived, adding an extra layer of security.
-
-#### Example Request (HTTP):
+## 1) Create or query a profile
 
 ```http
-POST /sessiontoken?mail=developer@example.com&api_key=A1b2C3d4E5f6G7H8I9J0
+POST /api/a2a/hushh-profile
+Content-Type: application/json
+
+{
+  "text": "Create a profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001."
+}
 ```
 
-#### Success Response (200 OK):
-
-```json
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-```
-
-#### Possible Errors:
-- **422 Validation Error:** If mail or API key is missing or invalid.
-- **Authentication Failure:** If mail and API key don’t match any existing profile.
-
----
-
-### Validate & Refresh
-
-- **Validate:** Check if your session token is active by calling:
-
-  ```bash
-  POST /validatetoken
-  ```
-
-- **Refresh:** Re-generate a new token if expired or invalid.
-
-#### Example Request (HTTP):
+## 2) Enrich with Public and Gemini agents
 
 ```http
-POST /validatetoken?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+POST /api/a2a/public
+Content-Type: application/json
+
+{
+  "text": "Provide a detailed JSON profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001."
+}
 ```
 
-#### Success Response (200 OK):
+```http
+POST /api/a2a/gemini
+Content-Type: application/json
+
+{
+  "text": "Provide a detailed JSON profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001."
+}
+```
+
+## 3) Normalize likes and dislikes
+
+```http
+POST /api/a2a/brand
+Content-Type: application/json
+
+{
+  "text": "Summarize likes, dislikes, and brand affinity for Sundar Pichai."
+}
+```
+
+## 4) Optional: server-side Plaid signals
+
+If your tenant enables Plaid, enrich the profile with merchant and category signals on your backend and pass them into the Brand agent for normalization.
+
+## JSON-RPC envelope (direct MuleSoft)
 
 ```json
-"Token is valid."
+{
+  "jsonrpc": "2.0",
+  "id": "task-124",
+  "method": "tasks/send",
+  "params": {
+    "sessionId": "session-456",
+    "message": {
+      "role": "user",
+      "parts": [
+        {
+          "type": "text",
+          "text": "Provide a detailed JSON profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001."
+        }
+      ]
+    }
+  }
+}
 ```
-
-#### Possible Errors:
-- **422 Validation Error:** Missing or invalid token.
-- **Token Expired:** Re-generate via `/sessiontoken`.
-
----
-
-### Request User Consent
-
-1. Attempt to retrieve or insert user data.
-2. If access is denied, prompt the user for consent using:
-
-   ```bash
-   POST /api/v1/request-consent
-   ```
-
-3. Await a response within 3 minutes (immediate window) or up to 24 hours.
-
-> **Why?** User consent is at the core of Hushh’s privacy model. Only explicitly approved data can be accessed.
-
----
-
-### Data Retrieval & Insertion
-
-- Use endpoints such as:
-  - `POST /api/v1/get-receipt-data`
-  - `POST /api/v1/insert-receipt-data`
-
-- Explore other specialized endpoints for Health, Browsing, Fashion, Brand Preferences, and more.
-
----
-
-### Best Practices
-
-- **Secure Keys:** Keep API keys and tokens safe.
-- **Minimize Requests:** Respect user privacy by requesting only necessary data.
-- **Handle Errors Gracefully:** Guide users when permission or validation issues arise.
-- **Stay Updated:** Monitor announcements for new endpoints, updates, or deprecations.
-
----
-
-### Going Live
-
-1. **Test Mode vs. Live Mode:** Switch to live API key for production usage.
-2. **Monitor:** Track logs and metrics for optimization.
-3. **Support:** Reach out to [sales@hushh.ai](mailto:sales@hushh.ai) for assistance.
-
----
-
-## Ready to Build?
-
-Follow these onboarding steps and tap into Hushh’s consent-driven data ecosystem. For any questions, visit our Support page or contact us directly. **We can’t wait to see what you create!**
