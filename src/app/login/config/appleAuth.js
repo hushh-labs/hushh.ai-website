@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from '../../../lib/config/supabaseEnv';
 
 // Apple Sign-In Configuration for Supabase
 const appleAuthConfig = {
@@ -9,8 +10,8 @@ const appleAuthConfig = {
   APPLE_PRIVATE_KEY: "-----BEGIN PRIVATE KEY-----\nMIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgTiGn4rnvx4Yj9U053NKQngYpkA0XBzhu0Lp84vaelHagCgYIKoZIzj0DAQehRANCAAQhw93yeOtRHhd4ujcrwtqiVIGpH/m3k63q9NEMBCIlbXlp3ZJoW7qJSfJSUhxqcDiAs6f5lxqkwEw5FDukx+h+\n-----END PRIVATE KEY-----",
   
   // Supabase Configuration
-  SUPABASE_URL: "https://gsqmwxqgqrgzhlhmbscg.supabase.co",
-  SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzcW13eHFncXJnemhsaG1ic2NnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg3NTk5ODYsImV4cCI6MjA1NDMzNTk4Nn0.a30I6aLvNNIS6coxJbgTeGBUmKR0NvTkZUDG5uyloFY",
+  SUPABASE_URL: SUPABASE_URL,
+  SUPABASE_ANON_KEY: SUPABASE_ANON_KEY,
   
   // Redirect URLs Configuration
   redirectUrls: {

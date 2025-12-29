@@ -367,7 +367,7 @@ const UserRegistrationContent = () => {
       if (isUpdateMode && userId) {
         // Update existing user with PATCH request - only updatable fields
         response = await fetch(
-          `https://rpmzykoxqnbozgdoqbpc.supabase.co/rest/v1/users?hushh_id=eq.${userId}`,
+          `https://ibsisfnjxeowvdtvgzff.supabase.co/rest/v1/users?hushh_id=eq.${userId}`,
           {
             method: 'PATCH',
             headers: API_HEADERS,
@@ -408,7 +408,7 @@ const UserRegistrationContent = () => {
       } else {
         // Create new user with POST request
         response = await fetch(
-          "https://rpmzykoxqnbozgdoqbpc.supabase.co/rest/v1/users",
+          "https://ibsisfnjxeowvdtvgzff.supabase.co/rest/v1/users",
           {
             method: 'POST',
             headers: API_HEADERS,

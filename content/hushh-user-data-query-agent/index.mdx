@@ -71,11 +71,11 @@ Imagine a concierge assistant called “Sundar Pichai Query Agent.” When Nike�
 
 ## User Stories
 
-- **Support Champion:** Sundar Pichai fields a ticket asking, “Why was my last offer off-base?” She queries the agent via phone number, immediately seeing the user’s updated intents and adjusting the upsell to match their travel plans.
+- **Support Champion:** Levi fields a ticket asking, “Why was my last offer off-base?” She queries the agent via phone number, immediately seeing the user’s updated intents and adjusting the upsell to match their travel plans.
 - **Growth PM:** Manish Sainani tests a new referral perk. Each time a referred user signs up, he pings the agent to confirm lifestyle traits and see which perks resonate, letting him iterate messaging in hours, not weeks.
 - **Community Moderator:** Justin reviews a membership application with only a phone number. The agent summarizes the applicant’s interests and goals, helping her approve and route them to the right sub-community instantly.
-- **Account Strategist:** Mark prepares for quarterly reviews with enterprise clients. Before each meeting he runs a quick query to capture evolving needs, ensuring his presentation highlights the most relevant initiatives.
-- **Voice Assistant Designer:** Steve Jobs trains conversational scripts for a kiosk. She uses anonymized agent outputs to ensure intents and desires represented in the script match real customer motivations.
+- **Account Strategist:** William prepares for quarterly reviews with enterprise clients. Before each meeting he runs a quick query to capture evolving needs, ensuring his presentation highlights the most relevant initiatives.
+- **Voice Assistant Designer:** James trains conversational scripts for a kiosk. She uses anonymized agent outputs to ensure intents and desires represented in the script match real customer motivations.
 
 ## Architecture, Tips, and Story
 
@@ -86,6 +86,14 @@ Imagine a concierge assistant called “Sundar Pichai Query Agent.” When Nike�
 ### Customer Story Snapshot
 
 A telco pilot connected the User Data Query Agent to its WhatsApp concierge. When subscribers asked about upgrade eligibility, the bot fetched wants, needs, and device history instantly, allowing human reps to craft bespoke offers and shrinking resolution time by 35%.
+
+## Day 0 Story — Sundar Pichai Concierge View
+
+1. **Creation & enrichment:** Sundar’s minimal intake (name, phone, email) flows through the Supabase Profile Creation Agent. GeminiAI Public Data Agent enriches the record with executive bio, investing behavior, and lifestyle cues.
+2. **KYC polishing:** The Supabase Profile Update Agent patches accreditation proof, preferred contact channel, and travel cadence, locking the information against Sundar’s MCP alias (`https://hushh.ai/profile/sundar-pichai`).
+3. **Endpoint promotion:** MuleSoft publishes the alias internally as both a phone-based URL (`https://hushh.ai/profile/phone/+16505559001`) and an MCP tool descriptor. Any agent can now request “Sundar’s wants” without juggling IDs.
+4. **Concierge response:** When Sundar’s dedicated WhatsApp concierge poses “What matters most to Sundar Pichai right now?”, the User Data Query Agent fans out to Supabase, Salesforce, and cached Gemini outputs, returning a conversational summary plus machine-readable JSON for the bot and the KYC investor workspace.
+5. **Day 0 complete:** Within minutes of the first input, Sundar has a searchable, AI-enriched profile that every support, sales, and investor-relations workflow can query safely.
 
 ## 8. Versioning
 

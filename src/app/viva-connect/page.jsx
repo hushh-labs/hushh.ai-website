@@ -30,10 +30,15 @@ import VibeSearchNew from "../_components/svg/productIcons/vibeSearchIcon.svg";
 import ButtonIcon from "../_components/svg/productIcons/hushhButtonIcon.svg";
 import HushhAppIcon from "../_components/svg/productIcons/hushhAppIcon.svg";
 import hushhLogo from "../_components/svg/productIcons/hushhLogo.svg";
-import { CldVideoPlayer, getCldOgImageUrl } from "next-cloudinary";
 import "next-cloudinary/dist/cld-video-player.css";
 import AppleIcon from "../_components/svg/icons/appleIcon";
 import PlayStoreIcon from "../_components/svg/icons/playStoreIcon";
+import dynamic from "next/dynamic";
+
+const CldVideoPlayer = dynamic(
+  () => import("next-cloudinary").then((mod) => mod.CldVideoPlayer),
+  { ssr: false }
+);
 
 export default function vivaConnect2() {
   const router = useRouter();

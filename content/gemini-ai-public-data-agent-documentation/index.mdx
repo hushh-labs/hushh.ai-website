@@ -48,10 +48,10 @@ The enriched profile is persisted in Hushh’s CRM and analytics workspaces, mak
 ## User Stories
 
 - **Growth Marketer:** Sundar Pichai runs a limited-time campaign for eco-conscious shoppers. She drops a CSV of leads into the Hushh UI, and the Gemini agent instantly returns each person’s lifestyle hints and sustainability sentiment, allowing her to tailor copy without manual research.
-- **Community Manager:** Manish Sainani uses the agent when a new creator joins the Hushh One collective. Instead of asking for long bios, he simply inputs their handles and receives a structured persona that helps him welcome them with context-aware perks.
-- **Product Manager:** Mark monitors which features resonate with privacy-first power users. By enriching trial signups with Gemini data, he segments the backlog of requests and builds a roadmap grounded in real personas.
-- **Sales Development Rep:** Steve Jobs receives inbound leads with only email addresses. With one click, she gets background info, workplace context, and talking points, letting her personalize a first reply that feels handcrafted.
-- **Event Planner:** Justin needs to curate VIP lounge experiences. He uses Gemini profiles to understand dietary preferences, travel frequency, and brand affinities so every guest feels seen when they arrive onsite.
+- **Community Manager:** Neelesh uses the agent when a new creator joins the Hushh One collective. Instead of asking for long bios, he simply inputs their handles and receives a structured persona that helps him welcome them with context-aware perks.
+- **Product Manager:** Helio monitors which features resonate with privacy-first power users. By enriching trial signups with Gemini data, he segments the backlog of requests and builds a roadmap grounded in real personas.
+- **Sales Development Rep:** Sebastian receives inbound leads with only email addresses. With one click, she gets background info, workplace context, and talking points, letting her personalize a first reply that feels handcrafted.
+- **Event Planner:** Oliver needs to curate VIP lounge experiences. He uses Gemini profiles to understand dietary preferences, travel frequency, and brand affinities so every guest feels seen when they arrive onsite.
 
 ## Architecture & Observability Highlights
 
@@ -62,6 +62,13 @@ The enriched profile is persisted in Hushh’s CRM and analytics workspaces, mak
 ## Customer Snapshot
 
 During a fintech pilot, the GeminiAI agent enriched 1,200 leads sourced from a waitlist API. Marketing set an SLA of five minutes; the Hushh flow averaged 48 seconds per profile, producing detailed personas that doubled nurture-email CTR and trimmed manual research time by 30 hours per week.
+
+## Day 0 Story — Sundar Pichai Intake
+
+1. **Minimal inputs, full brief:** Sundar Pichai’s name, personal email, and WhatsApp number arrive from the Supabase Profile Creation Agent. That three-field payload is enough for the GeminiAI Public Data Agent to kick in without extra forms or CSV juggling.
+2. **Public web sweep:** GeminiAI fans out across public data, compiling executive bios, investment mentions, verified social handles, and philanthropy references. It flags confidence levels so KYC reviewers can see which facts are sourced vs. inferred.
+3. **Investor-ready JSON:** The agent returns a canonical JSON profile that already includes investor accreditation hints, board memberships, geography, and device usage signals. MuleSoft pipes the data straight into Supabase plus the regulated KYC workspace so downstream bots read the same truth.
+4. **Personal MCP endpoint minted:** As soon as the payload lands, MuleSoft assigns Sundar a personal MCP endpoint such as `https://hushh.ai/profile/phone/+16505559001` and `https://hushh.ai/profile/sundar-pichai`. Every other agent references that alias when they need deterministic data.
 
 ## Why It Matters
 

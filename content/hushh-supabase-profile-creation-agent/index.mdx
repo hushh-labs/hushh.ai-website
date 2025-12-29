@@ -53,14 +53,22 @@ Parsed attributes become a structured Supabase payload, mapped to the appropriat
 ## User Stories
 
 - **Onboarding Specialist:** Sundar Pichai runs through a quick intake call with a new customer. Instead of forcing them through a form, she narrates the details aloud, the agent captures everything, and the Supabase record is ready before the call ends.
-- **Marketplace Admin:** Mark hosts community office hours. When a creator says “Here’s my updated address and audience focus,” he drops the info into the agent and instantly receives a fresh profile that syncs across the stack.
-- **Field Sales Associate:** Justin Donaldson travels with just her phone. After meeting a prospect at an event, she speaks the conversation details into the agent and sees a pristine record populate before she boards her flight home.
+- **Marketplace Admin:** Noah hosts community office hours. When a creator says “Here’s my updated address and audience focus,” he drops the info into the agent and instantly receives a fresh profile that syncs across the stack.
+- **Field Sales Associate:** Oliver travels with just his phone. After meeting a prospect at an event, she speaks the conversation details into the agent and sees a pristine record populate before she boards her flight home.
 - **Program Manager:** Manish Sainani runs accelerator cohorts. He uses the agent to log every founder’s background, motivation, and needs, ensuring mentors see a coherent profile without chasing spreadsheets.
-- **Partnership Ops Lead:** Steve Jobs handles channel partners submitting new leads via WhatsApp. She forwards their voice notes to the agent and receives fully structured Supabase entries—no manual transcription needed.
+- **Partnership Ops Lead:** James handles channel partners submitting new leads via WhatsApp. She forwards their voice notes to the agent and receives fully structured Supabase entries—no manual transcription needed.
 
 ### Customer Snapshot
 
 A premium bank replaced a 14-field onboarding form with this agent. Relationship managers now dictate a short brief and receive a Supabase record in under a minute—cutting onboarding time by 60% and boosting NPS.
+
+## Day 0 Story — Sundar Pichai Onboarding
+
+1. **Day 0 trigger:** Sundar Pichai is invited to pilot Hushh’s investor community. A concierge types a single sentence into the creation agent: “Create Sundar Pichai with phone +1 650-555-9001 and email sundar@alphabet.com.”
+2. **Structured Supabase draft:** The agent validates the identifier trio, assigns a UUID, and provisions a base record in Supabase plus MuleSoft’s MCP log. No other fields are required at this stage.
+3. **Gemini enrichment handoff:** Immediately after the record lands, a `profile.created` event invokes the GeminiAI Public Data Agent, which populates executive history, venture interests, and compliance hints drawn from public data.
+4. **KYC workspace sync:** MuleSoft writes both the raw intake and enrichment payload to the regulated KYC investor schema, making it available for downstream verification flows.
+5. **Personal endpoint minted:** Sundar’s record is now reachable via a deterministic MCP alias—`https://hushh.ai/profile/phone/+16505559001` or `https://hushh.ai/profile/sundar-pichai`—so every bot referencing him uses the same identifiers.
 
 
 ## Architecture Notes & Deployment Tips

@@ -1,0 +1,112 @@
+import { Callout, Steps } from 'nextra/components'
+
+# Brand Engineering Onboarding (Hushh Agentic Developer APIs)
+
+This guide is for enterprise brand engineering teams at LVMH, Reliance, and similar groups. It explains how to activate consented customer intelligence using Hushh Agentic Developer APIs orchestrated by MuleSoft.
+
+## Outcomes (product)
+
+- Faster onboarding with fewer forms and higher opt-in rates
+- Rich customer profiles that power personalization and clienteling
+- A consistent consent and audit model across brands and regions
+
+## Architecture (engineering)
+
+```
+Brand app or data pipeline
+  -> Hushh Agentic Developer APIs (/api/a2a)
+  -> MuleSoft agent mesh (JSON-RPC 2.0)
+  -> Public + Gemini enrichment
+  -> Supabase profile create/query/update
+  -> Brand CRM normalization
+  -> CRM / CDP / personalization
+```
+
+<Callout type="info">
+All profile access requires explicit user consent. Request consent before enrichment or activation.
+</Callout>
+
+## Guided onboarding
+
+<Steps>
+### 1) Create your developer account
+Set up your org profile so consent prompts display your brand identity.
+
+### 2) Verify your data flows
+Confirm your profile creation and query calls in the sandbox.
+
+### 3) Enable enrichment
+Turn on Public Data and Gemini Data agents for higher-confidence profiles.
+
+### 4) Normalize brand affinities
+Use the Brand User Data Query Agent to produce CRM-ready likes and dislikes.
+
+### 5) Optional: Plaid signals
+If enabled, map Plaid merchant and category data into brand affinity fields before CRM activation.
+</Steps>
+
+## End-to-end example (Sundar Pichai)
+
+### Create a profile
+
+```http
+POST /api/a2a/hushh-profile
+Content-Type: application/json
+
+{
+  "text": "Create a profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001."
+}
+```
+
+### Enrich with OpenAI and Gemini
+
+```http
+POST /api/a2a/public
+Content-Type: application/json
+
+{
+  "text": "Provide a detailed JSON profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001."
+}
+```
+
+```http
+POST /api/a2a/gemini
+Content-Type: application/json
+
+{
+  "text": "Provide a detailed JSON profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001."
+}
+```
+
+### Normalize likes, dislikes, and brand affinity
+
+```http
+POST /api/a2a/brand
+Content-Type: application/json
+
+{
+  "text": "Summarize likes, dislikes, and brand affinity for Sundar Pichai."
+}
+```
+
+### Merge and activate
+Merge in this order for best accuracy:
+`brand -> hushh -> public -> gemini`
+
+## Why this matters for LVMH and Reliance
+
+### LVMH
+- Cross-maison clienteling with verified preferences
+- Premium experiences powered by consented signals
+- Higher conversion in VIP outreach and private events
+
+### Reliance
+- Unified profiles across retail, telecom, and digital ecosystems
+- Faster segmentation for loyalty and omnichannel engagement
+- Lower cold-start friction for new users and regions
+
+## Next steps
+
+- Review agent endpoints in `pages/developer-Api/rootEndpoints.mdx`
+- See detailed agent behavior in `pages/developer-Api/agent-reference.mdx`
+- Explore the profile pipeline in `pages/developer-Api/data-retrieval-insertion.mdx`

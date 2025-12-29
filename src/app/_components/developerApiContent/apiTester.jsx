@@ -7,6 +7,7 @@ import {
   FormLabel,
   Icon,
   Input,
+  Spinner,
   Text,
   useDisclosure,
   VStack,
@@ -17,8 +18,19 @@ import { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import axios from "axios";
 
-// Example Base URL
-const BASE_URL = "https://hushh-api-53407187172.us-central1.run.app";
+const FALLBACK_BASE_URL = "https://hushh.ai";
+
+const resolveBaseUrl = (endpointBaseUrl) => {
+  if (endpointBaseUrl) {
+    return endpointBaseUrl;
+  }
+
+  if (typeof window !== "undefined" && window.location?.origin) {
+    return window.location.origin;
+  }
+
+  return FALLBACK_BASE_URL;
+};
 
 /**
  * Generates a dummy JSON object based on the endpoint.requestBody definition.
@@ -42,30 +54,54 @@ function generateDummyData(requestBodyDefinition) {
 
   for (const [key, definition] of Object.entries(requestBodyDefinition)) {
     const fieldType = definition.type;
+    const hasExample = Object.prototype.hasOwnProperty.call(definition, "example");
 
     if (fieldType === "string") {
-      // Provide a generic string placeholder
-      result[key] = `dummy_${key}`;
-    } else if (fieldType === "number") {
-      // Provide a generic numeric placeholder
-      result[key] = 123;
-    } else if (fieldType === "array") {
-      // If it's an array, decide what dummy content to insert
-      // Example: if items are objects, add a single object with sampleKey
-      if (definition.items?.type === "object") {
-        // We can guess a simple structure
-        result[key] = [
-          {
-            sampleKey: "sampleValue",
-          },
-        ];
+      if (hasExample) {
+        result[key] = definition.example;
+      } else if (key === "text") {
+        result[key] =
+          "Provide a detailed JSON profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001.";
+      } else if (key === "sessionId") {
+        result[key] = "session-456";
+      } else if (key === "id") {
+        result[key] = "task-124";
       } else {
-        // Maybe an array of strings or numbers
-        result[key] = ["sampleItem1", "sampleItem2"];
+        // Provide a generic string placeholder
+        result[key] = `dummy_${key}`;
+      }
+    } else if (fieldType === "number") {
+      if (hasExample) {
+        result[key] = definition.example;
+      } else {
+        // Provide a generic numeric placeholder
+        result[key] = 123;
+      }
+    } else if (fieldType === "array") {
+      if (hasExample) {
+        result[key] = definition.example;
+      } else {
+        // If it's an array, decide what dummy content to insert
+        // Example: if items are objects, add a single object with sampleKey
+        if (definition.items?.type === "object") {
+          // We can guess a simple structure
+          result[key] = [
+            {
+              sampleKey: "sampleValue",
+            },
+          ];
+        } else {
+          // Maybe an array of strings or numbers
+          result[key] = ["sampleItem1", "sampleItem2"];
+        }
       }
     } else {
-      // Fallback for unknown types or nested objects
-      result[key] = `dummy_${key}`;
+      if (hasExample) {
+        result[key] = definition.example;
+      } else {
+        // Fallback for unknown types or nested objects
+        result[key] = `dummy_${key}`;
+      }
     }
   }
 
@@ -102,6 +138,7 @@ const ApiSection = ({ endpoint, apiKey }) => {
   // Response & requested URL
   const [response, setResponse] = useState(null);
   const [requestedUrl, setRequestedUrl] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (setter, key, value) => {
     setter((prev) => ({ ...prev, [key]: value }));
@@ -110,10 +147,15 @@ const ApiSection = ({ endpoint, apiKey }) => {
   const handleSubmit = async () => {
     // Construct query string
     const queryString = new URLSearchParams(queryParams).toString();
-    const fullUrl = `${BASE_URL}${endpoint.path}${
+    const baseUrl = resolveBaseUrl(endpoint?.baseUrl);
+    const isAbsolutePath = /^https?:\/\//i.test(endpoint?.path || "");
+    const urlRoot = isAbsolutePath ? "" : baseUrl;
+    const fullUrl = `${urlRoot}${endpoint.path}${
       queryString ? "?" + queryString : ""
     }`;
     setRequestedUrl(fullUrl);
+    setResponse(null);
+    setIsLoading(true);
 
     // Prepare headers
     const finalHeaders = {
@@ -145,6 +187,8 @@ const ApiSection = ({ endpoint, apiKey }) => {
       setResponse(res.data);
     } catch (error) {
       setResponse(error.response ? error.response.data : "Error occurred.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -154,21 +198,27 @@ const ApiSection = ({ endpoint, apiKey }) => {
       p={4}
       borderWidth="1px"
       borderRadius="md"
+      borderColor="gray.200"
       bg="white"
-      shadow="md"
-      transition="all 0.3s ease"
-      _hover={{ transform: "translateY(-4px)", shadow: "lg" }}
+      shadow="sm"
+      transition="all 0.2s ease"
+      _hover={{ shadow: "md" }}
     >
       {/* Header */}
       <Flex justify="space-between" align="center" onClick={onToggle} cursor="pointer">
-        <Flex align="center">
-          <Badge colorScheme="green" mr={3}>
-            {endpoint?.method || "POST"}
-          </Badge>
-          <Text color="gray.500">{endpoint?.description}</Text>
+        <Flex align="center" gap={3}>
+          <Badge colorScheme="green">{endpoint?.method || "POST"}</Badge>
+          <Text fontFamily="mono" fontSize="sm" color="gray.800">
+            {endpoint?.path}
+          </Text>
         </Flex>
         <Icon as={isOpen ? FaChevronUp : FaChevronDown} boxSize={5} />
       </Flex>
+      {endpoint?.description && (
+        <Text mt={2} fontSize="sm" color="gray.500">
+          {endpoint.description}
+        </Text>
+      )}
 
       {/* Collapsible Content */}
       <Collapse in={isOpen} animateOpacity>
@@ -231,9 +281,10 @@ const ApiSection = ({ endpoint, apiKey }) => {
           {/* Send Request Button */}
           <button
             onClick={handleSubmit}
-            className=" bg-[#bd1e59] text-white inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary-foreground h-10 px-4 py-2 mt-4"
+            disabled={isLoading}
+            className="bg-[#0a2540] text-white inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 mt-4"
           >
-            Send Request
+            {isLoading ? "Sending..." : "Send Request"}
           </button>
 
           {/* Display Requested URL */}
@@ -245,19 +296,26 @@ const ApiSection = ({ endpoint, apiKey }) => {
           )}
 
           {/* Display Response */}
-          {response && (
+          {(isLoading || response) && (
             <Box w="full">
               <Text fontWeight="bold">Response:</Text>
-              <Textarea
-                value={
-                  typeof response === "string"
-                    ? response
-                    : JSON.stringify(response, null, 2)
-                }
-                readOnly
-                bg="gray.100"
-                minH={'200px'}
-              />
+              {isLoading ? (
+                <Flex align="center" gap={3} bg="gray.100" borderRadius="md" px={3} py={4}>
+                  <Spinner size="sm" />
+                  <Text fontSize="sm" color="gray.600">Waiting for response...</Text>
+                </Flex>
+              ) : (
+                <Textarea
+                  value={
+                    typeof response === "string"
+                      ? response
+                      : JSON.stringify(response, null, 2)
+                  }
+                  readOnly
+                  bg="gray.100"
+                  minH={'200px'}
+                />
+              )}
             </Box>
           )}
         </VStack>

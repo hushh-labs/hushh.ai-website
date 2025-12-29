@@ -32,41 +32,13 @@ import BgAnimation from "../../../public/Gif/bgAnimation.gif";
 import DataRetrievalMade from "../../../public/Gif/dataRetrievalMade.gif";
 import Slogo from "../../../public/Gif/slogo.gif";
 import VibeSearchGif from "../../../public/Gif/vibeSearchGIf.gif";
-import { CldVideoPlayer, getCldOgImageUrl } from "next-cloudinary";
 import "next-cloudinary/dist/cld-video-player.css";
-import { Metadata } from "next";
+import dynamic from "next/dynamic";
 
-const url = getCldOgImageUrl({
-  src: "Hushh_button_-_developer_walkthrough_uwwiy0",
-});
-
-const ogImageUrl = getCldOgImageUrl({
-  src: "Hushh_button_-_developer_walkthrough_uwwiy0",
-  format: "jpg",
-});
-
-const twitterImageUrl = getCldOgImageUrl({
-  src: "Hushh_button_-_developer_walkthrough_uwwiy0",
-  format: "webp",
-});
-
-export const metadata = {
-  title: "Hushh Button Developer Walkthrough Video",
-  description: "A guide to hushh button features",
-  openGraph: {
-    images: [
-      {
-        width: 1200,
-        height: 627,
-        url: ogImageUrl,
-        src: "Hushh_button_-_developer_walkthrough_uwwiy0",
-      },
-    ],
-  },
-  // twitter: {
-  //   images: [twitterImageUrl],
-  // },
-};
+const CldVideoPlayer = dynamic(
+  () => import("next-cloudinary").then((mod) => mod.CldVideoPlayer),
+  { ssr: false }
+);
 
 const ClientHushhButton = () => {
   const router = useRouter();

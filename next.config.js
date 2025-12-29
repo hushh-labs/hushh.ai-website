@@ -7,6 +7,18 @@ const withNextra = require('nextra')({
   standalone: false,
 });
 
+const supabaseUrlFromEnv = process.env.NEXT_PUBLIC_SUPABASE_URL
+  || process.env.VITE_SUPABASE_URL
+  || "https://ibsisfnjxeowvdtvgzff.supabase.co";
+
+const supabaseHostname = (() => {
+  try {
+    return new URL(supabaseUrlFromEnv).hostname;
+  } catch (error) {
+    return "ibsisfnjxeowvdtvgzff.supabase.co";
+  }
+})();
+
 const nextConfig = {
   compiler: {
     removeConsole: true,
@@ -22,7 +34,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'rpmzykoxqnbozgdoqbpc.supabase.co',
+        hostname: supabaseHostname,
         pathname: '/storage/v1/object/public/**',
       },
     ],
