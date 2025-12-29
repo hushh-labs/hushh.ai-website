@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import {
   Box,
+  Checkbox,
+  CheckboxGroup,
   Container,
   Heading,
   Text,
@@ -38,6 +40,8 @@ const ENDPOINTS = {
     "https://hushh-plaid-agent-app-bubqpu.5sc6y6-4.usa-e2.cloudhub.io/plaid-agent",
 };
 
+const DEFAULT_LINK_PRODUCTS = ["transactions", "investments", "liabilities", "assets"];
+
 const defaultPayload = {
   client_id: "",
   secret: "",
@@ -48,6 +52,7 @@ const defaultPayload = {
 export default function PlaidIntegrationPage() {
   const [credentials, setCredentials] = useState(defaultPayload);
   const [linkToken, setLinkToken] = useState("");
+  const [linkProducts, setLinkProducts] = useState(DEFAULT_LINK_PRODUCTS);
   const [responseLog, setResponseLog] = useState([]);
   const [fetchedData, setFetchedData] = useState(null);
   const [isPlaidReady, setIsPlaidReady] = useState(false);
@@ -101,6 +106,7 @@ export default function PlaidIntegrationPage() {
   };
 
   const unwrapPlaidResponse = (payload) => (payload?.data !== undefined ? payload.data : payload);
+  const getLinkTokenBody = () => (linkProducts.length ? { products: linkProducts } : undefined);
 
   const callPlaidApi = async ({
     title,
@@ -184,6 +190,7 @@ export default function PlaidIntegrationPage() {
     const result = await callPlaidApi({
       title: "Create Link Token",
       endpoint: ENDPOINTS.createLinkToken,
+      body: getLinkTokenBody(),
     });
     const data = unwrapPlaidResponse(result);
     if (data?.link_token) {
@@ -198,6 +205,7 @@ export default function PlaidIntegrationPage() {
     const result = await callPlaidApi({
       title: "Create Link Token",
       endpoint: ENDPOINTS.createLinkToken,
+      body: getLinkTokenBody(),
     });
     const data = unwrapPlaidResponse(result);
     if (data?.link_token) {
@@ -368,6 +376,22 @@ export default function PlaidIntegrationPage() {
                 Launch Plaid Link to connect a bank account. On success we capture the public token and automatically
                 exchange it for an access token.
               </Text>
+              <Box mb={5}>
+                <Text fontSize="sm" fontWeight="600" color="gray.700" mb={2}>
+                  Products requested in Link
+                </Text>
+                <CheckboxGroup value={linkProducts} onChange={setLinkProducts} colorScheme="blue">
+                  <Stack direction={{ base: "column", md: "row" }} spacing={4}>
+                    <Checkbox value="transactions">Transactions</Checkbox>
+                    <Checkbox value="investments">Investments</Checkbox>
+                    <Checkbox value="liabilities">Liabilities</Checkbox>
+                    <Checkbox value="assets">Assets</Checkbox>
+                  </Stack>
+                </CheckboxGroup>
+                <Text fontSize="xs" color="gray.500" mt={2}>
+                  These should match the MuleSoft flow. Missing products can cause 400 errors downstream.
+                </Text>
+              </Box>
               <Flex gap={4} flexWrap="wrap">
                 <Button
                   bgGradient="linear(135deg, #0C8CE9 0%, #5E5CE6 100%)"
