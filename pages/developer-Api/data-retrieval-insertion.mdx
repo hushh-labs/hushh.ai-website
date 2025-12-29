@@ -59,7 +59,48 @@ Map Plaid outputs into brand affinity fields before calling the Brand agent.
     path: "/api/a2a/hushh-profile",
     description: "Create a Supabase profile",
     requestBody: {
-      text: { type: "string" },
+      text: {
+        type: "string",
+        example:
+          "Create a profile for Sundar Pichai with email sundar.pichai@example.com, phone +1 6505559001, occupation CEO, city Mountain View, and country USA."
+      },
+      sessionId: { type: "string" },
+      id: { type: "string" }
+    }
+  }}
+/>
+
+### Supabase Profile Update Agent
+
+<ApiSection
+  endpoint={{
+    method: "POST",
+    path: "/api/a2a/hushh-profile-update",
+    description: "Update an existing Supabase profile",
+    requestBody: {
+      text: {
+        type: "string",
+        example:
+          "Update the city for Sundar Pichai to Mountain View and set the occupation to CEO."
+      },
+      sessionId: { type: "string" },
+      id: { type: "string" }
+    }
+  }}
+/>
+
+### Supabase Profile Query Agent
+
+<ApiSection
+  endpoint={{
+    method: "POST",
+    path: "/api/a2a/hushh",
+    description: "Query a Supabase profile by phone or email",
+    requestBody: {
+      text: {
+        type: "string",
+        example: "Fetch all details for Sundar Pichai with phone +1 6505559001."
+      },
       sessionId: { type: "string" },
       id: { type: "string" }
     }
@@ -74,7 +115,11 @@ Map Plaid outputs into brand affinity fields before calling the Brand agent.
     path: "/api/a2a/public",
     description: "Public data enrichment",
     requestBody: {
-      text: { type: "string" },
+      text: {
+        type: "string",
+        example:
+          "Provide a detailed JSON profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001."
+      },
       sessionId: { type: "string" },
       id: { type: "string" }
     }
@@ -89,7 +134,11 @@ Map Plaid outputs into brand affinity fields before calling the Brand agent.
     path: "/api/a2a/gemini",
     description: "Second-pass enrichment",
     requestBody: {
-      text: { type: "string" },
+      text: {
+        type: "string",
+        example:
+          "Using the Gemini Public Data Agent, provide a detailed JSON profile for Sundar Pichai with email sundar.pichai@example.com and phone +1 6505559001, including demographics, lifestyle, and intent fields."
+      },
       sessionId: { type: "string" },
       id: { type: "string" }
     }
@@ -104,12 +153,55 @@ Map Plaid outputs into brand affinity fields before calling the Brand agent.
     path: "/api/a2a/brand",
     description: "Normalize likes, dislikes, and brand affinities",
     requestBody: {
-      text: { type: "string" },
+      text: {
+        type: "string",
+        example: "Summarize likes, dislikes, and brand affinity for Sundar Pichai using the consented profile."
+      },
       sessionId: { type: "string" },
       id: { type: "string" }
     }
   }}
 />
+
+## Quickstart prompts (paste into the Api Tester)
+
+Use these prompts in the `text` field for the endpoints above.
+
+### Create a profile (Supabase Profile Creation Agent)
+
+```
+Create a profile for Sundar Pichai with email sundar.pichai@example.com, phone +1 6505559001, occupation CEO, city Mountain View, and country USA.
+```
+
+### Update a profile (Supabase Profile Update Agent)
+
+```
+Update the city for Sundar Pichai to Mountain View and set the occupation to CEO.
+```
+
+### Query an existing profile (Supabase Profile Query Agent)
+
+```
+Fetch all details for Sundar Pichai with phone +1 6505559001.
+```
+
+### Enrich with OpenAI Public Data Agent
+
+```
+Provide a detailed JSON profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001.
+```
+
+### Enrich with Gemini Public Data Agent
+
+```
+Using the Gemini Public Data Agent, provide a detailed JSON profile for Sundar Pichai with email sundar.pichai@example.com and phone +1 6505559001, including demographics, lifestyle, and intent fields.
+```
+
+### Normalize brand affinities (Brand User Data Query Agent)
+
+```
+Summarize likes, dislikes, and brand affinity for Sundar Pichai using the consented profile.
+```
 
 ## Example merged profile output
 

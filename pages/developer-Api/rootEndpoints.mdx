@@ -37,7 +37,11 @@ Enriches profiles using public signals to infer interests, lifestyle, and brand 
     path: "/api/a2a/public",
     description: "OpenAI Public Data Agent enrichment",
     requestBody: {
-      text: { type: "string" },
+      text: {
+        type: "string",
+        example:
+          "Provide a detailed JSON profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001."
+      },
       sessionId: { type: "string" },
       id: { type: "string" }
     }
@@ -53,7 +57,11 @@ Second-pass enrichment that fills gaps and adds higher-confidence traits.
     path: "/api/a2a/gemini",
     description: "Gemini Public Data Agent enrichment",
     requestBody: {
-      text: { type: "string" },
+      text: {
+        type: "string",
+        example:
+          "Using the Gemini Public Data Agent, provide a detailed JSON profile for Sundar Pichai with email sundar.pichai@example.com and phone +1 6505559001."
+      },
       sessionId: { type: "string" },
       id: { type: "string" }
     }
@@ -69,7 +77,11 @@ Creates a new profile in Supabase from a natural-language instruction.
     path: "/api/a2a/hushh-profile",
     description: "Supabase profile creation agent",
     requestBody: {
-      text: { type: "string" },
+      text: {
+        type: "string",
+        example:
+          "Create a profile for Sundar Pichai with email sundar.pichai@example.com, phone +1 6505559001, occupation CEO, city Mountain View, and country USA."
+      },
       sessionId: { type: "string" },
       id: { type: "string" }
     }
@@ -85,7 +97,11 @@ Updates an existing profile with new details or preferences.
     path: "/api/a2a/hushh-profile-update",
     description: "Supabase profile update agent",
     requestBody: {
-      text: { type: "string" },
+      text: {
+        type: "string",
+        example:
+          "Update the city for Sundar Pichai to Mountain View and set the occupation to CEO."
+      },
       sessionId: { type: "string" },
       id: { type: "string" }
     }
@@ -101,7 +117,10 @@ Retrieves existing profile data by email, phone, or name.
     path: "/api/a2a/hushh",
     description: "Supabase profile query agent",
     requestBody: {
-      text: { type: "string" },
+      text: {
+        type: "string",
+        example: "Fetch all details for Sundar Pichai with phone +1 6505559001."
+      },
       sessionId: { type: "string" },
       id: { type: "string" }
     }
@@ -117,7 +136,11 @@ Normalizes likes, dislikes, and brand preference signals into a CRM-ready profil
     path: "/api/a2a/brand",
     description: "Brand user data query agent (Salesforce CRM)",
     requestBody: {
-      text: { type: "string" },
+      text: {
+        type: "string",
+        example:
+          "Summarize likes, dislikes, and brand affinity for Sundar Pichai using the consented profile."
+      },
       sessionId: { type: "string" },
       id: { type: "string" }
     }

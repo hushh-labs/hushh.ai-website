@@ -53,9 +53,12 @@ function generateDummyData(requestBodyDefinition) {
 
   for (const [key, definition] of Object.entries(requestBodyDefinition)) {
     const fieldType = definition.type;
+    const hasExample = Object.prototype.hasOwnProperty.call(definition, "example");
 
     if (fieldType === "string") {
-      if (key === "text") {
+      if (hasExample) {
+        result[key] = definition.example;
+      } else if (key === "text") {
         result[key] =
           "Provide a detailed JSON profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001.";
       } else if (key === "sessionId") {
@@ -67,25 +70,37 @@ function generateDummyData(requestBodyDefinition) {
         result[key] = `dummy_${key}`;
       }
     } else if (fieldType === "number") {
-      // Provide a generic numeric placeholder
-      result[key] = 123;
-    } else if (fieldType === "array") {
-      // If it's an array, decide what dummy content to insert
-      // Example: if items are objects, add a single object with sampleKey
-      if (definition.items?.type === "object") {
-        // We can guess a simple structure
-        result[key] = [
-          {
-            sampleKey: "sampleValue",
-          },
-        ];
+      if (hasExample) {
+        result[key] = definition.example;
       } else {
-        // Maybe an array of strings or numbers
-        result[key] = ["sampleItem1", "sampleItem2"];
+        // Provide a generic numeric placeholder
+        result[key] = 123;
+      }
+    } else if (fieldType === "array") {
+      if (hasExample) {
+        result[key] = definition.example;
+      } else {
+        // If it's an array, decide what dummy content to insert
+        // Example: if items are objects, add a single object with sampleKey
+        if (definition.items?.type === "object") {
+          // We can guess a simple structure
+          result[key] = [
+            {
+              sampleKey: "sampleValue",
+            },
+          ];
+        } else {
+          // Maybe an array of strings or numbers
+          result[key] = ["sampleItem1", "sampleItem2"];
+        }
       }
     } else {
-      // Fallback for unknown types or nested objects
-      result[key] = `dummy_${key}`;
+      if (hasExample) {
+        result[key] = definition.example;
+      } else {
+        // Fallback for unknown types or nested objects
+        result[key] = `dummy_${key}`;
+      }
     }
   }
 
