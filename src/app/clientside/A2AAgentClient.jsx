@@ -36,68 +36,68 @@ const PROMPT_TEMPLATES = {
   brand: [
     {
       label: 'Lookup user state by phone',
-      text: 'Can you get the state of the user having phone: +919346661428?'
+      text: 'Can you get the state of Sundar Pichai with phone +1 6505559001?'
     },
     {
       label: 'Fetch full brand profile',
-      text: 'Can you fetch all the details of the user with phone number (637) 940-5403?'
+      text: 'Can you fetch all the details of Sundar Pichai with phone +1 6505559001?'
     },
     {
       label: 'Retrieve user wants and desires',
-      text: 'Can you fetch all the wants and desires of the user with phone number (637) 940-5403?'
+      text: 'Can you fetch all the wants and desires of Sundar Pichai with phone +1 6505559001?'
     },
     {
       label: 'Check lifestyle preference',
-      text: 'Does the user with phone number (637) 940-5403 like tea or coffee?'
+      text: 'Does Sundar Pichai with phone +1 6505559001 like tea or coffee?'
     },
   ],
   hushh: [
     {
       label: 'Fetch Supabase user profile',
-      text: 'Can you fetch all the details of the user with phone number (637) 940-5403?',
+      text: 'Can you fetch all the details of Sundar Pichai with phone +1 6505559001?',
     },
     {
       label: 'Retrieve user intentions',
-      text: 'Can you fetch all the intentions of the user with phone number (637) 940-5403?',
+      text: 'Can you fetch all the intentions of Sundar Pichai with phone +1 6505559001?',
     },
     {
       label: 'Get user wants data',
-      text: 'Can you fetch all the wants of the user with phone number (637) 940-5403?',
+      text: 'Can you fetch all the wants of Sundar Pichai with phone +1 6505559001?',
     },
     {
       label: 'Surface user desires',
-      text: 'Can you fetch all the desires of the user with phone number (637) 940-5403?',
+      text: 'Can you fetch all the desires of Sundar Pichai with phone +1 6505559001?',
     },
   ],
   'hushh-profile': [
     {
       label: 'Create a profile with full details',
       text:
-        'Can you create a user profile with the details below? {"fullName":"Amitabh Bachchan","phone":"+91 8266272888","email":"amitabh.bachchan@example.com","address":{"street":"Juhu Circle","city":"Mumbai","state":"Maharashtra","postalCode":"400049","country":"India"},"age":80,"gender":"Male","maritalStatus":"Married","householdSize":4,"childrenCount":2,"educationLevel":"Master\'s Degree","occupation":"Actor","incomeBracket":"High","homeOwnership":"Owned","cityTier":"Tier 1","transport":"Car","dietPreference":"Vegetarian","favoriteCuisine":"Indian","coffeeOrTeaChoice":"Tea","fitnessRoutine":"Yoga and Walking","gymMembership":"No","shoppingPreference":"Online and Local Markets","groceryStoreType":"Supermarket","fashionStyle":"Formal and Traditional","techAffinity":"Moderate","primaryDevice":"Smartphone","favoriteSocialPlatform":"Twitter","socialMediaUsageTime":"1-2 hours/day","contentPreference":"Movies and News","sportsInterest":"Cricket","gamingPreference":"Casual Gaming","travelFrequency":"2-3 times a year","ecoFriendliness":"High","sleepChronotype":"Morning Person","needs":["Health","Recognition","Quality Time"],"wants":["Luxury Travel","New Gadgets"],"desires":["Creative Expression","Social Impact"],"intents":{"24h":{"category":"Health","budget":"Low","timeWindow":"Today","confidence":"High"},"48h":{"category":"Entertainment","budget":"Medium","timeWindow":"This Weekend","confidence":"Medium"},"72h":{"category":"Travel","budget":"High","timeWindow":"Next Month","confidence":"Low"}}}',
+        'Can you create a user profile with the details below? {"fullName":"Sundar Pichai","phone":"+1 6505559001","email":"sundar.pichai@example.com","address":{"street":"1600 Amphitheatre Parkway","city":"Mountain View","state":"CA","postalCode":"94043","country":"USA"},"age":51,"gender":"Male","maritalStatus":"Married","householdSize":4,"childrenCount":2,"educationLevel":"Masters Degree","occupation":"CEO","incomeBracket":"High","homeOwnership":"Owned","cityTier":"Tier 1","transport":"Car","dietPreference":"Vegetarian","favoriteCuisine":"Indian","coffeeOrTeaChoice":"Tea","fitnessRoutine":"Walking","gymMembership":"No","shoppingPreference":"Online and In-Store","groceryStoreType":"Supermarket","fashionStyle":"Classic","techAffinity":"High","primaryDevice":"Smartphone","favoriteSocialPlatform":"LinkedIn","socialMediaUsageTime":"1-2 hours/day","contentPreference":"News and Technology","sportsInterest":"Cricket","gamingPreference":"None","travelFrequency":"2-3 times a year","ecoFriendliness":"High","sleepChronotype":"Morning Person","needs":["Innovation","Efficiency","Privacy"],"wants":["AI Tools","Leadership Insights"],"desires":["Sustainable Impact","Global Reach"],"intents":{"24h":{"category":"Work","budget":"N/A","timeWindow":"Today","confidence":"High"},"48h":{"category":"Family","budget":"Medium","timeWindow":"Weekend","confidence":"Medium"},"72h":{"category":"Travel","budget":"High","timeWindow":"Next Month","confidence":"Low"}}}',
     },
     {
-      label: 'Onboard Sundhar Pichai',
+      label: 'Onboard Sundar Pichai',
       text:
-        'Please create a profile for Sundhar Pichai with email sundar.pichai@google.com, phone +1 4085551234, occupation CEO, city Mountain View, and country USA.',
+        'Please create a profile for Sundar Pichai with email sundar.pichai@example.com, phone +1 6505559001, occupation CEO, city Mountain View, and country USA.',
     },
   ],
   'hushh-profile-update': [
     {
       label: 'Update state for an existing record',
       text:
-        'Can you update the state to AP for the user with phone +919346661428 and user ID d6f5fca9-924b-492e-95f6-55e81d405174?',
+        'Can you update the state to CA for the user with phone +1 6505559001?',
     },
     {
-      label: 'Correct Sundhar Pichai\'s contact info',
+      label: 'Correct Sundar Pichai contact info',
       text:
-        'Please update Sundhar Pichai’s city to Mountain View and email to sundar.pichai@google.com in the database having their +52 334i33 and user id d72882hgdt7889.',
+        'Please update Sundar Pichai city to Mountain View and email to sundar.pichai@example.com for phone +1 6505559001.',
     },
   ],
   gemini: [
     {
       label: 'Enrich via Gemini Public Data Agent',
       text:
-        "Using the Gemini Public Data Agent, provide a detailed JSON profile for Sundhar Pichai with phone +1-555-0123 and email sundhar.pichai@example.com. Include every possible field such as full name, phone, email, address, age, gender, marital status, household size, children count, education level, occupation, income bracket, home ownership, city tier, transport, diet preference, favorite cuisine, coffee or tea choice, fitness routine, gym membership, shopping preference, grocery store type, fashion style, tech affinity, primary device, favorite social platform, social media usage time, content preference, sports interest, gaming preference, travel frequency, eco-friendliness, sleep chronotype, needs, wants, desires, and intents for 24h, 48h, and 72h with category, budget, time window, and confidence.",
+        "Using the Gemini Public Data Agent, provide a detailed JSON profile for Sundar Pichai with phone +1 6505559001 and email sundar.pichai@example.com. Include every possible field such as full name, phone, email, address, age, gender, marital status, household size, children count, education level, occupation, income bracket, home ownership, city tier, transport, diet preference, favorite cuisine, coffee or tea choice, fitness routine, gym membership, shopping preference, grocery store type, fashion style, tech affinity, primary device, favorite social platform, social media usage time, content preference, sports interest, gaming preference, travel frequency, eco-friendliness, sleep chronotype, needs, wants, desires, and intents for 24h, 48h, and 72h with category, budget, time window, and confidence.",
     },
     {
       label: 'Compose Gemini JSON-RPC request',
@@ -127,9 +127,9 @@ const PROMPT_TEMPLATES = {
   ],
   public: [
     {
-      label: 'Enrich Sundhar Pichai\'s public profile',
+      label: 'Enrich Sundar Pichai public profile',
       text:
-        "Can you provide me with a detailed JSON profile of Sundhar Pichai with phone +1-555-0123 and email sundhar.pichai@example.com that includes every available field such as full name, phone, email, address, age, gender, marital status, household size, children count, education level, occupation, income bracket, home ownership, city tier, transport, diet preference, favorite cuisine, coffee or tea choice, fitness routine, gym membership, shopping preference, grocery store type, fashion style, tech affinity, primary device, favorite social platform, social media usage time, content preference, sports interest, gaming preference, travel frequency, eco-friendliness, sleep chronotype, needs, wants, desires, and intents for 24h, 48h, and 72h with category, budget, time window, and confidence?",
+        "Can you provide me with a detailed JSON profile of Sundar Pichai with phone +1 6505559001 and email sundar.pichai@example.com that includes every available field such as full name, phone, email, address, age, gender, marital status, household size, children count, education level, occupation, income bracket, home ownership, city tier, transport, diet preference, favorite cuisine, coffee or tea choice, fitness routine, gym membership, shopping preference, grocery store type, fashion style, tech affinity, primary device, favorite social platform, social media usage time, content preference, sports interest, gaming preference, travel frequency, eco-friendliness, sleep chronotype, needs, wants, desires, and intents for 24h, 48h, and 72h with category, budget, time window, and confidence?",
     },
     {
       label: 'Draft JSON-RPC request payload',
@@ -169,6 +169,17 @@ function initialsFromEmail(email) {
   const first = parts[0]?.[0] || ''
   const last = (parts.length > 1 ? parts[parts.length - 1]?.[0] : parts[0]?.[1]) || ''
   return (first + last).toUpperCase().slice(0, 2) || 'YO'
+}
+
+function normalizePhoneInText(value) {
+  if (!value || typeof value !== 'string') return value
+  const phonePattern = /(\+?\d[\d\s().-]{7,}\d)/g
+  return value.replace(phonePattern, (match) => {
+    const digits = match.replace(/[^\d]/g, '')
+    if (!digits) return match
+    const hasPlus = match.trim().startsWith('+')
+    return hasPlus ? `+${digits}` : digits
+  })
 }
 
 export default function A2AAgentClient() {
@@ -310,7 +321,9 @@ export default function A2AAgentClient() {
   const sendText = useCallback(async (text) => {
     const trimmed = (text || '').trim()
     if (!trimmed || loading) return
-    const userMsg = { role: 'user', content: trimmed, id: `u-${Date.now()}` }
+    const shouldNormalizePhone = ['brand', 'hushh', 'hushh-profile', 'hushh-profile-update'].includes(agent)
+    const normalizedText = shouldNormalizePhone ? normalizePhoneInText(trimmed) : trimmed
+    const userMsg = { role: 'user', content: normalizedText, id: `u-${Date.now()}` }
     setMessages(prev => [...prev, userMsg])
     setPrompt('')
     setShowPromptPanel(false)
@@ -323,7 +336,7 @@ export default function A2AAgentClient() {
         headers: { 
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ text: trimmed }),
+        body: JSON.stringify({ text: normalizedText }),
       })
       const json = await res.json()
       if (!res.ok) {
@@ -684,5 +697,6 @@ export default function A2AAgentClient() {
     </ContentWrapper>
   )
 }
+
 
 

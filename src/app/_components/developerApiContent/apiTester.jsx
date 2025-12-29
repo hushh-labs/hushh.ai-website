@@ -7,6 +7,7 @@ import {
   FormLabel,
   Icon,
   Input,
+  Spinner,
   Text,
   useDisclosure,
   VStack,
@@ -137,6 +138,7 @@ const ApiSection = ({ endpoint, apiKey }) => {
   // Response & requested URL
   const [response, setResponse] = useState(null);
   const [requestedUrl, setRequestedUrl] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (setter, key, value) => {
     setter((prev) => ({ ...prev, [key]: value }));
@@ -152,6 +154,8 @@ const ApiSection = ({ endpoint, apiKey }) => {
       queryString ? "?" + queryString : ""
     }`;
     setRequestedUrl(fullUrl);
+    setResponse(null);
+    setIsLoading(true);
 
     // Prepare headers
     const finalHeaders = {
@@ -183,6 +187,8 @@ const ApiSection = ({ endpoint, apiKey }) => {
       setResponse(res.data);
     } catch (error) {
       setResponse(error.response ? error.response.data : "Error occurred.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -275,9 +281,10 @@ const ApiSection = ({ endpoint, apiKey }) => {
           {/* Send Request Button */}
           <button
             onClick={handleSubmit}
+            disabled={isLoading}
             className="bg-[#0a2540] text-white inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 mt-4"
           >
-            Send Request
+            {isLoading ? "Sending..." : "Send Request"}
           </button>
 
           {/* Display Requested URL */}
@@ -289,19 +296,26 @@ const ApiSection = ({ endpoint, apiKey }) => {
           )}
 
           {/* Display Response */}
-          {response && (
+          {(isLoading || response) && (
             <Box w="full">
               <Text fontWeight="bold">Response:</Text>
-              <Textarea
-                value={
-                  typeof response === "string"
-                    ? response
-                    : JSON.stringify(response, null, 2)
-                }
-                readOnly
-                bg="gray.100"
-                minH={'200px'}
-              />
+              {isLoading ? (
+                <Flex align="center" gap={3} bg="gray.100" borderRadius="md" px={3} py={4}>
+                  <Spinner size="sm" />
+                  <Text fontSize="sm" color="gray.600">Waiting for response...</Text>
+                </Flex>
+              ) : (
+                <Textarea
+                  value={
+                    typeof response === "string"
+                      ? response
+                      : JSON.stringify(response, null, 2)
+                  }
+                  readOnly
+                  bg="gray.100"
+                  minH={'200px'}
+                />
+              )}
             </Box>
           )}
         </VStack>
