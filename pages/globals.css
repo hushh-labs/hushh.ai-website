@@ -76,7 +76,7 @@ a:hover {
   margin: 0 auto;
   padding: 0.75rem 1.5rem;
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 0.35fr);
   align-items: center;
   gap: 1.5rem;
 }
@@ -119,13 +119,14 @@ a:hover {
 }
 
 .docs-brand-tag {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  padding: 0.25rem 0.55rem;
+  padding: 0.3rem 0.7rem;
   border-radius: 999px;
-  background: var(--docs-accent-soft);
+  background: rgba(14, 165, 233, 0.12);
   color: var(--docs-accent-strong);
+  border: 1px solid rgba(14, 165, 233, 0.18);
 }
 
 .docs-nav-links {
@@ -148,28 +149,9 @@ a:hover {
   color: var(--docs-accent-strong);
 }
 
-.docs-nav-link {
-  font-size: 0.9rem;
-  color: var(--docs-muted);
-}
-
-.docs-cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.45rem 0.9rem;
+.docs-nav-right img,
+.docs-nav-right .chakra-avatar {
   border-radius: 999px;
-  background: linear-gradient(135deg, #0ea5e9, #38bdf8);
-  color: #ffffff;
-  font-weight: 600;
-  font-size: 0.85rem;
-  box-shadow: 0 10px 20px rgba(14, 165, 233, 0.25);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.docs-cta:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 14px 28px rgba(14, 165, 233, 0.3);
 }
 
 .docs-search input {
@@ -181,6 +163,11 @@ a:hover {
   font-size: 0.9rem;
   color: var(--docs-text);
   box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+}
+
+.docs-nav-center .nextra-search {
+  max-width: 340px;
+  margin: 0 auto;
 }
 
 .docs-search input:focus {
@@ -495,13 +482,13 @@ tr:last-child td {
   }
 
   .docs-nav {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr) minmax(0, 0.35fr);
   }
 }
 
 @media (max-width: 900px) {
   .docs-nav {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.35fr);
   }
 
   .docs-nav-center {
@@ -515,10 +502,6 @@ tr:last-child td {
 }
 
 @media (max-width: 600px) {
-  .docs-cta {
-    display: none;
-  }
-
   .docs-nav-right {
     gap: 0.5rem;
   }

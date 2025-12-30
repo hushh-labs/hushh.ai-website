@@ -29,12 +29,6 @@ const DocsNavbar = ({ flatDirectories = [] }) => {
           )}
         </div>
         <div className="docs-nav-right">
-          <Link href="/developerApi/login" className="docs-nav-link">
-            Console
-          </Link>
-          <Link href="/developer-Api/on-boarding" className="docs-cta">
-            Get API keys
-          </Link>
           <MyLogo />
         </div>
       </div>
