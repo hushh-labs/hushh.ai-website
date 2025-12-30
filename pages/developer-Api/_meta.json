@@ -1,4 +1,8 @@
 {
+  "index": {
+    "title": "Documentation",
+    "order": 0
+  },
   "intelligence-portal": {
     "title": "Intelligence Portal",
     "order": 1
