@@ -46,6 +46,6 @@
   },
   "investor-onboarding": {
     "title": "Investor Onboarding",
-    "display": "hidden"
+    "order": 9
   }
 }
