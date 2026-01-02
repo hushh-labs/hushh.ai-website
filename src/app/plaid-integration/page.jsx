@@ -40,6 +40,7 @@ const ENDPOINTS = {
     "https://hushh-plaid-agent-app-bubqpu.5sc6y6-4.usa-e2.cloudhub.io/plaid-agent",
 };
 
+const PLAID_ACCOUNTS_PATH = "/api/plaid/accounts";
 const DEFAULT_LINK_PRODUCTS = ["transactions", "investments", "liabilities", "assets"];
 
 const defaultPayload = {
@@ -244,6 +245,9 @@ export default function PlaidIntegrationPage() {
       onSuccess: async (public_token, metadata) => {
         updateField("public_token", public_token);
         pushLog("Plaid Link Success", { public_token, metadata });
+        console.log("[Plaid Link] Success", { public_token, metadata });
+        console.log("[Plaid Link] Institution", metadata?.institution || null);
+        console.log("[Plaid Link] Accounts", metadata?.accounts || []);
         try {
           const exchangeResult = await callPlaidApi({
             title: "Exchange Public Token",
@@ -251,6 +255,7 @@ export default function PlaidIntegrationPage() {
             body: { public_token },
           });
           const exchangeData = unwrapPlaidResponse(exchangeResult);
+          console.log("[Plaid Link] Token exchange result", exchangeData);
           if (exchangeData?.access_token) {
             updateField("access_token", exchangeData.access_token);
           }
@@ -287,16 +292,53 @@ export default function PlaidIntegrationPage() {
       });
       return;
     }
+    try {
+      const res = await fetch(PLAID_ACCOUNTS_PATH, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ access_token: credentials.access_token }),
+      });
+      const json = await res.json();
+      pushLog("Fetch Accounts (/accounts/get)", json);
+      const data = unwrapPlaidResponse(json);
+      if (data) {
+        setFetchedData(data);
+        console.log("[Plaid] Accounts response", data);
+        if (data?.accounts) {
+          console.log("[Plaid] Accounts", data.accounts);
+        }
+      }
+    } catch (error) {
+      pushLog("Fetch Accounts (/accounts/get)", { error: error?.message || "Unknown error" });
+      toast({
+        title: "Fetch accounts failed",
+        status: "error",
+        duration: 3000,
+      });
+    }
+  };
+
+  const handleFetchConsolidatedFinancialData = async () => {
+    if (!credentials.access_token) {
+      toast({
+        title: "Missing access token",
+        description: "Exchange the public token before fetching data.",
+        status: "info",
+        duration: 3000,
+      });
+      return;
+    }
     const result = await callPlaidApi({
-      title: "Fetch Consolidated Financial Data",
+      title: "Fetch Consolidated Financial Data (MuleSoft)",
       endpoint: ENDPOINTS.getUserFinancialData,
-      method: "POST", // send body
-      overrideMethod: "GET", // signal GET to backend while keeping JSON body
-      body: { access_token: credentials.access_token, client_id: credentials.client_id, secret: credentials.secret },
+      method: "POST",
+      overrideMethod: "GET",
+      body: { access_token: credentials.access_token },
     });
     const data = unwrapPlaidResponse(result);
     if (data) {
       setFetchedData(data);
+      console.log("[MuleSoft] Consolidated financial data", data);
     }
   };
 
@@ -579,7 +621,7 @@ export default function PlaidIntegrationPage() {
 
                 <VStack align="stretch" spacing={2}>
                   <Text fontSize="sm" fontWeight="600" color="gray.700" textTransform="uppercase">
-                    2.4 Fetch consolidated financial data using the access token
+                    2.4 Fetch account details via Plaid /accounts/get
                   </Text>
                   <Button
                     bg="#1CB5A3"
@@ -587,13 +629,27 @@ export default function PlaidIntegrationPage() {
                     _hover={{ bg: "#13a291" }}
                     onClick={handleFetchFinancialData}
                   >
-                    Fetch User Financial Data
+                    Fetch Account Details
                   </Button>
                 </VStack>
 
                 <VStack align="stretch" spacing={2}>
                   <Text fontSize="sm" fontWeight="600" color="gray.700" textTransform="uppercase">
-                    2.5 Push the unified payload to Supabase for storage
+                    2.5 Optional: fetch consolidated financial data via MuleSoft
+                  </Text>
+                  <Button
+                    bg="#0C8CE9"
+                    color="white"
+                    _hover={{ bg: "#0B7BD1" }}
+                    onClick={handleFetchConsolidatedFinancialData}
+                  >
+                    Fetch Consolidated Data (MuleSoft)
+                  </Button>
+                </VStack>
+
+                <VStack align="stretch" spacing={2}>
+                  <Text fontSize="sm" fontWeight="600" color="gray.700" textTransform="uppercase">
+                    2.6 Push the unified payload to Supabase for storage
                   </Text>
                   <Button
                     bg="#111827"
@@ -606,7 +662,7 @@ export default function PlaidIntegrationPage() {
                 </VStack>
               </Stack>
               <Text mt={4} color="gray.500" fontSize="sm">
-                Follow the buttons in order (1 → 5) to mirror the exact Plaid + MuleSoft flow. You can repeat steps with
+                Follow the buttons in order (1 to 6). Step 2.5 is optional if you want the MuleSoft consolidated flow. You can repeat steps with
                 fresh tokens at any time.
               </Text>
             </Box>
@@ -649,3 +705,4 @@ export default function PlaidIntegrationPage() {
     </ContentWrapper>
   );
 }
+
