@@ -1,26 +1,31 @@
 {
-  "intelligence-portal": {
-    "title": "Intelligence Portal",
-    "order": 1
+  "index": {
+    "title": "Documentation",
+    "order": 0
   },
+
   "brand-engineering-onboarding": {
     "title": "Brand Engineering Onboarding",
-    "order": 2
+    "order": 1
   },
   "rootEndpoints": {
     "title": "Agentic Endpoints",
-    "order": 3
+    "order": 2
   },
   "agent-reference": {
     "title": "Agent Reference",
-    "order": 4
+    "order": 3
   },
   "data-retrieval-insertion": {
     "title": "Profile Data and Enrichment",
-    "order": 5
+    "order": 4
   },
   "use-cases": {
     "title": "Use Cases",
+    "order": 5
+  },
+    "intelligence-portal": {
+    "title": "Intelligence Portal",
     "order": 6
   },
   "additional-requirements": {
@@ -41,6 +46,6 @@
   },
   "investor-onboarding": {
     "title": "Investor Onboarding",
-    "display": "hidden"
+    "order": 9
   }
 }

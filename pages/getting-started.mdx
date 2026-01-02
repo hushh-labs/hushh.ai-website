@@ -1,63 +1,77 @@
-import { Button } from '@chakra-ui/react';
-
 # Getting Started
 
-## 1. Introduction
+## Overview
 
-### 1.1 About the Hushh Developer APIs
+Hushh Agentic Developer APIs let you build consent-first personalization with A2A (Agent-to-Agent) JSON-RPC 2.0 workflows. Use the testable `/api/a2a/{agent}` endpoints in the docs to prototype, then move server-to-server for production workloads.
 
-#### Overview
+## The story: from first signal to activated profile
 
-Hushh Developer APIs enable a secure, trusted, and incentivized way for businesses to receive valuable personal information—directly from customers. Whether you’re in **test mode** or **live mode**, our infrastructure ensures GDPR-compliant, consent-driven data handling every step of the way.
+Imagine a luxury retail app onboarding Ava. She shares her email, selects a few style preferences, and explicitly consents to profile enrichment. Your app then:
 
-#### Test Mode vs. Live Mode
+1. Creates a clean profile record in Supabase.
+2. Enriches it with public and Gemini agents for deeper context.
+3. Normalizes the profile into CRM-friendly likes, dislikes, and affinities.
+4. Activates that profile in your CDP or personalization engine.
 
-- **Test Mode**: Experiment freely without impacting live data or interacting with banking networks.
-- **Live Mode**: Seamlessly switch once you’re production-ready. The API key determines your operating mode.
+The result is a profile that is consented, current, and actionable.
 
-[Learn More About Test Mode]('/')
+## What you will build
 
-#### Why Hushh?
+1. Create or query a profile in Supabase.
+2. Enrich the profile with public and Gemini agents.
+3. Normalize likes, dislikes, and brand affinities.
+4. Activate the merged profile in your CRM or CDP.
 
-- **Consent-Driven Data**: Users own and control their personal data, providing explicit consent before sharing.
-- **Regulatory Compliance**: Stay GDPR-compliant with standardized data governance.
-- **Granular Personal Data**: Access diverse data points (health, receipts, browsing, etc.) to build hyper-personalized experiences.
-- **Transparency & Security**: We prioritize privacy, ensuring robust encryption and privacy measures at every layer.
+## What success looks like
 
-#### Intended Audience
+- A single merged JSON profile that is ready for segmentation.
+- A clear consent trail for every enrichment step.
+- Faster personalization without manual data wrangling.
 
-- **Retail Businesses**: Elevate customer experience by leveraging personalized insights in luxury retail, e-commerce, and more.
-- **Application Developers**: Integrate direct user-consent data effortlessly to power next-level personalization in apps, CRMs, and beyond.
+## Prerequisites
 
----
+- A Hushh developer account.
+- An API key and session token.
+- A minimal identity payload (email or phone).
 
-### 1.2 Next Steps
+## Base URL
 
-Below are some quick links to help you get started:
+`https://hushh.ai`
 
-#### Quick Start (Test our APIs)
+## Your first workflow (story-driven)
 
-A step-by-step introduction on integrating Hushh into your application. Ideal for developers who want to jump in quickly.
+Use Ava as a reference profile. Start by enriching public data, then run Gemini for gap filling, and finally normalize the profile for brand activation.
 
-<Button href="">[On Boarding](developer-Api/on-boarding)</Button>
+## Make your first request
 
+```bash
+curl -X POST "https://hushh.ai/api/a2a/public" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d "{\"text\":\"Provide a detailed JSON profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001.\",\"sessionId\":\"session-123\",\"id\":\"task-abc123\"}"
+```
 
-#### Browse Our APIs
+## Example identity payload
 
-Discover the diverse range of APIs offered—PII, Fashion, Transactions, and more—and understand how each can drive innovation in your solutions.
+```json
+{
+  "text": "Create a profile for Ava Torres with email ava.torres@example.com, phone +1 4155550199, city San Francisco, and interests luxury retail, travel, wellness.",
+  "sessionId": "session-456",
+  "id": "task-789"
+}
+```
 
-<Button href="/browseApi">[Browse Our APIs](browseApi)</Button>
+## Common pitfalls to avoid
 
+- Using live endpoints from the browser. Use the doc endpoints for testing, then move to server-to-server.
+- Skipping consent metadata before enrichment.
+- Storing raw agent outputs without normalization.
 
+## Next steps
 
-#### Use Cases
+- [Developer console setup](/developer-Api/on-boarding)
+- [Agentic endpoints](/developer-Api/rootEndpoints)
+- [Profile data and enrichment](/developer-Api/data-retrieval-insertion)
+- [Use cases](/developer-Api/use-cases)
 
-Delve into advanced use cases, from hyper-personalized recommendations to consent-driven marketing campaigns.
-
-<Button href="/use-cases">[Explore use cases](use-cases)</Button>
-
----
-
-### Ready to Explore?
-
-Choose your path and start building a more personalized, privacy-focused experience with Hushh.
+Ready to explore? Start with the onboarding flow, then open the Agentic Endpoints page to test your first live request.

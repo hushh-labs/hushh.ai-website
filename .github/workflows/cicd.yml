@@ -42,13 +42,19 @@ jobs:
           node-version: "18"
           cache: "npm"
 
-      # Fix for: "Cannot find native binding" (@napi-rs/simple-git optional dependency bug)
       - name: Install dependencies (legacy peer deps + optional native deps fix)
         run: |
           rm -rf node_modules package-lock.json
           npm install --legacy-peer-deps
 
-     
+
+      # Extract commit message for push events (so Slack shows it cleanly)
+      - name: Get commit message
+        if: github.event_name == 'push'
+        id: commitmsg
+        run: |
+          msg=$(git log -1 --pretty=%B | tr '\n' ' ' | sed 's/"/'\''/g')
+          echo "message=$msg" >> $GITHUB_OUTPUT
 
   slack_ci_success:
     name: Slack notify (CI success)
@@ -57,6 +63,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout (for commit message on push)
+        if: github.event_name == 'push'
+        uses: actions/checkout@v4
+
+      - name: Get commit message (push)
+        if: github.event_name == 'push'
+        id: commitmsg
+        run: |
+          msg=$(git log -1 --pretty=%B | tr '\n' ' ' | sed 's/"/'\''/g')
+          echo "message=$msg" >> $GITHUB_OUTPUT
+
       - name: Send Slack message (CI success)
         uses: slackapi/slack-github-action@v2.0.0
         with:
@@ -90,6 +107,13 @@ jobs:
                   "text": {
                     "type": "mrkdwn",
                     "text": "${{ github.event_name == 'pull_request' && format('*PR:* <{0}|#{1} {2}>', github.event.pull_request.html_url, github.event.pull_request.number, github.event.pull_request.title) || format('*Commit:* <{0}/{1}/commit/{2}|View commit>', github.server_url, github.repository, github.sha) }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ github.event_name == 'push' && format('*Commit message:* {0}', steps.commitmsg.outputs.message) || format('*PR title:* {0}', github.event.pull_request.title) }}"
                   }
                 }
               ]

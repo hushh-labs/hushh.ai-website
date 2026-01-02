@@ -1,63 +1,74 @@
 'use client'
 import React from 'react'
+import Link from 'next/link'
 import { useConfig } from 'nextra-theme-docs'
 import MDXComponents from './src/app/_components/developerApiContent/page'
 import remarkGfm from 'remark-gfm'
 import MyLogo from './src/app/developerApi/userLogo'
-import { Box, Flex, IconButton } from '@chakra-ui/react'
-import { HamburgerIcon } from '@chakra-ui/icons'
+
+const DocsNavbar = ({ flatDirectories = [] }) => {
+  const { search } = useConfig()
+
+  return (
+    <div className="docs-nav-shell">
+      <div className="docs-nav">
+        <div className="docs-nav-left">
+          <Link href="/developerApi" className="docs-brand">
+            <span className="docs-brand-mark">Hushh</span>
+            <span className="docs-brand-tag">Developer Docs</span>
+          </Link>
+          <div className="docs-nav-links">
+            <Link href="/developer-Api/on-boarding">Get started</Link>
+            <Link href="/developer-Api/rootEndpoints">API reference</Link>
+            <Link href="/developer-Api/use-cases">Use cases</Link>
+          </div>
+        </div>
+        <div className="docs-nav-center">
+          {search?.component && (
+            <search.component className="docs-search" directories={flatDirectories} />
+          )}
+        </div>
+        <div className="docs-nav-right">
+          <MyLogo />
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default {
-  logo: <span>Hushh Developer API</span>,
+  logo: (
+    <span className="docs-logo">
+      Hushh <em>Developer Docs</em>
+    </span>
+  ),
   nextThemes: {
     defaultTheme: "light", // Set the default theme to light
     forcedTheme: "light",  // Force light mode regardless of system preference
     disableSwitch: true,   // Hide the theme switch option
   },
   navbar: {
-    component: () => {
-      const { search,theme } = useConfig()
-      const isDarkMode = theme === 'dark';
-      return (
-        <Flex
-        as="nav"
-        position="sticky"
-        top="0"
-        zIndex="1000"
-        justifyContent="space-between"
-        alignItems="center"
-        width="100%"
-        px={4}
-        py={2}
-        bg="white"
-        borderBottom="1px solid #eaeaea"
-        >
-          {/* Left Section: Logo */}
-          <Box fontWeight="bold" fontSize="lg" >
-            Hushh Developer API
-          </Box>
-
-          {/* Center Section: Search Bar (first) + MyLogo (after) */}
-          <Flex alignItems="center" gap={4}>
-            <Box display={{ base: "none", md: "block" }}>
-              {search?.component && <search.component />}
-            </Box>
-            <MyLogo />
-          </Flex>
-
-          {/* Right Section: Mobile Hamburger Menu */}
-          <Box display={{ base: "block", md: "none" }}>
-            <IconButton 
-              icon={<HamburgerIcon />} 
-              variant="ghost" 
-              aria-label="Menu" 
-            />
-          </Box>
-        </Flex>
-      )
-    }
+    component: DocsNavbar
   },
-darkMode: false,
+  darkMode: false,
+  primaryHue: {
+    light: 204,
+    dark: 204,
+  },
+  primarySaturation: {
+    light: 90,
+    dark: 90,
+  },
+  sidebar: {
+    defaultMenuCollapseLevel: 1,
+    toggleButton: true,
+    autoCollapse: true,
+  },
+  toc: {
+    float: true,
+    title: "On this page",
+  },
+  navigation: true,
   project: {
     link: '/developerApi/login',
     icon: <MyLogo />,

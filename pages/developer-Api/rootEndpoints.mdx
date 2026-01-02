@@ -2,7 +2,114 @@
 title: Agentic Endpoints
 ---
 import ApiSection from '../../src/app/_components/developerApiContent/apiTester'
+import TryItOut from '../../src/app/_components/developerApiContent/tryItOut'
 import { Callout, Steps } from 'nextra/components'
+
+export const tryItOutSamples = [
+  {
+    title: "Enrich a profile",
+    description: "Generate a full profile using public signals.",
+    endpoint: {
+      method: "POST",
+      path: "/api/a2a/public",
+      requestBody: {
+        text: {
+          type: "string",
+          example:
+            "Provide a detailed JSON profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001."
+        },
+        sessionId: { type: "string" },
+        id: { type: "string" }
+      }
+    }
+  },
+  /*
+  {
+    title: "Fill gaps with Gemini",
+    description: "Run a second-pass enrichment for higher confidence traits.",
+    endpoint: {
+      method: "POST",
+      path: "/api/a2a/gemini",
+      requestBody: {
+        text: {
+          type: "string",
+          example:
+            "Using the Gemini Public Data Agent, provide a detailed JSON profile for Sundar Pichai with email sundar.pichai@example.com and phone +1 6505559001."
+        },
+        sessionId: { type: "string" },
+        id: { type: "string" }
+      }
+    }
+  },
+  */
+  {
+    title: "Create a profile",
+    description: "Create a new Supabase profile from natural language.",
+    endpoint: {
+      method: "POST",
+      path: "/api/a2a/hushh-profile",
+      requestBody: {
+        text: {
+          type: "string",
+          example:
+            "Create a profile for Sundar Pichai with email sundar.pichai@example.com, phone +1 6505559001, occupation CEO, city Mountain View, and country USA."
+        },
+        sessionId: { type: "string" },
+        id: { type: "string" }
+      }
+    }
+  },
+  {
+    title: "Update a profile",
+    description: "Update preferences or details in the profile.",
+    endpoint: {
+      method: "POST",
+      path: "/api/a2a/hushh-profile-update",
+      requestBody: {
+        text: {
+          type: "string",
+          example:
+            "Update the city for Sundar Pichai to Mountain View and set the occupation to CEO."
+        },
+        sessionId: { type: "string" },
+        id: { type: "string" }
+      }
+    }
+  },
+  {
+    title: "Query a profile",
+    description: "Fetch a profile by email, phone, or name.",
+    endpoint: {
+      method: "POST",
+      path: "/api/a2a/hushh",
+      requestBody: {
+        text: {
+          type: "string",
+          example: "Fetch all details for Sundar Pichai with phone +1 6505559001."
+        },
+        sessionId: { type: "string" },
+        id: { type: "string" }
+      }
+    }
+  },
+  {
+    title: "Normalize brand signals",
+    description: "Summarize likes, dislikes, and brand affinity.",
+    endpoint: {
+      method: "POST",
+      path: "/api/a2a/brand",
+      requestBody: {
+        text: {
+          type: "string",
+          example:
+            "Summarize likes, dislikes, and brand affinity for Sundar Pichai using the consented profile."
+        },
+        sessionId: { type: "string" },
+        id: { type: "string" }
+      }
+    }
+  }
+]
 
 # Hushh Agentic Developer APIs
 
@@ -27,6 +134,12 @@ Use `/api/a2a/{agent}` for testing in this documentation. Call direct MuleSoft e
 ```
 
 ## Core endpoints (testable)
+
+<TryItOut
+  title="Run a live agent request"
+  subtitle="Pick a workflow on the left, edit the payload, and send a request to the test endpoint."
+  samples={tryItOutSamples}
+/>
 
 ### OpenAI Public Data Agent
 Enriches profiles using public signals to infer interests, lifestyle, and brand affinities.
