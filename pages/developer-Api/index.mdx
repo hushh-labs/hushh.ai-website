@@ -3,15 +3,20 @@ title: Documentation
 ---
 import DocsHero from '../../src/app/_components/developerApiContent/docsHero'
 
-<DocsHero />
+<div className="w-full max-w-[90rem] mx-auto">
+  <DocsHero />
+</div>
 
-## Popular guides
+<div className="mt-24 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto px-6">
+  <div className="p-8 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] hover:border-[var(--accent-secondary)] transition-colors group">
+    <h3 className="text-xl font-bold mb-3 group-hover:text-[var(--accent-primary)] transition-colors">Developer Console</h3>
+    <p className="text-[var(--text-secondary)] mb-6">Get your API keys and configure your first agentic workflow.</p>
+    <a href="/developer-Api/on-boarding" className="text-sm font-semibold text-[var(--accent-primary)] hover:text-[var(--accent-secondary)]">Start Setup →</a>
+  </div>
 
-- [Developer console setup](/developer-Api/on-boarding)
-- [Agentic endpoints](/developer-Api/rootEndpoints)
-- [Profile data and enrichment](/developer-Api/data-retrieval-insertion)
-- [Use cases](/developer-Api/use-cases)
-
-## Build with Hushh
-
-Hushh APIs help you capture consented data, enrich profiles, and activate personalization in your CRM or CDP. Start with the onboarding flow, then explore the agentic endpoints to run your first live request.
+  <div className="p-8 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] hover:border-[var(--accent-secondary)] transition-colors group">
+    <h3 className="text-xl font-bold mb-3 group-hover:text-[var(--accent-primary)] transition-colors">Agentic Endpoints</h3>
+    <p className="text-[var(--text-secondary)] mb-6">Explore the full API reference for profile enrichment and data retrieval.</p>
+    <a href="/developer-Api/rootEndpoints" className="text-sm font-semibold text-[var(--accent-primary)] hover:text-[var(--accent-secondary)]">View Reference →</a>
+  </div>
+</div>

@@ -1,5 +1,8 @@
 # Getting Started
 
+import StepProcess from '../../src/app/_components/developerApiContent/StepProcess';
+import InteractiveEndpoint from '../../src/app/_components/developerApiContent/InteractiveEndpoint';
+
 ## Overview
 
 Hushh Agentic Developer APIs let you build consent-first personalization with A2A (Agent-to-Agent) JSON-RPC 2.0 workflows. Use the testable `/api/a2a/{agent}` endpoints in the docs to prototype, then move server-to-server for production workloads.
@@ -8,48 +11,60 @@ Hushh Agentic Developer APIs let you build consent-first personalization with A2
 
 Imagine a luxury retail app onboarding Ava. She shares her email, selects a few style preferences, and explicitly consents to profile enrichment. Your app then:
 
-1. Creates a clean profile record in Supabase.
-2. Enriches it with public and Gemini agents for deeper context.
-3. Normalizes the profile into CRM-friendly likes, dislikes, and affinities.
-4. Activates that profile in your CDP or personalization engine.
+<StepProcess steps={[
+  {
+    icon: "Fingerprint",
+    title: "Consented Identity",
+    description: "Create a clean profile record in Supabase with user consent.",
+    snippet: "POST /v1/user/create"
+  },
+  {
+    icon: "Sparkles",
+    title: "Agentic Enrichment",
+    description: "Enrich profile with public and Gemini agents for deeper context.",
+    snippet: "POST /v1/agents/enrich"
+  },
+  {
+    icon: "Database",
+    title: "Normalization",
+    description: "Normalize the profile into CRM-friendly likes, dislikes, and affinities.",
+    snippet: "{ likes: ['Gucci', 'Prada'], dislikes: [] }"
+  },
+  {
+    icon: "Send",
+    title: "Activation",
+    description: "Activate that profile in your CDP or personalization engine.",
+    snippet: "SYNC -> Salesforce CDP"
+  }
+]} />
 
 The result is a profile that is consented, current, and actionable.
 
-## What you will build
-
-1. Create or query a profile in Supabase.
-2. Enrich the profile with public and Gemini agents.
-3. Normalize likes, dislikes, and brand affinities.
-4. Activate the merged profile in your CRM or CDP.
-
-## What success looks like
-
-- A single merged JSON profile that is ready for segmentation.
-- A clear consent trail for every enrichment step.
-- Faster personalization without manual data wrangling.
-
-## Prerequisites
-
-- A Hushh developer account.
-- An API key and session token.
-- A minimal identity payload (email or phone).
-
-## Base URL
-
-`https://hushh.ai`
-
-## Your first workflow (story-driven)
-
-Use Ava as a reference profile. Start by enriching public data, then run Gemini for gap filling, and finally normalize the profile for brand activation.
-
 ## Make your first request
 
-```bash
-curl -X POST "https://hushh.ai/api/a2a/public" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -d "{\"text\":\"Provide a detailed JSON profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001.\",\"sessionId\":\"session-123\",\"id\":\"task-abc123\"}"
-```
+Try it out right here. Use Ava as a reference profile to test the public agent.
+
+<InteractiveEndpoint 
+  method="POST" 
+  path="/api/a2a/public" 
+  description="Enrich a profile using public data agents."
+  curlCommand={`curl -X POST "https://hushh.ai/api/a2a/public" \\
+  -H "Content-Type: application/json" \\
+  -H "Authorization: Bearer YOUR_API_KEY" \\
+  -d "{\\"text\\":\\"Provide a detailed JSON profile for Sundar Pichai, email sundar.pichai@example.com, phone +1 6505559001.\\",\\"sessionId\\":\\"session-123\\",\\"id\\":\\"task-abc123\\"}"`}
+  responseExample={`{
+  "jsonrpc": "2.0",
+  "result": {
+    "profile": {
+      "name": "Sundar Pichai",
+      "role": "CEO of Alphabet and Google",
+      "known_for": ["Chrome", "Android", "Google Drive"],
+      "affinities": ["Technology", "Leadership", "Product Management"]
+    }
+  },
+  "id": "task-abc123"
+}`}
+/>
 
 ## Example identity payload
 
@@ -63,7 +78,9 @@ curl -X POST "https://hushh.ai/api/a2a/public" \
 
 ## Common pitfalls to avoid
 
-- Using live endpoints from the browser. Use the doc endpoints for testing, then move to server-to-server.
+> [!WARNING]
+> Do not use live endpoints from the browser implementation in production. Always move to server-to-server communication to protect your API keys.
+
 - Skipping consent metadata before enrichment.
 - Storing raw agent outputs without normalization.
 
@@ -73,5 +90,3 @@ curl -X POST "https://hushh.ai/api/a2a/public" \
 - [Agentic endpoints](/developer-Api/rootEndpoints)
 - [Profile data and enrichment](/developer-Api/data-retrieval-insertion)
 - [Use cases](/developer-Api/use-cases)
-
-Ready to explore? Start with the onboarding flow, then open the Agentic Endpoints page to test your first live request.

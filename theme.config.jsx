@@ -43,22 +43,11 @@ export default {
     </span>
   ),
   nextThemes: {
-    defaultTheme: "light", // Set the default theme to light
-    forcedTheme: "light",  // Force light mode regardless of system preference
-    disableSwitch: true,   // Hide the theme switch option
+    defaultTheme: "dark", 
   },
-  navbar: {
-    component: DocsNavbar
-  },
-  darkMode: false,
-  primaryHue: {
-    light: 204,
-    dark: 204,
-  },
-  primarySaturation: {
-    light: 90,
-    dark: 90,
-  },
+  darkMode: true,
+  primaryHue: 270,
+  primarySaturation: 80,
   sidebar: {
     defaultMenuCollapseLevel: 1,
     toggleButton: true,
