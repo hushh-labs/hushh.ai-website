@@ -3,6 +3,7 @@ import getUserDetails from "./getUserDetails";
 import signOut from "./signOut";
 import isLoggedIn from "./isLoggedIn";
 import getSession from "./getSession";
+import mfaService from "./mfaService";
 
 const authentication = {
   googleSignIn: googleSignIn,
@@ -10,6 +11,7 @@ const authentication = {
   signOut: signOut,
   isLoggedIn: isLoggedIn,
   getSession: getSession,
+  mfa: mfaService,
 };
 
 export default authentication; 
