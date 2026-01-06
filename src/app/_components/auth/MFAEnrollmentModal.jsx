@@ -189,9 +189,10 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
         <Modal
             isOpen={isOpen}
             onClose={onClose}
-            size="xl"
+            size="md"
             closeOnOverlayClick={false}
             isCentered
+            scrollBehavior="inside"
         >
             <ModalOverlay
                 bg="blackAlpha.600"
@@ -199,39 +200,40 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
             />
             <ModalContent
                 bg="#ffffff"
-                borderRadius="3xl"
+                borderRadius="2xl"
                 boxShadow="0 20px 60px rgba(0, 0, 0, 0.15)"
                 border="1px solid #e5e5ea"
                 overflow="hidden"
+                my="auto"
             >
                 <ModalHeader
                     bg="linear-gradient(135deg, #0071E3 0%, #BB62FC 100%)"
                     color="white"
-                    py={6}
-                    fontSize="2xl"
+                    py={4}
+                    fontSize="xl"
                     fontWeight={800}
                     textAlign="center"
                 >
-                    🔐 Enable Two-Factor Authentication
+                    🔐 Enable 2FA
                 </ModalHeader>
-                <ModalCloseButton color="white" top={4} right={4} />
+                <ModalCloseButton color="white" top={3} right={3} />
 
-                <ModalBody py={8} px={8}>
+                <ModalBody py={4} px={5}>
                     {isEnrolling ? (
-                        <VStack spacing={6} py={10}>
-                            <Spinner size="xl" color="#0071E3" thickness="4px" />
-                            <Text color="#6e6e73" fontSize="lg">
-                                Setting up your authenticator...
+                        <VStack spacing={4} py={8}>
+                            <Spinner size="lg" color="#0071E3" thickness="3px" />
+                            <Text color="#6e6e73" fontSize="sm">
+                                Setting up...
                             </Text>
                         </VStack>
                     ) : (
-                        <VStack spacing={6} animation={`${fadeIn} 0.5s ease-out`}>
-                            {/* Step Indicator */}
-                            <HStack spacing={4} w="full" justify="center">
-                                <HStack spacing={2}>
+                        <VStack spacing={3} animation={`${fadeIn} 0.5s ease-out`}>
+                            {/* Step Indicator - Compact */}
+                            <HStack spacing={3} w="full" justify="center">
+                                <HStack spacing={1}>
                                     <Box
-                                        w="32px"
-                                        h="32px"
+                                        w="24px"
+                                        h="24px"
                                         borderRadius="full"
                                         bg={step >= 1 ? "#0071E3" : "#e5e5ea"}
                                         color="white"
@@ -239,17 +241,17 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
                                         alignItems="center"
                                         justifyContent="center"
                                         fontWeight={700}
-                                        transition="all 0.3s"
+                                        fontSize="xs"
                                     >
-                                        {step > 1 ? <CheckCircleIcon /> : "1"}
+                                        {step > 1 ? <CheckCircleIcon boxSize={3} /> : "1"}
                                     </Box>
-                                    <Text color="#1d1d1f" fontWeight={600}>Scan QR</Text>
+                                    <Text color="#1d1d1f" fontWeight={600} fontSize="xs">Scan</Text>
                                 </HStack>
-                                <Box w="40px" h="2px" bg={step >= 2 ? "#0071E3" : "#e5e5ea"} transition="all 0.3s" />
-                                <HStack spacing={2}>
+                                <Box w="20px" h="1px" bg={step >= 2 ? "#0071E3" : "#e5e5ea"} />
+                                <HStack spacing={1}>
                                     <Box
-                                        w="32px"
-                                        h="32px"
+                                        w="24px"
+                                        h="24px"
                                         borderRadius="full"
                                         bg={step >= 2 ? "#0071E3" : "#e5e5ea"}
                                         color="white"
@@ -257,89 +259,69 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
                                         alignItems="center"
                                         justifyContent="center"
                                         fontWeight={700}
-                                        transition="all 0.3s"
+                                        fontSize="xs"
                                     >
                                         2
                                     </Box>
-                                    <Text color="#1d1d1f" fontWeight={600}>Verify</Text>
+                                    <Text color="#1d1d1f" fontWeight={600} fontSize="xs">Verify</Text>
                                 </HStack>
                             </HStack>
 
-                            <Divider />
+                            <Divider borderColor="#e5e5ea" />
 
                             {step === 1 && (
-                                <VStack spacing={6} w="full">
-                                    <Alert
-                                        status="info"
-                                        borderRadius="xl"
-                                        bg="#f0f9ff"
-                                        border="1px solid #bfdbfe"
+                                <VStack spacing={3} w="full">
+                                    <Text color="#6e6e73" fontSize="xs" textAlign="center">
+                                        Use Google Authenticator or similar to scan:
+                                    </Text>
+
+                                    {/* QR Code - Compact */}
+                                    <Box
+                                        p={3}
+                                        bg="white"
+                                        borderRadius="lg"
+                                        border="1px solid #e5e5ea"
+                                        boxShadow="0 2px 8px rgba(0, 0, 0, 0.04)"
                                     >
-                                        <AlertIcon color="#0071E3" />
-                                        <Box>
-                                            <AlertTitle color="#1d1d1f" fontSize="md">
-                                                Download an Authenticator App
-                                            </AlertTitle>
-                                            <AlertDescription color="#6e6e73" fontSize="sm">
-                                                Use Google Authenticator, Microsoft Authenticator, or any TOTP app
-                                            </AlertDescription>
-                                        </Box>
-                                    </Alert>
+                                        {qrCode && (
+                                            <QRCodeSVG
+                                                value={qrCode}
+                                                size={130}
+                                                level="H"
+                                                includeMargin={true}
+                                            />
+                                        )}
+                                    </Box>
 
-                                    {/* QR Code */}
-                                    <VStack spacing={4}>
-                                        <Text color="#1d1d1f" fontSize="lg" fontWeight={700}>
-                                            Step 1: Scan this QR Code
-                                        </Text>
-                                        <Box
-                                            p={6}
-                                            bg="white"
-                                            borderRadius="2xl"
-                                            border="2px solid #e5e5ea"
-                                            boxShadow="0 4px 12px rgba(0, 0, 0, 0.08)"
-                                        >
-                                            {qrCode && (
-                                                <QRCodeSVG
-                                                    value={qrCode}
-                                                    size={220}
-                                                    level="H"
-                                                    includeMargin={true}
-                                                />
-                                            )}
-                                        </Box>
-                                    </VStack>
-
-                                    {/* Manual Entry */}
-                                    <VStack spacing={3} w="full">
-                                        <Text color="#6e6e73" fontSize="sm" fontWeight={600}>
-                                            Or enter this code manually:
+                                    {/* Manual Entry - Compact */}
+                                    <VStack spacing={1} w="full">
+                                        <Text color="#6e6e73" fontSize="xs" fontWeight={500}>
+                                            Or enter code manually:
                                         </Text>
                                         <HStack
                                             w="full"
-                                            p={4}
+                                            p={2}
                                             bg="#f5f5f7"
-                                            borderRadius="xl"
+                                            borderRadius="md"
                                             border="1px solid #e5e5ea"
                                             justify="space-between"
+                                            h="36px"
                                         >
                                             <Code
                                                 colorScheme="gray"
-                                                fontSize="md"
+                                                fontSize="sm"
                                                 fontWeight={600}
                                                 bg="transparent"
                                                 color="#1d1d1f"
-                                                letterSpacing="2px"
                                             >
                                                 {secret}
                                             </Code>
                                             <Button
-                                                size="sm"
+                                                size="xs"
                                                 leftIcon={copied ? <CheckCircleIcon /> : <CopyIcon />}
                                                 onClick={handleCopySecret}
-                                                bg={copied ? "#34C759" : "#0071E3"}
-                                                color="white"
-                                                _hover={{ opacity: 0.9 }}
-                                                borderRadius="lg"
+                                                colorScheme={copied ? "green" : "blue"}
+                                                variant="ghost"
                                             >
                                                 {copied ? 'Copied' : 'Copy'}
                                             </Button>
@@ -348,17 +330,18 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
 
                                     <Button
                                         w="full"
-                                        h="56px"
+                                        h="44px"
                                         bg="#0071E3"
                                         color="white"
-                                        fontSize="lg"
-                                        fontWeight={700}
-                                        borderRadius="xl"
+                                        fontSize="sm"
+                                        fontWeight={600}
+                                        borderRadius="lg"
                                         _hover={{ bg: "#0051B3" }}
                                         _active={{ bg: "#003D8F" }}
                                         onClick={() => setStep(2)}
+                                        mt={1}
                                     >
-                                        Continue to Verification
+                                        Continue
                                     </Button>
                                 </VStack>
                             )}

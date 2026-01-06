@@ -121,9 +121,10 @@ const MFAVerificationModal = ({ isOpen, onClose, onSuccess, factorId, challengeI
         <Modal
             isOpen={isOpen}
             onClose={onClose}
-            size="lg"
+            size="md"
             closeOnOverlayClick={false}
             isCentered
+            scrollBehavior="inside"
         >
             <ModalOverlay
                 bg="blackAlpha.700"
@@ -131,55 +132,43 @@ const MFAVerificationModal = ({ isOpen, onClose, onSuccess, factorId, challengeI
             />
             <ModalContent
                 bg="#ffffff"
-                borderRadius="3xl"
+                borderRadius="2xl"
                 boxShadow="0 20px 60px rgba(0, 0, 0, 0.2)"
                 border="1px solid #e5e5ea"
                 overflow="hidden"
+                my="auto"
             >
                 <ModalHeader
                     bg="linear-gradient(135deg, #0071E3 0%, #5E5CE6 100%)"
                     color="white"
-                    py={6}
-                    fontSize="xl"
+                    py={4}
+                    fontSize="lg"
                     fontWeight={800}
                     textAlign="center"
                 >
-                    <VStack spacing={2}>
-                        <Box fontSize="3xl">🔐</Box>
-                        <Text>Two-Factor Authentication</Text>
-                    </VStack>
+                    <HStack spacing={2} justify="center">
+                        <Box fontSize="xl">🔐</Box>
+                        <Text>2FA Verification</Text>
+                    </HStack>
                 </ModalHeader>
-                <ModalCloseButton color="white" top={4} right={4} />
+                <ModalCloseButton color="white" top={3} right={3} />
 
-                <ModalBody py={10} px={8}>
-                    <VStack spacing={8} animation={`${fadeIn} 0.5s ease-out`}>
-                        {/* Instructions */}
-                        <Alert
-                            status="info"
-                            borderRadius="xl"
-                            bg="#f0f9ff"
-                            border="1px solid #bfdbfe"
-                        >
-                            <AlertIcon color="#0071E3" />
-                            <AlertDescription color="#1d1d1f" fontSize="sm">
-                                Open your authenticator app and enter the 6-digit code for Hushh
-                            </AlertDescription>
-                        </Alert>
-
-                        {/* Title */}
-                        <VStack spacing={2}>
-                            <Text color="#1d1d1f" fontSize="2xl" fontWeight={800} textAlign="center">
+                <ModalBody py={5} px={6}>
+                    <VStack spacing={4} animation={`${fadeIn} 0.5s ease-out`}>
+                        {/* Streamlined Header Text */}
+                        <VStack spacing={1}>
+                            <Text color="#1d1d1f" fontSize="lg" fontWeight={700} textAlign="center">
                                 Enter Verification Code
                             </Text>
-                            <Text color="#6e6e73" fontSize="md" textAlign="center">
-                                This adds an extra layer of security to your account
+                            <Text color="#6e6e73" fontSize="xs" textAlign="center">
+                                Enter the 6-digit code from your authenticator app
                             </Text>
                         </VStack>
 
-                        {/* OTP Input */}
+                        {/* OTP Input - Compact */}
                         <VStack spacing={4} w="full">
                             <HStack
-                                spacing={3}
+                                spacing={2}
                                 justify="center"
                                 animation={error ? `${shake} 0.5s ease-in-out` : 'none'}
                             >
@@ -189,7 +178,7 @@ const MFAVerificationModal = ({ isOpen, onClose, onSuccess, factorId, challengeI
                                         setOtp(value);
                                         setError('');
                                     }}
-                                    size="lg"
+                                    size="md"
                                     otp
                                     autoFocus
                                     onComplete={handleVerifyOTP}
@@ -199,12 +188,12 @@ const MFAVerificationModal = ({ isOpen, onClose, onSuccess, factorId, challengeI
                                         bg="#f5f5f7"
                                         border="2px solid"
                                         borderColor={error ? "#FF3B30" : "#e5e5ea"}
-                                        borderRadius="xl"
-                                        fontSize="2xl"
+                                        borderRadius="lg"
+                                        fontSize="lg"
                                         fontWeight={700}
                                         color="#1d1d1f"
-                                        w="56px"
-                                        h="64px"
+                                        w="40px"
+                                        h="48px"
                                         _focus={{
                                             borderColor: error ? "#FF3B30" : "#0071E3",
                                             boxShadow: error
@@ -216,12 +205,12 @@ const MFAVerificationModal = ({ isOpen, onClose, onSuccess, factorId, challengeI
                                         bg="#f5f5f7"
                                         border="2px solid"
                                         borderColor={error ? "#FF3B30" : "#e5e5ea"}
-                                        borderRadius="xl"
-                                        fontSize="2xl"
+                                        borderRadius="lg"
+                                        fontSize="lg"
                                         fontWeight={700}
                                         color="#1d1d1f"
-                                        w="56px"
-                                        h="64px"
+                                        w="40px"
+                                        h="48px"
                                         _focus={{
                                             borderColor: error ? "#FF3B30" : "#0071E3",
                                             boxShadow: error
@@ -233,12 +222,12 @@ const MFAVerificationModal = ({ isOpen, onClose, onSuccess, factorId, challengeI
                                         bg="#f5f5f7"
                                         border="2px solid"
                                         borderColor={error ? "#FF3B30" : "#e5e5ea"}
-                                        borderRadius="xl"
-                                        fontSize="2xl"
+                                        borderRadius="lg"
+                                        fontSize="lg"
                                         fontWeight={700}
                                         color="#1d1d1f"
-                                        w="56px"
-                                        h="64px"
+                                        w="40px"
+                                        h="48px"
                                         _focus={{
                                             borderColor: error ? "#FF3B30" : "#0071E3",
                                             boxShadow: error
@@ -250,12 +239,12 @@ const MFAVerificationModal = ({ isOpen, onClose, onSuccess, factorId, challengeI
                                         bg="#f5f5f7"
                                         border="2px solid"
                                         borderColor={error ? "#FF3B30" : "#e5e5ea"}
-                                        borderRadius="xl"
-                                        fontSize="2xl"
+                                        borderRadius="lg"
+                                        fontSize="lg"
                                         fontWeight={700}
                                         color="#1d1d1f"
-                                        w="56px"
-                                        h="64px"
+                                        w="40px"
+                                        h="48px"
                                         _focus={{
                                             borderColor: error ? "#FF3B30" : "#0071E3",
                                             boxShadow: error
@@ -267,12 +256,12 @@ const MFAVerificationModal = ({ isOpen, onClose, onSuccess, factorId, challengeI
                                         bg="#f5f5f7"
                                         border="2px solid"
                                         borderColor={error ? "#FF3B30" : "#e5e5ea"}
-                                        borderRadius="xl"
-                                        fontSize="2xl"
+                                        borderRadius="lg"
+                                        fontSize="lg"
                                         fontWeight={700}
                                         color="#1d1d1f"
-                                        w="56px"
-                                        h="64px"
+                                        w="40px"
+                                        h="48px"
                                         _focus={{
                                             borderColor: error ? "#FF3B30" : "#0071E3",
                                             boxShadow: error
@@ -284,12 +273,12 @@ const MFAVerificationModal = ({ isOpen, onClose, onSuccess, factorId, challengeI
                                         bg="#f5f5f7"
                                         border="2px solid"
                                         borderColor={error ? "#FF3B30" : "#e5e5ea"}
-                                        borderRadius="xl"
-                                        fontSize="2xl"
+                                        borderRadius="lg"
+                                        fontSize="lg"
                                         fontWeight={700}
                                         color="#1d1d1f"
-                                        w="56px"
-                                        h="64px"
+                                        w="40px"
+                                        h="48px"
                                         _focus={{
                                             borderColor: error ? "#FF3B30" : "#0071E3",
                                             boxShadow: error
@@ -304,7 +293,7 @@ const MFAVerificationModal = ({ isOpen, onClose, onSuccess, factorId, challengeI
                             {error && (
                                 <Text
                                     color="#FF3B30"
-                                    fontSize="sm"
+                                    fontSize="xs"
                                     fontWeight={600}
                                     textAlign="center"
                                 >
@@ -312,70 +301,46 @@ const MFAVerificationModal = ({ isOpen, onClose, onSuccess, factorId, challengeI
                                 </Text>
                             )}
 
-                            {/* Attempts Warning */}
-                            {attempts >= 3 && (
-                                <Alert
-                                    status="warning"
-                                    borderRadius="xl"
-                                    bg="#fff9e6"
-                                    border="1px solid #ffd60a"
+                            {/* Action Buttons */}
+                            <VStack spacing={2} w="full">
+                                <Button
+                                    w="full"
+                                    h="44px"
+                                    bg="#0071E3"
+                                    color="white"
+                                    fontSize="sm"
+                                    fontWeight={600}
+                                    borderRadius="lg"
+                                    _hover={{ bg: "#0051B3" }}
+                                    _active={{ bg: "#003D8F" }}
+                                    onClick={handleVerifyOTP}
+                                    isLoading={isLoading}
+                                    loadingText="Verifying..."
+                                    isDisabled={otp.length !== 6}
+                                    leftIcon={<LockIcon boxSize={3} />}
                                 >
-                                    <AlertIcon color="#ffd60a" />
-                                    <AlertDescription color="#1d1d1f" fontSize="sm">
-                                        Multiple failed attempts. Please check your authenticator app.
-                                    </AlertDescription>
-                                </Alert>
-                            )}
-                        </VStack>
+                                    Verify Code
+                                </Button>
 
-                        {/* Action Buttons */}
-                        <VStack spacing={3} w="full">
-                            <Button
-                                w="full"
-                                h="56px"
-                                bg="#0071E3"
-                                color="white"
-                                fontSize="lg"
-                                fontWeight={700}
-                                borderRadius="xl"
-                                _hover={{ bg: "#0051B3" }}
-                                _active={{ bg: "#003D8F" }}
-                                onClick={handleVerifyOTP}
-                                isLoading={isLoading}
-                                loadingText="Verifying..."
-                                isDisabled={otp.length !== 6}
-                                leftIcon={<LockIcon />}
-                            >
-                                Verify Code
-                            </Button>
+                                <Button
+                                    w="full"
+                                    h="32px"
+                                    variant="ghost"
+                                    color="#6e6e73"
+                                    fontSize="xs"
+                                    fontWeight={500}
+                                    borderRadius="lg"
+                                    _hover={{ bg: "#f5f5f7" }}
+                                    onClick={handleSkip}
+                                >
+                                    Cancel
+                                </Button>
+                            </VStack>
 
-                            <Button
-                                w="full"
-                                h="48px"
-                                variant="ghost"
-                                color="#6e6e73"
-                                fontSize="md"
-                                fontWeight={600}
-                                borderRadius="xl"
-                                _hover={{ bg: "#f5f5f7" }}
-                                onClick={handleSkip}
-                            >
-                                Cancel
-                            </Button>
-                        </VStack>
-
-                        {/* Help Text */}
-                        <Box
-                            p={4}
-                            bg="#f5f5f7"
-                            borderRadius="xl"
-                            border="1px solid #e5e5ea"
-                            w="full"
-                        >
-                            <Text color="#6e6e73" fontSize="sm" textAlign="center" lineHeight="1.6">
-                                💡 <strong>Tip:</strong> Codes refresh every 30 seconds. If a code doesn't work, wait for the next one.
+                            <Text color="#6e6e73" fontSize="xs" textAlign="center">
+                                Codes refresh every 30 seconds
                             </Text>
-                        </Box>
+                        </VStack>
                     </VStack>
                 </ModalBody>
             </ModalContent>
