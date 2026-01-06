@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }) => {
       const verifiedFactors = factors?.filter(f => f.status === 'verified') || [];
 
       if (verifiedFactors.length === 0) {
-        // No MFA enrolled - show enrollment modal
+        // No MFA enrolled - mandatory enrollment
         console.log('⚠️ No MFA enrolled - showing enrollment modal');
         setMfaEnrollmentNeeded(true);
         setMfaRequired(false);
