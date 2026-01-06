@@ -46,6 +46,7 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
     const [qrCode, setQrCode] = useState(null);
     const [secret, setSecret] = useState('');
     const [factorId, setFactorId] = useState('');
+    const [challengeId, setChallengeId] = useState(null);
     const [otp, setOtp] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isEnrolling, setIsEnrolling] = useState(true);
@@ -56,6 +57,7 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
     useEffect(() => {
         if (isOpen) {
             setHasSavedKey(false);
+            setChallengeId(null);
             initializeEnrollment();
         }
     }, [isOpen]);
@@ -97,6 +99,16 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
             setSecret(data.totp.secret);
             setFactorId(data.id);
             setStep(1);
+
+            // Optimization: Pre-create challenge to make verification faster
+            // We do this in background so UI doesn't wait
+            authentication.mfa.challengeMFA(data.id).then(({ data: challengeData, error: challengeError }) => {
+                if (challengeData && !challengeError) {
+                    console.log("MFA Challenge pre-fetched for speed");
+                    setChallengeId(challengeData.id);
+                }
+            });
+
         } catch (error) {
             console.error('Enrollment initialization error:', error);
             toast({
@@ -145,7 +157,17 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
 
         setIsLoading(true);
         try {
-            const { data, error } = await authentication.mfa.verifyMFAEnrollment(factorId, codeToVerify);
+            let result;
+
+            // Optimization: Use pre-fetched challenge if available (1 API call instead of 2)
+            if (challengeId) {
+                result = await authentication.mfa.verifyMFAChallenge(factorId, challengeId, codeToVerify);
+            } else {
+                // Fallback: Challenge + Verify (2 API calls)
+                result = await authentication.mfa.verifyMFAEnrollment(factorId, codeToVerify);
+            }
+
+            const { data, error } = result;
 
             if (error) {
                 toast({
