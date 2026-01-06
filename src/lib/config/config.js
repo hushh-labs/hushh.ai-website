@@ -4,7 +4,7 @@ import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./supabaseEnv";
 const config = {
   SUPABASE_URL,
   SUPABASE_ANON_KEY,
-  redirect_url: "https://hushh.ai/",
+  // redirect_url: typeof window !== "undefined" ? window.location.origin : "https://hushh.ai/",
 };
 
 function createSupabaseClient() {
@@ -13,7 +13,7 @@ function createSupabaseClient() {
       autoRefreshToken: true,
       persistSession: true,
       detectSessionInUrl: true
-    }
+    } 
   });
   return supabase;
 }

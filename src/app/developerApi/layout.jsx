@@ -1,4 +1,4 @@
-import { SessionProvider } from "next-auth/react"
+
 import ClientSideLayout from "./clientSideLayout"
 
 export const metadata = {
@@ -28,7 +28,7 @@ export const metadata = {
 };
 
 export default function RootLayout({
- children
+  children
 }) {
   return (
     <ClientSideLayout >

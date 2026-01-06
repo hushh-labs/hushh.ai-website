@@ -1,17 +1,16 @@
 import { Button } from "@chakra-ui/react";
-import { useSession, signOut, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import '../../../../pages/fonts.css'
+import { useAuth } from "../../context/AuthContext";
 
 const LogoutButton = () => {
-  const { data: session } = useSession();
+  const { session, signOut } = useAuth();
   const router = useRouter();
 
   const handleLogout = async () => {
-    await signOut({ redirect: false }).then(() => {
-        router.push("/developer-Api/about-developer-api"); 
-    });
+    await signOut();
+    router.push("/developer-Api/about-developer-api");
   };
 
   return (
@@ -21,11 +20,7 @@ const LogoutButton = () => {
       ) : (
         <button
           onClick={() =>
-            signIn(
-              "goolge",
-              { callbackUrl: "/developer-Api/on-boarding" },
-              console.log("Github session data :", session)
-            )
+            router.push("/developer-Api/login")
           }
         >
           LogIn

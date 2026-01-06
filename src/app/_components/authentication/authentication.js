@@ -8,10 +8,10 @@ import getSession from "./getSession";
 import appleSignIn from "./appleSignIn";
 const authentication = {
   googleSignIn: googleSignIn,
-  appleSignIn:appleSignIn,
+  appleSignIn: appleSignIn,
   getUserDetails: getUserDetails,
   signOut: signOut,
-  getAccessToken: getAccessToken,
+  getSession: getSession,
   isLoggedIn: isLoggedIn,
   getFullName: getFullName,
   getSession: getSession,

@@ -28,7 +28,8 @@ import BgRightCircle from "../../_components/svg/developerApi/developerLoginRCir
 import Image from "next/image";
 import { EmailIcon } from "@chakra-ui/icons";
 import { FiAlertCircle, FiLock, FiUser } from "react-icons/fi";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useAuth } from "../../../context/AuthContext";
+// import { useSession, signIn, signOut } from "next-auth/react";
 import GoogelIcon from "../../_components/svg/icons/googleIcon.svg";
 import GithubIcon from "../../_components/svg/icons/githubIcon.svg";
 import Loading from "../../_components/features/loading";
@@ -40,7 +41,8 @@ import { getCountryCallingCode } from "react-phone-number-input";
 import authentication from '../../_components/authentication/authentication'
 
 export default function LoginPage() {
-  const { data: session, status } = useSession();
+  const { session, loading: authLoading } = useAuth();
+  // const { data: session, status } = useSession();
   const { setApiKey } = useApiKey();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
