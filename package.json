@@ -68,6 +68,7 @@
     "nextra": "^2.13.4",
     "nextra-theme-docs": "^2.13.4",
     "nprogress": "^0.2.0",
+    "qrcode.react": "^4.2.0",
     "react": "^18",
     "react-calendly": "^4.3.0",
     "react-device-detect": "^2.2.3",
