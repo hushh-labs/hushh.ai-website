@@ -1,3 +1,4 @@
+import appleSignIn from "./appleSignIn";
 import googleSignIn from "./googleSignIn";
 import getUserDetails from "./getUserDetails";
 import signOut from "./signOut";
@@ -6,6 +7,7 @@ import getSession from "./getSession";
 import mfaService from "./mfaService";
 
 const authentication = {
+  appleSignIn: appleSignIn,
   googleSignIn: googleSignIn,
   getUserDetails: getUserDetails,
   signOut: signOut,

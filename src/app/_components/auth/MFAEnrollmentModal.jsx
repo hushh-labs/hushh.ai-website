@@ -23,10 +23,12 @@ import {
     AlertTitle,
     AlertDescription,
     Spinner,
+    Checkbox,
 } from '@chakra-ui/react';
 import { QRCodeSVG } from 'qrcode.react';
 import { CheckCircleIcon, CopyIcon } from '@chakra-ui/icons';
 import { keyframes } from '@emotion/react';
+import authentication from '../../../lib/auth/authentication';
 
 // Animations
 const fadeIn = keyframes`
@@ -48,10 +50,12 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isEnrolling, setIsEnrolling] = useState(true);
     const [copied, setCopied] = useState(false);
+    const [hasSavedKey, setHasSavedKey] = useState(false);
     const toast = useToast();
 
     useEffect(() => {
         if (isOpen) {
+            setHasSavedKey(false);
             initializeEnrollment();
         }
     }, [isOpen]);
@@ -59,9 +63,6 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
     const initializeEnrollment = async () => {
         setIsEnrolling(true);
         try {
-            // Import dynamically to avoid SSR issues
-            const { default: authentication } = await import('../../../lib/auth/authentication');
-
             // First, check if there are any existing factors (verified or unverified)
             const { data: existingFactors } = await authentication.mfa.getMFAFactors();
 
@@ -144,8 +145,6 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
 
         setIsLoading(true);
         try {
-            const { default: authentication } = await import('../../../lib/auth/authentication');
-
             const { data, error } = await authentication.mfa.verifyMFAEnrollment(factorId, codeToVerify);
 
             if (error) {
@@ -297,10 +296,13 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
                                     </Box>
 
                                     {/* Manual Entry - Compact */}
-                                    <VStack spacing={1} w="full">
-                                        <Text color="#6e6e73" fontSize="xs" fontWeight={500}>
-                                            Or enter code manually:
-                                        </Text>
+                                    <VStack spacing={2} w="full">
+                                        <HStack justify="space-between" w="full">
+                                            <Text color="#6e6e73" fontSize="xs" fontWeight={600}>
+                                                Manual Entry / Recovery Key:
+                                            </Text>
+                                        </HStack>
+
                                         <HStack
                                             w="full"
                                             p={2}
@@ -329,6 +331,32 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
                                                 {copied ? 'Copied' : 'Copy'}
                                             </Button>
                                         </HStack>
+
+                                        <Alert status="warning" borderRadius="md" py={2} px={3} bg="orange.50">
+                                            <HStack spacing={2} align="start">
+                                                <AlertIcon boxSize={3} color="orange.500" mt={1} />
+                                                <VStack align="start" spacing={0}>
+                                                    <Text fontSize="xs" fontWeight={700} color="orange.800">
+                                                        Save this key!
+                                                    </Text>
+                                                    <Text fontSize="xs" color="orange.700" lineHeight="1.2">
+                                                        If you lose your device, you can use this key to set up 2FA on a new phone.
+                                                    </Text>
+                                                </VStack>
+                                            </HStack>
+                                        </Alert>
+
+                                        <Checkbox
+                                            isChecked={hasSavedKey}
+                                            onChange={(e) => setHasSavedKey(e.target.checked)}
+                                            size="sm"
+                                            colorScheme="blue"
+                                            borderColor="#d2d2d7"
+                                        >
+                                            <Text fontSize="xs" fontWeight={600} color="#1d1d1f">
+                                                I have saved this recovery key in a safe place.
+                                            </Text>
+                                        </Checkbox>
                                     </VStack>
 
                                     <Button
@@ -343,6 +371,7 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
                                         _active={{ bg: "#003D8F" }}
                                         onClick={() => setStep(2)}
                                         mt={1}
+                                        isDisabled={!hasSavedKey}
                                     >
                                         Continue
                                     </Button>

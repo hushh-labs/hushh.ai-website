@@ -22,6 +22,7 @@ import {
 } from '@chakra-ui/react';
 import { keyframes } from '@emotion/react';
 import { LockIcon } from '@chakra-ui/icons';
+import authentication from '../../../lib/auth/authentication';
 
 // Animations
 const fadeIn = keyframes`
@@ -51,6 +52,7 @@ const MFAVerificationModal = ({ isOpen, onClose, onSuccess, factorId, challengeI
     }, [isOpen]);
 
     const handleVerifyOTP = async (value) => {
+        // ... existing verification logic ...
         // Use the value passed from onComplete if available, otherwise use state
         const codeToVerify = typeof value === 'string' ? value : otp;
 
@@ -63,8 +65,6 @@ const MFAVerificationModal = ({ isOpen, onClose, onSuccess, factorId, challengeI
         setError('');
 
         try {
-            const { default: authentication } = await import('../../../lib/auth/authentication');
-
             const { data, error: verifyError } = await authentication.mfa.verifyMFAChallenge(
                 factorId,
                 challengeId,
@@ -120,6 +120,8 @@ const MFAVerificationModal = ({ isOpen, onClose, onSuccess, factorId, challengeI
         onClose();
     };
 
+
+
     return (
         <Modal
             isOpen={isOpen}
@@ -158,6 +160,7 @@ const MFAVerificationModal = ({ isOpen, onClose, onSuccess, factorId, challengeI
 
                 <ModalBody py={5} px={6}>
                     <VStack spacing={4} animation={`${fadeIn} 0.5s ease-out`}>
+
                         {/* Streamlined Header Text */}
                         <VStack spacing={1}>
                             <Text color="#1d1d1f" fontSize="lg" fontWeight={700} textAlign="center">
@@ -187,108 +190,12 @@ const MFAVerificationModal = ({ isOpen, onClose, onSuccess, factorId, challengeI
                                     onComplete={handleVerifyOTP}
                                     isInvalid={!!error}
                                 >
-                                    <PinInputField
-                                        bg="#f5f5f7"
-                                        border="2px solid"
-                                        borderColor={error ? "#FF3B30" : "#e5e5ea"}
-                                        borderRadius="lg"
-                                        fontSize="lg"
-                                        fontWeight={700}
-                                        color="#1d1d1f"
-                                        w="40px"
-                                        h="48px"
-                                        _focus={{
-                                            borderColor: error ? "#FF3B30" : "#0071E3",
-                                            boxShadow: error
-                                                ? "0 0 0 3px rgba(255, 59, 48, 0.1)"
-                                                : "0 0 0 3px rgba(0, 113, 227, 0.1)",
-                                        }}
-                                    />
-                                    <PinInputField
-                                        bg="#f5f5f7"
-                                        border="2px solid"
-                                        borderColor={error ? "#FF3B30" : "#e5e5ea"}
-                                        borderRadius="lg"
-                                        fontSize="lg"
-                                        fontWeight={700}
-                                        color="#1d1d1f"
-                                        w="40px"
-                                        h="48px"
-                                        _focus={{
-                                            borderColor: error ? "#FF3B30" : "#0071E3",
-                                            boxShadow: error
-                                                ? "0 0 0 3px rgba(255, 59, 48, 0.1)"
-                                                : "0 0 0 3px rgba(0, 113, 227, 0.1)",
-                                        }}
-                                    />
-                                    <PinInputField
-                                        bg="#f5f5f7"
-                                        border="2px solid"
-                                        borderColor={error ? "#FF3B30" : "#e5e5ea"}
-                                        borderRadius="lg"
-                                        fontSize="lg"
-                                        fontWeight={700}
-                                        color="#1d1d1f"
-                                        w="40px"
-                                        h="48px"
-                                        _focus={{
-                                            borderColor: error ? "#FF3B30" : "#0071E3",
-                                            boxShadow: error
-                                                ? "0 0 0 3px rgba(255, 59, 48, 0.1)"
-                                                : "0 0 0 3px rgba(0, 113, 227, 0.1)",
-                                        }}
-                                    />
-                                    <PinInputField
-                                        bg="#f5f5f7"
-                                        border="2px solid"
-                                        borderColor={error ? "#FF3B30" : "#e5e5ea"}
-                                        borderRadius="lg"
-                                        fontSize="lg"
-                                        fontWeight={700}
-                                        color="#1d1d1f"
-                                        w="40px"
-                                        h="48px"
-                                        _focus={{
-                                            borderColor: error ? "#FF3B30" : "#0071E3",
-                                            boxShadow: error
-                                                ? "0 0 0 3px rgba(255, 59, 48, 0.1)"
-                                                : "0 0 0 3px rgba(0, 113, 227, 0.1)",
-                                        }}
-                                    />
-                                    <PinInputField
-                                        bg="#f5f5f7"
-                                        border="2px solid"
-                                        borderColor={error ? "#FF3B30" : "#e5e5ea"}
-                                        borderRadius="lg"
-                                        fontSize="lg"
-                                        fontWeight={700}
-                                        color="#1d1d1f"
-                                        w="40px"
-                                        h="48px"
-                                        _focus={{
-                                            borderColor: error ? "#FF3B30" : "#0071E3",
-                                            boxShadow: error
-                                                ? "0 0 0 3px rgba(255, 59, 48, 0.1)"
-                                                : "0 0 0 3px rgba(0, 113, 227, 0.1)",
-                                        }}
-                                    />
-                                    <PinInputField
-                                        bg="#f5f5f7"
-                                        border="2px solid"
-                                        borderColor={error ? "#FF3B30" : "#e5e5ea"}
-                                        borderRadius="lg"
-                                        fontSize="lg"
-                                        fontWeight={700}
-                                        color="#1d1d1f"
-                                        w="40px"
-                                        h="48px"
-                                        _focus={{
-                                            borderColor: error ? "#FF3B30" : "#0071E3",
-                                            boxShadow: error
-                                                ? "0 0 0 3px rgba(255, 59, 48, 0.1)"
-                                                : "0 0 0 3px rgba(0, 113, 227, 0.1)",
-                                        }}
-                                    />
+                                    <PinInputField bg="#f5f5f7" border="2px solid" borderColor={error ? "#FF3B30" : "#e5e5ea"} borderRadius="lg" fontSize="lg" fontWeight={700} color="#1d1d1f" w="40px" h="48px" _focus={{ borderColor: error ? "#FF3B30" : "#0071E3", boxShadow: error ? "0 0 0 3px rgba(255, 59, 48, 0.1)" : "0 0 0 3px rgba(0, 113, 227, 0.1)" }} />
+                                    <PinInputField bg="#f5f5f7" border="2px solid" borderColor={error ? "#FF3B30" : "#e5e5ea"} borderRadius="lg" fontSize="lg" fontWeight={700} color="#1d1d1f" w="40px" h="48px" _focus={{ borderColor: error ? "#FF3B30" : "#0071E3", boxShadow: error ? "0 0 0 3px rgba(255, 59, 48, 0.1)" : "0 0 0 3px rgba(0, 113, 227, 0.1)" }} />
+                                    <PinInputField bg="#f5f5f7" border="2px solid" borderColor={error ? "#FF3B30" : "#e5e5ea"} borderRadius="lg" fontSize="lg" fontWeight={700} color="#1d1d1f" w="40px" h="48px" _focus={{ borderColor: error ? "#FF3B30" : "#0071E3", boxShadow: error ? "0 0 0 3px rgba(255, 59, 48, 0.1)" : "0 0 0 3px rgba(0, 113, 227, 0.1)" }} />
+                                    <PinInputField bg="#f5f5f7" border="2px solid" borderColor={error ? "#FF3B30" : "#e5e5ea"} borderRadius="lg" fontSize="lg" fontWeight={700} color="#1d1d1f" w="40px" h="48px" _focus={{ borderColor: error ? "#FF3B30" : "#0071E3", boxShadow: error ? "0 0 0 3px rgba(255, 59, 48, 0.1)" : "0 0 0 3px rgba(0, 113, 227, 0.1)" }} />
+                                    <PinInputField bg="#f5f5f7" border="2px solid" borderColor={error ? "#FF3B30" : "#e5e5ea"} borderRadius="lg" fontSize="lg" fontWeight={700} color="#1d1d1f" w="40px" h="48px" _focus={{ borderColor: error ? "#FF3B30" : "#0071E3", boxShadow: error ? "0 0 0 3px rgba(255, 59, 48, 0.1)" : "0 0 0 3px rgba(0, 113, 227, 0.1)" }} />
+                                    <PinInputField bg="#f5f5f7" border="2px solid" borderColor={error ? "#FF3B30" : "#e5e5ea"} borderRadius="lg" fontSize="lg" fontWeight={700} color="#1d1d1f" w="40px" h="48px" _focus={{ borderColor: error ? "#FF3B30" : "#0071E3", boxShadow: error ? "0 0 0 3px rgba(255, 59, 48, 0.1)" : "0 0 0 3px rgba(0, 113, 227, 0.1)" }} />
                                 </PinInput>
                             </HStack>
 

@@ -28,7 +28,7 @@ import BgRightCircle from "../../_components/svg/developerApi/developerLoginRCir
 import Image from "next/image";
 import { EmailIcon } from "@chakra-ui/icons";
 import { FiAlertCircle, FiLock, FiUser } from "react-icons/fi";
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 // import { useSession, signIn, signOut } from "next-auth/react";
 import GoogelIcon from "../../_components/svg/icons/googleIcon.svg";
 import GithubIcon from "../../_components/svg/icons/githubIcon.svg";
@@ -38,10 +38,22 @@ import AppleIcon from "../../_components/svg/icons/appleIconLogo.svg";
 import PhoneInput from "react-phone-number-input";
 import 'react-phone-number-input/style.css'
 import { getCountryCallingCode } from "react-phone-number-input";
-import authentication from '../../_components/authentication/authentication'
+import MFAEnrollmentModal from "../../_components/auth/MFAEnrollmentModal";
+import MFAVerificationModal from "../../_components/auth/MFAVerificationModal";
+import authentication from "../../../lib/auth/authentication";
 
 export default function LoginPage() {
-  const { session, loading: authLoading } = useAuth();
+  const {
+    isAuthenticated,
+    loading: authLoading,
+    mfaRequired,
+    mfaEnrollmentNeeded,
+    currentFactorId,
+    currentChallengeId,
+    checkingMFA,
+    completeMFAEnrollment,
+    completeMFAVerification,
+  } = useAuth();
   // const { data: session, status } = useSession();
   const { setApiKey } = useApiKey();
   const [email, setEmail] = useState("");
@@ -57,14 +69,36 @@ export default function LoginPage() {
     email: "",
     password: "",
   });
+  const oauthReturnPath = "/developerApi/login";
+  const onboardingPath = "/developer-Api/on-boarding";
+
+  useEffect(() => {
+    if (
+      isAuthenticated &&
+      !authLoading &&
+      !checkingMFA &&
+      !mfaRequired &&
+      !mfaEnrollmentNeeded
+    ) {
+      router.replace(onboardingPath);
+    }
+  }, [
+    isAuthenticated,
+    authLoading,
+    checkingMFA,
+    mfaRequired,
+    mfaEnrollmentNeeded,
+    router,
+    onboardingPath,
+  ]);
 
   const handleGoogleLogin = async () => {
     try {
-      await authentication.googleSignIn()
+      await authentication.googleSignIn(null, oauthReturnPath);
       toast({
-        title: "Google Sign-In Successful",
-        description: "You have been signed in with Google.",
-        status: "success",
+        title: "Redirecting to Google",
+        description: "Complete sign-in to continue.",
+        status: "info",
         duration: 3000,
         isClosable: true,
       });
@@ -82,15 +116,14 @@ export default function LoginPage() {
 
   const handleAppleLogin = async () => {
     try {
-      await authentication.appleSignIn(setEmail);
+      await authentication.appleSignIn(null, oauthReturnPath);
       toast({
-        title: "Apple Sign-In Successful",
-        description: "You have been signed in with Apple.",
-        status: "success",
+        title: "Redirecting to Apple",
+        description: "Complete sign-in to continue.",
+        status: "info",
         duration: 3000,
         isClosable: true,
       });
-      router.push("/developer-Api/on-boarding");
     } catch (error) {
       toast({
         title: "Apple Sign-In Error",
@@ -240,6 +273,58 @@ export default function LoginPage() {
           </Text>
         </Box>
       </main>
+
+      <MFAEnrollmentModal
+        isOpen={mfaEnrollmentNeeded}
+        onClose={() => {
+          toast({
+            title: "Two-factor required",
+            description: "Enable two-factor authentication to continue.",
+            status: "info",
+            duration: 4000,
+            isClosable: true,
+            position: "top",
+          });
+        }}
+        onSuccess={async () => {
+          await completeMFAEnrollment();
+          toast({
+            title: "Two-factor enabled",
+            description: "Two-factor authentication is now active.",
+            status: "success",
+            duration: 4000,
+            isClosable: true,
+            position: "top",
+          });
+        }}
+      />
+
+      <MFAVerificationModal
+        isOpen={mfaRequired}
+        onClose={() => {
+          toast({
+            title: "Verification required",
+            description: "Enter your authentication code to continue.",
+            status: "info",
+            duration: 4000,
+            isClosable: true,
+            position: "top",
+          });
+        }}
+        factorId={currentFactorId}
+        challengeId={currentChallengeId}
+        onSuccess={async () => {
+          await completeMFAVerification();
+          toast({
+            title: "Verified",
+            description: "Authentication verified. Redirecting...",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+            position: "top",
+          });
+        }}
+      />
     </div>
   );
 }
