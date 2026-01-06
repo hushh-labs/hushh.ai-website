@@ -126,8 +126,11 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
         setTimeout(() => setCopied(false), 2000);
     };
 
-    const handleVerifyOTP = async () => {
-        if (otp.length !== 6) {
+    const handleVerifyOTP = async (value) => {
+        // Use the value passed from onComplete if available, otherwise use state
+        const codeToVerify = typeof value === 'string' ? value : otp;
+
+        if (!codeToVerify || codeToVerify.length !== 6) {
             toast({
                 title: 'Invalid Code',
                 description: 'Please enter a 6-digit code',
@@ -143,7 +146,7 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
         try {
             const { default: authentication } = await import('../../../lib/auth/authentication');
 
-            const { data, error } = await authentication.mfa.verifyMFAEnrollment(factorId, otp);
+            const { data, error } = await authentication.mfa.verifyMFAEnrollment(factorId, codeToVerify);
 
             if (error) {
                 toast({
@@ -347,33 +350,40 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
                             )}
 
                             {step === 2 && (
-                                <VStack spacing={6} w="full">
-                                    <Text color="#1d1d1f" fontSize="lg" fontWeight={700} textAlign="center">
-                                        Step 2: Enter the 6-digit code
-                                    </Text>
-                                    <Text color="#6e6e73" fontSize="md" textAlign="center">
-                                        Open your authenticator app and enter the code shown for Hushh
-                                    </Text>
+                                <VStack spacing={4} w="full">
+                                    {/* Streamlined Header */}
+                                    <VStack spacing={1}>
+                                        <Text color="#1d1d1f" fontSize="lg" fontWeight={700} textAlign="center">
+                                            Step 2: Enter Code
+                                        </Text>
+                                        <Text color="#6e6e73" fontSize="xs" textAlign="center">
+                                            Enter the code from your authenticator app
+                                        </Text>
+                                    </VStack>
 
-                                    {/* OTP Input */}
-                                    <HStack spacing={3} justify="center" py={4}>
+                                    {/* OTP Input - Compact */}
+                                    <HStack spacing={2} justify="center">
                                         <PinInput
                                             value={otp}
-                                            onChange={setOtp}
-                                            size="lg"
+                                            onChange={(value) => {
+                                                setOtp(value);
+                                                // Clear error if user is typing
+                                            }}
+                                            size="md"
                                             otp
                                             autoFocus
                                             onComplete={handleVerifyOTP}
                                         >
                                             <PinInputField
                                                 bg="#f5f5f7"
-                                                border="2px solid #e5e5ea"
-                                                borderRadius="xl"
-                                                fontSize="2xl"
+                                                border="2px solid"
+                                                borderColor="#e5e5ea"
+                                                borderRadius="lg"
+                                                fontSize="lg"
                                                 fontWeight={700}
                                                 color="#1d1d1f"
-                                                w="56px"
-                                                h="64px"
+                                                w="40px"
+                                                h="48px"
                                                 _focus={{
                                                     borderColor: "#0071E3",
                                                     boxShadow: "0 0 0 3px rgba(0, 113, 227, 0.1)",
@@ -381,13 +391,14 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
                                             />
                                             <PinInputField
                                                 bg="#f5f5f7"
-                                                border="2px solid #e5e5ea"
-                                                borderRadius="xl"
-                                                fontSize="2xl"
+                                                border="2px solid"
+                                                borderColor="#e5e5ea"
+                                                borderRadius="lg"
+                                                fontSize="lg"
                                                 fontWeight={700}
                                                 color="#1d1d1f"
-                                                w="56px"
-                                                h="64px"
+                                                w="40px"
+                                                h="48px"
                                                 _focus={{
                                                     borderColor: "#0071E3",
                                                     boxShadow: "0 0 0 3px rgba(0, 113, 227, 0.1)",
@@ -395,13 +406,14 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
                                             />
                                             <PinInputField
                                                 bg="#f5f5f7"
-                                                border="2px solid #e5e5ea"
-                                                borderRadius="xl"
-                                                fontSize="2xl"
+                                                border="2px solid"
+                                                borderColor="#e5e5ea"
+                                                borderRadius="lg"
+                                                fontSize="lg"
                                                 fontWeight={700}
                                                 color="#1d1d1f"
-                                                w="56px"
-                                                h="64px"
+                                                w="40px"
+                                                h="48px"
                                                 _focus={{
                                                     borderColor: "#0071E3",
                                                     boxShadow: "0 0 0 3px rgba(0, 113, 227, 0.1)",
@@ -409,13 +421,14 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
                                             />
                                             <PinInputField
                                                 bg="#f5f5f7"
-                                                border="2px solid #e5e5ea"
-                                                borderRadius="xl"
-                                                fontSize="2xl"
+                                                border="2px solid"
+                                                borderColor="#e5e5ea"
+                                                borderRadius="lg"
+                                                fontSize="lg"
                                                 fontWeight={700}
                                                 color="#1d1d1f"
-                                                w="56px"
-                                                h="64px"
+                                                w="40px"
+                                                h="48px"
                                                 _focus={{
                                                     borderColor: "#0071E3",
                                                     boxShadow: "0 0 0 3px rgba(0, 113, 227, 0.1)",
@@ -423,13 +436,14 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
                                             />
                                             <PinInputField
                                                 bg="#f5f5f7"
-                                                border="2px solid #e5e5ea"
-                                                borderRadius="xl"
-                                                fontSize="2xl"
+                                                border="2px solid"
+                                                borderColor="#e5e5ea"
+                                                borderRadius="lg"
+                                                fontSize="lg"
                                                 fontWeight={700}
                                                 color="#1d1d1f"
-                                                w="56px"
-                                                h="64px"
+                                                w="40px"
+                                                h="48px"
                                                 _focus={{
                                                     borderColor: "#0071E3",
                                                     boxShadow: "0 0 0 3px rgba(0, 113, 227, 0.1)",
@@ -437,13 +451,14 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
                                             />
                                             <PinInputField
                                                 bg="#f5f5f7"
-                                                border="2px solid #e5e5ea"
-                                                borderRadius="xl"
-                                                fontSize="2xl"
+                                                border="2px solid"
+                                                borderColor="#e5e5ea"
+                                                borderRadius="lg"
+                                                fontSize="lg"
                                                 fontWeight={700}
                                                 color="#1d1d1f"
-                                                w="56px"
-                                                h="64px"
+                                                w="40px"
+                                                h="48px"
                                                 _focus={{
                                                     borderColor: "#0071E3",
                                                     boxShadow: "0 0 0 3px rgba(0, 113, 227, 0.1)",
@@ -452,16 +467,16 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
                                         </PinInput>
                                     </HStack>
 
-                                    <HStack spacing={3} w="full">
+                                    <HStack spacing={2} w="full" pt={2}>
                                         <Button
                                             flex={1}
-                                            h="56px"
+                                            h="44px"
                                             variant="outline"
                                             borderColor="#d2d2d7"
                                             color="#1d1d1f"
-                                            fontSize="lg"
-                                            fontWeight={700}
-                                            borderRadius="xl"
+                                            fontSize="sm"
+                                            fontWeight={600}
+                                            borderRadius="lg"
                                             _hover={{ bg: "#f5f5f7" }}
                                             onClick={() => setStep(1)}
                                         >
@@ -469,15 +484,15 @@ const MFAEnrollmentModal = ({ isOpen, onClose, onSuccess }) => {
                                         </Button>
                                         <Button
                                             flex={2}
-                                            h="56px"
+                                            h="44px"
                                             bg="#0071E3"
                                             color="white"
-                                            fontSize="lg"
-                                            fontWeight={700}
-                                            borderRadius="xl"
+                                            fontSize="sm"
+                                            fontWeight={600}
+                                            borderRadius="lg"
                                             _hover={{ bg: "#0051B3" }}
                                             _active={{ bg: "#003D8F" }}
-                                            onClick={handleVerifyOTP}
+                                            onClick={() => handleVerifyOTP(otp)}
                                             isLoading={isLoading}
                                             loadingText="Verifying..."
                                             isDisabled={otp.length !== 6}

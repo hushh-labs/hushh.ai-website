@@ -50,8 +50,11 @@ const MFAVerificationModal = ({ isOpen, onClose, onSuccess, factorId, challengeI
         }
     }, [isOpen]);
 
-    const handleVerifyOTP = async () => {
-        if (otp.length !== 6) {
+    const handleVerifyOTP = async (value) => {
+        // Use the value passed from onComplete if available, otherwise use state
+        const codeToVerify = typeof value === 'string' ? value : otp;
+
+        if (codeToVerify.length !== 6) {
             setError('Please enter a 6-digit code');
             return;
         }
@@ -65,7 +68,7 @@ const MFAVerificationModal = ({ isOpen, onClose, onSuccess, factorId, challengeI
             const { data, error: verifyError } = await authentication.mfa.verifyMFAChallenge(
                 factorId,
                 challengeId,
-                otp
+                codeToVerify
             );
 
             if (verifyError) {
