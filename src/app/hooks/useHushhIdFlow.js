@@ -121,36 +121,24 @@ export const useHushhIdFlow = () => {
         return;
       }
 
-      // Stage 2: Handle unauthenticated users
-      if (!isAuthenticated || !user) {
+      // Stage 2: Allow anyone to proceed directly to the registration flow when no session exists
+      if (!user?.email) {
         toast({
-          title: "🔐 Authentication Required",
-          description: "Please sign in to get your Hushh ID. Redirecting to login page...",
-          status: "warning",
+          title: "📝 Let's set up your profile",
+          description: "Complete the form to instantly generate your demo Hushh ID.",
+          status: "info",
           duration: 3000,
           isClosable: true,
           position: "top",
         });
-        
-        // Redirect to login page after a short delay
+
         setTimeout(() => {
-          router.push('/login');
-        }, 1500);
+          router.push('/user-registration');
+        }, 500);
         return;
       }
 
       // Stage 3: Check user registration status for authenticated users
-      if (!user.email) {
-        toast({
-          title: "❌ Email Required",
-          description: "Your account doesn't have an email address. Please contact support.",
-          status: "error",
-          duration: 4000,
-          isClosable: true,
-          position: "top",
-        });
-        return;
-      }
 
       // If we don't have user existence data yet, check it first
       if (userExists === null) {
