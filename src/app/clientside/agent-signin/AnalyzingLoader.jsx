@@ -7,119 +7,158 @@ import {
   HStack,
   Heading,
   Text,
-  Spinner,
   Progress,
   Badge,
+  useColorModeValue,
+  Flex
 } from '@chakra-ui/react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { CheckCircleIcon, TimeIcon, SettingsIcon } from '@chakra-ui/icons'
+
+const MotionBox = motion(Box);
+const MotionHStack = motion(HStack);
 
 export default function AnalyzingLoader({ progress = 0, currentAgent = '' }) {
-  // Four profile fetching agents (removed whatsapp and email)
+  // Four profile fetching agents
   const agents = [
-    { id: 'brand', name: 'Brand Agent', status: progress > 0 ? 'completed' : 'pending' },
-    { id: 'hushh', name: 'Hushh Agent', status: progress > 25 ? 'completed' : progress > 0 ? 'processing' : 'pending' },
-    { id: 'public', name: 'Public Data Agent', status: progress > 50 ? 'completed' : progress > 25 ? 'processing' : 'pending' },
-    { id: 'gemini', name: 'Gemini Agent', status: progress > 75 ? 'completed' : progress > 50 ? 'processing' : 'pending' },
+    { id: 'brand', name: 'Brand Identity Agent', description: 'Analyzing brand affinity & loyalty', status: progress > 0 ? 'completed' : 'pending' },
+    { id: 'hushh', name: 'Hushh Core Agent', description: 'Retrieving secure user intent data', status: progress > 25 ? 'completed' : progress > 0 ? 'processing' : 'pending' },
+    { id: 'public', name: 'Public Data Agent', description: 'Scanning public records & footprint', status: progress > 50 ? 'completed' : progress > 25 ? 'processing' : 'pending' },
+    { id: 'gemini', name: 'Gemini Intelligence', description: 'Synthesizing comprehensive profile', status: progress > 75 ? 'completed' : progress > 50 ? 'processing' : 'pending' },
   ]
 
-  return (
-    <Container maxW="container.md" py={{ base: 8, md: 12 }}>
-      <Box
-        bg="rgba(255, 255, 255, 0.03)"
-        borderRadius="24px"
-        borderWidth="1px"
-        borderColor="rgba(255, 255, 255, 0.1)"
-        p={{ base: 6, md: 10 }}
-        shadow="xl"
-      >
-        <VStack spacing={8} align="stretch">
-          <VStack spacing={3} align="center" textAlign="center">
-            <Spinner
-              size="xl"
-              thickness="4px"
-              speed="0.65s"
-              color="green.400"
-            />
-            <Heading
-              as="h2"
-              fontSize={{ base: '2xl', md: '3xl' }}
-              fontWeight="700"
-              color="white"
-            >
-              Analyzing Your Profile
-            </Heading>
-            <Text color="gray.400" fontSize={{ base: 'sm', md: 'md' }}>
-              Querying all agents to gather comprehensive data about you
-            </Text>
-            
-            {/* Step indicator for mobile */}
-            <HStack spacing={2} pt={2} display={{ base: 'flex', md: 'none' }}>
-              <Box w={6} h={1} bg={progress > 0 ? "green.400" : "gray.700"} borderRadius="full" />
-              <Box w={6} h={1} bg={progress > 25 ? "green.400" : "gray.700"} borderRadius="full" />
-              <Box w={6} h={1} bg={progress > 50 ? "green.400" : "gray.700"} borderRadius="full" />
-              <Box w={6} h={1} bg={progress > 75 ? "green.400" : "gray.700"} borderRadius="full" />
-            </HStack>
-          </VStack>
+  // Calculate current active agent index for display
+  const activeAgentIndex = agents.findIndex(a => a.status === 'processing');
+  const activeAgent = agents[activeAgentIndex] || (progress === 100 ? { name: 'Finalizing...', description: 'Compiling results' } : agents[0]);
 
-          <Box>
-            <Progress
-              value={progress}
-              size="sm"
-              colorScheme="green"
+  return (
+    <Container maxW="container.md" h="100vh" display="flex" alignItems="center" justifyContent="center">
+      <VStack spacing={8} w="full">
+
+        {/* Central visualizer */}
+        <Box position="relative" w="200px" h="200px" display="flex" alignItems="center" justifyContent="center">
+          {/* Pulsing rings */}
+          {[0, 1, 2].map((i) => (
+            <MotionBox
+              key={i}
+              position="absolute"
+              w="100%"
+              h="100%"
               borderRadius="full"
-              bg="rgba(255, 255, 255, 0.1)"
+              border="2px solid"
+              borderColor="blue.500"
+              initial={{ opacity: 0.5, scale: 0.8 }}
+              animate={{
+                opacity: [0.5, 0],
+                scale: [0.8, 1.5]
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                delay: i * 0.6,
+                ease: "easeOut"
+              }}
             />
-            <Text fontSize="xs" color="gray.400" textAlign="center" mt={2}>
-              {Math.round(progress)}% Complete
+          ))}
+
+          {/* Center Core */}
+          <Box
+            w="120px"
+            h="120px"
+            borderRadius="full"
+            bg="black"
+            border="1px solid white"
+            boxShadow="0 0 20px blue"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            zIndex={2}
+          >
+            <Text fontSize="2xl" fontWeight="bold" color="white">
+              {Math.round(progress)}%
             </Text>
           </Box>
+        </Box>
 
-          <VStack spacing={3} align="stretch">
-            {agents.map((agent) => (
-              <HStack
-                key={agent.id}
-                justify="space-between"
-                p={3}
-                borderWidth="1px"
-                borderColor={
-                  agent.status === 'completed' ? 'green.500' :
-                  agent.status === 'processing' ? 'blue.500' :
-                  'rgba(255, 255, 255, 0.1)'
-                }
-                borderRadius="12px"
-                bg={
-                  agent.status === 'completed' ? 'rgba(72, 187, 120, 0.1)' :
-                  agent.status === 'processing' ? 'rgba(66, 153, 225, 0.1)' :
-                  'rgba(255, 255, 255, 0.03)'
-                }
-              >
-                <HStack spacing={3}>
-                  {agent.status === 'processing' && <Spinner size="sm" color="blue.400" />}
-                  {agent.status === 'completed' && (
-                    <Box w={4} h={4} borderRadius="full" bg="green.400" />
-                  )}
-                  {agent.status === 'pending' && (
-                    <Box w={4} h={4} borderRadius="full" bg="gray.600" />
-                  )}
-                  <Text fontWeight="600" fontSize="sm" color="white">{agent.name}</Text>
-                </HStack>
-                <Badge
-                  colorScheme={
-                    agent.status === 'completed' ? 'green' :
-                    agent.status === 'processing' ? 'blue' :
-                    'gray'
-                  }
-                  borderRadius="8px"
-                  px={2}
-                >
-                  {agent.status === 'completed' ? 'Complete' :
-                   agent.status === 'processing' ? 'Processing...' :
-                   'Pending'}
-                </Badge>
-              </HStack>
-            ))}
-          </VStack>
+        <VStack spacing={2} textAlign="center">
+          <Heading size="lg" bgGradient="linear(to-r, blue.400, purple.500)" bgClip="text">
+            {activeAgent.name}
+          </Heading>
+          <Text color="gray.400" fontSize="md">
+            {activeAgent.description}
+          </Text>
         </VStack>
-      </Box>
+
+        {/* Progress Bar */}
+        <Box w="full" maxW="400px">
+          <Progress
+            value={progress}
+            size="xs"
+            colorScheme="blue"
+            borderRadius="full"
+            hasStripe
+            isAnimated
+            bg="gray.800"
+          />
+        </Box>
+
+        {/* Agent Status List */}
+        <VStack spacing={3} w="full" maxW="500px">
+          <AnimatePresence>
+            {agents.map((agent, index) => (
+              <MotionHStack
+                key={agent.id}
+                w="full"
+                p={4}
+                bg="rgba(255, 255, 255, 0.03)"
+                border="1px solid"
+                borderColor={agent.status === 'processing' ? 'blue.500' : 'rgba(255,255,255,0.1)'}
+                borderRadius="xl"
+                justify="space-between"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                layout
+              >
+                <HStack spacing={4}>
+                  <Box
+                    p={2}
+                    borderRadius="lg"
+                    bg={agent.status === 'completed' ? 'green.500' : agent.status === 'processing' ? 'blue.500' : 'gray.700'}
+                    color="white"
+                  >
+                    {agent.status === 'completed' ? <CheckCircleIcon /> :
+                      agent.status === 'processing' ? <SettingsIcon className="spin" /> : <TimeIcon />}
+                  </Box>
+                  <VStack align="start" spacing={0}>
+                    <Text fontWeight="bold" fontSize="md" color={agent.status === 'pending' ? 'gray.500' : 'white'}>
+                      {agent.name}
+                    </Text>
+                    <Text fontSize="xs" color="gray.500">
+                      {agent.status === 'completed' ? 'Analysis Complete' :
+                        agent.status === 'processing' ? 'Processing Data...' : 'Waiting in Queue'}
+                    </Text>
+                  </VStack>
+                </HStack>
+
+                {agent.status === 'processing' && (
+                  <Badge colorScheme="blue" variant="solid" borderRadius="full" px={2}>ACTIVE</Badge>
+                )}
+              </MotionHStack>
+            ))}
+          </AnimatePresence>
+        </VStack>
+      </VStack>
+
+      <style jsx global>{`
+        .spin {
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </Container>
   )
 }
