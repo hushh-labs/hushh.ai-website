@@ -21,13 +21,14 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react'
+import HushhProfileCard from '../../../components/profile/HushhProfileCard'
 
 // Helper function to extract data from API responses
 const extractUserData = (agentResults, userData) => {
   const allData = {}
-  
+
   console.log('🔍 Extracting data from agent results:', agentResults)
-  
+
   // Process agents in priority order: brand -> hushh -> public -> gemini (last = highest priority)
   const priorityOrder = ['brand', 'hushh', 'public', 'gemini', 'gemini-proxy']
   const sortedEntries = Object.entries(agentResults).sort((a, b) => {
@@ -35,22 +36,22 @@ const extractUserData = (agentResults, userData) => {
     const indexB = priorityOrder.indexOf(b[0])
     return (indexA === -1 ? 999 : indexA) - (indexB === -1 ? 999 : indexB)
   })
-  
+
   // Combine all agent data with Gemini taking priority (processed last)
   sortedEntries.forEach(([agent, result]) => {
     console.log(`📊 Processing ${agent} agent:`, result)
-    
+
     if (result.success && result.data) {
       // Handle different response structures - JSON-RPC format
-      let responseData = result.data?.result?.status?.message?.parts?.[0]?.text || 
-                         result.data?.result?.artifacts?.[0]?.parts?.[0]?.text ||
-                         result.data?.result?.message?.parts?.[0]?.text ||
-                         result.data?.result?.response?.parts?.[0]?.text || 
-                         result.data?.data || 
-                         result.data
-      
+      let responseData = result.data?.result?.status?.message?.parts?.[0]?.text ||
+        result.data?.result?.artifacts?.[0]?.parts?.[0]?.text ||
+        result.data?.result?.message?.parts?.[0]?.text ||
+        result.data?.result?.response?.parts?.[0]?.text ||
+        result.data?.data ||
+        result.data
+
       console.log(`📝 Extracted response data from ${agent}:`, responseData)
-      
+
       // If responseData is a string, try to parse it as JSON
       if (typeof responseData === 'string') {
         try {
@@ -59,12 +60,12 @@ const extractUserData = (agentResults, userData) => {
             .replace(/```json\n?/g, '')
             .replace(/```\n?/g, '')
             .trim()
-          
+
           console.log(`🧹 Cleaned data from ${agent}:`, cleanedData.substring(0, 200))
-          
+
           const parsed = JSON.parse(cleanedData)
           console.log(`✅ Parsed JSON from ${agent}:`, parsed)
-          
+
           // Handle userProfile wrapper
           if (parsed.userProfile) {
             Object.assign(allData, parsed.userProfile)
@@ -90,16 +91,16 @@ const extractUserData = (agentResults, userData) => {
       console.warn(`⚠️ ${agent} agent failed or has no data:`, result)
     }
   })
-  
+
   console.log('✨ Final merged data:', allData)
   console.log('📋 Available fields:', Object.keys(allData))
   console.log('🔑 Total fields extracted:', Object.keys(allData).length)
-  
+
   // Log specific important fields for debugging
   console.log('🏋️ Gym Membership field:', allData.gymMembership || allData.gym_membership || allData.GymMembership || 'NOT FOUND')
   console.log('👤 Full Name field:', allData.fullName || allData.full_name || allData.name || 'NOT FOUND')
   console.log('📧 Email field:', allData.email || allData.Email || 'NOT FOUND')
-  
+
   return allData
 }
 
@@ -141,10 +142,10 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
   const [showRawData, setShowRawData] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
-  
+
   // Extract and parse all data
   const parsedData = useMemo(() => extractUserData(agentResults, userData), [agentResults, userData])
-  
+
   // Calculate metadata
   const metadata = useMemo(() => {
     const totalFields = Object.keys(parsedData).length
@@ -152,7 +153,7 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
       .filter(r => r.responseTime && r.responseTime !== 'N/A')
       .map(r => parseInt(r.responseTime))
       .reduce((acc, val) => acc + val, 0) / Object.values(agentResults).filter(r => r.responseTime && r.responseTime !== 'N/A').length || 0
-    
+
     return {
       confidenceScore: parsedData.confidence_score || parsedData.confidence || '30',
       accuracyScore: parsedData.accuracy_score || parsedData.accuracy || '50',
@@ -171,7 +172,7 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
         agentResults,
         exportDate: new Date().toISOString(),
       }
-      
+
       const dataStr = JSON.stringify(exportData, null, 2)
       const dataBlob = new Blob([dataStr], { type: 'application/json' })
       const url = URL.createObjectURL(dataBlob)
@@ -182,7 +183,7 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
       link.click()
       document.body.removeChild(link)
       URL.revokeObjectURL(url)
-      
+
       toast({
         title: 'Results Exported',
         description: 'Your profile analysis has been downloaded as JSON',
@@ -243,9 +244,9 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
         <VStack spacing={8} align="stretch">
           {/* Header */}
           <Box textAlign="center">
-            <Heading 
-              fontSize={{ base: '2xl', md: '4xl' }} 
-              fontWeight="700" 
+            <Heading
+              fontSize={{ base: '2xl', md: '4xl' }}
+              fontWeight="700"
               color="green.400"
               mb={3}
             >
@@ -255,11 +256,11 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
               Comprehensive profile intelligence generated from multiple data sources
             </Text>
             {agentResults.gemini?.success && (
-              <Badge 
-                colorScheme="white" 
-                fontSize="xs" 
-                px={3} 
-                py={1} 
+              <Badge
+                colorScheme="white"
+                fontSize="xs"
+                px={3}
+                py={1}
                 borderRadius="full"
               >
                 ✨ Enhanced with Gemini AI and Open AI
@@ -318,11 +319,16 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
             </Button>
           </HStack>
 
+          {/* HUSHH PROFILE CARD */}
+          <Box mb={6}>
+            <HushhProfileCard userData={parsedData} />
+          </Box>
+
           {/* BASIC INFORMATION */}
           <Box>
-            <Heading 
-              fontSize={{ base: 'lg', md: 'xl' }} 
-              fontWeight="700" 
+            <Heading
+              fontSize={{ base: 'lg', md: 'xl' }}
+              fontWeight="700"
               mb={4}
               pb={3}
               borderBottomWidth="1px"
@@ -342,9 +348,9 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
 
           {/* LOCATION */}
           <Box>
-            <Heading 
-              fontSize={{ base: 'lg', md: 'xl' }} 
-              fontWeight="700" 
+            <Heading
+              fontSize={{ base: 'lg', md: 'xl' }}
+              fontWeight="700"
               mb={4}
               pb={3}
               borderBottomWidth="1px"
@@ -363,9 +369,9 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
 
           {/* DEMOGRAPHICS */}
           <Box>
-            <Heading 
-              fontSize={{ base: 'lg', md: 'xl' }} 
-              fontWeight="700" 
+            <Heading
+              fontSize={{ base: 'lg', md: 'xl' }}
+              fontWeight="700"
               mb={4}
               pb={3}
               borderBottomWidth="1px"
@@ -382,9 +388,9 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
 
           {/* PROFESSIONAL */}
           <Box>
-            <Heading 
-              fontSize={{ base: 'lg', md: 'xl' }} 
-              fontWeight="700" 
+            <Heading
+              fontSize={{ base: 'lg', md: 'xl' }}
+              fontWeight="700"
               mb={4}
               pb={3}
               borderBottomWidth="1px"
@@ -403,9 +409,9 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
 
           {/* LIFESTYLE */}
           <Box>
-            <Heading 
-              fontSize={{ base: 'lg', md: 'xl' }} 
-              fontWeight="700" 
+            <Heading
+              fontSize={{ base: 'lg', md: 'xl' }}
+              fontWeight="700"
               mb={4}
               pb={3}
               borderBottomWidth="1px"
@@ -430,9 +436,9 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
 
           {/* TECHNOLOGY */}
           <Box>
-            <Heading 
-              fontSize={{ base: 'lg', md: 'xl' }} 
-              fontWeight="700" 
+            <Heading
+              fontSize={{ base: 'lg', md: 'xl' }}
+              fontWeight="700"
               mb={4}
               pb={3}
               borderBottomWidth="1px"
@@ -451,9 +457,9 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
 
           {/* INTERESTS */}
           <Box>
-            <Heading 
-              fontSize={{ base: 'lg', md: 'xl' }} 
-              fontWeight="700" 
+            <Heading
+              fontSize={{ base: 'lg', md: 'xl' }}
+              fontWeight="700"
               mb={4}
               pb={3}
               borderBottomWidth="1px"
@@ -470,9 +476,9 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
 
           {/* INTENT ANALYSIS */}
           <Box>
-            <Heading 
-              fontSize={{ base: 'lg', md: 'xl' }} 
-              fontWeight="700" 
+            <Heading
+              fontSize={{ base: 'lg', md: 'xl' }}
+              fontWeight="700"
               mb={4}
               pb={3}
               borderBottomWidth="1px"
@@ -506,23 +512,23 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
                       <Badge colorScheme="green" fontSize="xs" px={2} py={1}>24 HOURS</Badge>
                       <Text fontSize="sm" color="gray.400">Category</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {getField(parsedData, 'intents.24h.category', 'intent24h.category') || 
-                         (Array.isArray(parsedData.intents) && parsedData.intents[0] ? parsedData.intents[0].category : 'Not available')}
+                        {getField(parsedData, 'intents.24h.category', 'intent24h.category') ||
+                          (Array.isArray(parsedData.intents) && parsedData.intents[0] ? parsedData.intents[0].category : 'Not available')}
                       </Text>
                       <Text fontSize="sm" color="gray.400">Budget</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {getField(parsedData, 'intents.24h.budget', 'intent24h.budget') || 
-                         (Array.isArray(parsedData.intents) && parsedData.intents[0] ? parsedData.intents[0].budget : 'Not available')}
+                        {getField(parsedData, 'intents.24h.budget', 'intent24h.budget') ||
+                          (Array.isArray(parsedData.intents) && parsedData.intents[0] ? parsedData.intents[0].budget : 'Not available')}
                       </Text>
                       <Text fontSize="sm" color="gray.400">Time Window</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {getField(parsedData, 'intents.24h.timeWindow', 'intent24h.timeWindow', 'intents.24h.time_window') || 
-                         (Array.isArray(parsedData.intents) && parsedData.intents[0] ? parsedData.intents[0].timeWindow : 'Not available')}
+                        {getField(parsedData, 'intents.24h.timeWindow', 'intent24h.timeWindow', 'intents.24h.time_window') ||
+                          (Array.isArray(parsedData.intents) && parsedData.intents[0] ? parsedData.intents[0].timeWindow : 'Not available')}
                       </Text>
                       <Text fontSize="sm" color="gray.400">Confidence</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {getField(parsedData, 'intents.24h.confidence', 'intent24h.confidence') || 
-                         (Array.isArray(parsedData.intents) && parsedData.intents[0] ? parsedData.intents[0].confidence : 'Not available')}
+                        {getField(parsedData, 'intents.24h.confidence', 'intent24h.confidence') ||
+                          (Array.isArray(parsedData.intents) && parsedData.intents[0] ? parsedData.intents[0].confidence : 'Not available')}
                       </Text>
                     </VStack>
                   </Box>
@@ -539,23 +545,23 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
                       <Badge colorScheme="blue" fontSize="xs" px={2} py={1}>48 HOURS</Badge>
                       <Text fontSize="sm" color="gray.400">Category</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {getField(parsedData, 'intents.48h.category', 'intent48h.category') || 
-                         (Array.isArray(parsedData.intents) && parsedData.intents[1] ? parsedData.intents[1].category : 'Not available')}
+                        {getField(parsedData, 'intents.48h.category', 'intent48h.category') ||
+                          (Array.isArray(parsedData.intents) && parsedData.intents[1] ? parsedData.intents[1].category : 'Not available')}
                       </Text>
                       <Text fontSize="sm" color="gray.400">Budget</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {getField(parsedData, 'intents.48h.budget', 'intent48h.budget') || 
-                         (Array.isArray(parsedData.intents) && parsedData.intents[1] ? parsedData.intents[1].budget : 'Not available')}
+                        {getField(parsedData, 'intents.48h.budget', 'intent48h.budget') ||
+                          (Array.isArray(parsedData.intents) && parsedData.intents[1] ? parsedData.intents[1].budget : 'Not available')}
                       </Text>
                       <Text fontSize="sm" color="gray.400">Time Window</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {getField(parsedData, 'intents.48h.timeWindow', 'intent48h.timeWindow', 'intents.48h.time_window') || 
-                         (Array.isArray(parsedData.intents) && parsedData.intents[1] ? parsedData.intents[1].timeWindow : 'Not available')}
+                        {getField(parsedData, 'intents.48h.timeWindow', 'intent48h.timeWindow', 'intents.48h.time_window') ||
+                          (Array.isArray(parsedData.intents) && parsedData.intents[1] ? parsedData.intents[1].timeWindow : 'Not available')}
                       </Text>
                       <Text fontSize="sm" color="gray.400">Confidence</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {getField(parsedData, 'intents.48h.confidence', 'intent48h.confidence') || 
-                         (Array.isArray(parsedData.intents) && parsedData.intents[1] ? parsedData.intents[1].confidence : 'Not available')}
+                        {getField(parsedData, 'intents.48h.confidence', 'intent48h.confidence') ||
+                          (Array.isArray(parsedData.intents) && parsedData.intents[1] ? parsedData.intents[1].confidence : 'Not available')}
                       </Text>
                     </VStack>
                   </Box>
@@ -572,23 +578,23 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
                       <Badge colorScheme="purple" fontSize="xs" px={2} py={1}>72 HOURS</Badge>
                       <Text fontSize="sm" color="gray.400">Category</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {getField(parsedData, 'intents.72h.category', 'intent72h.category') || 
-                         (Array.isArray(parsedData.intents) && parsedData.intents[2] ? parsedData.intents[2].category : 'Not available')}
+                        {getField(parsedData, 'intents.72h.category', 'intent72h.category') ||
+                          (Array.isArray(parsedData.intents) && parsedData.intents[2] ? parsedData.intents[2].category : 'Not available')}
                       </Text>
                       <Text fontSize="sm" color="gray.400">Budget</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {getField(parsedData, 'intents.72h.budget', 'intent72h.budget') || 
-                         (Array.isArray(parsedData.intents) && parsedData.intents[2] ? parsedData.intents[2].budget : 'Not available')}
+                        {getField(parsedData, 'intents.72h.budget', 'intent72h.budget') ||
+                          (Array.isArray(parsedData.intents) && parsedData.intents[2] ? parsedData.intents[2].budget : 'Not available')}
                       </Text>
                       <Text fontSize="sm" color="gray.400">Time Window</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {getField(parsedData, 'intents.72h.timeWindow', 'intent72h.timeWindow', 'intents.72h.time_window') || 
-                         (Array.isArray(parsedData.intents) && parsedData.intents[2] ? parsedData.intents[2].timeWindow : 'Not available')}
+                        {getField(parsedData, 'intents.72h.timeWindow', 'intent72h.timeWindow', 'intents.72h.time_window') ||
+                          (Array.isArray(parsedData.intents) && parsedData.intents[2] ? parsedData.intents[2].timeWindow : 'Not available')}
                       </Text>
                       <Text fontSize="sm" color="gray.400">Confidence</Text>
                       <Text fontSize="md" color="white" fontWeight="500">
-                        {getField(parsedData, 'intents.72h.confidence', 'intent72h.confidence') || 
-                         (Array.isArray(parsedData.intents) && parsedData.intents[2] ? parsedData.intents[2].confidence : 'Not available')}
+                        {getField(parsedData, 'intents.72h.confidence', 'intent72h.confidence') ||
+                          (Array.isArray(parsedData.intents) && parsedData.intents[2] ? parsedData.intents[2].confidence : 'Not available')}
                       </Text>
                     </VStack>
                   </Box>
@@ -599,9 +605,9 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
 
           {/* ANALYSIS METADATA */}
           <Box>
-            <Heading 
-              fontSize={{ base: 'lg', md: 'xl' }} 
-              fontWeight="700" 
+            <Heading
+              fontSize={{ base: 'lg', md: 'xl' }}
+              fontWeight="700"
               mb={4}
               pb={3}
               borderBottomWidth="1px"

@@ -18,17 +18,17 @@ export default function AgentSignInClient() {
   const callAgentAPI = useCallback(async (agent, userData) => {
     const sessionId = `session-${Date.now()}`
     const id = `task-${Math.random().toString(36).slice(2)}`
-    
+
     try {
       const startTime = Date.now()
       let body = {}
-      
+
       // Build full phone number with country code
       const fullPhoneNumber = `${userData.countryCode} ${userData.phoneNumber}`
-      
+
       // Custom prompt template for detailed JSON profile
       const detailedPrompt = `Can you provide me with a detailed JSON profile of ${userData.fullName} having email ${userData.email} and phone ${fullPhoneNumber} that includes all possible fields such as user ID, full name, phone, email, address, age, gender, marital status, household size, children count, education level, occupation, income bracket, home ownership, city tier, transport, diet preference, favorite cuisine, coffee or tea choice, fitness routine, gym membership, shopping preference, grocery store type, fashion style, tech affinity, primary device, favorite social platform, social media usage time, content preference, sports interest, gaming preference, travel frequency, eco-friendliness, sleep chronotype, needs, wants, desires, and 24h/48h/72h intents with category, budget, time window, and confidence. The output should strictly be in JSON format. If some information is not available from public sources, please generate reasonable and relevant placeholder data instead of leaving fields blank, while keeping it realistic and respectful.`
-      
+
       // Build the appropriate payload for profile fetching agents only
       switch (agent) {
         case 'brand':
@@ -42,11 +42,11 @@ export default function AgentSignInClient() {
             id,
           }
           break
-          
+
         default:
           throw new Error(`Unknown agent: ${agent}`)
       }
-      
+
       // Call via Next.js API proxy
       const response = await fetch(`/api/a2a/${agent}`, {
         method: 'POST',
@@ -55,10 +55,10 @@ export default function AgentSignInClient() {
         },
         body: JSON.stringify(body),
       })
-      
+
       const responseTime = `${Date.now() - startTime}ms`
       const result = await response.json().catch(() => ({}))
-      
+
       if (!response.ok) {
         return {
           success: false,
@@ -68,7 +68,7 @@ export default function AgentSignInClient() {
           upstreamUrl: result.upstreamUrl, // Show actual agent URL
         }
       }
-      
+
       return {
         success: true,
         data: result.data || result,
@@ -92,7 +92,7 @@ export default function AgentSignInClient() {
     setUserData(formData)
     setCurrentStep('analyzing')
     setAnalysisProgress(0)
-    
+
     toast({
       title: 'Analyzing Profile',
       description: 'Querying all agents with your details...',
@@ -105,34 +105,62 @@ export default function AgentSignInClient() {
       // Only profile fetching agents (removed whatsapp and email)
       const agents = ['brand', 'hushh', 'public', 'gemini']
       const resultMap = {}
-      
+
       // Call agents sequentially to show progress
       for (let i = 0; i < agents.length; i++) {
         const agent = agents[i]
         const result = await callAgentAPI(agent, formData)
         resultMap[agent] = result
-        
+
         // Update progress
         const progress = ((i + 1) / agents.length) * 100
         setAnalysisProgress(progress)
-        
+
         // Small delay for UX
         await new Promise(resolve => setTimeout(resolve, 300))
       }
-      
+
       setAgentResults(resultMap)
-      
+
       // Count successes
       const successCount = Object.values(resultMap).filter(r => r.success).length
-      
+
+
+      // Save the generated profile to Supabase for the Public Page link
+      try {
+        const saveRes = await fetch('/api/user/profile/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userData: formData, agentResults: resultMap })
+        });
+        const saveData = await saveRes.json();
+
+        if (saveData.success && saveData.userId) {
+          console.log("Profile saved with ID:", saveData.userId);
+          // Update userData with the confirmed user_id so the QR code is correct
+          formData.user_id = saveData.userId;
+          // Also merge parsed agent data into userData for immediate display consistency
+          if (resultMap.gemini?.data?.result?.response?.parts?.[0]?.text) {
+            try {
+              const parsedGemini = JSON.parse(resultMap.gemini.data.result.response.parts[0].text);
+              Object.assign(formData, parsedGemini);
+            } catch (e) { }
+          }
+          setUserData({ ...formData });
+        }
+      } catch (e) {
+        console.error("Background profile save failed:", e);
+        // Don't block the UI, just log error
+      }
+
       toast({
-        title: 'Analysis Complete',
-        description: `Successfully retrieved data from ${successCount} out of ${agents.length} agents`,
+        title: 'Analysis & Profile Created',
+        description: `Successfully analyzed and saved your digital identity.`,
         status: successCount > 0 ? 'success' : 'warning',
         duration: 5000,
         isClosable: true,
       })
-      
+
       // Move to results view
       setCurrentStep('results')
     } catch (error) {
@@ -159,26 +187,26 @@ export default function AgentSignInClient() {
   // Render based on current step
   return (
     <ContentWrapper>
-    <Box minH="100vh" bg="black">
-      {currentStep === 'form' && (
-        <UserDetailsForm onSubmit={handleFormSubmit} />
-      )}
-      
-      {currentStep === 'analyzing' && (
-        <AnalyzingLoader progress={analysisProgress} />
-      )}
-      
-      {currentStep === 'results' && (
-        <>
-          <ResultsDisplay
-            userData={userData}
-            agentResults={agentResults}
-            onBack={handleBack}
-          />
-          <DataSourceComparison agentResults={agentResults} />
-        </>
-      )}
-    </Box>
+      <Box minH="100vh" bg="black">
+        {currentStep === 'form' && (
+          <UserDetailsForm onSubmit={handleFormSubmit} />
+        )}
+
+        {currentStep === 'analyzing' && (
+          <AnalyzingLoader progress={analysisProgress} />
+        )}
+
+        {currentStep === 'results' && (
+          <>
+            <ResultsDisplay
+              userData={userData}
+              agentResults={agentResults}
+              onBack={handleBack}
+            />
+            <DataSourceComparison agentResults={agentResults} />
+          </>
+        )}
+      </Box>
     </ContentWrapper>
   )
 }
