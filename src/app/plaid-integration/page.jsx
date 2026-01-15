@@ -26,8 +26,7 @@ import Script from "next/script";
 import ContentWrapper from "../_components/layout/ContentWrapper";
 
 const ENDPOINTS = {
-  createPublicToken:
-    "https://hushh-plaid-api-app-bubqpu.5sc6y6-1.usa-e2.cloudhub.io/sandbox/public_token/create",
+  // createPublicToken: -- REMOVED FOR PRODUCTION (Sandbox Only) --
   exchangePublicToken:
     "https://hushh-plaid-api-app-bubqpu.5sc6y6-1.usa-e2.cloudhub.io/item/public_token/exchange",
   createLinkToken:
@@ -48,6 +47,7 @@ const defaultPayload = {
   secret: "",
   access_token: "",
   public_token: "",
+  user_id: "test_user_001",
 };
 
 export default function PlaidIntegrationPage() {
@@ -128,10 +128,10 @@ export default function PlaidIntegrationPage() {
     }
     const payload = includeCredentials
       ? {
-          client_id: credentials.client_id,
-          secret: credentials.secret,
-          ...body,
-        }
+        client_id: credentials.client_id,
+        secret: credentials.secret,
+        ...body,
+      }
       : body || {};
     const normalizedMethod = method?.toUpperCase() || "POST";
 
@@ -156,14 +156,12 @@ export default function PlaidIntegrationPage() {
   };
 
   const handleCreatePublicToken = async () => {
-    const result = await callPlaidApi({
-      title: "Create Public Token",
-      endpoint: ENDPOINTS.createPublicToken,
+    toast({
+      title: "Not available in Production",
+      description: "You cannot programmatically create public tokens in Production. Please use 'Connect Bank Account'.",
+      status: "warning",
+      duration: 5000,
     });
-    const data = unwrapPlaidResponse(result);
-    if (data?.public_token) {
-      updateField("public_token", data.public_token);
-    }
   };
 
   const handleExchangePublicToken = async () => {
@@ -352,6 +350,10 @@ export default function PlaidIntegrationPage() {
       });
       return;
     }
+
+    // Include the User ID in the prompt so the Agent can link the data
+    const promptText = `Create a user financial profile for user_id "${credentials.user_id}" with the details below: ${JSON.stringify(fetchedData)}`;
+
     const agentPayload = {
       jsonrpc: "2.0",
       id: `task-${Date.now()}`,
@@ -363,7 +365,7 @@ export default function PlaidIntegrationPage() {
           parts: [
             {
               type: "text",
-              text: `Create a user financial profile with the details below: ${JSON.stringify(fetchedData)}`,
+              text: promptText,
             },
           ],
         },
@@ -526,6 +528,14 @@ export default function PlaidIntegrationPage() {
                 Step 1 — Configure Credentials
               </Heading>
               <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+                <FormControl>
+                  <FormLabel>User ID (for Supabase)</FormLabel>
+                  <Input
+                    value={credentials.user_id}
+                    onChange={(e) => updateField("user_id", e.target.value)}
+                    placeholder="e.g. 935789999"
+                  />
+                </FormControl>
                 <FormControl>
                   <FormLabel>Client ID</FormLabel>
                   <Input

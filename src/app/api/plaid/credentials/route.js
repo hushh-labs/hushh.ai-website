@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const clientId = process.env.PLAID_CLIENT_ID || "";
-  const secret = process.env.PLAID_CLIENT_SECRET || "";
+  // MuleSoft / Plaid Production Credentials
+  const clientId = process.env.PLAID_CLIENT_ID || "6934322f139fbf00216faf36";
+  const secret = process.env.PLAID_CLIENT_SECRET || "3800cc352586fd410bb82f63ab020f";
 
   if (!clientId || !secret) {
     return NextResponse.json({ error: "Missing Plaid credentials" }, { status: 500 });
