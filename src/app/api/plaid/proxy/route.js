@@ -33,6 +33,27 @@ export async function POST(request) {
       });
     }
 
+    const env = request.headers.get("x-plaid-env") || "sandbox";
+
+    let clientId, secret;
+    if (env === "production") {
+      clientId = process.env.PLAID_CLIENT_ID_PRODUCTION;
+      secret = process.env.PLAID_SECRET_PRODUCTION;
+    } else {
+      clientId = process.env.PLAID_CLIENT_ID_SANDBOX;
+      secret = process.env.PLAID_SECRET_SANDBOX;
+    }
+
+    const finalPayload = {
+      ...(payload || {}),
+      client_id: clientId,
+      secret: secret,
+    };
+
+    console.log(`[Proxy] Environment: ${env}`);
+    console.log("[Proxy] Sending to:", url.toString());
+    console.log("[Proxy] Payload:", JSON.stringify(finalPayload, null, 2));
+
     const response = await fetch(url.toString(), {
       method: normalizedMethod,
       headers: {
@@ -40,10 +61,13 @@ export async function POST(request) {
         Accept: "application/json, text/event-stream",
         ...(overrideMethod ? { "X-HTTP-Method-Override": overrideMethod } : {}),
       },
-      body: JSON.stringify(payload || {}),
+      body: JSON.stringify(finalPayload),
     });
 
     const text = await response.text();
+    console.log("[Proxy] Response Status:", response.status);
+    console.log("[Proxy] Response Body:", text);
+
     let data;
     try {
       data = JSON.parse(text);

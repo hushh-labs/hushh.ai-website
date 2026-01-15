@@ -10,14 +10,26 @@ export async function POST(request) {
       return NextResponse.json({ error: "access_token is required" }, { status: 400 });
     }
 
-    const clientId = process.env.PLAID_CLIENT_ID || "6934322f139fbf00216faf36";
-    const secret = process.env.PLAID_CLIENT_SECRET || "3800cc352586fd410bb82f63ab020f";
+    const env = request.headers.get("x-plaid-env") || "sandbox";
+    const PLAID_URL =
+      env === "production"
+        ? "https://production.plaid.com/accounts/get"
+        : "https://sandbox.plaid.com/accounts/get";
+
+    let clientId, secret;
+    if (env === "production") {
+      clientId = process.env.PLAID_CLIENT_ID_PRODUCTION;
+      secret = process.env.PLAID_SECRET_PRODUCTION;
+    } else {
+      clientId = process.env.PLAID_CLIENT_ID_SANDBOX;
+      secret = process.env.PLAID_SECRET_SANDBOX;
+    }
 
     if (!clientId || !secret) {
       return NextResponse.json({ error: "Missing Plaid credentials" }, { status: 500 });
     }
 
-    const response = await fetch(PLAID_ACCOUNTS_URL, {
+    const response = await fetch(PLAID_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
