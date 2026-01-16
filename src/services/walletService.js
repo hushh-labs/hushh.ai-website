@@ -51,21 +51,21 @@ export const WalletService = {
                     key: "id",
                     label: "HUSHH ID",
                     value: userId
+                },
+                {
+                    key: "email",
+                    label: "EMAIL",
+                    value: userData?.email || "N/A"
+                },
+                {
+                    key: "phone",
+                    label: "PHONE",
+                    value: userData?.phone || userData?.phoneNumber || "N/A"
                 }
             ],
 
             // Back of the card details
             backFields: [
-                {
-                    key: "email",
-                    label: "Email",
-                    value: userData?.email || "N/A"
-                },
-                {
-                    key: "phone",
-                    label: "Phone",
-                    value: userData?.phone || userData?.phoneNumber || "N/A"
-                },
                 {
                     key: "city",
                     label: "Location",

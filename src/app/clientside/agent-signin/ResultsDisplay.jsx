@@ -165,14 +165,23 @@ const InfoRow = ({ label, value }) => (
   </Box>
 )
 
-const IntentCard = ({ badge, badgeColor, data, categoryKey, budgetKey, confidenceKey }) => (
+const IntentCard = ({ badge, badgeColor, data, categoryKey, budgetKey, confidenceKey, timeWindowKey }) => (
   <Box bg="gray.900" p={4} borderRadius="xl" border="1px solid" borderColor="gray.800">
-    <HStack justify="space-between" mb={3}>
-      <Badge colorScheme={badgeColor}>{badge}</Badge>
-      <Text fontSize="xs" color="gray.500">Confidence: {data?.[confidenceKey] || 'N/A'}</Text>
-    </HStack>
-    <Text fontWeight="bold" fontSize="lg" mb={1}>{data?.[categoryKey] || 'No Data'}</Text>
-    <Text fontSize="sm" color="gray.400">{data?.[budgetKey] || 'No Budget'}</Text>
+    <VStack align="stretch" spacing={2}>
+      <HStack justify="space-between">
+        <Badge colorScheme={badgeColor} variant="subtle">{badge}</Badge>
+        <Text fontSize="xs" color="gray.500" fontWeight="bold">Conf: {data?.[confidenceKey] || 'N/A'}</Text>
+      </HStack>
+      <Box>
+        <Text fontWeight="bold" fontSize="lg" color="white" noOfLines={1}>{data?.[categoryKey] || 'No category'}</Text>
+        <Text fontSize="sm" color="teal.300" fontWeight="semibold">{data?.[budgetKey] || 'Budget: N/A'}</Text>
+      </Box>
+      {timeWindowKey && data?.[timeWindowKey] && (
+        <Text fontSize="xs" color="gray.400" fontStyle="italic">
+          Window: {data[timeWindowKey]}
+        </Text>
+      )}
+    </VStack>
   </Box>
 )
 
@@ -264,7 +273,7 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
                 <Box bg="gray.900" p={6} borderRadius="2xl" border="1px solid" borderColor="gray.800">
                   <Text color="gray.500" fontSize="sm" fontWeight="bold">DATA POINTS</Text>
                   <Heading size="3xl" mt={2} color="blue.400">
-                    {Object.keys(parsedData).length}
+                    {Object.values(parsedData).filter(v => v !== null && v !== undefined && v !== '' && v !== 'Not available').length}
                   </Heading>
                   <Text fontSize="sm" color="gray.400" mt={2}>Fields extracted & verified</Text>
                 </Box>
@@ -285,23 +294,28 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
 
             {/* Personal Details */}
             <DashboardCard title="Personal Details" icon={FaUser} colorScheme="pink">
-              <SimpleGrid columns={2} spacing={4}>
-                <InfoRow label="AGE" value={getField(parsedData, 'age', 'ageRange')} />
-                <InfoRow label="GENDER" value={getField(parsedData, 'gender', 'sex')} />
-                <InfoRow label="MARITAL STATUS" value={getField(parsedData, 'maritalStatus', 'relationship_status')} />
-                <InfoRow label="HOUSEHOLD" value={getField(parsedData, 'householdSize', 'family_size') || 'N/A'} />
-              </SimpleGrid>
+              <VStack align="stretch" spacing={4}>
+                <InfoRow label="NAME" value={getField(parsedData, 'full_name', 'fullName')} />
+                <InfoRow label="EMAIL" value={getField(parsedData, 'email')} />
+                <InfoRow label="PHONE" value={getField(parsedData, 'phone', 'phoneNumber')} />
+                <SimpleGrid columns={2} spacing={4}>
+                  <InfoRow label="AGE" value={getField(parsedData, 'age', 'ageRange')} />
+                  <InfoRow label="GENDER" value={getField(parsedData, 'gender', 'sex')} />
+                  <InfoRow label="MARITAL STATUS" value={getField(parsedData, 'marital_status', 'maritalStatus', 'relationship_status')} />
+                  <InfoRow label="HOUSEHOLD" value={getField(parsedData, 'household_size', 'householdSize', 'family_size') || 'N/A'} />
+                </SimpleGrid>
+              </VStack>
             </DashboardCard>
 
             {/* Location */}
             <DashboardCard title="Location Data" icon={FaMapMarkerAlt} colorScheme="orange">
               <VStack align="stretch" spacing={3}>
-                <InfoRow label="ADDRESS" value={getField(parsedData, 'address.street', 'street', 'location')} />
+                <InfoRow label="ADDRESS" value={getField(parsedData, 'address.street', 'street', 'location', 'address')} />
                 <HStack>
-                  <InfoRow label="CITY" value={getField(parsedData, 'address.city', 'city')} />
-                  <InfoRow label="COUNTRY" value={getField(parsedData, 'address.country', 'country')} />
+                  <InfoRow label="CITY" value={getField(parsedData, 'city', 'address.city')} flex="1" />
+                  <InfoRow label="COUNTRY" value={getField(parsedData, 'country', 'address.country')} flex="1" />
                 </HStack>
-                <InfoRow label="TIER" value={getField(parsedData, 'cityTier', 'tier')} />
+                <InfoRow label="TIER" value={getField(parsedData, 'city_tier', 'cityTier', 'tier')} />
               </VStack>
             </DashboardCard>
 
@@ -309,40 +323,45 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
             <DashboardCard title="Career & Status" icon={FaBriefcase} colorScheme="purple">
               <VStack align="stretch" spacing={3}>
                 <InfoRow label="OCCUPATION" value={getField(parsedData, 'occupation', 'jobTitle')} />
-                <InfoRow label="EDUCATION" value={getField(parsedData, 'educationLevel', 'degree')} />
-                <InfoRow label="INCOME BRACKET" value={getField(parsedData, 'incomeBracket', 'salaryRange')} />
-                <InfoRow label="HOME OWNERSHIP" value={getField(parsedData, 'homeOwnership', 'housing')} />
+                <InfoRow label="EDUCATION" value={getField(parsedData, 'education_level', 'educationLevel', 'degree')} />
+                <InfoRow label="INCOME BRACKET" value={getField(parsedData, 'income_bracket', 'incomeBracket', 'salaryRange')} />
+                <InfoRow label="HOME OWNERSHIP" value={getField(parsedData, 'home_ownership', 'homeOwnership', 'housing')} />
               </VStack>
             </DashboardCard>
 
             {/* Lifestyle */}
             <DashboardCard title="Lifestyle" icon={FaHeart} colorScheme="red">
               <SimpleGrid columns={2} spacing={4}>
-                <InfoRow label="DIET" value={getField(parsedData, 'dietPreference', 'diet')} />
-                <InfoRow label="CUISINE" value={getField(parsedData, 'favoriteCuisine', 'cuisine')} />
-                <InfoRow label="FITNESS" value={getField(parsedData, 'fitnessRoutine', 'exercise')} />
-                <InfoRow label="SLEEP" value={getField(parsedData, 'sleepChronotype', 'chronotype')} />
+                <InfoRow label="DIET" value={getField(parsedData, 'diet_preference', 'dietPreference', 'diet')} />
+                <InfoRow label="CUISINE" value={getField(parsedData, 'favorite_cuisine', 'favoriteCuisine', 'cuisine')} />
+                <InfoRow label="FITNESS" value={getField(parsedData, 'fitness_routine', 'fitnessRoutine', 'exercise')} />
+                <InfoRow label="SLEEP" value={getField(parsedData, 'sleep_chronotype', 'sleepChronotype', 'chronotype')} />
+                <InfoRow label="COFFEE/TEA" value={getField(parsedData, 'coffee_or_tea_choice', 'coffeeOrTeaChoice')} />
+                <InfoRow label="GYM" value={getField(parsedData, 'gym_membership', 'gymMembership')} />
               </SimpleGrid>
-              <InfoRow label="ECO FRIENDLY" value={getField(parsedData, 'ecoFriendliness', 'sustainability')} />
+              <InfoRow label="ECO FRIENDLY" value={getField(parsedData, 'eco_friendliness', 'ecoFriendliness', 'sustainability')} />
             </DashboardCard>
 
             {/* Technology */}
             <DashboardCard title="Tech Profile" icon={FaLaptop} colorScheme="cyan">
               <VStack align="stretch" spacing={3}>
-                <InfoRow label="TECH AFFINITY" value={getField(parsedData, 'techAffinity', 'technology_adoption')} />
-                <InfoRow label="PRIMARY DEVICE" value={getField(parsedData, 'primaryDevice', 'device')} />
-                <InfoRow label="SOCIAL PLATFORM" value={getField(parsedData, 'favoriteSocialPlatform', 'social_media')} />
-                <InfoRow label="CONTENT PREF" value={getField(parsedData, 'contentPreference', 'content')} />
+                <InfoRow label="TECH AFFINITY" value={getField(parsedData, 'tech_affinity', 'techAffinity', 'technology_adoption')} />
+                <InfoRow label="PRIMARY DEVICE" value={getField(parsedData, 'primary_device', 'primaryDevice', 'device')} />
+                <InfoRow label="SOCIAL PLATFORM" value={getField(parsedData, 'favorite_social_platform', 'favoriteSocialPlatform', 'social_media')} />
+                <InfoRow label="CONTENT PREF" value={getField(parsedData, 'content_preference', 'contentPreference', 'content')} />
+                <InfoRow label="USAGE TIME" value={getField(parsedData, 'social_media_usage_time', 'socialMediaUsageTime')} />
               </VStack>
             </DashboardCard>
 
-            {/* Interests of Travel */}
+            {/* Interests & Shopping */}
             <DashboardCard title="Interests" icon={FaPlane} colorScheme="yellow">
               <VStack align="stretch" spacing={3}>
-                <InfoRow label="TRAVEL FREQ" value={getField(parsedData, 'travelFrequency', 'travel')} />
-                <InfoRow label="GAMING" value={getField(parsedData, 'gamingPreference', 'games')} />
-                <InfoRow label="SPORTS" value={getField(parsedData, 'sportsInterest', 'favorite_sport')} />
-                <InfoRow label="FASHION" value={getField(parsedData, 'fashionStyle', 'style')} />
+                <InfoRow label="TRAVEL FREQ" value={getField(parsedData, 'travel_frequency', 'travelFrequency', 'travel')} />
+                <InfoRow label="GAMING" value={getField(parsedData, 'gaming_preference', 'gamingPreference', 'games')} />
+                <InfoRow label="SPORTS" value={getField(parsedData, 'sports_interest', 'sportsInterest', 'favorite_sport')} />
+                <InfoRow label="FASHION" value={getField(parsedData, 'fashion_style', 'fashionStyle', 'style')} />
+                <InfoRow label="SHOPPING PREF" value={getField(parsedData, 'shopping_preference', 'shoppingPreference')} />
+                <InfoRow label="GROCERY STORE" value={getField(parsedData, 'grocery_store_type', 'groceryStoreType')} />
               </VStack>
             </DashboardCard>
 
@@ -354,18 +373,19 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
             <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
               <IntentCard
                 badge="24 HOURS" badgeColor="red"
-                data={getIntent(0)}
-                categoryKey="category" budgetKey="budget" confidenceKey="confidence"
+                data={parsedData}
+                categoryKey="intent_24h_category" budgetKey="intent_24h_budget" confidenceKey="intent_24h_confidence"
               />
               <IntentCard
                 badge="48 HOURS" badgeColor="orange"
-                data={getIntent(1)}
-                categoryKey="category" budgetKey="budget" confidenceKey="confidence"
+                data={parsedData}
+                categoryKey="intent_48h_category" budgetKey="intent_48h_budget" confidenceKey="intent_48h_confidence"
+                timeWindowKey="intent_48h_time_window"
               />
               <IntentCard
                 badge="72 HOURS" badgeColor="green"
-                data={getIntent(2)}
-                categoryKey="category" budgetKey="budget" confidenceKey="confidence"
+                data={parsedData}
+                categoryKey="intent_72h_category" budgetKey="intent_72h_budget" confidenceKey="intent_72h_confidence"
               />
             </SimpleGrid>
           </Box>

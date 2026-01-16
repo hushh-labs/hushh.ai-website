@@ -90,15 +90,35 @@ export default function HushhProfileCard({ userData }) {
                         </Box>
                     </Box>
 
-                    {/* Primary Info: Name */}
-                    <Box mb={6}>
-                        <Text fontSize="xs" fontWeight="bold" color="gray.500" letterSpacing="widest" mb={1}>
-                            NAME
-                        </Text>
-                        <Text fontSize="2xl" fontWeight="bold" lineHeight="1.1" color="white">
-                            {fullName}
-                        </Text>
-                    </Box>
+                    {/* Primary Info: Name, Email, Phone */}
+                    <VStack align="stretch" spacing={4} mb={6}>
+                        <Box>
+                            <Text fontSize="xs" fontWeight="bold" color="gray.500" letterSpacing="widest" mb={1}>
+                                NAME
+                            </Text>
+                            <Text fontSize="2xl" fontWeight="bold" lineHeight="1.1" color="white">
+                                {fullName}
+                            </Text>
+                        </Box>
+                        <HStack spacing={6}>
+                            <Box flex="1">
+                                <Text fontSize="xx-small" fontWeight="bold" color="gray.500" letterSpacing="widest" mb={1}>
+                                    EMAIL
+                                </Text>
+                                <Text fontSize="xs" fontWeight="semibold" color="gray.300" isTruncated>
+                                    {userData?.email || 'N/A'}
+                                </Text>
+                            </Box>
+                            <Box flex="1">
+                                <Text fontSize="xx-small" fontWeight="bold" color="gray.500" letterSpacing="widest" mb={1}>
+                                    PHONE
+                                </Text>
+                                <Text fontSize="xs" fontWeight="semibold" color="gray.300">
+                                    {userData?.phone || userData?.phoneNumber || 'N/A'}
+                                </Text>
+                            </Box>
+                        </HStack>
+                    </VStack>
 
                     {/* Secondary Info: ID & Role */}
                     <Flex justify="space-between" align="flex-start" mb={8}>

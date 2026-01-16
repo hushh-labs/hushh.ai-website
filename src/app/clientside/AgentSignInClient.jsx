@@ -136,7 +136,13 @@ export default function AgentSignInClient() {
 
       // Phase 1.5: Aggregate Data
       // Merge all discovered data to pass to the Profile Agent
-      let aggregatedData = { ...formData };
+      let aggregatedData = {
+        ...formData,
+        full_name: formData.fullName,
+        phone: `${formData.countryCode} ${formData.phoneNumber}`,
+        email: formData.email
+      };
+
       for (const agent of discoveryAgents) {
         if (resultMap[agent]?.success && resultMap[agent]?.data) {
           const text = resultMap[agent].data?.result?.status?.message?.parts?.[0]?.text ||
@@ -146,11 +152,70 @@ export default function AgentSignInClient() {
             const jsonMatch = text.match(/\{[\s\S]*\}/);
             if (jsonMatch) {
               const parsed = JSON.parse(jsonMatch[0]);
-              // Deep merge or extensive Object.assign
-              Object.assign(aggregatedData, parsed);
+
+              // Map camelCase to snake_case for Supabase alignment
+              const mappedParsed = {};
+              Object.keys(parsed).forEach(key => {
+                let targetKey = key;
+                if (key === 'fullName') targetKey = 'full_name';
+                if (key === 'maritalStatus') targetKey = 'marital_status';
+                if (key === 'relationship_status') targetKey = 'marital_status';
+                if (key === 'householdSize') targetKey = 'household_size';
+                if (key === 'family_size') targetKey = 'household_size';
+                if (key === 'childrenCount') targetKey = 'children_count';
+                if (key === 'educationLevel') targetKey = 'education_level';
+                if (key === 'incomeBracket') targetKey = 'income_bracket';
+                if (key === 'salaryRange') targetKey = 'income_bracket';
+                if (key === 'homeOwnership') targetKey = 'home_ownership';
+                if (key === 'cityTier') targetKey = 'city_tier';
+                if (key === 'dietPreference') targetKey = 'diet_preference';
+                if (key === 'favoriteCuisine') targetKey = 'favorite_cuisine';
+                if (key === 'coffeeOrTeaChoice') targetKey = 'coffee_or_tea_choice';
+                if (key === 'fitnessRoutine') targetKey = 'fitness_routine';
+                if (key === 'gymMembership') targetKey = 'gym_membership';
+                if (key === 'shoppingPreference') targetKey = 'shopping_preference';
+                if (key === 'groceryStoreType') targetKey = 'grocery_store_type';
+                if (key === 'fashionStyle') targetKey = 'fashion_style';
+                if (key === 'techAffinity') targetKey = 'tech_affinity';
+                if (key === 'primaryDevice') targetKey = 'primary_device';
+                if (key === 'favoriteSocialPlatform') targetKey = 'favorite_social_platform';
+                if (key === 'social_media') targetKey = 'favorite_social_platform';
+                if (key === 'socialMediaUsageTime') targetKey = 'social_media_usage_time';
+                if (key === 'contentPreference') targetKey = 'content_preference';
+                if (key === 'sportsInterest') targetKey = 'sports_interest';
+                if (key === 'gamingPreference') targetKey = 'gaming_preference';
+                if (key === 'travelFrequency') targetKey = 'travel_frequency';
+                if (key === 'ecoFriendliness') targetKey = 'eco_friendliness';
+                if (key === 'sleepChronotype') targetKey = 'sleep_chronotype';
+
+                mappedParsed[targetKey] = parsed[key];
+              });
+
+              // Handle nested intents mapping
+              if (parsed.intents) {
+                const i = parsed.intents;
+                if (i['24h']) {
+                  aggregatedData.intent_24h_category = i['24h'].category;
+                  aggregatedData.intent_24h_budget = i['24h'].budget;
+                  aggregatedData.intent_24h_confidence = i['24h'].confidence;
+                }
+                if (i['48h']) {
+                  aggregatedData.intent_48h_category = i['48h'].category;
+                  aggregatedData.intent_48h_budget = i['48h'].budget;
+                  aggregatedData.intent_48h_time_window = i['48h'].timeWindow || i['48h'].time_window;
+                  aggregatedData.intent_48h_confidence = i['48h'].confidence;
+                }
+                if (i['72h']) {
+                  aggregatedData.intent_72h_category = i['72h'].category;
+                  aggregatedData.intent_72h_budget = i['72h'].budget;
+                  aggregatedData.intent_72h_confidence = i['72h'].confidence;
+                }
+              }
+
+              Object.assign(aggregatedData, mappedParsed);
             }
           } catch (e) {
-            // console.warn(`Failed to parse data from ${agent} for aggregation`, e);
+            console.warn(`Failed to parse data from ${agent} for aggregation`, e);
           }
         }
       }
