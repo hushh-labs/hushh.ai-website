@@ -59,19 +59,21 @@ If information is unavailable, provide realistic placeholder data based on the u
           break
 
         case 'supabase-profile-creation-agent':
-          // Synthesis/Creation Prompt - Forces explicit mapping of all granular fields
-          const dataToSync = aggregatedData || userData;
-          const creationPrompt = `Create a comprehensive user profile in the database using the following verified data points: ${JSON.stringify(dataToSync)}.
+          // Synthesis/Creation Prompt - Sanitize to only flat fields and primitive arrays
+          const rawData = aggregatedData || userData;
+          const sanitizedData = {};
+          Object.keys(rawData).forEach(key => {
+            if (typeof rawData[key] !== 'object' || Array.isArray(rawData[key])) {
+              sanitizedData[key] = rawData[key];
+            }
+          });
 
-IMPORTANT: You MUST synchronize all granular fields to their relevant columns:
-- Personal: full_name, phone, email, age, gender, marital_status, household_size, children_count
-- Professional & Status: education_level, occupation, income_bracket, home_ownership, city_tier, primary_transport
-- Lifestyle: diet_preference, favorite_cuisine, coffee_or_tea_choice, fitness_routine, gym_membership, shopping_preference, grocery_store_type, fashion_style
-- Tech: tech_affinity, primary_device, favorite_social_platform, social_media_usage_time, content_preference
-- Psychographics: needs, wants, desires, travel_frequency, eco_friendliness, sleep_chronotype
-- INTENTS (CRITICAL): Ensure intent_24h_category, intent_24h_budget, intent_24h_confidence, intent_48h_category, intent_48h_budget, intent_48h_time_window, intent_48h_confidence, intent_72h_category, intent_72h_budget, intent_72h_confidence are all persisted.
+          const creationPrompt = `Create a comprehensive user profile with these verified data points:
+\`\`\`json
+${JSON.stringify(sanitizedData, null, 2)}
+\`\`\`
 
-Return the final created profile as JSON including the user_id.`;
+Ensure all intent, lifestyle, and psychographic fields are persisted correctly. Return the user_id in the JSON response.`;
 
           body = {
             text: creationPrompt,

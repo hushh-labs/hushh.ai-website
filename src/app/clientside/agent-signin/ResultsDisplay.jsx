@@ -57,6 +57,10 @@ const extractUserData = (agentResults, userData) => {
 
           let dataToMerge = parsed.userProfile || parsed;
 
+          // ID Normalization
+          const extractedId = dataToMerge.user_id || dataToMerge.userId || dataToMerge.id;
+          if (extractedId) allData.user_id = extractedId;
+
           // Basic normalization for UI consistency
           if (dataToMerge.address && typeof dataToMerge.address === 'object') {
             const addr = dataToMerge.address;
@@ -121,10 +125,27 @@ const extractUserData = (agentResults, userData) => {
           console.error(`❌ Failed to parse JSON from ${agent}:`, e)
         }
       } else if (typeof responseData === 'object' && responseData !== null) {
-        Object.assign(allData, responseData.userProfile || responseData)
+        let objToMerge = responseData.userProfile || responseData;
+        const extractedId = objToMerge.user_id || objToMerge.userId || objToMerge.id;
+        if (extractedId) allData.user_id = extractedId;
+        Object.assign(allData, objToMerge)
       }
     }
   })
+
+  // Final safeguarding: Ensure user_id from Supabase agent wins if multiple IDs present
+  const supabaseResult = agentResults['supabase-profile-creation-agent'];
+  if (supabaseResult?.success && supabaseResult?.data) {
+    const text = supabaseResult.data?.result?.status?.message?.parts?.[0]?.text || '';
+    const match = text.match(/\{[\s\S]*\}/);
+    if (match) {
+      try {
+        const parsed = JSON.parse(match[0]);
+        const finalId = parsed.user_id || parsed.userId || parsed.id;
+        if (finalId) allData.user_id = finalId;
+      } catch (e) { }
+    }
+  }
 
   return allData
 }
