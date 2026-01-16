@@ -26,8 +26,23 @@ export default function AgentSignInClient() {
       // Build full phone number with country code
       const fullPhoneNumber = `${userData.countryCode} ${userData.phoneNumber}`
 
-      // Custom prompt template for detailed JSON profile
-      const detailedPrompt = `Can you provide me with a detailed JSON profile of ${userData.fullName} having email ${userData.email} and phone ${fullPhoneNumber} that includes all possible fields such as user ID, full name, phone, email, address, age, gender, marital status, household size, children count, education level, occupation, income bracket, home ownership, city tier, transport, diet preference, favorite cuisine, coffee or tea choice, fitness routine, gym membership, shopping preference, grocery store type, fashion style, tech affinity, primary device, favorite social platform, social media usage time, content preference, sports interest, gaming preference, travel frequency, eco-friendliness, sleep chronotype, needs, wants, desires, and 24h/48h/72h intents with category, budget, time window, and confidence. The output should strictly be in JSON format. If some information is not available from public sources, please generate reasonable and relevant placeholder data instead of leaving fields blank, while keeping it realistic and respectful.`
+      // Standardized Prompt Template for all discovery agents
+      const detailedPrompt = `Provide a detailed profile of ${userData.fullName} (Email: ${userData.email}, Phone: ${fullPhoneNumber}) in STRICT JSON format.
+Use these EXACT keys:
+- full_name, phone, email, age, gender, marital_status
+- household_size, children_count, education_level, occupation, income_bracket, home_ownership
+- city_tier, primary_transport, diet_preference, favorite_cuisine, coffee_or_tea_choice
+- fitness_routine, gym_membership, shopping_preference, grocery_store_type, fashion_style
+- tech_affinity, primary_device, favorite_social_platform, social_media_usage_time
+- content_preference, sports_interest, gaming_preference, travel_frequency, eco_friendliness, sleep_chronotype
+- address: { street, city, state, zip_code, country }
+- intent_24h: { category, budget_usd, time_window, confidence }
+- intent_48h: { category, budget_usd, time_window, confidence }
+- intent_72h: { category, budget_usd, time_window, confidence }
+- needs: [list], wants: [list], desires: [list]
+- summary: (brief AI bio)
+
+If information is unavailable, provide realistic placeholder data based on the user's name and location. DO NOT leave fields blank.`
 
       // Build the appropriate payload for profile fetching agents only
       switch (agent) {
@@ -44,11 +59,20 @@ export default function AgentSignInClient() {
           break
 
         case 'supabase-profile-creation-agent':
-          // Synthesis/Creation Prompt
-          // Matches the pattern in A2AAgentClient.jsx
+          // Synthesis/Creation Prompt - Forces explicit mapping of all granular fields
           const dataToSync = aggregatedData || userData;
-          const creationPrompt = `Can you create a user profile with the details below? ${JSON.stringify(dataToSync)}`;
-          console.log("🚀 Calling Supabase Profile Creation Agent with payload:", body);
+          const creationPrompt = `Create a comprehensive user profile in the database using the following verified data points: ${JSON.stringify(dataToSync)}.
+
+IMPORTANT: You MUST synchronize all granular fields to their relevant columns:
+- Personal: full_name, phone, email, age, gender, marital_status, household_size, children_count
+- Professional & Status: education_level, occupation, income_bracket, home_ownership, city_tier, primary_transport
+- Lifestyle: diet_preference, favorite_cuisine, coffee_or_tea_choice, fitness_routine, gym_membership, shopping_preference, grocery_store_type, fashion_style
+- Tech: tech_affinity, primary_device, favorite_social_platform, social_media_usage_time, content_preference
+- Psychographics: needs, wants, desires, travel_frequency, eco_friendliness, sleep_chronotype
+- INTENTS (CRITICAL): Ensure intent_24h_category, intent_24h_budget, intent_24h_confidence, intent_48h_category, intent_48h_budget, intent_48h_time_window, intent_48h_confidence, intent_72h_category, intent_72h_budget, intent_72h_confidence are all persisted.
+
+Return the final created profile as JSON including the user_id.`;
+
           body = {
             text: creationPrompt,
             sessionId,
@@ -146,6 +170,7 @@ export default function AgentSignInClient() {
       for (const agent of discoveryAgents) {
         if (resultMap[agent]?.success && resultMap[agent]?.data) {
           const text = resultMap[agent].data?.result?.status?.message?.parts?.[0]?.text ||
+            resultMap[agent].data?.result?.artifacts?.[0]?.parts?.[0]?.text ||
             resultMap[agent].data?.result?.message?.parts?.[0]?.text ||
             resultMap[agent].data?.result?.response?.parts?.[0]?.text || '';
           try {
@@ -153,63 +178,106 @@ export default function AgentSignInClient() {
             if (jsonMatch) {
               const parsed = JSON.parse(jsonMatch[0]);
 
-              // Map camelCase to snake_case for Supabase alignment
+              // 1. Map top-level aliases and core fields
               const mappedParsed = {};
               Object.keys(parsed).forEach(key => {
                 let targetKey = key;
+                // Basic normalization for Supabase alignment
                 if (key === 'fullName') targetKey = 'full_name';
-                if (key === 'maritalStatus') targetKey = 'marital_status';
-                if (key === 'relationship_status') targetKey = 'marital_status';
-                if (key === 'householdSize') targetKey = 'household_size';
-                if (key === 'family_size') targetKey = 'household_size';
+                if (key === 'maritalStatus' || key === 'relationship_status') targetKey = 'marital_status';
+                if (key === 'householdSize' || key === 'family_size') targetKey = 'household_size';
                 if (key === 'childrenCount') targetKey = 'children_count';
                 if (key === 'educationLevel') targetKey = 'education_level';
-                if (key === 'incomeBracket') targetKey = 'income_bracket';
-                if (key === 'salaryRange') targetKey = 'income_bracket';
+                if (key === 'incomeBracket' || key === 'salaryRange') targetKey = 'income_bracket';
                 if (key === 'homeOwnership') targetKey = 'home_ownership';
                 if (key === 'cityTier') targetKey = 'city_tier';
                 if (key === 'dietPreference') targetKey = 'diet_preference';
                 if (key === 'favoriteCuisine') targetKey = 'favorite_cuisine';
-                if (key === 'coffeeOrTeaChoice') targetKey = 'coffee_or_tea_choice';
+                if (key === 'coffeeOrTeaChoice' || key === 'coffee_or_tea') targetKey = 'coffee_or_tea_choice';
                 if (key === 'fitnessRoutine') targetKey = 'fitness_routine';
-                if (key === 'gymMembership') targetKey = 'gym_membership';
+                if (key === 'gymMembership' || key === 'gym_member') targetKey = 'gym_membership';
                 if (key === 'shoppingPreference') targetKey = 'shopping_preference';
-                if (key === 'groceryStoreType') targetKey = 'grocery_store_type';
+                if (key === 'groceryStoreType' || key === 'preferred_grocery_store_type') targetKey = 'grocery_store_type';
                 if (key === 'fashionStyle') targetKey = 'fashion_style';
                 if (key === 'techAffinity') targetKey = 'tech_affinity';
                 if (key === 'primaryDevice') targetKey = 'primary_device';
                 if (key === 'favoriteSocialPlatform') targetKey = 'favorite_social_platform';
                 if (key === 'social_media') targetKey = 'favorite_social_platform';
-                if (key === 'socialMediaUsageTime') targetKey = 'social_media_usage_time';
+                if (key === 'socialMediaUsageTime' || key === 'daily_social_time_minutes') targetKey = 'social_media_usage_time';
                 if (key === 'contentPreference') targetKey = 'content_preference';
                 if (key === 'sportsInterest') targetKey = 'sports_interest';
-                if (key === 'gamingPreference') targetKey = 'gaming_preference';
+                if (key === 'gamingPreference' || key === 'gamer') targetKey = 'gaming_preference';
                 if (key === 'travelFrequency') targetKey = 'travel_frequency';
-                if (key === 'ecoFriendliness') targetKey = 'eco_friendliness';
+                if (key === 'ecoFriendliness' || key === 'eco_friendly') targetKey = 'eco_friendliness';
                 if (key === 'sleepChronotype') targetKey = 'sleep_chronotype';
+                if (key === 'primary_transport' || key === 'transport') targetKey = 'primary_transport';
 
                 mappedParsed[targetKey] = parsed[key];
               });
 
-              // Handle nested intents mapping
-              if (parsed.intents) {
-                const i = parsed.intents;
-                if (i['24h']) {
-                  aggregatedData.intent_24h_category = i['24h'].category;
-                  aggregatedData.intent_24h_budget = i['24h'].budget;
-                  aggregatedData.intent_24h_confidence = i['24h'].confidence;
-                }
-                if (i['48h']) {
-                  aggregatedData.intent_48h_category = i['48h'].category;
-                  aggregatedData.intent_48h_budget = i['48h'].budget;
-                  aggregatedData.intent_48h_time_window = i['48h'].timeWindow || i['48h'].time_window;
-                  aggregatedData.intent_48h_confidence = i['48h'].confidence;
-                }
-                if (i['72h']) {
-                  aggregatedData.intent_72h_category = i['72h'].category;
-                  aggregatedData.intent_72h_budget = i['72h'].budget;
-                  aggregatedData.intent_72h_confidence = i['72h'].confidence;
-                }
+              // 2. Handle nested address normalization
+              if (parsed.address && typeof parsed.address === 'object') {
+                const addr = parsed.address;
+                aggregatedData.street = addr.street || addr.address_line1 || addr.address || aggregatedData.street;
+                aggregatedData.city = addr.city || aggregatedData.city;
+                aggregatedData.state = addr.state || aggregatedData.state;
+                aggregatedData.zip_code = addr.zip_code || addr.zip || addr.zip_code || aggregatedData.zip_code;
+                aggregatedData.country = addr.country || aggregatedData.country;
+              }
+
+              // 3. Normalized Intent Extraction
+              const extractIntentData = (src) => ({
+                category: src.category,
+                budget: src.budget_usd || src.budget,
+                time_window: src.time_window || src.timeWindow,
+                confidence: src.confidence
+              });
+
+              // Format A: { intent_24h: { category, budget_usd, ... } }
+              if (parsed.intent_24h) {
+                const i = extractIntentData(parsed.intent_24h);
+                aggregatedData.intent_24h_category = i.category || aggregatedData.intent_24h_category;
+                aggregatedData.intent_24h_budget = i.budget || aggregatedData.intent_24h_budget;
+                aggregatedData.intent_24h_confidence = i.confidence || aggregatedData.intent_24h_confidence;
+                aggregatedData.intent_24h_time_window = i.time_window || aggregatedData.intent_24h_time_window;
+              }
+              if (parsed.intent_48h) {
+                const i = extractIntentData(parsed.intent_48h);
+                aggregatedData.intent_48h_category = i.category || aggregatedData.intent_48h_category;
+                aggregatedData.intent_48h_budget = i.budget || aggregatedData.intent_48h_budget;
+                aggregatedData.intent_48h_confidence = i.confidence || aggregatedData.intent_48h_confidence;
+                aggregatedData.intent_48h_time_window = i.time_window || aggregatedData.intent_48h_time_window;
+              }
+              if (parsed.intent_72h) {
+                const i = extractIntentData(parsed.intent_72h);
+                aggregatedData.intent_72h_category = i.category || aggregatedData.intent_72h_category;
+                aggregatedData.intent_72h_budget = i.budget || aggregatedData.intent_72h_budget;
+                aggregatedData.intent_72h_confidence = i.confidence || aggregatedData.intent_72h_confidence;
+                aggregatedData.intent_72h_time_window = i.time_window || aggregatedData.intent_72h_time_window;
+              }
+
+              // Format B: { intents: [ { time_frame: '24h', ... } ] }
+              if (Array.isArray(parsed.intents)) {
+                parsed.intents.forEach(int => {
+                  const tf = int.time_frame || int.timeFrame || int.time_window;
+                  const i = extractIntentData(int);
+                  if (tf?.includes('24h')) {
+                    aggregatedData.intent_24h_category = i.category || aggregatedData.intent_24h_category;
+                    aggregatedData.intent_24h_budget = i.budget || aggregatedData.intent_24h_budget;
+                    aggregatedData.intent_24h_confidence = i.confidence || aggregatedData.intent_24h_confidence;
+                    aggregatedData.intent_24h_time_window = i.time_window || aggregatedData.intent_24h_time_window;
+                  } else if (tf?.includes('48h')) {
+                    aggregatedData.intent_48h_category = i.category || aggregatedData.intent_48h_category;
+                    aggregatedData.intent_48h_budget = i.budget || aggregatedData.intent_48h_budget;
+                    aggregatedData.intent_48h_confidence = i.confidence || aggregatedData.intent_48h_confidence;
+                    aggregatedData.intent_48h_time_window = i.time_window || aggregatedData.intent_48h_time_window;
+                  } else if (tf?.includes('72h')) {
+                    aggregatedData.intent_72h_category = i.category || aggregatedData.intent_72h_category;
+                    aggregatedData.intent_72h_budget = i.budget || aggregatedData.intent_72h_budget;
+                    aggregatedData.intent_72h_confidence = i.confidence || aggregatedData.intent_72h_confidence;
+                    aggregatedData.intent_72h_time_window = i.time_window || aggregatedData.intent_72h_time_window;
+                  }
+                });
               }
 
               Object.assign(aggregatedData, mappedParsed);

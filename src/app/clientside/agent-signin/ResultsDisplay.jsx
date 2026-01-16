@@ -29,11 +29,10 @@ import HushhProfileCard from '../../../components/profile/HushhProfileCard'
 
 // Helper function to extract data from API responses
 const extractUserData = (agentResults, userData) => {
-  const allData = {}
+  const allData = { ...userData }
 
   console.log('🔍 Extracting data from agent results:', agentResults)
 
-  // Process agents in priority order: brand -> hushh -> public -> gemini -> supabase-profile-creation-agent (last = highest priority)
   const priorityOrder = ['brand', 'hushh', 'public', 'gemini', 'gemini-proxy', 'supabase-profile-creation-agent']
   const sortedEntries = Object.entries(agentResults).sort((a, b) => {
     const indexA = priorityOrder.indexOf(a[0])
@@ -41,12 +40,8 @@ const extractUserData = (agentResults, userData) => {
     return (indexA === -1 ? 999 : indexA) - (indexB === -1 ? 999 : indexB)
   })
 
-  // Combine all agent data with Gemini taking priority (processed last)
   sortedEntries.forEach(([agent, result]) => {
-    // console.log(`📊 Processing ${agent} agent:`, result)
-
     if (result.success && result.data) {
-      // Handle different response structures - JSON-RPC format
       let responseData = result.data?.result?.status?.message?.parts?.[0]?.text ||
         result.data?.result?.artifacts?.[0]?.parts?.[0]?.text ||
         result.data?.result?.message?.parts?.[0]?.text ||
@@ -54,35 +49,79 @@ const extractUserData = (agentResults, userData) => {
         result.data?.data ||
         result.data
 
-      // console.log(`📝 Extracted response data from ${agent}:`, responseData)
-
-      // If responseData is a string, try to parse it as JSON
       if (typeof responseData === 'string') {
         try {
-          // Remove markdown code blocks if present
-          const cleanedData = responseData
-            .replace(/```json\n?/g, '')
-            .replace(/```\n?/g, '')
-            .trim()
+          const cleanedData = responseData.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
+          const jsonMatch = cleanedData.match(/\{[\s\S]*\}/);
+          const parsed = JSON.parse(jsonMatch ? jsonMatch[0] : cleanedData)
 
-          const parsed = JSON.parse(cleanedData)
+          let dataToMerge = parsed.userProfile || parsed;
 
-          // Handle userProfile wrapper
-          if (parsed.userProfile) {
-            Object.assign(allData, parsed.userProfile)
-          } else if (typeof parsed === 'object' && parsed !== null) {
-            Object.assign(allData, parsed)
+          // Basic normalization for UI consistency
+          if (dataToMerge.address && typeof dataToMerge.address === 'object') {
+            const addr = dataToMerge.address;
+            allData.street = addr.street || addr.address_line1 || allData.street;
+            allData.city = addr.city || allData.city;
+            allData.state = addr.state || allData.state;
+            allData.zip_code = addr.zip_code || addr.zip || allData.zip_code;
+            allData.country = addr.country || allData.country;
           }
+
+          // Handle intents
+          const extract = (src) => ({
+            category: src.category,
+            budget: src.budget_usd || src.budget,
+            time_window: src.time_window || src.timeWindow,
+            confidence: src.confidence
+          });
+
+          if (dataToMerge.intent_24h) {
+            const i = extract(dataToMerge.intent_24h);
+            allData.intent_24h_category = i.category || allData.intent_24h_category;
+            allData.intent_24h_budget = i.budget || allData.intent_24h_budget;
+            allData.intent_24h_confidence = i.confidence || allData.intent_24h_confidence;
+          }
+          if (dataToMerge.intent_48h) {
+            const i = extract(dataToMerge.intent_48h);
+            allData.intent_48h_category = i.category || allData.intent_48h_category;
+            allData.intent_48h_budget = i.budget || allData.intent_48h_budget;
+            allData.intent_48h_time_window = i.time_window || allData.intent_48h_time_window;
+            allData.intent_48h_confidence = i.confidence || allData.intent_48h_confidence;
+          }
+          if (dataToMerge.intent_72h) {
+            const i = extract(dataToMerge.intent_72h);
+            allData.intent_72h_category = i.category || allData.intent_72h_category;
+            allData.intent_72h_budget = i.budget || allData.intent_72h_budget;
+            allData.intent_72h_confidence = i.confidence || allData.intent_72h_confidence;
+          }
+
+          if (Array.isArray(dataToMerge.intents)) {
+            dataToMerge.intents.forEach(int => {
+              const tf = int.time_frame || int.timeFrame;
+              const i = extract(int);
+              if (tf?.includes('24h')) {
+                allData.intent_24h_category = i.category;
+                allData.intent_24h_budget = i.budget;
+                allData.intent_24h_confidence = i.confidence;
+              } else if (tf?.includes('48h')) {
+                allData.intent_48h_category = i.category;
+                allData.intent_48h_budget = i.budget;
+                allData.intent_48h_time_window = i.time_window;
+                allData.intent_48h_confidence = i.confidence;
+              } else if (tf?.includes('72h')) {
+                allData.intent_72h_category = i.category;
+                allData.intent_72h_budget = i.budget;
+                allData.intent_72h_confidence = i.confidence;
+              }
+            });
+          }
+
+          Object.assign(allData, dataToMerge)
         } catch (e) {
           console.error(`❌ Failed to parse JSON from ${agent}:`, e)
         }
       } else if (typeof responseData === 'object' && responseData !== null) {
-        // If already an object, handle userProfile wrapper
-        if (responseData.userProfile) {
-          Object.assign(allData, responseData.userProfile)
-        } else {
-          Object.assign(allData, responseData)
-        }
+        Object.assign(allData, responseData.userProfile || responseData)
       }
     }
   })
@@ -118,6 +157,9 @@ const getField = (data, ...keys) => {
 const formatArrayValue = (value) => {
   if (Array.isArray(value)) {
     return value.join(', ')
+  }
+  if (typeof value === 'object' && value !== null) {
+    return Object.values(value).join(', ')
   }
   return value
 }
@@ -362,6 +404,16 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
                 <InfoRow label="FASHION" value={getField(parsedData, 'fashion_style', 'fashionStyle', 'style')} />
                 <InfoRow label="SHOPPING PREF" value={getField(parsedData, 'shopping_preference', 'shoppingPreference')} />
                 <InfoRow label="GROCERY STORE" value={getField(parsedData, 'grocery_store_type', 'groceryStoreType')} />
+              </VStack>
+            </DashboardCard>
+
+            {/* AI Psychographics */}
+            <DashboardCard title="Psychographics" icon={FaLeaf} colorScheme="green">
+              <VStack align="stretch" spacing={3}>
+                <InfoRow label="NEEDS" value={formatArrayValue(getField(parsedData, 'needs'))} />
+                <InfoRow label="WANTS" value={formatArrayValue(getField(parsedData, 'wants'))} />
+                <InfoRow label="DESIRES" value={formatArrayValue(getField(parsedData, 'desires'))} />
+                <InfoRow label="TRANSPORT" value={getField(parsedData, 'primary_transport', 'transport')} />
               </VStack>
             </DashboardCard>
 
