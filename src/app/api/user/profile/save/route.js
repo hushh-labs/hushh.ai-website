@@ -12,11 +12,46 @@ export async function POST(request) {
         const { userData, agentResults } = body;
 
         // Extract AI data
-        const geminiData = agentResults.gemini?.data?.result?.response?.parts?.[0]?.text
-            ? JSON.parse(agentResults.gemini.data.result.response.parts[0].text)
-            : {};
+        const getAgentData = (agentName) => {
+            const result = agentResults[agentName];
+            if (!result?.data) return {};
 
-        const publicData = agentResults.public?.data || {};
+            // Handle various nested structures
+            const text = result.data?.result?.status?.message?.parts?.[0]?.text ||
+                result.data?.result?.message?.parts?.[0]?.text ||
+                result.data?.result?.response?.parts?.[0]?.text ||
+                result.data?.result?.output ||
+                (typeof result.data === 'string' ? result.data : '');
+
+            try {
+                // Try parsing if it's a string, looking for JSON block
+                if (typeof text === 'string') {
+                    const jsonMatch = text.match(/\{[\s\S]*\}/);
+                    const jsonStr = jsonMatch ? jsonMatch[0] : text;
+                    return JSON.parse(jsonStr);
+                }
+                return text || {}; // Return object if already object
+            } catch (e) {
+                return {};
+            }
+        };
+
+        const profileAgentData = getAgentData('hushh-profile');
+        const geminiAgentData = getAgentData('gemini');
+        const publicAgentData = agentResults.public?.data || {};
+
+        // Merge strategies: Profile Agent > Gemini > Public
+        // We use a consolidated object for the mapping below
+        const geminiData = {
+            ...publicAgentData,
+            ...geminiAgentData,
+            ...profileAgentData // Profile agent overwrites others as it is the "synthesizer"
+        };
+
+        // Ensure nested objects (like address) are merged, not just overwritten if partial
+        if (profileAgentData.address && geminiAgentData.address) {
+            geminiData.address = { ...geminiAgentData.address, ...profileAgentData.address };
+        }
 
         // Helper to safe parse Int/Float
         const safeInt = (val) => {

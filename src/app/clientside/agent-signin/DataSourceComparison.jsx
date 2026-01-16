@@ -73,10 +73,10 @@ const DataSourceCard = ({ agentName, agentType, result }) => {
         </HStack>
 
         {isFailed && (
-          <HStack 
-            mt={3} 
-            p={3} 
-            bg="rgba(255, 0, 0, 0.1)" 
+          <HStack
+            mt={3}
+            p={3}
+            bg="rgba(255, 0, 0, 0.1)"
             borderRadius="8px"
             spacing={2}
           >
@@ -98,6 +98,7 @@ export default function DataSourceComparison({ agentResults }) {
     hushh: { name: 'Hushh Agent', type: 'Supabase Proxy' },
     public: { name: 'Public Data Agent', type: 'OpenAI Public Data Agent' },
     gemini: { name: 'Gemini Agent', type: 'Gemini Public Data Agent' },
+    'supabase-profile-creation-agent': { name: 'Supabase Profile Creation', type: 'Supabase Synthesis Agent' },
     'gemini-proxy': { name: 'Gemini Proxy Agent', type: 'Gemini Proxy Agent' },
   }
 
@@ -105,8 +106,8 @@ export default function DataSourceComparison({ agentResults }) {
     <Box bg="black" color="white" py={{ base: 6, md: 10 }}>
       <Container maxW="container.xl">
         <VStack spacing={6} align="stretch">
-          <Heading 
-            fontSize={{ base: 'lg', md: 'xl' }} 
+          <Heading
+            fontSize={{ base: 'lg', md: 'xl' }}
             fontWeight="700"
             pb={3}
             borderBottomWidth="1px"
@@ -119,7 +120,7 @@ export default function DataSourceComparison({ agentResults }) {
             {Object.entries(agentResults).map(([agentId, result]) => {
               const info = agentInfo[agentId]
               if (!info) return null
-              
+
               return (
                 <DataSourceCard
                   key={agentId}
@@ -130,7 +131,7 @@ export default function DataSourceComparison({ agentResults }) {
               )
             })}
           </SimpleGrid>
-          
+
           <Text fontSize="xs" color="gray.500" textAlign="center" mt={2}>
             💡 Gemini AI data is prioritized in the profile analysis above
           </Text>

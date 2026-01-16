@@ -12,6 +12,7 @@ const AGENT_URLS = {
   // with a 400 that lacks a Content-Type header. Switch to the new Query Agent host.
   hushh: 'https://hushh-supabase-query-agent-app-bubqpu.5sc6y6-2.usa-e2.cloudhub.io/supabase-query-agent',
   'hushh-profile': 'https://hushh-supabase-agent-app-bubqpu.5sc6y6-2.usa-e2.cloudhub.io/supabase-agent',
+  'supabase-profile-creation-agent': 'https://hushh-supabase-agent-app-bubqpu.5sc6y6-2.usa-e2.cloudhub.io/supabase-agent',
   'hushh-profile-update': 'https://hushh-supabase-agent-app-bubqpu.5sc6y6-2.usa-e2.cloudhub.io/supabase-agent',
   public: 'https://hushh-open-ai-agent-ap-bt5gn1.7y6hwo.usa-e2.cloudhub.io/public-data-agent',
   gemini: 'https://hushh-geminiai-agent-app-bt5gn1.7y6hwo.usa-e2.cloudhub.io/public-data-agent',
@@ -31,7 +32,7 @@ const AGENT_TIMEOUT = 50000;
 
 export async function POST(req, { params }) {
   const agent = params?.agent?.toLowerCase();
-  
+
   try {
     let upstream = AGENT_URLS[agent];
     if (!upstream) {
@@ -108,7 +109,7 @@ export async function POST(req, { params }) {
       "Content-Type": "application/json",
       Accept: "application/json",
     };
-    
+
     // Add Authorization header only when calling Facebook Graph API
     if (agent === 'whatsapp' && upstream === FACEBOOK_WHATSAPP_URL) {
       headers.Authorization = `Bearer ${WHATSAPP_BEARER_TOKEN}`;
@@ -151,23 +152,23 @@ export async function POST(req, { params }) {
       });
     } catch (fetchError) {
       clearTimeout(timeoutId);
-      
+
       // Handle timeout specifically
       if (fetchError.name === 'AbortError') {
-        return NextResponse.json({ 
-          error: `Agent timeout after ${AGENT_TIMEOUT/1000}s`,
+        return NextResponse.json({
+          error: `Agent timeout after ${AGENT_TIMEOUT / 1000}s`,
           upstreamUrl: upstream,
           upstreamStatus: 408,
           data: {},
           timeout: true
         }, { status: 408 });
       }
-      
+
       throw fetchError;
     }
   } catch (err) {
     console.error(`Error in /api/a2a/${agent}:`, err);
-    return NextResponse.json({ 
+    return NextResponse.json({
       error: err?.message ?? "Unknown error",
       agent,
       timestamp: new Date().toISOString()

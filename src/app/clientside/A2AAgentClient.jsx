@@ -69,7 +69,7 @@ const PROMPT_TEMPLATES = {
       text: 'Can you fetch all the desires of Sundar Pichai with phone +1 6505559001?',
     },
   ],
-  'hushh-profile': [
+  'supabase-profile-creation-agent': [
     {
       label: 'Create a profile with full details',
       text:
@@ -295,7 +295,7 @@ export default function A2AAgentClient() {
       const node = stack.pop()
       if (!node || typeof node !== 'object') continue
       for (const [k, v] of Object.entries(node)) {
-        if (typeof v === 'string' && ['text','content','output','answer'].includes(k) && v.trim()) return v
+        if (typeof v === 'string' && ['text', 'content', 'output', 'answer'].includes(k) && v.trim()) return v
         if (v && typeof v === 'object') stack.push(v)
       }
     }
@@ -321,7 +321,7 @@ export default function A2AAgentClient() {
   const sendText = useCallback(async (text) => {
     const trimmed = (text || '').trim()
     if (!trimmed || loading) return
-    const shouldNormalizePhone = ['brand', 'hushh', 'hushh-profile', 'hushh-profile-update'].includes(agent)
+    const shouldNormalizePhone = ['brand', 'hushh', 'supabase-profile-creation-agent', 'hushh-profile-update'].includes(agent)
     const normalizedText = shouldNormalizePhone ? normalizePhoneInText(trimmed) : trimmed
     const userMsg = { role: 'user', content: normalizedText, id: `u-${Date.now()}` }
     setMessages(prev => [...prev, userMsg])
@@ -333,7 +333,7 @@ export default function A2AAgentClient() {
       // Call via Next.js API proxy
       const res = await fetch(`/api/a2a/${agent}`, {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ text: normalizedText }),
@@ -368,7 +368,7 @@ export default function A2AAgentClient() {
       // Call via Next.js API proxy with custom payload
       const res = await fetch(`/api/a2a/${agent}`, {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ payload }),

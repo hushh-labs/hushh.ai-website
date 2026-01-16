@@ -30,8 +30,8 @@ export const AGENT_OPTIONS = [
     icon: FiDatabase,
   },
   {
-    id: 'hushh-profile',
-    name: 'Hushh Profile Creation Agent',
+    id: 'supabase-profile-creation-agent',
+    name: 'Supabase Profile Creation Agent',
     description: 'Supabase profile onboarding',
     tagline: 'Create rich Supabase user profiles with conversational prompts.',
     accent: {
@@ -115,7 +115,7 @@ export const AGENT_OPTIONS = [
   },
 ]
 
-export const CHAT_ENABLED_AGENT_IDS = ['brand', 'hushh', 'hushh-profile', 'hushh-profile-update', 'public', 'gemini']
+export const CHAT_ENABLED_AGENT_IDS = ['brand', 'hushh', 'supabase-profile-creation-agent', 'hushh-profile-update', 'public', 'gemini']
 
 export function getAgentOptionById(id) {
   return AGENT_OPTIONS.find((agent) => agent.id === id)

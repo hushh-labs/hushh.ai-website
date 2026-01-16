@@ -19,17 +19,18 @@ const MotionBox = motion(Box);
 const MotionHStack = motion(HStack);
 
 export default function AnalyzingLoader({ progress = 0, currentAgent = '' }) {
-  // Four profile fetching agents
+  // Five profile fetching agents (4 discovery + 1 profile creation)
   const agents = [
     { id: 'brand', name: 'Brand Identity Agent', description: 'Analyzing brand affinity & loyalty', status: progress > 0 ? 'completed' : 'pending' },
-    { id: 'hushh', name: 'Hushh Core Agent', description: 'Retrieving secure user intent data', status: progress > 25 ? 'completed' : progress > 0 ? 'processing' : 'pending' },
-    { id: 'public', name: 'Public Data Agent', description: 'Scanning public records & footprint', status: progress > 50 ? 'completed' : progress > 25 ? 'processing' : 'pending' },
-    { id: 'gemini', name: 'Gemini Intelligence', description: 'Synthesizing comprehensive profile', status: progress > 75 ? 'completed' : progress > 50 ? 'processing' : 'pending' },
+    { id: 'hushh', name: 'Hushh Core Agent', description: 'Retrieving secure user intent data', status: progress > 20 ? 'completed' : progress > 0 ? 'processing' : 'pending' },
+    { id: 'public', name: 'Public Data Agent', description: 'Scanning public records & footprint', status: progress > 40 ? 'completed' : progress > 20 ? 'processing' : 'pending' },
+    { id: 'gemini', name: 'Gemini Intelligence', description: 'Analysis of public intelligence', status: progress > 60 ? 'completed' : progress > 40 ? 'processing' : 'pending' },
+    { id: 'supabase-profile-creation-agent', name: 'Supabase Profile Creation', description: 'Finalizing and securing identity', status: progress > 80 ? 'completed' : progress > 60 ? 'processing' : 'pending' },
   ]
 
   // Calculate current active agent index for display
   const activeAgentIndex = agents.findIndex(a => a.status === 'processing');
-  const activeAgent = agents[activeAgentIndex] || (progress === 100 ? { name: 'Finalizing...', description: 'Compiling results' } : agents[0]);
+  const activeAgent = agents[activeAgentIndex] || (progress >= 100 ? { name: 'Identity Secured', description: 'Finalizing dashboard...' } : agents[0]);
 
   return (
     <Container maxW="container.md" h="100vh" display="flex" alignItems="center" justifyContent="center">

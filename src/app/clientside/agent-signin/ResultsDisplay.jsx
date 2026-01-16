@@ -33,8 +33,8 @@ const extractUserData = (agentResults, userData) => {
 
   console.log('🔍 Extracting data from agent results:', agentResults)
 
-  // Process agents in priority order: brand -> hushh -> public -> gemini (last = highest priority)
-  const priorityOrder = ['brand', 'hushh', 'public', 'gemini', 'gemini-proxy']
+  // Process agents in priority order: brand -> hushh -> public -> gemini -> supabase-profile-creation-agent (last = highest priority)
+  const priorityOrder = ['brand', 'hushh', 'public', 'gemini', 'gemini-proxy', 'supabase-profile-creation-agent']
   const sortedEntries = Object.entries(agentResults).sort((a, b) => {
     const indexA = priorityOrder.indexOf(a[0])
     const indexB = priorityOrder.indexOf(b[0])

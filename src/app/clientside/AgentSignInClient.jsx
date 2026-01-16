@@ -15,7 +15,7 @@ export default function AgentSignInClient() {
   const toast = useToast()
 
   // Call all agent APIs with user details via Next.js proxy
-  const callAgentAPI = useCallback(async (agent, userData) => {
+  const callAgentAPI = useCallback(async (agent, userData, aggregatedData = null) => {
     const sessionId = `session-${Date.now()}`
     const id = `task-${Math.random().toString(36).slice(2)}`
 
@@ -38,6 +38,19 @@ export default function AgentSignInClient() {
         case 'gemini-proxy':
           body = {
             text: detailedPrompt,
+            sessionId,
+            id,
+          }
+          break
+
+        case 'supabase-profile-creation-agent':
+          // Synthesis/Creation Prompt
+          // Matches the pattern in A2AAgentClient.jsx
+          const dataToSync = aggregatedData || userData;
+          const creationPrompt = `Can you create a user profile with the details below? ${JSON.stringify(dataToSync)}`;
+          console.log("🚀 Calling Supabase Profile Creation Agent with payload:", body);
+          body = {
+            text: creationPrompt,
             sessionId,
             id,
           }
@@ -94,70 +107,116 @@ export default function AgentSignInClient() {
     setAnalysisProgress(0)
 
     toast({
-      title: 'Analyzing Profile',
-      description: 'Querying all agents with your details...',
+      title: 'Initiating Discovery',
+      description: 'Running Brand, Public, and AI Agents...',
       status: 'info',
       duration: 3000,
       isClosable: true,
     })
 
     try {
-      // Only profile fetching agents (removed whatsapp and email)
-      const agents = ['brand', 'hushh', 'public', 'gemini']
+      // Phase 1: Discovery Agents
+      const discoveryAgents = ['brand', 'hushh', 'public', 'gemini']
       const resultMap = {}
 
-      // Call agents sequentially to show progress
-      for (let i = 0; i < agents.length; i++) {
-        const agent = agents[i]
+      const totalAgents = discoveryAgents.length + 1 // +1 for hushh-profile
+      let completedCount = 0
+
+      // Run Discovery Agents
+      for (const agent of discoveryAgents) {
         const result = await callAgentAPI(agent, formData)
         resultMap[agent] = result
 
-        // Update progress
-        const progress = ((i + 1) / agents.length) * 100
-        setAnalysisProgress(progress)
+        completedCount++
+        setAnalysisProgress((completedCount / totalAgents) * 100)
 
         // Small delay for UX
         await new Promise(resolve => setTimeout(resolve, 300))
       }
 
-      setAgentResults(resultMap)
-
-      // Count successes
-      const successCount = Object.values(resultMap).filter(r => r.success).length
-
-
-      // Save the generated profile to Supabase for the Public Page link
-      try {
-        const saveRes = await fetch('/api/user/profile/save', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userData: formData, agentResults: resultMap })
-        });
-        const saveData = await saveRes.json();
-
-        if (saveData.success && saveData.userId) {
-          console.log("Profile saved with ID:", saveData.userId);
-          // Update userData with the confirmed user_id so the QR code is correct
-          formData.user_id = saveData.userId;
-          // Also merge parsed agent data into userData for immediate display consistency
-          if (resultMap.gemini?.data?.result?.response?.parts?.[0]?.text) {
-            try {
-              const parsedGemini = JSON.parse(resultMap.gemini.data.result.response.parts[0].text);
-              Object.assign(formData, parsedGemini);
-            } catch (e) { }
+      // Phase 1.5: Aggregate Data
+      // Merge all discovered data to pass to the Profile Agent
+      let aggregatedData = { ...formData };
+      for (const agent of discoveryAgents) {
+        if (resultMap[agent]?.success && resultMap[agent]?.data) {
+          const text = resultMap[agent].data?.result?.status?.message?.parts?.[0]?.text ||
+            resultMap[agent].data?.result?.message?.parts?.[0]?.text ||
+            resultMap[agent].data?.result?.response?.parts?.[0]?.text || '';
+          try {
+            const jsonMatch = text.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+              const parsed = JSON.parse(jsonMatch[0]);
+              // Deep merge or extensive Object.assign
+              Object.assign(aggregatedData, parsed);
+            }
+          } catch (e) {
+            // console.warn(`Failed to parse data from ${agent} for aggregation`, e);
           }
-          setUserData({ ...formData });
         }
-      } catch (e) {
-        console.error("Background profile save failed:", e);
-        // Don't block the UI, just log error
       }
 
+      // Phase 2: Profile Creation Agent (Supabase Profile)
+      // The AGENT inserts the data into Supabase. We just need to give it the data.
+      console.log("🛠️ Phase 2: Starting Supabase Profile Creation...");
       toast({
-        title: 'Analysis & Profile Created',
-        description: `Successfully analyzed and saved your digital identity.`,
-        status: successCount > 0 ? 'success' : 'warning',
-        duration: 5000,
+        title: 'Creating Profile',
+        description: 'Syncing complete profile to secure database...',
+        status: 'loading',
+        duration: 3000,
+        isClosable: true,
+      })
+
+      const profileAgent = 'supabase-profile-creation-agent'
+      // Use standard API call with aggregated data. Internally it builds the Creation Prompt.
+      const profileResult = await callAgentAPI(profileAgent, formData, aggregatedData)
+      console.log("📊 Phase 2 Results:", profileResult);
+
+      resultMap[profileAgent] = profileResult
+      setAgentResults({ ...resultMap }) // Force state update with new reference
+
+      completedCount++
+      setAnalysisProgress(100)
+
+      // Post-Processing: Extract User ID from Agent Response
+      // The User ID is needed for the QR code and Public Profile Link
+      if (profileResult.success) {
+        const responseText = profileResult.data?.result?.status?.message?.parts?.[0]?.text ||
+          profileResult.data?.result?.message?.parts?.[0]?.text ||
+          '';
+        try {
+          // Look for JSON block if embedded in markdown
+          const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+          const jsonStr = jsonMatch ? jsonMatch[0] : responseText;
+          const parsed = JSON.parse(jsonStr);
+
+          if (parsed.user_id || parsed.userId || parsed.id) {
+            const finalUserId = parsed.user_id || parsed.userId || parsed.id;
+            console.log("✅ Agent Confirmation - User ID:", finalUserId);
+            formData.user_id = finalUserId; // Critical for QR code
+
+            // Update aggregated view with final confirmed data
+            Object.assign(aggregatedData, parsed);
+            setUserData(aggregatedData);
+          } else {
+            console.warn("⚠️ Profile Agent returned success but no user_id found in response.");
+          }
+        } catch (e) {
+          console.error("Failed to parse Profile Agent response for user_id", e);
+        }
+      } else {
+        toast({
+          title: 'Profile Sync Warning',
+          description: 'Could not confirm profile creation with agent. Data may be cached locally only.',
+          status: 'warning',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
+      toast({
+        title: 'Analysis Complete',
+        description: `Profile synthesized and secured.`,
+        status: 'success',
+        duration: 3000,
         isClosable: true,
       })
 
