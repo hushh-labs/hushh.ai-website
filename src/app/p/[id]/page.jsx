@@ -30,7 +30,7 @@ import {
     FiShare2
 } from "react-icons/fi";
 import { motion } from "framer-motion";
-import { UserProfileService } from "../../services/userProfileService";
+import { UserProfileService } from "../../../services/userProfileService";
 
 const MotionBox = motion(Box);
 
