@@ -68,37 +68,28 @@ export async function POST(request) {
             return null;
         };
 
-        // 1. Resolve User ID (Check if email exists to prevent duplicates)
-        let finalUserId = userData.userId; // Try from request first
-        if (!finalUserId) {
-            // Check DB for existing email
-            const { data: existingUser } = await supabase
-                .from('user_profiles')
-                .select('user_id')
-                .eq('email', userData.email)
-                .single();
+        // 1. Resolve Unified IDs
+        // The user wants 'user_id' to contain the formatted string (e.g. name/id)
+        let formattedId = userData.user_id || userData.hushh_id || userData.userId || userData.hushhId;
 
-            if (existingUser) {
-                finalUserId = existingUser.user_id;
-            } else {
-                // Generate new ID if not found
-                finalUserId = `hushh_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
-            }
+        if (!formattedId || !formattedId.includes('/')) {
+            const firstName = (userData.fullName || userData.full_name || "user").split(' ')[0].toLowerCase();
+            const uniqueStr = Math.random().toString(36).substring(2, 8);
+            formattedId = `${firstName}/${uniqueStr}`;
         }
+
+        const finalUserId = formattedId;
+        const finalHushhId = formattedId;
 
         // 2. Map Flattened Needs/Wants/Desires
         const needs = Array.isArray(geminiData.needs) ? geminiData.needs : [];
         const wants = Array.isArray(geminiData.wants) ? geminiData.wants : [];
         const desires = Array.isArray(geminiData.desires) ? geminiData.desires : [];
 
-        // 3. Map Intents (handling potentially different AI output structures)
+        // 3. Map Intents
         const intents = geminiData.intents || {};
-        // Helper to get intent fields safely
         const getIntent = (period) => {
-            // Support array structure or object key structure
-            if (Array.isArray(intents)) {
-                return intents.find(i => i.period === period) || {};
-            }
+            if (Array.isArray(intents)) return intents.find(i => i.period === period) || {};
             return intents[period] || intents[`${period}h`] || {};
         };
 
@@ -106,72 +97,71 @@ export async function POST(request) {
         const intent48 = getIntent('48');
         const intent72 = getIntent('72');
 
-
-        // 4. Construct Exact Schema Object
+        // 4. Construct Profile Data for Upsert
+        // We now upsert on 'email' which we just made UNIQUE
         const profileData = {
             user_id: finalUserId,
-            full_name: userData.fullName,
             email: userData.email,
-            phone: `${userData.countryCode} ${userData.phoneNumber}`.trim(),
+            hushh_id: finalHushhId,
+            full_name: userData.fullName || userData.full_name,
+            phone: userData.phone || `${userData.countryCode || ''} ${userData.phoneNumber || ''}`.trim(),
 
             // Address
-            address_line1: geminiData.address?.street || publicData.address?.street || userData.address,
-            city: geminiData.address?.city || publicData.address?.city || userData.city,
-            state: geminiData.address?.state || publicData.address?.state,
-            zip: safeInt(geminiData.address?.zipCode || publicData.address?.zipCode),
+            address_line1: geminiData.address?.street || userData.address || userData.address_line1,
+            city: geminiData.address?.city || userData.city,
+            state: geminiData.address?.state || userData.state,
+            zip: safeInt(geminiData.address?.zipCode || userData.zip || userData.zip_code),
 
             // Demographics
-            age: safeInt(geminiData.age),
-            gender: geminiData.gender,
-            marital_status: geminiData.maritalStatus,
-            household_size: safeInt(geminiData.householdSize),
-            children_count: geminiData.childrenCount?.toString(), // Schema says text
+            age: safeInt(geminiData.age || userData.age),
+            gender: geminiData.gender || userData.gender,
+            marital_status: geminiData.maritalStatus || geminiData.marital_status || userData.marital_status,
+            household_size: safeInt(geminiData.householdSize || userData.household_size),
+            children_count: (geminiData.childrenCount || userData.children_count)?.toString(),
 
             // Professional
-            education_level: geminiData.educationLevel,
-            occupation: geminiData.occupation,
-            income_bracket: geminiData.incomeBracket,
-            home_ownership: geminiData.homeOwnership,
-            city_tier: geminiData.cityTier,
+            education_level: geminiData.educationLevel || userData.education_level,
+            occupation: geminiData.occupation || userData.occupation,
+            income_bracket: geminiData.incomeBracket || userData.income_bracket,
+            home_ownership: geminiData.homeOwnership || userData.home_ownership,
+            city_tier: geminiData.cityTier || userData.city_tier,
 
             // Lifestyle
-            primary_transport: geminiData.transport || geminiData.primaryTransport,
-            diet_preference: geminiData.dietPreference,
-            favorite_cuisine: geminiData.favoriteCuisine,
-            coffee_or_tea: geminiData.coffeeOrTeaChoice || geminiData.coffeeOrTea,
-            fitness_routine: geminiData.fitnessRoutine,
-            gym_member: safeBool(geminiData.gymMembership),
+            primary_transport: geminiData.transport || geminiData.primaryTransport || userData.primary_transport,
+            diet_preference: geminiData.dietPreference || userData.diet_preference,
+            favorite_cuisine: geminiData.favoriteCuisine || userData.favorite_cuisine,
+            coffee_or_tea: geminiData.coffeeOrTeaChoice || geminiData.coffeeOrTea || userData.coffee_or_tea,
+            fitness_routine: geminiData.fitnessRoutine || userData.fitness_routine,
+            gym_member: safeBool(geminiData.gymMembership ?? userData.gym_member),
 
-            shopping_preference: geminiData.shoppingPreference,
-            preferred_grocery_store_type: geminiData.groceryStoreType,
-            fashion_style: geminiData.fashionStyle,
+            shopping_preference: geminiData.shoppingPreference || userData.shopping_preference,
+            preferred_grocery_store_type: geminiData.groceryStoreType || userData.preferred_grocery_store_type,
+            fashion_style: geminiData.fashionStyle || userData.fashion_style,
 
             // Tech
-            tech_affinity: geminiData.techAffinity,
-            primary_device: geminiData.primaryDevice,
-            favorite_social_platform: geminiData.favoriteSocialPlatform,
-            daily_social_time_minutes: geminiData.socialMediaUsageTime, // Schema says text? or int. Schema said text.
-            content_preference: geminiData.contentPreference,
+            tech_affinity: geminiData.techAffinity || userData.tech_affinity,
+            primary_device: geminiData.primaryDevice || userData.primary_device,
+            favorite_social_platform: geminiData.favoriteSocialPlatform || userData.favorite_social_platform,
+            daily_social_time_minutes: (geminiData.socialMediaUsageTime || userData.daily_social_time_minutes)?.toString(),
+            content_preference: geminiData.contentPreference || userData.content_preference,
 
             // Interests
-            sports_interest: geminiData.sportsInterest,
-            gamer: safeBool(geminiData.gamingPreference?.toLowerCase().includes('yes') || geminiData.gamer),
-            travel_frequency: geminiData.travelFrequency,
-            eco_friendly: safeBool(geminiData.ecoFriendliness?.toLowerCase().includes('high') || geminiData.ecoFriendly),
-            sleep_chronotype: geminiData.sleepChronotype,
+            sports_interest: geminiData.sportsInterest || userData.sports_interest,
+            gamer: safeBool(geminiData.gamer ?? (geminiData.gamingPreference?.toLowerCase().includes('yes'))),
+            travel_frequency: geminiData.travelFrequency || userData.travel_frequency,
+            eco_friendly: safeBool(geminiData.ecoFriendly ?? (geminiData.ecoFriendliness?.toLowerCase().includes('high'))),
+            sleep_chronotype: geminiData.sleepChronotype || userData.sleep_chronotype,
 
-            // Flattened Arrays
-            need_1: needs[0] || null,
-            need_2: needs[1] || null,
-            need_3: needs[2] || null,
-
-            want_1: wants[0] || null,
-            want_2: wants[1] || null,
-            want_3: wants[2] || null,
-
-            desire_1: desires[0] || null,
-            desire_2: desires[1] || null,
-            desire_3: desires[2] || null,
+            // Needs/Wants/Desires (Flattened)
+            need_1: needs[0] || userData.need_1,
+            need_2: needs[1] || userData.need_2,
+            need_3: needs[2] || userData.need_3,
+            want_1: wants[0] || userData.want_1,
+            want_2: wants[1] || userData.want_2,
+            want_3: wants[2] || userData.want_3,
+            desire_1: desires[0] || userData.desire_1,
+            desire_2: desires[1] || userData.desire_2,
+            desire_3: desires[2] || userData.desire_3,
 
             // Intents
             intent_24h_category: intent24.category,
@@ -190,13 +180,12 @@ export async function POST(request) {
             intent_72h_confidence: safeFloat(intent72.confidence),
 
             profile_updated_utc: new Date().toISOString()
-            // profile_created_utc is default now(), so we don't need to send it unless verifying insert
         };
 
-        // Upsert using user_id as PK
+        // Upsert on 'email' to unify AI-created rows with our enriched data
         const { data, error } = await supabase
             .from('user_profiles')
-            .upsert(profileData, { onConflict: 'user_id' })
+            .upsert(profileData, { onConflict: 'email' })
             .select();
 
         if (error) {

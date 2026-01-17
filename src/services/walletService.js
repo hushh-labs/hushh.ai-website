@@ -10,7 +10,7 @@ export const WalletService = {
      */
     async generatePass(userData) {
         const fullName = userData?.full_name || userData?.fullName || "Hushh User";
-        const userId = userData?.user_id || userData?.id || "hushh-id";
+        const userId = userData?.hushh_id || userData?.user_id || userData?.id || "hushh-id";
         const role = userData?.occupation || "Member";
 
         // Construct public profile URL for the QR code

@@ -73,13 +73,15 @@ If information is unavailable, provide realistic placeholder data based on the u
 ${JSON.stringify(sanitizedData, null, 2)}
 \`\`\`
 
-Ensure all intent, lifestyle, and psychographic fields are persisted correctly. Return the user_id in the JSON response.`;
+IMPORTANT: You MUST sync the "hushh_id" field to the "hushh_id" column in the database. 
+Ensure all intent, lifestyle, and psychographic fields are persisted correctly. Return the user_id and confirmed hushh_id in the JSON response.`;
 
           body = {
             text: creationPrompt,
             sessionId,
             id,
           }
+          console.log("🚀 Sending Payload to Profile Agent:", body);
           break
 
         default:
@@ -128,6 +130,14 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
 
   // Handle form submission and call all agents
   const handleFormSubmit = useCallback(async (formData) => {
+    // Generate Unified Formatted ID: [firstName]/[uniqueString]
+    const firstName = formData.fullName.split(' ')[0].toLowerCase();
+    const uniqueStr = Math.random().toString(36).substring(2, 8);
+    const unifiedId = `${firstName}/${uniqueStr}`;
+
+    formData.user_id = unifiedId;
+    formData.hushh_id = unifiedId; // Keep both for safety across components
+
     setUserData(formData)
     setCurrentStep('analyzing')
     setAnalysisProgress(0)
@@ -313,40 +323,62 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
       setAnalysisProgress(100)
 
       // Post-Processing: Extract User ID from Agent Response
-      // The User ID is needed for the QR code and Public Profile Link
       if (profileResult.success) {
         const responseText = profileResult.data?.result?.status?.message?.parts?.[0]?.text ||
           profileResult.data?.result?.message?.parts?.[0]?.text ||
           '';
         try {
-          // Look for JSON block if embedded in markdown
           const jsonMatch = responseText.match(/\{[\s\S]*\}/);
           const jsonStr = jsonMatch ? jsonMatch[0] : responseText;
           const parsed = JSON.parse(jsonStr);
 
           if (parsed.user_id || parsed.userId || parsed.id) {
-            const finalUserId = parsed.user_id || parsed.userId || parsed.id;
-            console.log("✅ Agent Confirmation - User ID:", finalUserId);
-            formData.user_id = finalUserId; // Critical for QR code
+            const agentReturnedId = parsed.user_id || parsed.userId || parsed.id;
+            console.log("✅ Agent Confirmation - ID:", agentReturnedId);
+
+            // Only use agent ID if we don't already have our custom formatted one
+            if (!formData.user_id?.includes('/')) {
+              formData.user_id = agentReturnedId;
+            }
 
             // Update aggregated view with final confirmed data
             Object.assign(aggregatedData, parsed);
-            setUserData(aggregatedData);
-          } else {
-            console.warn("⚠️ Profile Agent returned success but no user_id found in response.");
+
+            // FORCE our unified ID back into the state objects
+            aggregatedData.user_id = formData.user_id;
+            aggregatedData.hushh_id = formData.hushh_id;
           }
         } catch (e) {
-          console.error("Failed to parse Profile Agent response for user_id", e);
+          console.error("Failed to parse Profile Agent response", e);
         }
+
+        // GUARANTEED BACKUP SAVE: Always sync to DB via local API to ensure hushh_id is persisted
+        console.log("💾 Triggering Guaranteed Backup Save...");
+        try {
+          await fetch('/api/user/profile/save', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userData: { ...formData },
+              agentResults: resultMap
+            })
+          });
+          console.log("✅ Guaranteed Backup Save triggered.");
+        } catch (saveError) {
+          console.error("❌ Backup Save Exception:", saveError);
+        }
+
+        setUserData({ ...aggregatedData });
       } else {
         toast({
           title: 'Profile Sync Warning',
-          description: 'Could not confirm profile creation with agent. Data may be cached locally only.',
+          description: 'Could not confirm profile creation with agent.',
           status: 'warning',
           duration: 5000,
           isClosable: true,
         })
       }
+
       toast({
         title: 'Analysis Complete',
         description: `Profile synthesized and secured.`,
