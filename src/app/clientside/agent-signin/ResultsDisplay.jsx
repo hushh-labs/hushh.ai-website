@@ -310,11 +310,17 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
               <Button leftIcon={<FaRedo />} onClick={onBack} variant="outline" borderColor="gray.700" color="gray.300" _hover={{ bg: 'gray.800' }}>
                 New Scan
               </Button>
-              <Button leftIcon={<FaCode />} onClick={onOpen} variant="outline" borderColor="gray.700" color="gray.300" _hover={{ bg: 'gray.800' }}>
-                Raw JSON
+              <Button leftIcon={<FaDownload />} onClick={handleExportResults} bg="transparent" border="1px solid white" color="white" _hover={{ bg: 'whiteAlpha.200' }}>
+                Export
               </Button>
-              <Button leftIcon={<FaDownload />} onClick={handleExportResults} bg="white" color="black" _hover={{ bg: 'gray.200' }}>
-                Export Data
+              <Button
+                onClick={() => window.location.href = '/qrCodePage'}
+                bgGradient="linear(to-r, #0071E3, #BB62FC)"
+                color="white"
+                px={8}
+                _hover={{ opacity: 0.9, transform: 'translateY(-2px)' }}
+              >
+                Get My QR
               </Button>
             </HStack>
           </Flex>

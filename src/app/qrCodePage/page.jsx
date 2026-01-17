@@ -14,31 +14,60 @@ import { useToast } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/navigation";
 
+import { useState, useEffect } from "react";
+
 const qrCodePage = () => {
   const router = useRouter();
   const toast = useToast();
-  const qrValue = "https://www.hush1one.com/vivaConnect";
+  const [qrValue, setQrValue] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserData = () => {
+      try {
+        setIsLoading(true);
+        // Attempt to get user from localStorage which is set after profile creation
+        const storedUser = localStorage.getItem('hushh_user_profile');
+        if (storedUser) {
+          const user = JSON.parse(storedUser);
+          const identifier = user.user_id || user.userId;
+          if (identifier) {
+            const origin = typeof window !== 'undefined' ? window.location.origin : '';
+            setQrValue(`${origin}/p/${identifier}`);
+          }
+        } else {
+          // Fallback: If not in localstorage, maybe we can't show it yet
+          setQrValue(window.location.origin + "/p/guest");
+        }
+      } catch (err) {
+        console.error("Error loading QR data:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleShare = () => {
-    if (navigator.share) {
+    if (navigator.share && qrValue) {
       navigator
         .share({
-          title: "Share QR Code",
-          text: "Check out this QR code!",
-          url: window.location.href,
+          title: "My Hushh Profile",
+          text: "Scan to view my profile!",
+          url: qrValue,
         })
-        .then(
+        .then(() => {
           toast({
-            title: "QR share successfully",
-            description: "Meanwhile please explore our products",
+            title: "Shared successfully",
             status: "success",
             duration: 3000,
-            isClosable: true,
-          })
-        )
+          });
+        })
         .catch((error) => console.log("Error sharing", error));
     } else {
-      alert("Share functionality is not supported in this browser.");
+      navigator.clipboard.writeText(qrValue);
+      toast({ title: "Link copied to clipboard", status: "info" });
     }
   };
 
@@ -56,47 +85,68 @@ const qrCodePage = () => {
       >
         <Button
           onClick={() => router.push("/vivaConnect")}
-          leftIcon={<ArrowBackIcon stroke={"#FFFFFF"} />}
+          leftIcon={<ArrowBackIcon color={"#FFFFFF"} />}
           bg={"transparent"}
           color={"#FFFFFF"}
           m={0}
           _hover={{
-            color:'white',
-            bg:'#1B1B1B'
+            color: 'white',
+            bg: '#1B1B1B'
           }}
         >
           Back
         </Button>
-        <VStack spacing={4} mt={"4rem"}>
+        <VStack spacing={8} mt={"4rem"}>
           <Box
             bg={"#1B1B1B"}
             p={"2rem"}
-            borderRadius={"8px"}
+            borderRadius={"20px"}
             textAlign={"center"}
             display={"flex"}
             flexDirection={"column"}
+            alignItems="center"
+            boxShadow="0 10px 30px rgba(0,0,0,0.5)"
+            border="1px solid rgba(255,255,255,0.1)"
           >
-            {/* <QRCode size='40' fgColor='#FFFFFF' logoOpacity={'0.5'} bgColor='transparent'	 quietZone={'0'} logoPaddingStyle='square' logoPadding='0' value="https://github.com/gcoro/react-qrcode-logo"/> */}
+            {isLoading ? (
+              <StackDivider h="256px" display="flex" alignItems="center"><Text>Loading...</Text></StackDivider>
+            ) : qrValue ? (
+              <Box p={4} bg="white" borderRadius="xl">
+                <QRCode
+                  value={qrValue}
+                  size={200}
+                  logoImage="/hushh-logo.png" // Optional
+                  logoWidth={50}
+                  qrStyle="dots"
+                  eyeRadius={10}
+                />
+              </Box>
+            ) : (
+              <Text>No profile data found.</Text>
+            )}
 
-            <QRCode value={qrValue} size={256} />
             <Text
-              mt={"0.5rem"}
-              fontSize={"12px"}
+              mt={"1.5rem"}
+              fontSize={"14px"}
               fontWeight={"400"}
               align={"center"}
               color={"#949494"}
-              lineHeight={"14.4px"}
+              maxW="250px"
             >
-              Scan to save their digital profile and network
+              Scan to view your digital profile and network
             </Text>
           </Box>
           <Button
-            leftIcon={<CiShare2 stroke="#666666" />}
-            bg={"white"}
-            color={"#666666"}
+            leftIcon={<CiShare2 size={20} />}
+            bg="white"
+            color="black"
             onClick={handleShare}
+            borderRadius="full"
+            px={8}
+            _hover={{ transform: 'scale(1.05)' }}
+            transition="all 0.2s"
           >
-            Share QR code
+            Share Profile Link
           </Button>
         </VStack>
       </Box>

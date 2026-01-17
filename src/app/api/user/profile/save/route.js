@@ -68,22 +68,41 @@ export async function POST(request) {
             return null;
         };
 
-        // 1. Resolve User ID (Check if email exists to prevent duplicates)
-        let finalUserId = userData.userId; // Try from request first
+        // 1. Resolve User ID & Hushh ID
+        // Priority: Agent Result > Request Data > Existing DB > Random
+        let finalUserId = userData.userId || userData.user_id;
+        let finalHushhId = userData.hushh_id;
+
+        // Extract from Agent results if available
+        if (profileAgentData?.user_id) {
+            finalUserId = profileAgentData.user_id;
+        }
+        if (profileAgentData?.hushh_id) {
+            finalHushhId = profileAgentData.hushh_id;
+        }
+
         if (!finalUserId) {
             // Check DB for existing email
             const { data: existingUser } = await supabase
                 .from('user_profiles')
-                .select('user_id')
+                .select('user_id, hushh_id')
                 .eq('email', userData.email)
                 .single();
 
             if (existingUser) {
                 finalUserId = existingUser.user_id;
+                finalHushhId = finalHushhId || existingUser.hushh_id;
             } else {
                 // Generate new ID if not found
                 finalUserId = `hushh_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
             }
+        }
+
+        // Fallback for hushh_id if still missing
+        if (!finalHushhId) {
+            const firstName = (userData.fullName || "user").split(' ')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+            const suffix = finalUserId.includes('-') ? finalUserId.split('-').shift() : finalUserId.substr(-6);
+            finalHushhId = `${firstName}/${suffix}`;
         }
 
         // 2. Map Flattened Needs/Wants/Desires
@@ -110,9 +129,10 @@ export async function POST(request) {
         // 4. Construct Exact Schema Object
         const profileData = {
             user_id: finalUserId,
+            hushh_id: finalHushhId, // Added hushh_id column
             full_name: userData.fullName,
             email: userData.email,
-            phone: `${userData.countryCode} ${userData.phoneNumber}`.trim(),
+            phone: `${userData.countryCode || ''} ${userData.phoneNumber || ''}`.trim(),
 
             // Address
             address_line1: geminiData.address?.street || publicData.address?.street || userData.address,

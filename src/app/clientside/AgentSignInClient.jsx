@@ -355,6 +355,35 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
         isClosable: true,
       })
 
+      // Phase 3: Sync to local Supabase Proxy (Persist in user_profiles table)
+      console.log("🛠️ Phase 3: Syncing to local Supabase database...");
+      try {
+        const saveRes = await fetch('/api/user/profile/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userData: {
+              ...formData,
+              user_id: aggregatedData.user_id || formData.user_id,
+            },
+            agentResults: resultMap
+          })
+        });
+
+        const saveResult = await saveRes.json();
+        if (saveResult.success) {
+          console.log("✅ Profile persisted locally:", saveResult);
+          // Store in localStorage for the QR code page to access 
+          localStorage.setItem('hushh_user_profile', JSON.stringify({
+            user_id: saveResult.userId,
+            full_name: formData.fullName,
+            email: formData.email
+          }));
+        }
+      } catch (saveError) {
+        console.error("Failed to sync profile to local DB:", saveError);
+      }
+
       // Move to results view
       setCurrentStep('results')
     } catch (error) {
