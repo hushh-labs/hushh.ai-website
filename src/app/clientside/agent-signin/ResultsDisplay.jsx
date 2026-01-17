@@ -267,6 +267,10 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
   const toast = useToast()
 
   const parsedData = useMemo(() => extractUserData(agentResults, userData), [agentResults, userData])
+  const cardData = useMemo(() => ({
+    ...parsedData,
+    user_id: userData?.user_id || parsedData?.user_id
+  }), [parsedData, userData])
 
   // Extract Intents safely
   const intents = useMemo(() => {
@@ -342,7 +346,7 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
           {/* Profile Card & Key Stats */}
           <Grid templateColumns={{ base: '1fr', lg: '1fr 2fr' }} gap={8}>
             <GridItem>
-              <HushhProfileCard userData={parsedData} />
+              <HushhProfileCard userData={cardData} />
             </GridItem>
             <GridItem>
               <SimpleGrid columns={{ base: 2, md: 2 }} spacing={4} h="full">

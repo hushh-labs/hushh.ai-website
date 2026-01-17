@@ -397,6 +397,11 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
         const saveResult = await saveRes.json();
         if (saveResult.success) {
           console.log("✅ Profile persisted locally:", saveResult);
+          if (saveResult.userId) {
+            formData.user_id = saveResult.userId;
+            aggregatedData.user_id = saveResult.userId;
+            setUserData({ ...aggregatedData });
+          }
           // Store in localStorage for the QR code page to access 
           localStorage.setItem('hushh_user_profile', JSON.stringify({
             user_id: saveResult.userId,
