@@ -70,3 +70,27 @@ export function getImagePath(imagePath) {
   // Otherwise, clean up the path
   return imagePath.replace('../public', '');
 } 
+
+/**
+ * Extract a UUID from a string value.
+ * @param {string} value - The value that may contain a UUID
+ * @returns {string|null} The UUID or null if not found
+ */
+export function extractUuid(value) {
+  if (!value) return null;
+  const text = String(value).trim();
+  const match = text.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i);
+  return match ? match[0] : null;
+}
+
+/**
+ * Resolve the site base URL, preferring the current origin in the browser.
+ * @returns {string} The base URL without a trailing slash
+ */
+export function getSiteUrl() {
+  if (typeof window !== 'undefined' && window.location?.origin) {
+    return window.location.origin.replace(/\/$/, '');
+  }
+  const envUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.hushh.ai';
+  return envUrl.replace(/\/$/, '');
+}

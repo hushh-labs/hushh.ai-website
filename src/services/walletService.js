@@ -2,6 +2,8 @@
  * Service to generate Apple Wallet Passes via Hushh Wallet API.
  * Endpoint: https://hushh-wallet.vercel.app/api/passes/universal/create
  */
+import { extractUuid, getSiteUrl } from '../lib/utils';
+
 export const WalletService = {
     /**
      * Generates a .pkpass file for the user profile.
@@ -10,13 +12,16 @@ export const WalletService = {
      */
     async generatePass(userData) {
         const fullName = userData?.full_name || userData?.fullName || "Hushh User";
-        const userId = userData?.user_id || userData?.id || null;
-        const hushhId = userData?.hushh_id || null;
-        const publicId = userId || hushhId || "hushh-id";
+        const rawUserId = userData?.user_id || userData?.id || null;
+        const userId = extractUuid(rawUserId);
+        const publicId = userId;
         const role = userData?.occupation || "Member";
-        const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.hushh.ai").replace(/\/$/, "");
+        const baseUrl = getSiteUrl();
 
         // Construct public profile URL for the QR code
+        if (!publicId) {
+            throw new Error("Missing user_id for wallet pass generation.");
+        }
         const profileUrl = `${baseUrl}/hushh_id/${publicId}`;
 
         // Payload matching the "Universal Pass" request structure

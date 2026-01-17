@@ -6,6 +6,7 @@ import ResultsDisplay from './agent-signin/ResultsDisplay'
 import DataSourceComparison from './agent-signin/DataSourceComparison'
 import AnalyzingLoader from './agent-signin/AnalyzingLoader'
 import ContentWrapper from '../_components/layout/ContentWrapper'
+import { extractUuid } from '../../lib/utils'
 
 export default function AgentSignInClient() {
   const [currentStep, setCurrentStep] = useState('form') // 'form', 'analyzing', 'results'
@@ -337,16 +338,21 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
 
           if (parsed.user_id || parsed.userId || parsed.id) {
             const agentReturnedId = parsed.user_id || parsed.userId || parsed.id;
+            const agentUuid = extractUuid(agentReturnedId);
             console.log("✅ Agent Confirmation - ID:", agentReturnedId);
 
             // Keep a local copy of the confirmed UUID for downstream operations.
-            formData.user_id = agentReturnedId;
+            if (agentUuid) {
+              formData.user_id = agentUuid;
+            }
 
             // Update aggregated view with final confirmed data
             Object.assign(aggregatedData, parsed);
 
             // FORCE separation: aggregatedData.user_id is the UUID, aggregatedData.hushh_id is the formatted one
-            aggregatedData.user_id = formData.user_id;
+            if (agentUuid) {
+              aggregatedData.user_id = formData.user_id;
+            }
             aggregatedData.hushh_id = formData.hushh_id;
           }
         } catch (e) {
@@ -397,14 +403,15 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
         const saveResult = await saveRes.json();
         if (saveResult.success) {
           console.log("✅ Profile persisted locally:", saveResult);
-          if (saveResult.userId) {
-            formData.user_id = saveResult.userId;
-            aggregatedData.user_id = saveResult.userId;
+          const savedUuid = extractUuid(saveResult.userId);
+          if (savedUuid) {
+            formData.user_id = savedUuid;
+            aggregatedData.user_id = savedUuid;
             setUserData({ ...aggregatedData });
           }
           // Store in localStorage for the QR code page to access 
           localStorage.setItem('hushh_user_profile', JSON.stringify({
-            user_id: saveResult.userId,
+            user_id: savedUuid || saveResult.userId,
             full_name: formData.fullName,
             email: formData.email
           }));

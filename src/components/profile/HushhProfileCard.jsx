@@ -5,6 +5,7 @@ import QRCode from 'react-qr-code';
 import { FaApple } from 'react-icons/fa';
 import { WalletService } from '../../services/walletService';
 import HushhHeaderLogo from '../../app/_components/svg/hushhHeaderLogo';
+import { extractUuid, getSiteUrl } from '../../lib/utils';
 
 const MotionBox = motion(Box);
 
@@ -14,13 +15,25 @@ export default function HushhProfileCard({ userData }) {
     const fullName = userData?.fullName || userData?.full_name || 'Hushh User';
     const role = userData?.occupation || userData?.role || 'Member';
     // Prefer UUID user_id for public profile lookup
-    const userId = userData?.user_id || userData?.id || null;
+    const rawUserId = userData?.user_id || userData?.id || null;
+    const userId = extractUuid(rawUserId);
     const hushhId = userData?.hushh_id || null;
-    const displayId = userId || hushhId || 'hushh-id';
-    const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.hushh.ai').replace(/\/$/, '');
-    const profileUrl = `${baseUrl}/hushh_id/${displayId}`;
+    const displayId = hushhId || userId || 'hushh-id';
+    const baseUrl = getSiteUrl();
+    const profileUrl = userId ? `${baseUrl}/hushh_id/${userId}` : '';
+    const hasProfileUrl = Boolean(userId);
 
     const handleAddToWallet = async () => {
+        if (!userId) {
+            toast({
+                title: "Missing user_id",
+                description: "We need a confirmed UUID before generating the wallet pass.",
+                status: "warning",
+                duration: 3000,
+                isClosable: true,
+            });
+            return;
+        }
         toast({
             title: "Generating Wallet Pass...",
             description: "Request sent to Hushh Wallet API.",
@@ -150,12 +163,20 @@ export default function HushhProfileCard({ userData }) {
                             p={3}
                             borderRadius="xl"
                         >
-                            <QRCode
-                                value={profileUrl}
-                                size={160}
-                                style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                                viewBox={`0 0 256 256`}
-                            />
+                            {hasProfileUrl ? (
+                                <QRCode
+                                    value={profileUrl}
+                                    size={160}
+                                    style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                                    viewBox={`0 0 256 256`}
+                                />
+                            ) : (
+                                <Box px={4} py={6}>
+                                    <Text fontSize="xs" color="gray.700" textAlign="center">
+                                        UUID not ready yet
+                                    </Text>
+                                </Box>
+                            )}
                         </Box>
                     </Flex>
 
@@ -175,6 +196,7 @@ export default function HushhProfileCard({ userData }) {
                 _hover={{ bg: "gray.900", transform: "translateY(-2px)", boxShadow: "lg" }}
                 _active={{ transform: "scale(0.98)" }}
                 onClick={handleAddToWallet}
+                isDisabled={!hasProfileUrl}
                 fontWeight="medium"
             >
                 Add to Apple Wallet

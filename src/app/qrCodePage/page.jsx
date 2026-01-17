@@ -12,12 +12,14 @@ import { CiShare2 } from "react-icons/ci";
 import { QRCode } from "react-qrcode-logo";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/navigation";
+import { extractUuid, getSiteUrl } from "../../lib/utils";
 
 const qrCodePage = () => {
   const router = useRouter();
   const toast = useToast();
   const [qrValue, setQrValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const fetchUserData = () => {
@@ -25,19 +27,22 @@ const qrCodePage = () => {
         setIsLoading(true);
         // Attempt to get user from localStorage which is set after profile creation
         const storedUser = localStorage.getItem('hushh_user_profile');
-        const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.hushh.ai").replace(/\/$/, "");
+        const baseUrl = getSiteUrl();
         if (storedUser) {
           const user = JSON.parse(storedUser);
-          const identifier = user.user_id || user.userId;
+          const rawId = user.user_id || user.userId;
+          const identifier = extractUuid(rawId);
           if (identifier) {
             setQrValue(`${baseUrl}/hushh_id/${identifier}`);
+          } else {
+            setErrorMessage("Missing UUID. Please finish profile creation first.");
           }
         } else {
-          // Fallback: If not in localstorage, maybe we can't show it yet
-          setQrValue(`${baseUrl}/hushh_id/guest`);
+          setErrorMessage("No profile data found yet.");
         }
       } catch (err) {
         console.error("Error loading QR data:", err);
+        setErrorMessage("Could not load QR data.");
       } finally {
         setIsLoading(false);
       }
@@ -121,7 +126,7 @@ const qrCodePage = () => {
               />
             </Box>
           ) : (
-            <Text>No profile data found.</Text>
+            <Text>{errorMessage || "No profile data found."}</Text>
           )}
 
           <Text

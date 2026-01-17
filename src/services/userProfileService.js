@@ -1,4 +1,5 @@
 import config from '../lib/config/config';
+import { extractUuid } from '../lib/utils';
 
 /**
  * Service to handle User Profile data fetching and operations.
@@ -13,6 +14,8 @@ export const UserProfileService = {
         if (!userId) return null;
 
         try {
+            const rawId = String(userId).trim();
+            const normalizedId = extractUuid(rawId) || rawId;
             const supabase = config.supabaseClient;
             if (!supabase) return null;
 
@@ -20,7 +23,7 @@ export const UserProfileService = {
             const { data: byUserId, error: userIdError } = await supabase
                 .from('user_profiles')
                 .select('*')
-                .eq('user_id', userId)
+                .eq('user_id', normalizedId)
                 .maybeSingle();
 
             if (userIdError) {
@@ -33,7 +36,7 @@ export const UserProfileService = {
             const { data: byHushhId, error: hushhIdError } = await supabase
                 .from('user_profiles')
                 .select('*')
-                .eq('hushh_id', userId)
+                .eq('hushh_id', rawId)
                 .maybeSingle();
 
             if (hushhIdError) {

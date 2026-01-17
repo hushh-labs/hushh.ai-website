@@ -26,6 +26,7 @@ import {
 } from '@chakra-ui/react'
 import { FaUser, FaMapMarkerAlt, FaBriefcase, FaHeart, FaGamepad, FaPlane, FaLeaf, FaLaptop, FaDownload, FaTrash, FaCode, FaRedo } from 'react-icons/fa'
 import HushhProfileCard from '../../../components/profile/HushhProfileCard'
+import { extractUuid } from '../../../lib/utils'
 
 // Helper function to extract data from API responses
 const extractUserData = (agentResults, userData) => {
@@ -59,8 +60,9 @@ const extractUserData = (agentResults, userData) => {
 
           // ID Normalization
           const extractedId = dataToMerge.user_id || dataToMerge.userId || dataToMerge.id;
-          if (extractedId && (!allData.user_id || allData.user_id.startsWith('pending-') || !extractedId.includes('/'))) {
-            allData.user_id = extractedId;
+          const extractedUuid = extractUuid(extractedId);
+          if (extractedUuid && (!allData.user_id || allData.user_id.startsWith('pending-'))) {
+            allData.user_id = extractedUuid;
           }
 
           const extractedHushhId = dataToMerge.hushh_id || dataToMerge.hushhId;
@@ -134,7 +136,8 @@ const extractUserData = (agentResults, userData) => {
       } else if (typeof responseData === 'object' && responseData !== null) {
         let objToMerge = responseData.userProfile || responseData;
         const extractedId = objToMerge.user_id || objToMerge.userId || objToMerge.id;
-        if (extractedId && !allData.user_id?.includes('/')) allData.user_id = extractedId;
+        const extractedUuid = extractUuid(extractedId);
+        if (extractedUuid) allData.user_id = extractedUuid;
         Object.assign(allData, objToMerge)
       }
     }
@@ -149,8 +152,9 @@ const extractUserData = (agentResults, userData) => {
       try {
         const parsed = JSON.parse(match[0]);
         const finalId = parsed.user_id || parsed.userId || parsed.id;
-        if (finalId && (!allData.user_id || allData.user_id.startsWith('pending-') || !finalId.includes('/'))) {
-          allData.user_id = finalId;
+        const finalUuid = extractUuid(finalId);
+        if (finalUuid && (!allData.user_id || allData.user_id.startsWith('pending-'))) {
+          allData.user_id = finalUuid;
         }
 
         const finalHushhId = parsed.hushh_id || parsed.hushhId;
@@ -269,7 +273,7 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
   const parsedData = useMemo(() => extractUserData(agentResults, userData), [agentResults, userData])
   const cardData = useMemo(() => ({
     ...parsedData,
-    user_id: userData?.user_id || parsedData?.user_id
+    user_id: extractUuid(userData?.user_id) || parsedData?.user_id
   }), [parsedData, userData])
 
   // Extract Intents safely
