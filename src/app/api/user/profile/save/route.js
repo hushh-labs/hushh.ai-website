@@ -68,18 +68,18 @@ export async function POST(request) {
             return null;
         };
 
-        // 1. Resolve Unified IDs
-        // The user wants 'user_id' to contain the formatted string (e.g. name/id)
-        let formattedId = userData.user_id || userData.hushh_id || userData.userId || userData.hushhId;
+        // 1. Resolve Separate IDs
+        // user_id: Keep the original UUID/ID from the Supabase agent
+        // hushh_id: Formatted friendly identifier (name/id)
 
-        if (!formattedId || !formattedId.includes('/')) {
-            const firstName = (userData.fullName || userData.full_name || "user").split(' ')[0].toLowerCase();
-            const uniqueStr = Math.random().toString(36).substring(2, 8);
-            formattedId = `${firstName}/${uniqueStr}`;
-        }
+        const rawUserId = userData.user_id || userData.userId || userData.id;
+        // If the incoming ID is already our formatted one, we need to find the "real" one or create a fallback
+        const finalUserId = (rawUserId && !rawUserId.includes('/')) ? rawUserId : `h_user_${Date.now()}`;
 
-        const finalUserId = formattedId;
-        const finalHushhId = formattedId;
+        // Construct formatted hushh_id: name/id
+        const firstName = (userData.fullName || userData.full_name || "user").split(' ')[0].toLowerCase();
+        const shortId = (finalUserId.includes('-')) ? finalUserId.split('-').shift() : finalUserId.substring(0, 8);
+        const finalHushhId = `${firstName}/${shortId}`;
 
         // 2. Map Flattened Needs/Wants/Desires
         const needs = Array.isArray(geminiData.needs) ? geminiData.needs : [];
@@ -182,10 +182,48 @@ export async function POST(request) {
             profile_updated_utc: new Date().toISOString()
         };
 
-        // Upsert on 'email' to unify AI-created rows with our enriched data
-        const { data, error } = await supabase
+        // 5. MANUAL DEDUPLICATION & MERGING
+        // Since we dropped the UNIQUE constraint on email to prevent 409s from the AI agent,
+        // we now handle deduplication manually to ensure a single lean record per email.
+
+        console.log(`🧹 Deduplicating records for email: ${userData.email}`);
+
+        // Find all existing records for this email
+        const { data: existingRecords } = await supabase
             .from('user_profiles')
-            .upsert(profileData, { onConflict: 'email' })
+            .select('*')
+            .eq('email', userData.email);
+
+        let consolidatedData = { ...profileData };
+
+        if (existingRecords && existingRecords.length > 0) {
+            console.log(`🔍 Found ${existingRecords.length} existing records. Merging...`);
+
+            // Merge existing data into our new profileData (preferring existing non-null fields if our current ones are missing)
+            existingRecords.forEach(record => {
+                Object.keys(record).forEach(key => {
+                    if (record[key] !== null && consolidatedData[key] === null) {
+                        consolidatedData[key] = record[key];
+                    }
+                });
+            });
+
+            // Delete all old records for this email to make way for the unified one
+            const { error: deleteError } = await supabase
+                .from('user_profiles')
+                .delete()
+                .eq('email', userData.email);
+
+            if (deleteError) {
+                console.error("Error cleaning up duplicates:", deleteError);
+            }
+        }
+
+        // 6. FINAL INSERT (Universal)
+        // Now that we've cleaned up, we insert the unified record.
+        const { data: finalInsert, error } = await supabase
+            .from('user_profiles')
+            .insert(consolidatedData)
             .select();
 
         if (error) {

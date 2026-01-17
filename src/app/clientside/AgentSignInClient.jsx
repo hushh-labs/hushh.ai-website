@@ -130,13 +130,14 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
 
   // Handle form submission and call all agents
   const handleFormSubmit = useCallback(async (formData) => {
-    // Generate Unified Formatted ID: [firstName]/[uniqueString]
+    // Generate Tentative Hushh ID for UI display until final ID resolved
     const firstName = formData.fullName.split(' ')[0].toLowerCase();
     const uniqueStr = Math.random().toString(36).substring(2, 8);
-    const unifiedId = `${firstName}/${uniqueStr}`;
 
-    formData.user_id = unifiedId;
-    formData.hushh_id = unifiedId; // Keep both for safety across components
+    // user_id MUST remain empty or distinct from the formatted hushh_id 
+    // to allow the Supabase Agent to provide the persistent UUID
+    formData.hushh_id = `${firstName}/${uniqueStr}`;
+    formData.user_id = `pending-${uniqueStr}`; // Temporary placeholder
 
     setUserData(formData)
     setCurrentStep('analyzing')
@@ -336,15 +337,15 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
             const agentReturnedId = parsed.user_id || parsed.userId || parsed.id;
             console.log("✅ Agent Confirmation - ID:", agentReturnedId);
 
-            // Only use agent ID if we don't already have our custom formatted one
-            if (!formData.user_id?.includes('/')) {
+            // Overwrite if user_id is empty, placeholder, or already formatted incorrectly
+            if (!formData.user_id || formData.user_id.startsWith('pending-') || formData.user_id.includes('/')) {
               formData.user_id = agentReturnedId;
             }
 
             // Update aggregated view with final confirmed data
             Object.assign(aggregatedData, parsed);
 
-            // FORCE our unified ID back into the state objects
+            // FORCE separation: aggregatedData.user_id is the UUID, aggregatedData.hushh_id is the formatted one
             aggregatedData.user_id = formData.user_id;
             aggregatedData.hushh_id = formData.hushh_id;
           }

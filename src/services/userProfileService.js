@@ -13,11 +13,11 @@ export const UserProfileService = {
         if (!userId) return null;
 
         try {
-            // Select ALL columns as requested for the full public profile
+            // Search by both user_id (UUID) and hushh_id (formatted string)
             const { data, error } = await config.supabaseClient
                 .from('user_profiles')
                 .select('*')
-                .eq('user_id', userId)
+                .or(`user_id.eq.${userId},hushh_id.eq.${userId}`)
                 .single();
 
             if (error) {
