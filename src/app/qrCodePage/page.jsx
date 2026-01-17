@@ -30,7 +30,7 @@ const qrCodePage = () => {
           const identifier = user.user_id || user.userId;
           if (identifier) {
             const origin = typeof window !== 'undefined' ? window.location.origin : '';
-            setQrValue(`${origin}/p/${identifier}`);
+            setQrValue(`${origin}/hushh-id/${identifier}`);
           }
         } else {
           // Fallback: If not in localstorage, maybe we can't show it yet
