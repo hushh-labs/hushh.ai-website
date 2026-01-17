@@ -77,8 +77,25 @@ export async function POST(request) {
         const finalUserId = (rawUserId && !rawUserId.includes('/')) ? rawUserId : `h_user_${Date.now()}`;
 
         // Construct formatted hushh_id: name/id
-        const firstName = (userData.fullName || userData.full_name || "user").split(' ')[0].toLowerCase();
-        const shortId = (finalUserId.includes('-')) ? finalUserId.split('-').shift() : finalUserId.substring(0, 8);
+        const firstName = (userData.fullName || userData.full_name || "user").split(' ')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+
+        // Intelligent Short ID Generation
+        let shortId;
+        if (finalUserId.toString().startsWith('pending-')) {
+            // If ID is 'pending-xyz', use 'xyz'
+            const parts = finalUserId.split('-');
+            shortId = (parts.length > 1 && parts[1]) ? parts[1] : Math.random().toString(36).substring(2, 8);
+        } else if (finalUserId.includes('-')) {
+            // If standard UUID or format 'prefix-suffix', usually take first part, 
+            // BUT if first part is common/generic, we might want last part. 
+            // Standard UUID: 8-4-4-4-12. First part is fine for uniqueness locally usually.
+            const firstPart = finalUserId.split('-')[0];
+            // ID check to avoid generic prefixes if any (unlikely for UUID)
+            shortId = firstPart;
+        } else {
+            shortId = finalUserId.substring(0, 8);
+        }
+
         const finalHushhId = `${firstName}/${shortId}`;
 
         // 2. Map Flattened Needs/Wants/Desires
