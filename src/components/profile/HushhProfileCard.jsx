@@ -17,10 +17,8 @@ export default function HushhProfileCard({ userData }) {
     const userId = userData?.user_id || userData?.id || null;
     const hushhId = userData?.hushh_id || null;
     const displayId = userId || hushhId || 'hushh-id';
-    const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://www.hushh.ai';
-    const profileUrl = userId
-        ? `${baseUrl}/p/${userId}`
-        : `${baseUrl}/hushh-id/${displayId}`;
+    const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.hushh.ai').replace(/\/$/, '');
+    const profileUrl = `${baseUrl}/hushh_id/${displayId}`;
 
     const handleAddToWallet = async () => {
         toast({

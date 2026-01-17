@@ -25,16 +25,16 @@ const qrCodePage = () => {
         setIsLoading(true);
         // Attempt to get user from localStorage which is set after profile creation
         const storedUser = localStorage.getItem('hushh_user_profile');
+        const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.hushh.ai").replace(/\/$/, "");
         if (storedUser) {
           const user = JSON.parse(storedUser);
           const identifier = user.user_id || user.userId;
           if (identifier) {
-            const origin = typeof window !== 'undefined' ? window.location.origin : '';
-            setQrValue(`${origin}/hushh-id/${identifier}`);
+            setQrValue(`${baseUrl}/hushh_id/${identifier}`);
           }
         } else {
           // Fallback: If not in localstorage, maybe we can't show it yet
-          setQrValue(window.location.origin + "/p/guest");
+          setQrValue(`${baseUrl}/hushh_id/guest`);
         }
       } catch (err) {
         console.error("Error loading QR data:", err);

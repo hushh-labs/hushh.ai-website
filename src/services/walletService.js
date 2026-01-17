@@ -14,12 +14,10 @@ export const WalletService = {
         const hushhId = userData?.hushh_id || null;
         const publicId = userId || hushhId || "hushh-id";
         const role = userData?.occupation || "Member";
-        const baseUrl = typeof window !== "undefined" ? window.location.origin : "https://www.hushh.ai";
+        const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.hushh.ai").replace(/\/$/, "");
 
         // Construct public profile URL for the QR code
-        const profileUrl = userId
-            ? `${baseUrl}/p/${userId}`
-            : `${baseUrl}/hushh-id/${publicId}`;
+        const profileUrl = `${baseUrl}/hushh_id/${publicId}`;
 
         // Payload matching the "Universal Pass" request structure
         const payload = {
