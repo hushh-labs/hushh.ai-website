@@ -13,19 +13,34 @@ export const UserProfileService = {
         if (!userId) return null;
 
         try {
-            // Search by both user_id (UUID) and hushh_id (formatted string)
-            const { data, error } = await config.supabaseClient
+            const supabase = config.supabaseClient;
+            if (!supabase) return null;
+
+            // Prefer UUID lookups for public profile access
+            const { data: byUserId, error: userIdError } = await supabase
                 .from('user_profiles')
                 .select('*')
-                .or(`user_id.eq.${userId},hushh_id.eq.${userId}`)
-                .single();
+                .eq('user_id', userId)
+                .maybeSingle();
 
-            if (error) {
-                console.error('Error fetching user profile:', error);
-                return null;
+            if (userIdError) {
+                console.error('Error fetching user profile by user_id:', userIdError);
             }
 
-            return data;
+            if (byUserId) return byUserId;
+
+            // Fallback for legacy hushh_id links
+            const { data: byHushhId, error: hushhIdError } = await supabase
+                .from('user_profiles')
+                .select('*')
+                .eq('hushh_id', userId)
+                .maybeSingle();
+
+            if (hushhIdError) {
+                console.error('Error fetching user profile by hushh_id:', hushhIdError);
+            }
+
+            return byHushhId || null;
         } catch (err) {
             console.error('Unexpected error in getUserProfile:', err);
             return null;

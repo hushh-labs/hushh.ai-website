@@ -14,9 +14,13 @@ export default function HushhProfileCard({ userData }) {
     const fullName = userData?.fullName || userData?.full_name || 'Hushh User';
     const role = userData?.occupation || userData?.role || 'Member';
     // Prefer UUID user_id for public profile lookup
-    const userId = userData?.user_id || userData?.id || userData?.hushh_id || 'hushh-id';
-    // Public profile URL (UUID-based)
-    const profileUrl = `https://hushh.ai/hushh-id/${userId}`;
+    const userId = userData?.user_id || userData?.id || null;
+    const hushhId = userData?.hushh_id || null;
+    const displayId = userId || hushhId || 'hushh-id';
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://www.hushh.ai';
+    const profileUrl = userId
+        ? `${baseUrl}/p/${userId}`
+        : `${baseUrl}/hushh-id/${displayId}`;
 
     const handleAddToWallet = async () => {
         toast({
@@ -128,7 +132,7 @@ export default function HushhProfileCard({ userData }) {
                                 HUSHH ID
                             </Text>
                             <Text fontSize="xs" color="gray.300" fontFamily="monospace" maxW="150px" noOfLines={2}>
-                                {userId}
+                                {displayId}
                             </Text>
                         </Box>
                         <Box textAlign="right">

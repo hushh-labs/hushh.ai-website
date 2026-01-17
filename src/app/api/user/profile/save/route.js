@@ -36,7 +36,10 @@ export async function POST(request) {
             }
         };
 
-        const profileAgentData = getAgentData('hushh-profile');
+        // IMPORTANT:
+        // We must NOT generate or mutate Supabase-auth identity ourselves.
+        // The persistent UUID must come from the Supabase profile-creation agent/API only.
+        const profileAgentData = getAgentData('supabase-profile-creation-agent');
         const geminiAgentData = getAgentData('gemini');
         const publicAgentData = agentResults.public?.data || {};
 
@@ -69,33 +72,24 @@ export async function POST(request) {
         };
 
         // 1. Resolve User ID & Hushh ID
-        // Priority: Agent Result > Request Data > Existing DB > Random
-        let finalUserId = userData.userId || userData.user_id;
+        // Priority: Agent Result > Request Data
+        // NOTE: We intentionally do NOT query by email to “find or invent” user_id,
+        // and we never generate a synthetic user_id.
+        let finalUserId = profileAgentData?.user_id || userData?.user_id || userData?.userId;
         let finalHushhId = userData.hushh_id;
 
-        // Extract from Agent results if available
-        if (profileAgentData?.user_id) {
-            finalUserId = profileAgentData.user_id;
-        }
         if (profileAgentData?.hushh_id) {
             finalHushhId = profileAgentData.hushh_id;
         }
 
         if (!finalUserId) {
-            // Check DB for existing email
-            const { data: existingUser } = await supabase
-                .from('user_profiles')
-                .select('user_id, hushh_id')
-                .eq('email', userData.email)
-                .single();
-
-            if (existingUser) {
-                finalUserId = existingUser.user_id;
-                finalHushhId = finalHushhId || existingUser.hushh_id;
-            } else {
-                // Generate new ID if not found
-                finalUserId = `hushh_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
-            }
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: 'Missing user_id. It must be provided by the Supabase profile creation API/agent.'
+                },
+                { status: 400 }
+            );
         }
 
         // Fallback for hushh_id if still missing
@@ -122,7 +116,6 @@ export async function POST(request) {
         const intent72 = getIntent('72');
 
         // 4. Construct Profile Data for Upsert
-        // We now upsert on 'email' which we just made UNIQUE
         const profileData = {
             user_id: finalUserId,
             hushh_id: finalHushhId, // Added hushh_id column
@@ -206,48 +199,26 @@ export async function POST(request) {
             profile_updated_utc: new Date().toISOString()
         };
 
-        // 5. MANUAL DEDUPLICATION & MERGING
-        // Since we dropped the UNIQUE constraint on email to prevent 409s from the AI agent,
-        // we now handle deduplication manually to ensure a single lean record per email.
-
-        console.log(`🧹 Deduplicating records for email: ${userData.email}`);
-
-        // Find all existing records for this email
-        const { data: existingRecords } = await supabase
+        // 5. Merge with existing row (if any) by user_id, then upsert by user_id.
+        // This keeps user_id stable and avoids destructive email-based cleanup.
+        const { data: existingByUserId } = await supabase
             .from('user_profiles')
             .select('*')
-            .eq('email', userData.email);
+            .eq('user_id', finalUserId)
+            .maybeSingle();
 
-        let consolidatedData = { ...profileData };
-
-        if (existingRecords && existingRecords.length > 0) {
-            console.log(`🔍 Found ${existingRecords.length} existing records. Merging...`);
-
-            // Merge existing data into our new profileData (preferring existing non-null fields if our current ones are missing)
-            existingRecords.forEach(record => {
-                Object.keys(record).forEach(key => {
-                    if (record[key] !== null && consolidatedData[key] === null) {
-                        consolidatedData[key] = record[key];
-                    }
-                });
+        const consolidatedData = { ...profileData };
+        if (existingByUserId) {
+            Object.keys(existingByUserId).forEach(key => {
+                if (existingByUserId[key] !== null && consolidatedData[key] === null) {
+                    consolidatedData[key] = existingByUserId[key];
+                }
             });
-
-            // Delete all old records for this email to make way for the unified one
-            const { error: deleteError } = await supabase
-                .from('user_profiles')
-                .delete()
-                .eq('email', userData.email);
-
-            if (deleteError) {
-                console.error("Error cleaning up duplicates:", deleteError);
-            }
         }
 
-        // 6. FINAL INSERT (Universal)
-        // Now that we've cleaned up, we insert the unified record.
-        const { data: finalInsert, error } = await supabase
+        const { data: upserted, error } = await supabase
             .from('user_profiles')
-            .insert(consolidatedData)
+            .upsert([consolidatedData], { onConflict: 'user_id' })
             .select();
 
         if (error) {

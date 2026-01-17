@@ -10,11 +10,16 @@ export const WalletService = {
      */
     async generatePass(userData) {
         const fullName = userData?.full_name || userData?.fullName || "Hushh User";
-        const userId = userData?.hushh_id || userData?.user_id || userData?.id || "hushh-id";
+        const userId = userData?.user_id || userData?.id || null;
+        const hushhId = userData?.hushh_id || null;
+        const publicId = userId || hushhId || "hushh-id";
         const role = userData?.occupation || "Member";
+        const baseUrl = typeof window !== "undefined" ? window.location.origin : "https://www.hushh.ai";
 
         // Construct public profile URL for the QR code
-        const profileUrl = `https://hushh.ai/hushh-id/${userId}`;
+        const profileUrl = userId
+            ? `${baseUrl}/p/${userId}`
+            : `${baseUrl}/hushh-id/${publicId}`;
 
         // Payload matching the "Universal Pass" request structure
         const payload = {
@@ -50,7 +55,7 @@ export const WalletService = {
                 {
                     key: "id",
                     label: "HUSHH ID",
-                    value: userId
+                    value: publicId
                 },
                 {
                     key: "email",

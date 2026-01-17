@@ -134,10 +134,12 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
     const firstName = formData.fullName.split(' ')[0].toLowerCase();
     const uniqueStr = Math.random().toString(36).substring(2, 8);
 
-    // user_id MUST remain empty or distinct from the formatted hushh_id 
-    // to allow the Supabase Agent to provide the persistent UUID
+    // IMPORTANT:
+    // Do NOT generate or persist any Supabase-auth identity fields client-side.
+    // The persistent Supabase UUID must come ONLY from the profile-creation agent/API.
     formData.hushh_id = `${firstName}/${uniqueStr}`;
-    formData.user_id = `pending-${uniqueStr}`; // Temporary placeholder
+    // Ensure we don't send a placeholder user_id anywhere.
+    delete formData.user_id;
 
     setUserData(formData)
     setCurrentStep('analyzing')
@@ -337,10 +339,8 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
             const agentReturnedId = parsed.user_id || parsed.userId || parsed.id;
             console.log("✅ Agent Confirmation - ID:", agentReturnedId);
 
-            // Overwrite if user_id is empty, placeholder, or already formatted incorrectly
-            if (!formData.user_id || formData.user_id.startsWith('pending-') || formData.user_id.includes('/')) {
-              formData.user_id = agentReturnedId;
-            }
+            // Keep a local copy of the confirmed UUID for downstream operations.
+            formData.user_id = agentReturnedId;
 
             // Update aggregated view with final confirmed data
             Object.assign(aggregatedData, parsed);
@@ -351,22 +351,6 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
           }
         } catch (e) {
           console.error("Failed to parse Profile Agent response", e);
-        }
-
-        // GUARANTEED BACKUP SAVE: Always sync to DB via local API to ensure hushh_id is persisted
-        console.log("💾 Triggering Guaranteed Backup Save...");
-        try {
-          await fetch('/api/user/profile/save', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              userData: { ...formData },
-              agentResults: resultMap
-            })
-          });
-          console.log("✅ Guaranteed Backup Save triggered.");
-        } catch (saveError) {
-          console.error("❌ Backup Save Exception:", saveError);
         }
 
         setUserData({ ...aggregatedData });
@@ -391,6 +375,13 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
       // Phase 3: Sync to local Supabase Proxy (Persist in user_profiles table)
       console.log("🛠️ Phase 3: Syncing to local Supabase database...");
       try {
+        // Only sync if we have a confirmed Supabase UUID from the profile-creation agent.
+        if (!aggregatedData.user_id) {
+          console.warn('⚠️ Skipping local profile save: missing confirmed user_id from agent');
+          setCurrentStep('results');
+          return;
+        }
+
         const saveRes = await fetch('/api/user/profile/save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -466,4 +457,3 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
     </ContentWrapper>
   )
 }
-
