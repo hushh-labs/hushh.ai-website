@@ -20,7 +20,8 @@ import { UserProfileService } from "../../../services/userProfileService";
 import ContentWrapper from "../../_components/layout/ContentWrapper";
 
 export default function PublicProfilePage({ params }) {
-    const { id } = params;
+    // With catch-all route [...id], id will be an array of segments
+    const id = Array.isArray(params.id) ? params.id.join('/') : params.id;
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
 

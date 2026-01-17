@@ -59,7 +59,14 @@ const extractUserData = (agentResults, userData) => {
 
           // ID Normalization
           const extractedId = dataToMerge.user_id || dataToMerge.userId || dataToMerge.id;
-          if (extractedId) allData.user_id = extractedId;
+          if (extractedId && (!allData.user_id || allData.user_id.startsWith('pending-') || !extractedId.includes('/'))) {
+            allData.user_id = extractedId;
+          }
+
+          const extractedHushhId = dataToMerge.hushh_id || dataToMerge.hushhId;
+          if (extractedHushhId && (!allData.hushh_id || allData.hushh_id.includes('pending-') || extractedHushhId.includes('/'))) {
+            allData.hushh_id = extractedHushhId;
+          }
 
           // Basic normalization for UI consistency
           if (dataToMerge.address && typeof dataToMerge.address === 'object') {
@@ -127,7 +134,7 @@ const extractUserData = (agentResults, userData) => {
       } else if (typeof responseData === 'object' && responseData !== null) {
         let objToMerge = responseData.userProfile || responseData;
         const extractedId = objToMerge.user_id || objToMerge.userId || objToMerge.id;
-        if (extractedId) allData.user_id = extractedId;
+        if (extractedId && !allData.user_id?.includes('/')) allData.user_id = extractedId;
         Object.assign(allData, objToMerge)
       }
     }
@@ -142,7 +149,14 @@ const extractUserData = (agentResults, userData) => {
       try {
         const parsed = JSON.parse(match[0]);
         const finalId = parsed.user_id || parsed.userId || parsed.id;
-        if (finalId) allData.user_id = finalId;
+        if (finalId && (!allData.user_id || allData.user_id.startsWith('pending-') || !finalId.includes('/'))) {
+          allData.user_id = finalId;
+        }
+
+        const finalHushhId = parsed.hushh_id || parsed.hushhId;
+        if (finalHushhId && (!allData.hushh_id || allData.hushh_id.includes('pending-') || finalHushhId.includes('/'))) {
+          allData.hushh_id = finalHushhId;
+        }
       } catch (e) { }
     }
   }
@@ -364,6 +378,7 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
             {/* Personal Details */}
             <DashboardCard title="Personal Details" icon={FaUser} colorScheme="pink">
               <VStack align="stretch" spacing={4}>
+                <InfoRow label="HUSHH ID" value={getField(parsedData, 'hushh_id')} />
                 <InfoRow label="NAME" value={getField(parsedData, 'full_name', 'fullName')} />
                 <InfoRow label="EMAIL" value={getField(parsedData, 'email')} />
                 <InfoRow label="PHONE" value={getField(parsedData, 'phone', 'phoneNumber')} />

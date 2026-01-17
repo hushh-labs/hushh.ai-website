@@ -1,20 +1,17 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
-  IconButton,
-  StackDivider,
-  Text,
   VStack,
+  Text,
+  useToast,
+  Spinner,
 } from "@chakra-ui/react";
 import { CiShare2 } from "react-icons/ci";
 import { QRCode } from "react-qrcode-logo";
-import { useToast } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/navigation";
-
-import { useState, useEffect } from "react";
 
 const qrCodePage = () => {
   const router = useRouter();
@@ -72,85 +69,87 @@ const qrCodePage = () => {
   };
 
   return (
-    <>
-      <Box
-        fontFamily={"Poppins"}
-        bg="black"
-        minH="100vh"
-        p={4}
-        color="white"
-        position={"relative"}
-        mt={"1rem"}
-        zIndex={"999999999"}
+    <Box
+      fontFamily={"Poppins"}
+      bg="black"
+      minH="100vh"
+      p={4}
+      color="white"
+      position={"relative"}
+      mt={"1rem"}
+      zIndex={"999999999"}
+    >
+      <Button
+        onClick={() => router.push("/vivaConnect")}
+        leftIcon={<ArrowBackIcon color={"#FFFFFF"} />}
+        bg={"transparent"}
+        color={"#FFFFFF"}
+        m={0}
+        _hover={{
+          color: 'white',
+          bg: '#1B1B1B'
+        }}
       >
-        <Button
-          onClick={() => router.push("/vivaConnect")}
-          leftIcon={<ArrowBackIcon color={"#FFFFFF"} />}
-          bg={"transparent"}
-          color={"#FFFFFF"}
-          m={0}
-          _hover={{
-            color: 'white',
-            bg: '#1B1B1B'
-          }}
+        Back
+      </Button>
+      <VStack spacing={8} mt={"4rem"}>
+        <Box
+          bg={"#1B1B1B"}
+          p={"2rem"}
+          borderRadius={"20px"}
+          textAlign={"center"}
+          display={"flex"}
+          flexDirection={"column"}
+          alignItems="center"
+          boxShadow="0 10px 30px rgba(0,0,0,0.5)"
+          border="1px solid rgba(255,255,255,0.1)"
         >
-          Back
-        </Button>
-        <VStack spacing={8} mt={"4rem"}>
-          <Box
-            bg={"#1B1B1B"}
-            p={"2rem"}
-            borderRadius={"20px"}
-            textAlign={"center"}
-            display={"flex"}
-            flexDirection={"column"}
-            alignItems="center"
-            boxShadow="0 10px 30px rgba(0,0,0,0.5)"
-            border="1px solid rgba(255,255,255,0.1)"
-          >
-            {isLoading ? (
-              <StackDivider h="256px" display="flex" alignItems="center"><Text>Loading...</Text></StackDivider>
-            ) : qrValue ? (
-              <Box p={4} bg="white" borderRadius="xl">
-                <QRCode
-                  value={qrValue}
-                  size={200}
-                  logoImage="/hushh-logo.png" // Optional
-                  logoWidth={50}
-                  qrStyle="dots"
-                  eyeRadius={10}
-                />
-              </Box>
-            ) : (
-              <Text>No profile data found.</Text>
-            )}
+          {isLoading ? (
+            <Box h="256px" display="flex" flexDirection="column" alignItems="center" justifyContent="center" gap={4}>
+              <Spinner size="xl" color="white" />
+              <Text>Loading your QR Code...</Text>
+            </Box>
+          ) : qrValue ? (
+            <Box p={4} bg="white" borderRadius="xl">
+              <QRCode
+                value={qrValue}
+                size={200}
+                logoImage="/hushh-logo.png"
+                logoWidth={50}
+                qrStyle="dots"
+                eyeRadius={10}
+              />
+            </Box>
+          ) : (
+            <Text>No profile data found.</Text>
+          )}
 
-            <Text
-              mt={"1.5rem"}
-              fontSize={"14px"}
-              fontWeight={"400"}
-              align={"center"}
-              color={"#949494"}
-              maxW="250px"
-            >
-              Scan to view your digital profile and network
-            </Text>
-          </Box>
-          <Button
-            leftIcon={<CiShare2 size={20} />}
-            bg="white"
-            color="black"
-            onClick={handleShare}
-            borderRadius="full"
-            px={8}
-            _hover={{ transform: 'scale(1.05)' }}
-            transition="all 0.2s"
+          <Text
+            mt={"1.5rem"}
+            fontSize={"14px"}
+            fontWeight={"400"}
+            align={"center"}
+            color={"#949494"}
+            maxW="250px"
           >
-            Share Profile Link
-          </Button>
-        </VStack>
-      </Box>
-    </>
+            Scan to view your digital profile and network
+          </Text>
+        </Box>
+        <Button
+          leftIcon={<CiShare2 size={20} />}
+          bg="white"
+          color="black"
+          onClick={handleShare}
+          borderRadius="full"
+          px={8}
+          _hover={{ transform: 'scale(1.05)' }}
+          transition="all 0.2s"
+          isDisabled={!qrValue || isLoading}
+        >
+          Share Profile Link
+        </Button>
+      </VStack>
+    </Box>
   );
 };
 

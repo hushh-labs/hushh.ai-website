@@ -13,7 +13,7 @@ export default function HushhProfileCard({ userData }) {
     // Fallback if userData is missing specific fields
     const fullName = userData?.fullName || userData?.full_name || 'Hushh User';
     const role = userData?.occupation || userData?.role || 'Member';
-    const userId = userData?.user_id || userData?.id || 'hushh-id';
+    const userId = userData?.hushh_id || userData?.user_id || userData?.id || 'hushh-id';
     // Public profile URL
     const profileUrl = `https://hushh.ai/hushh-id/${userId}`;
 
