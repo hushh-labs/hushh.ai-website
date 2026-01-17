@@ -88,9 +88,13 @@ export function extractUuid(value) {
  * @returns {string} The base URL without a trailing slash
  */
 export function getSiteUrl() {
+  const envUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  if (envUrl) {
+    const normalizedEnv = /^https?:\/\//i.test(envUrl) ? envUrl : `https://${envUrl}`;
+    return normalizedEnv.replace(/\/$/, '');
+  }
   if (typeof window !== 'undefined' && window.location?.origin) {
     return window.location.origin.replace(/\/$/, '');
   }
-  const envUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.hushh.ai';
-  return envUrl.replace(/\/$/, '');
+  return 'https://www.hushh.ai';
 }
