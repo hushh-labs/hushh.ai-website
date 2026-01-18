@@ -14,8 +14,8 @@ import {
 } from '@chakra-ui/react';
 import { keyframes } from '@emotion/react';
 import { ArrowBackIcon, CheckIcon, WarningIcon } from '@chakra-ui/icons';
-import { createClient } from '@supabase/supabase-js';
-import config from '../../../lib/config/config.js';
+import authConfig from '../../../lib/config/authConfig.js';
+import dataConfig from '../../../lib/config/config.js';
 
 // Animation keyframes
 const fadeIn = keyframes`
@@ -114,17 +114,8 @@ const AppleCallbackContent = () => {
         // Skip loading message for faster UX
         
         // Create Supabase client
-        const supabase = config.supabaseClient || createClient(
-          config.SUPABASE_URL, 
-          config.SUPABASE_ANON_KEY,
-          {
-            auth: {
-              autoRefreshToken: true,
-              persistSession: true,
-              detectSessionInUrl: true
-            }
-          }
-        );
+        const supabase = authConfig.supabaseClient;
+        const dataSupabase = dataConfig.supabaseClient;
 
         // Exchange the authorization code for a session using Supabase Auth
         const { data, error: callbackError } = await supabase.auth.exchangeCodeForSession(code);
@@ -170,7 +161,7 @@ const AppleCallbackContent = () => {
             };
 
             // Upsert user profile to database
-            await supabase
+            await dataSupabase
               .from('dev_api_userprofile')
               .upsert([userData], { 
                 onConflict: 'mail',

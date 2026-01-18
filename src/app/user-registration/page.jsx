@@ -41,7 +41,7 @@ import { IoLocationOutline } from "react-icons/io5";
 import { MdWork, MdOutlineWorkOutline } from "react-icons/md";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import config from "../../lib/config/config";
+import authConfig from "../../lib/config/authConfig";
 import ContentWrapper from "../_components/layout/ContentWrapper";
 
 const MotionBox = motion(Box);
@@ -142,7 +142,7 @@ const UserRegistrationContent = () => {
           console.log('Processing OAuth tokens...');
           
           // Set the session with Supabase
-          const { error: sessionError } = await config.supabaseClient.auth.setSession({
+          const { error: sessionError } = await authConfig.supabaseClient.auth.setSession({
             access_token: accessToken,
             refresh_token: refreshToken
           });
@@ -376,9 +376,9 @@ const UserRegistrationContent = () => {
         );
         
         // If email has been changed, update the Supabase auth email as well
-        if (userEmail !== initialEmail && config.supabaseClient) {
+        if (userEmail !== initialEmail && authConfig.supabaseClient) {
           try {
-            await config.supabaseClient.auth.updateUser({ email: userEmail });
+            await authConfig.supabaseClient.auth.updateUser({ email: userEmail });
             toast({
               title: "Email Update",
               description: "Your email has been updated. Please check your new email for a confirmation link.",

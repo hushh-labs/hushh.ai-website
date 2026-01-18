@@ -1,5 +1,5 @@
-import config from "../config/config";
+import authConfig from "../../../lib/config/authConfig";
 
 export default async function signOut() {
-  await config.supabaseClient.auth.signOut();
+  await authConfig.supabaseClient.auth.signOut();
 }

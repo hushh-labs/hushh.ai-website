@@ -1,4 +1,4 @@
-import config from '../config/config';
+import authConfig from '../../../lib/config/authConfig';
 
 
 // export default async function googleSignIn() {
@@ -55,7 +55,7 @@ export default async function googleSignIn(setUserEmail) {
     console.log('Starting Google Sign-In process...');
     const redirectTo = window.location.origin + '/user-registration';
     
-    const { data, error } = await config.supabaseClient.auth.signInWithOAuth({
+    const { data, error } = await authConfig.supabaseClient.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: redirectTo,
@@ -65,7 +65,7 @@ export default async function googleSignIn(setUserEmail) {
     if (error) {
       console.error('Error during Google Sign-In:', error.message);
     } else {
-      const user = data?.user || (await config.supabaseClient.auth.getUser()).data.user;
+      const user = data?.user || (await authConfig.supabaseClient.auth.getUser()).data.user;
       if (user) {
         setUserEmail(user.email); // Capture and set the user's email
       }

@@ -1,4 +1,4 @@
-import config from '../config/config';
+import authConfig from '../config/authConfig';
 
 /**
  * MFA Service for Supabase TOTP Authentication
@@ -11,7 +11,7 @@ import config from '../config/config';
  */
 export const enrollMFA = async () => {
     try {
-        const { data, error } = await config.supabaseClient.auth.mfa.enroll({
+        const { data, error } = await authConfig.supabaseClient.auth.mfa.enroll({
             factorType: 'totp',
             friendlyName: 'Authenticator App',
         });
@@ -36,7 +36,7 @@ export const enrollMFA = async () => {
  */
 export const verifyMFAEnrollment = async (factorId, code) => {
     try {
-        const { data, error } = await config.supabaseClient.auth.mfa.challenge({
+        const { data, error } = await authConfig.supabaseClient.auth.mfa.challenge({
             factorId,
         });
 
@@ -47,7 +47,7 @@ export const verifyMFAEnrollment = async (factorId, code) => {
 
         const challengeId = data.id;
 
-        const { data: verifyData, error: verifyError } = await config.supabaseClient.auth.mfa.verify({
+        const { data: verifyData, error: verifyError } = await authConfig.supabaseClient.auth.mfa.verify({
             factorId,
             challengeId,
             code,
@@ -72,7 +72,7 @@ export const verifyMFAEnrollment = async (factorId, code) => {
  */
 export const challengeMFA = async (factorId) => {
     try {
-        const { data, error } = await config.supabaseClient.auth.mfa.challenge({
+        const { data, error } = await authConfig.supabaseClient.auth.mfa.challenge({
             factorId,
         });
 
@@ -97,7 +97,7 @@ export const challengeMFA = async (factorId) => {
  */
 export const verifyMFAChallenge = async (factorId, challengeId, code) => {
     try {
-        const { data, error } = await config.supabaseClient.auth.mfa.verify({
+        const { data, error } = await authConfig.supabaseClient.auth.mfa.verify({
             factorId,
             challengeId,
             code,
@@ -122,7 +122,7 @@ export const verifyMFAChallenge = async (factorId, challengeId, code) => {
  */
 export const unenrollMFA = async (factorId) => {
     try {
-        const { data, error } = await config.supabaseClient.auth.mfa.unenroll({
+        const { data, error } = await authConfig.supabaseClient.auth.mfa.unenroll({
             factorId,
         });
 
@@ -144,7 +144,7 @@ export const unenrollMFA = async (factorId) => {
  */
 export const getMFAFactors = async () => {
     try {
-        const { data, error } = await config.supabaseClient.auth.mfa.listFactors();
+        const { data, error } = await authConfig.supabaseClient.auth.mfa.listFactors();
 
         if (error) {
             console.error('Get MFA factors error:', error);
@@ -164,7 +164,7 @@ export const getMFAFactors = async () => {
  */
 export const getAssuranceLevel = async () => {
     try {
-        const { data, error } = await config.supabaseClient.auth.mfa.getAuthenticatorAssuranceLevel();
+        const { data, error } = await authConfig.supabaseClient.auth.mfa.getAuthenticatorAssuranceLevel();
 
         if (error) {
             console.error('Get assurance level error:', error);

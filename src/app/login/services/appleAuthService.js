@@ -6,10 +6,12 @@ import {
   validateAppleAuthConfig,
   appleAuthConfig 
 } from '../config/appleAuth.js';
+import dataConfig from '../../../lib/config/config.js';
 
 class AppleAuthService {
   constructor() {
     this.supabase = createAppleAuthSupabaseClient();
+    this.dataSupabase = dataConfig.supabaseClient;
     this.nonce = null;
     this.hashedNonce = null;
   }
@@ -212,7 +214,7 @@ class AppleAuthService {
       console.log('Upserting user profile:', userData);
 
       // Insert or update user profile
-      const { data, error } = await this.supabase
+      const { data, error } = await this.dataSupabase
         .from('dev_api_userprofile')
         .upsert([userData], { 
           onConflict: 'mail',
@@ -331,7 +333,7 @@ class AppleAuthService {
         throw new Error('User email is required');
       }
 
-      const { data, error } = await this.supabase
+      const { data, error } = await this.dataSupabase
         .from('dev_api_userprofile')
         .select('*')
         .eq('mail', userEmail)

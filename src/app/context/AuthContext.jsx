@@ -1,6 +1,6 @@
 "use client";
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import config from '../../lib/config/config';
+import authConfig from '../../lib/config/authConfig';
 import authentication from '../../lib/auth/authentication';
 
 const AuthContext = createContext({});
@@ -87,7 +87,7 @@ export const AuthProvider = ({ children }) => {
     // Get initial session
     const getInitialSession = async () => {
       try {
-        const { data: { session } } = await config.supabaseClient.auth.getSession();
+        const { data: { session } } = await authConfig.supabaseClient.auth.getSession();
         setSession(session);
         setUser(session?.user ?? null);
 
@@ -105,7 +105,7 @@ export const AuthProvider = ({ children }) => {
     getInitialSession();
 
     // Listen for auth changes
-    const { data: { subscription } } = config.supabaseClient.auth.onAuthStateChange(
+    const { data: { subscription } } = authConfig.supabaseClient.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state change:', event, session?.user?.email);
 
@@ -164,7 +164,7 @@ export const AuthProvider = ({ children }) => {
     setCurrentFactorId(null);
     setCurrentChallengeId(null);
     // Refresh session to get updated assurance level
-    await config.supabaseClient.auth.refreshSession();
+    await authConfig.supabaseClient.auth.refreshSession();
   };
 
   const refreshMFAStatus = async () => {

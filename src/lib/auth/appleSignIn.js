@@ -1,4 +1,4 @@
-import config from "../config/config";
+import authConfig from "../config/authConfig";
 
 export default async function appleSignIn(callback, customRedirectPath) {
   try {
@@ -23,12 +23,12 @@ export default async function appleSignIn(callback, customRedirectPath) {
     const redirectTo = window.location.origin + redirectPath;
     console.log("Redirecting to:", redirectTo);
 
-    if (!config.supabaseClient) {
+    if (!authConfig.supabaseClient) {
       console.error("Supabase client is not initialized");
       return;
     }
 
-    const { error } = await config.supabaseClient.auth.signInWithOAuth({
+    const { error } = await authConfig.supabaseClient.auth.signInWithOAuth({
       provider: "apple",
       options: {
         redirectTo,

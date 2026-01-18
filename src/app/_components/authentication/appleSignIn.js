@@ -1,4 +1,4 @@
-import config from "../config/config";
+import authConfig from "../../../lib/config/authConfig";
 
 export default async function appleSignIn(setUserEmail) {
   try {
@@ -6,7 +6,7 @@ export default async function appleSignIn(setUserEmail) {
 
     console.log("Starting Apple Sign-In process...");
 
-    const { data, error } = await config.supabaseClient.auth.signInWithOAuth({
+    const { data, error } = await authConfig.supabaseClient.auth.signInWithOAuth({
       provider: "apple",
       options: {
         redirectTo: redirectTo,
@@ -18,7 +18,7 @@ export default async function appleSignIn(setUserEmail) {
       // Handle the error appropriately
     } else {
       console.log("Apple Sign-In successful:", data);
-      const user = data?.user || (await config.supabaseClient.auth.getUser()).data.user;
+      const user = data?.user || (await authConfig.supabaseClient.auth.getUser()).data.user;
       if (user) {
         setUserEmail(user.email); // Capture and set the user's email
       }

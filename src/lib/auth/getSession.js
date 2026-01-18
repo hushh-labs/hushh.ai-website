@@ -1,8 +1,8 @@
-import config from '../config/config';
+import authConfig from '../config/authConfig';
 
 export default async function getSession() {
   try {
-    const { data, error } = await config.supabaseClient.auth.getSession();
+    const { data, error } = await authConfig.supabaseClient.auth.getSession();
     
     if (error) {
       console.error('Error getting session:', error.message);

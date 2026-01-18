@@ -1,8 +1,8 @@
-import config from '../config/config';
+import authConfig from '../config/authConfig';
 
 export default async function signOut() {
   try {
-    const { error } = await config.supabaseClient.auth.signOut();
+    const { error } = await authConfig.supabaseClient.auth.signOut();
     
     if (error) {
       console.error('Error signing out:', error.message);

@@ -1,7 +1,7 @@
-import config from "../config/config";
+import authConfig from "../config/authConfig";
 
 const getAuthTokenKey = () => {
-  const match = config.SUPABASE_URL?.match(/https?:\/\/(.*?)\.supabase\.co/i);
+  const match = authConfig.SUPABASE_URL?.match(/https?:\/\/(.*?)\.supabase\.co/i);
   const projectRef = match?.[1] || "supabase";
   return `sb-${projectRef}-auth-token`;
 };

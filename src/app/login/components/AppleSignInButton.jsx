@@ -9,8 +9,7 @@ import {
   Box,
 } from '@chakra-ui/react';
 import { keyframes } from '@emotion/react';
-import { createClient } from '@supabase/supabase-js';
-import config from '../../../lib/config/config.js';
+import authConfig from '../../../lib/config/authConfig.js';
 
 // Apple Logo SVG Component
 const AppleIcon = (props) => (
@@ -54,17 +53,7 @@ const AppleSignInButton = ({
       console.log('Apple Sign-In button clicked');
       
       // Create Supabase client
-      const supabase = config.supabaseClient || createClient(
-        config.SUPABASE_URL, 
-        config.SUPABASE_ANON_KEY,
-        {
-          auth: {
-            autoRefreshToken: true,
-            persistSession: true,
-            detectSessionInUrl: true
-          }
-        }
-      );
+      const supabase = authConfig.supabaseClient;
 
       // Show loading toast
       const loadingToast = toast({
@@ -79,7 +68,7 @@ const AppleSignInButton = ({
       // Determine redirect URL based on environment
       const redirectTo = typeof window !== 'undefined' 
         ? `${window.location.origin}/login/callback`
-        : config.redirect_url;
+        : "https://www.hushh.ai/login/callback";
 
       console.log('Using redirect URL:', redirectTo);
 

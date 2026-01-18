@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Box, Button, Avatar, Menu, MenuButton, MenuList, MenuItem, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
-import config from '../config/config';
+import authConfig from '../../../lib/config/authConfig';
 
 export default function Header() {
   const [session, setSession] = useState(null);
@@ -10,14 +10,14 @@ export default function Header() {
 
   useEffect(() => {
     // Fetch the current session
-    config.supabaseClient.auth.getSession().then(({ data: { session } }) => {
+    authConfig.supabaseClient.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });
 
     // Listen for auth state changes
     const {
       data: { subscription },
-    } = config.supabaseClient.auth.onAuthStateChange((_event, session) => {
+    } = authConfig.supabaseClient.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
 
@@ -26,7 +26,7 @@ export default function Header() {
 
   const handleLogout = async () => {
     try {
-      await config.supabaseClient.auth.signOut();
+      await authConfig.supabaseClient.auth.signOut();
       setSession(null);
       router.push('/'); // Redirect to home or login page
     } catch (error) {

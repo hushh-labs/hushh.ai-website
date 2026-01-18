@@ -1,7 +1,7 @@
 // import resources from '../../resources/resources'
 
-import config from '../config/config'
+import authConfig from '../../../lib/config/authConfig'
 export default async function getSession(){
-    let supabase=config.supabaseClient
+    let supabase=authConfig.supabaseClient
     await supabase.auth.getSession()
 }
