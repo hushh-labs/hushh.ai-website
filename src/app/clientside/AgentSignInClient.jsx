@@ -384,6 +384,11 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
         // Only sync if we have a confirmed Supabase UUID from the profile-creation agent.
         if (!aggregatedData.user_id) {
           console.warn('⚠️ Skipping local profile save: missing confirmed user_id from agent');
+          localStorage.setItem('hushh_user_profile', JSON.stringify({
+            full_name: formData.fullName,
+            email: formData.email,
+            phone: `${formData.countryCode || ''} ${formData.phoneNumber || ''}`.trim(),
+          }));
           setCurrentStep('results');
           return;
         }
@@ -413,7 +418,8 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
           localStorage.setItem('hushh_user_profile', JSON.stringify({
             user_id: savedUuid || saveResult.userId,
             full_name: formData.fullName,
-            email: formData.email
+            email: formData.email,
+            phone: `${formData.countryCode || ''} ${formData.phoneNumber || ''}`.trim(),
           }));
         }
       } catch (saveError) {

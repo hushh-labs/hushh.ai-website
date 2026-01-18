@@ -22,26 +22,50 @@ const qrCodePage = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    const fetchUserData = () => {
-      try {
-        setIsLoading(true);
-        // Attempt to get user from localStorage which is set after profile creation
-        const storedUser = localStorage.getItem('hushh_user_profile');
-        const baseUrl = getSiteUrl();
-        if (storedUser) {
-          const user = JSON.parse(storedUser);
-          const rawId = user.user_id || user.userId;
-          const identifier = extractUuid(rawId);
-          if (identifier) {
-            setQrValue(`${baseUrl}/hushh_id/${identifier}`);
+      const fetchUserData = async () => {
+        try {
+          setIsLoading(true);
+          // Attempt to get user from localStorage which is set after profile creation
+          const storedUser = localStorage.getItem('hushh_user_profile');
+          const baseUrl = getSiteUrl();
+          if (storedUser) {
+            const user = JSON.parse(storedUser);
+            const rawId = user.user_id || user.userId;
+            const identifier = extractUuid(rawId);
+            if (identifier) {
+              setQrValue(`${baseUrl}/hushh_id/${identifier}`);
+            } else {
+              const lookupRes = await fetch('/api/user/profile/lookup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  email: user.email,
+                  phone: user.phone,
+                }),
+              });
+
+              const lookup = await lookupRes.json();
+              if (lookupRes.ok && lookup?.userId) {
+                const fetchedUuid = extractUuid(lookup.userId);
+                if (fetchedUuid) {
+                  const updatedProfile = {
+                    ...user,
+                    user_id: fetchedUuid,
+                  };
+                  localStorage.setItem('hushh_user_profile', JSON.stringify(updatedProfile));
+                  setQrValue(`${baseUrl}/hushh_id/${fetchedUuid}`);
+                } else {
+                  setErrorMessage("Invalid UUID returned. Please retry.");
+                }
+              } else {
+                setErrorMessage(lookup?.error || "Missing UUID. Please finish profile creation first.");
+              }
+            }
           } else {
-            setErrorMessage("Missing UUID. Please finish profile creation first.");
+            setErrorMessage("No profile data found yet.");
           }
-        } else {
-          setErrorMessage("No profile data found yet.");
-        }
-      } catch (err) {
-        console.error("Error loading QR data:", err);
+        } catch (err) {
+          console.error("Error loading QR data:", err);
         setErrorMessage("Could not load QR data.");
       } finally {
         setIsLoading(false);
