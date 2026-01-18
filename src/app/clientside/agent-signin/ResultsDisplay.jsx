@@ -26,7 +26,7 @@ import {
 } from '@chakra-ui/react'
 import { FaUser, FaMapMarkerAlt, FaBriefcase, FaHeart, FaGamepad, FaPlane, FaLeaf, FaLaptop, FaDownload, FaTrash, FaCode, FaRedo } from 'react-icons/fa'
 import HushhProfileCard from '../../../components/profile/HushhProfileCard'
-import { extractUuid } from '../../../lib/utils'
+import { extractUuid, getSiteUrl } from '../../../lib/utils'
 
 // Helper function to extract data from API responses
 const extractUserData = (agentResults, userData) => {
@@ -271,10 +271,10 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
   const toast = useToast()
 
   const parsedData = useMemo(() => extractUserData(agentResults, userData), [agentResults, userData])
-  const cardData = useMemo(() => ({
-    ...parsedData,
-    user_id: extractUuid(userData?.user_id) || parsedData?.user_id
-  }), [parsedData, userData])
+  const [cardProfile, setCardProfile] = useState(null)
+  const [cardLoading, setCardLoading] = useState(false)
+  const [cardError, setCardError] = useState('')
+  const [publicLink, setPublicLink] = useState('')
 
   // Extract Intents safely
   const intents = useMemo(() => {
@@ -312,6 +312,64 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
     }
   }
 
+  const handleGenerateCard = async () => {
+    setCardError('')
+    setPublicLink('')
+    setCardLoading(true)
+
+    try {
+      const email = parsedData.email || userData?.email || ''
+      const fallbackPhone = userData?.phoneNumber
+        ? `${userData.countryCode || ''} ${userData.phoneNumber || ''}`.trim()
+        : ''
+      const phone = parsedData.phone || userData?.phone || fallbackPhone || ''
+      const fullName = parsedData.full_name || parsedData.fullName || userData?.fullName || userData?.full_name || ''
+
+      if (!email && !phone && !fullName) {
+        setCardError('Email, phone, or full name is required to lookup your UUID.')
+        return
+      }
+
+      const response = await fetch('/api/user/profile/lookup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          phone,
+          full_name: fullName,
+        }),
+      })
+
+      const result = await response.json()
+      if (!response.ok || !result?.userId) {
+        setCardError(result?.error || 'Could not fetch UUID from Supabase.')
+        return
+      }
+
+      const uuid = extractUuid(result.userId)
+      if (!uuid) {
+        setCardError('Supabase returned an invalid UUID.')
+        return
+      }
+
+      const profileFromDb = result.profile || {}
+      const baseUrl = getSiteUrl()
+      setPublicLink(`${baseUrl}/hushh_id/${uuid}`)
+      setCardProfile({
+        ...parsedData,
+        user_id: uuid,
+        hushh_id: parsedData.hushh_id || result.hushhId || null,
+        email: profileFromDb.email || email || parsedData.email,
+        phone: profileFromDb.phone || phone || parsedData.phone,
+        full_name: profileFromDb.full_name || parsedData.full_name || parsedData.fullName || fullName,
+      })
+    } catch (error) {
+      setCardError(error.message || 'Failed to generate Hushh ID card.')
+    } finally {
+      setCardLoading(false)
+    }
+  }
+
   return (
     <Box minH="100vh" bg="black" color="white" py={{ base: 6, md: 12 }}>
       <Container maxW="container.xl">
@@ -336,13 +394,15 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
                 Export
               </Button>
               <Button
-                onClick={() => window.location.href = '/qrCodePage'}
+                onClick={handleGenerateCard}
+                isLoading={cardLoading}
+                loadingText="Fetching UUID"
                 bgGradient="linear(to-r, #0071E3, #BB62FC)"
                 color="white"
                 px={8}
                 _hover={{ opacity: 0.9, transform: 'translateY(-2px)' }}
               >
-                Get My QR
+                Get Hushh ID Card
               </Button>
             </HStack>
           </Flex>
@@ -350,7 +410,50 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
           {/* Profile Card & Key Stats */}
           <Grid templateColumns={{ base: '1fr', lg: '1fr 2fr' }} gap={8}>
             <GridItem>
-              <HushhProfileCard userData={cardData} />
+              {cardProfile ? (
+                <HushhProfileCard userData={cardProfile} />
+              ) : (
+                <Box
+                  bg="gray.900"
+                  border="1px solid"
+                  borderColor="gray.800"
+                  borderRadius="2xl"
+                  p={6}
+                  textAlign="center"
+                >
+                  <Heading size="md" mb={3} color="white">
+                    Generate Your Hushh ID Card
+                  </Heading>
+                  <Text color="gray.400" mb={4}>
+                    Click the button to fetch your UUID from Supabase and create the QR card.
+                  </Text>
+                  <Button
+                    onClick={handleGenerateCard}
+                    isLoading={cardLoading}
+                    loadingText="Fetching UUID"
+                    bgGradient="linear(to-r, #0071E3, #BB62FC)"
+                    color="white"
+                    _hover={{ opacity: 0.9 }}
+                  >
+                    Get Hushh ID Card
+                  </Button>
+                  {cardError && (
+                    <Text mt={3} fontSize="sm" color="red.300">
+                      {cardError}
+                    </Text>
+                  )}
+                </Box>
+              )}
+              {publicLink && (
+                <Box mt={4} bg="gray.900" border="1px solid" borderColor="gray.800" borderRadius="xl" p={4}>
+                  <Text fontSize="xs" color="gray.400" mb={2} textTransform="uppercase" letterSpacing="wide">
+                    Public Profile Link
+                  </Text>
+                  <Text fontSize="sm" color="blue.300" wordBreak="break-all">
+                    {publicLink}
+                  </Text>
+                </Box>
+              )}
             </GridItem>
             <GridItem>
               <SimpleGrid columns={{ base: 2, md: 2 }} spacing={4} h="full">

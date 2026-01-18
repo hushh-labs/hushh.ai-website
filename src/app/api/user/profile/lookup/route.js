@@ -10,10 +10,11 @@ export async function POST(request) {
     const body = await request.json();
     const email = body?.email?.trim();
     const phone = body?.phone?.trim();
+    const fullName = body?.full_name?.trim() || body?.fullName?.trim();
 
-    if (!email && !phone) {
+    if (!email && !phone && !fullName) {
       return NextResponse.json(
-        { success: false, error: 'Email or phone is required to lookup user_id.' },
+        { success: false, error: 'Email, phone, or full name is required to lookup user_id.' },
         { status: 400 }
       );
     }
@@ -21,10 +22,11 @@ export async function POST(request) {
     const filters = [];
     if (email) filters.push(`email.eq.${email}`);
     if (phone) filters.push(`phone.eq.${phone}`);
+    if (fullName) filters.push(`full_name.eq.${fullName}`);
 
     let query = supabase
       .from('user_profiles')
-      .select('user_id, hushh_id, email, phone, profile_created_utc')
+      .select('user_id, hushh_id, full_name, email, phone, profile_created_utc')
       .order('profile_created_utc', { ascending: false })
       .limit(1);
 
@@ -46,6 +48,11 @@ export async function POST(request) {
       success: true,
       userId: data.user_id,
       hushhId: data.hushh_id || null,
+      profile: {
+        full_name: data.full_name,
+        email: data.email,
+        phone: data.phone,
+      },
     });
   } catch (error) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

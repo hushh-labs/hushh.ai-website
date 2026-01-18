@@ -12,61 +12,32 @@ import { CiShare2 } from "react-icons/ci";
 import { QRCode } from "react-qrcode-logo";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/navigation";
-import { extractUuid, getSiteUrl } from "../../lib/utils";
 
 const qrCodePage = () => {
   const router = useRouter();
   const toast = useToast();
   const [qrValue, setQrValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-      const fetchUserData = async () => {
-        try {
-          setIsLoading(true);
-          // Attempt to get user from localStorage which is set after profile creation
-          const storedUser = localStorage.getItem('hushh_user_profile');
-          const baseUrl = getSiteUrl();
-          if (storedUser) {
-            const user = JSON.parse(storedUser);
-            const rawId = user.user_id || user.userId;
-            const identifier = extractUuid(rawId);
-            if (identifier) {
-              setQrValue(`${baseUrl}/hushh_id/${identifier}`);
-            } else {
-              const lookupRes = await fetch('/api/user/profile/lookup', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  email: user.email,
-                  phone: user.phone,
-                }),
-              });
-
-              const lookup = await lookupRes.json();
-              if (lookupRes.ok && lookup?.userId) {
-                const fetchedUuid = extractUuid(lookup.userId);
-                if (fetchedUuid) {
-                  const updatedProfile = {
-                    ...user,
-                    user_id: fetchedUuid,
-                  };
-                  localStorage.setItem('hushh_user_profile', JSON.stringify(updatedProfile));
-                  setQrValue(`${baseUrl}/hushh_id/${fetchedUuid}`);
-                } else {
-                  setErrorMessage("Invalid UUID returned. Please retry.");
-                }
-              } else {
-                setErrorMessage(lookup?.error || "Missing UUID. Please finish profile creation first.");
-              }
-            }
-          } else {
-            setErrorMessage("No profile data found yet.");
+    const fetchUserData = () => {
+      try {
+        setIsLoading(true);
+        // Attempt to get user from localStorage which is set after profile creation
+        const storedUser = localStorage.getItem('hushh_user_profile');
+        const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.hushh.ai").replace(/\/$/, "");
+        if (storedUser) {
+          const user = JSON.parse(storedUser);
+          const identifier = user.user_id || user.userId;
+          if (identifier) {
+            setQrValue(`${baseUrl}/hushh_id/${identifier}`);
           }
-        } catch (err) {
-          console.error("Error loading QR data:", err);
-        setErrorMessage("Could not load QR data.");
+        } else {
+          // Fallback: If not in localstorage, maybe we can't show it yet
+          setQrValue(`${baseUrl}/hushh_id/guest`);
+        }
+      } catch (err) {
+        console.error("Error loading QR data:", err);
       } finally {
         setIsLoading(false);
       }
@@ -150,7 +121,7 @@ const qrCodePage = () => {
               />
             </Box>
           ) : (
-            <Text>{errorMessage || "No profile data found."}</Text>
+            <Text>No profile data found.</Text>
           )}
 
           <Text
