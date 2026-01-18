@@ -21,6 +21,7 @@ import {
   useDisclosure,
   useToast,
   Icon,
+  Link,
   Divider,
   Flex
 } from '@chakra-ui/react'
@@ -449,9 +450,15 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
                   <Text fontSize="xs" color="gray.400" mb={2} textTransform="uppercase" letterSpacing="wide">
                     Public Profile Link
                   </Text>
-                  <Text fontSize="sm" color="blue.300" wordBreak="break-all">
+                  <Link
+                    href={publicLink}
+                    isExternal
+                    fontSize="sm"
+                    color="blue.300"
+                    wordBreak="break-all"
+                  >
                     {publicLink}
-                  </Text>
+                  </Link>
                 </Box>
               )}
             </GridItem>
