@@ -95,8 +95,17 @@ export async function POST(request) {
         // Fallback for hushh_id if still missing
         if (!finalHushhId) {
             const firstName = (userData.fullName || "user").split(' ')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
-            const suffix = finalUserId.includes('-') ? finalUserId.split('-').shift() : finalUserId.substr(-6);
-            finalHushhId = `${firstName}/${suffix}`;
+            // Sanitize phone number to remove spaces and special chars for the URL
+            const cleanPhone = (userData.phoneNumber || '').replace(/\D/g, '');
+
+            if (cleanPhone && cleanPhone.length > 6) {
+                // Use name/phone format if we have a valid phone number
+                finalHushhId = `${firstName}/${cleanPhone}`;
+            } else {
+                // Fallback to suffix if phone is not available/valid
+                const suffix = finalUserId.includes('-') ? finalUserId.split('-').shift() : finalUserId.substr(-6);
+                finalHushhId = `${firstName}/${suffix}`;
+            }
         }
 
         // 2. Map Flattened Needs/Wants/Desires

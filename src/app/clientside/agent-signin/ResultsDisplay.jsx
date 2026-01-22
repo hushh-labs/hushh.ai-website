@@ -207,26 +207,27 @@ const formatArrayValue = (value) => {
 // Reusable Dashboard Card Component
 const DashboardCard = ({ title, icon, children, colorScheme = "blue" }) => (
   <Box
-    bg="black"
+    bg="white"
     border="1px solid"
-    borderColor="gray.800"
+    borderColor="rgba(0,0,0,0.05)"
     borderRadius="2xl"
     p={6}
     height="full"
-    transition="all 0.3s"
-    _hover={{ borderColor: `${colorScheme}.500`, boxShadow: `0 0 20px rgba(0,0,0,0.5)` }}
+    transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+    _hover={{ transform: "translateY(-4px)", boxShadow: "0 15px 30px rgba(0,0,0,0.08)" }}
+    boxShadow="0 4px 10px rgba(0,0,0,0.02)"
   >
     <HStack mb={6} spacing={3} align="center">
       <Flex
         w={10} h={10}
         align="center" justify="center"
         borderRadius="lg"
-        bg={`${colorScheme}.900`}
-        color={`${colorScheme}.400`}
+        bg={`${colorScheme}.50`}
+        color={`${colorScheme}.600`}
       >
         <Icon as={icon} boxSize={5} />
       </Flex>
-      <Heading size="md" fontWeight="bold" letterSpacing="tight">
+      <Heading size="md" fontWeight="bold" letterSpacing="tight" color="#1d1d1f">
         {title}
       </Heading>
     </HStack>
@@ -238,28 +239,37 @@ const DashboardCard = ({ title, icon, children, colorScheme = "blue" }) => (
 
 const InfoRow = ({ label, value }) => (
   <Box>
-    <Text fontSize="xs" color="gray.500" fontWeight="bold" letterSpacing="wider" textTransform="uppercase" mb={1}>
+    <Text fontSize="xs" color="gray.500" fontWeight="700" letterSpacing="wider" textTransform="uppercase" mb={1}>
       {label}
     </Text>
-    <Text fontSize="md" color="white" fontWeight="500">
+    <Text fontSize="md" color="#1d1d1f" fontWeight="500">
       {value}
     </Text>
   </Box>
 )
 
 const IntentCard = ({ badge, badgeColor, data, categoryKey, budgetKey, confidenceKey, timeWindowKey }) => (
-  <Box bg="gray.900" p={4} borderRadius="xl" border="1px solid" borderColor="gray.800">
+  <Box
+    bg="white"
+    p={4}
+    borderRadius="xl"
+    border="1px solid"
+    borderColor="rgba(0,0,0,0.05)"
+    boxShadow="sm"
+    transition="all 0.2s"
+    _hover={{ boxShadow: "md" }}
+  >
     <VStack align="stretch" spacing={2}>
       <HStack justify="space-between">
-        <Badge colorScheme={badgeColor} variant="subtle">{badge}</Badge>
-        <Text fontSize="xs" color="gray.500" fontWeight="bold">Conf: {data?.[confidenceKey] || 'N/A'}</Text>
+        <Badge colorScheme={badgeColor} variant="subtle" borderRadius="full" px={2}>{badge}</Badge>
+        <Text fontSize="xs" color="gray.400" fontWeight="600">Conf: {data?.[confidenceKey] || 'N/A'}</Text>
       </HStack>
       <Box>
-        <Text fontWeight="bold" fontSize="lg" color="white" noOfLines={1}>{data?.[categoryKey] || 'No category'}</Text>
-        <Text fontSize="sm" color="teal.300" fontWeight="semibold">{data?.[budgetKey] || 'Budget: N/A'}</Text>
+        <Text fontWeight="bold" fontSize="lg" color="#1d1d1f" noOfLines={1}>{data?.[categoryKey] || 'No category'}</Text>
+        <Text fontSize="sm" color={`${badgeColor}.600`} fontWeight="semibold">{data?.[budgetKey] || 'Budget: N/A'}</Text>
       </Box>
       {timeWindowKey && data?.[timeWindowKey] && (
-        <Text fontSize="xs" color="gray.400" fontStyle="italic">
+        <Text fontSize="xs" color="gray.500" fontStyle="italic">
           Window: {data[timeWindowKey]}
         </Text>
       )}
@@ -372,26 +382,26 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
   }
 
   return (
-    <Box minH="100vh" bg="black" color="white" py={{ base: 6, md: 12 }}>
+    <Box minH="100vh" bg="#f5f5f7" color="#1d1d1f" py={{ base: 6, md: 12 }}>
       <Container maxW="container.xl">
         <VStack spacing={10} align="stretch">
 
           {/* Header Section */}
           <Flex direction={{ base: 'column', md: 'row' }} justify="space-between" align={{ base: 'center', md: 'flex-start' }} gap={6}>
             <VStack align={{ base: 'center', md: 'flex-start' }} spacing={2}>
-              <Heading size="2xl" bgGradient="linear(to-r, green.400, teal.400)" bgClip="text" letterSpacing="tight">
+              <Heading size="2xl" color="#1d1d1f" letterSpacing="tight">
                 Identity Decoded.
               </Heading>
-              <Text color="gray.400" maxW="xl">
+              <Text color="#86868b" maxW="xl" fontSize="lg">
                 Comprehensive profile intelligence synthesized from multiple data agents including Gemini and Brand logic.
               </Text>
             </VStack>
 
             <HStack spacing={3}>
-              <Button leftIcon={<FaRedo />} onClick={onBack} variant="outline" borderColor="gray.700" color="gray.300" _hover={{ bg: 'gray.800' }}>
+              <Button leftIcon={<FaRedo />} onClick={onBack} variant="outline" borderColor="gray.300" color="gray.600" _hover={{ bg: 'white', borderColor: 'gray.400' }} bg="white">
                 New Scan
               </Button>
-              <Button leftIcon={<FaDownload />} onClick={handleExportResults} bg="transparent" border="1px solid white" color="white" _hover={{ bg: 'whiteAlpha.200' }}>
+              <Button leftIcon={<FaDownload />} onClick={handleExportResults} bg="white" border="1px solid" borderColor="gray.300" color="gray.700" _hover={{ bg: 'gray.50' }}>
                 Export
               </Button>
               <Button
@@ -415,46 +425,52 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
                 <HushhProfileCard userData={cardProfile} />
               ) : (
                 <Box
-                  bg="gray.900"
+                  bg="white"
                   border="1px solid"
-                  borderColor="gray.800"
+                  borderColor="rgba(0,0,0,0.05)"
                   borderRadius="2xl"
-                  p={6}
+                  p={8}
                   textAlign="center"
+                  boxShadow="0 10px 30px rgba(0,0,0,0.05)"
                 >
-                  <Heading size="md" mb={3} color="white">
+                  <Heading size="md" mb={3} color="#1d1d1f">
                     Generate Your Hushh ID Card
                   </Heading>
-                  <Text color="gray.400" mb={4}>
+                  <Text color="#86868b" mb={6}>
                     Click the button to fetch your UUID from Supabase and create the QR card.
                   </Text>
                   <Button
                     onClick={handleGenerateCard}
                     isLoading={cardLoading}
                     loadingText="Fetching UUID"
-                    bgGradient="linear(to-r, #0071E3, #BB62FC)"
+                    bg="#0071e3"
                     color="white"
-                    _hover={{ opacity: 0.9 }}
+                    px={8}
+                    py={6}
+                    fontSize="lg"
+                    borderRadius="full"
+                    _hover={{ bg: "#0077ED", transform: 'translateY(-1px)', boxShadow: 'lg' }}
                   >
                     Get Hushh ID Card
                   </Button>
                   {cardError && (
-                    <Text mt={3} fontSize="sm" color="red.300">
+                    <Text mt={3} fontSize="sm" color="red.500">
                       {cardError}
                     </Text>
                   )}
                 </Box>
               )}
               {publicLink && (
-                <Box mt={4} bg="gray.900" border="1px solid" borderColor="gray.800" borderRadius="xl" p={4}>
-                  <Text fontSize="xs" color="gray.400" mb={2} textTransform="uppercase" letterSpacing="wide">
+                <Box mt={4} bg="white" border="1px solid" borderColor="rgba(0,0,0,0.05)" borderRadius="xl" p={4} boxShadow="sm">
+                  <Text fontSize="xs" color="gray.400" mb={2} textTransform="uppercase" letterSpacing="wide" fontWeight="700">
                     Public Profile Link
                   </Text>
                   <Link
                     href={publicLink}
                     isExternal
                     fontSize="sm"
-                    color="blue.300"
+                    color="#0071e3"
+                    fontWeight="500"
                     wordBreak="break-all"
                   >
                     {publicLink}
@@ -464,23 +480,23 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
             </GridItem>
             <GridItem>
               <SimpleGrid columns={{ base: 2, md: 2 }} spacing={4} h="full">
-                <Box bg="gray.900" p={6} borderRadius="2xl" border="1px solid" borderColor="gray.800">
-                  <Text color="gray.500" fontSize="sm" fontWeight="bold">CONFIDENCE SCORE</Text>
-                  <Heading size="3xl" mt={2} color="green.400">
+                <Box bg="white" p={6} borderRadius="2xl" border="1px solid" borderColor="rgba(0,0,0,0.05)" boxShadow="sm">
+                  <Text color="gray.500" fontSize="xs" fontWeight="700" letterSpacing="wider">CONFIDENCE SCORE</Text>
+                  <Heading size="3xl" mt={2} color="#1d1d1f">
                     {parsedData.confidence_score || parsedData.confidence || '85'}%
                   </Heading>
-                  <Text fontSize="sm" color="gray.400" mt={2}>Based on data consistency</Text>
+                  <Text fontSize="sm" color="gray.500" mt={2}>Based on data consistency</Text>
                 </Box>
-                <Box bg="gray.900" p={6} borderRadius="2xl" border="1px solid" borderColor="gray.800">
-                  <Text color="gray.500" fontSize="sm" fontWeight="bold">DATA POINTS</Text>
-                  <Heading size="3xl" mt={2} color="blue.400">
+                <Box bg="white" p={6} borderRadius="2xl" border="1px solid" borderColor="rgba(0,0,0,0.05)" boxShadow="sm">
+                  <Text color="gray.500" fontSize="xs" fontWeight="700" letterSpacing="wider">DATA POINTS</Text>
+                  <Heading size="3xl" mt={2} color="#0071e3">
                     {Object.values(parsedData).filter(v => v !== null && v !== undefined && v !== '' && v !== 'Not available').length}
                   </Heading>
-                  <Text fontSize="sm" color="gray.400" mt={2}>Fields extracted & verified</Text>
+                  <Text fontSize="sm" color="gray.500" mt={2}>Fields extracted & verified</Text>
                 </Box>
-                <Box bg="gray.900" p={6} borderRadius="2xl" border="1px solid" borderColor="gray.800" gridColumn="span 2">
-                  <Heading size="md" mb={4}>AI Analysis Summary</Heading>
-                  <Text color="gray.300" lineHeight="tall">
+                <Box bg="white" p={6} borderRadius="2xl" border="1px solid" borderColor="rgba(0,0,0,0.05)" gridColumn="span 2" boxShadow="sm">
+                  <Heading size="md" mb={4} color="#1d1d1f">AI Analysis Summary</Heading>
+                  <Text color="#424245" lineHeight="1.6" fontSize="md">
                     {parsedData.summary || parsedData.bio || "The user demonstrates a high affinity for premium brands and technology. Digital footprint indicates active engagement in professional networks and consistent online purchasing behavior."}
                   </Text>
                 </Box>
@@ -488,7 +504,7 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
             </GridItem>
           </Grid>
 
-          <Divider borderColor="gray.800" />
+          <Divider borderColor="gray.200" />
 
           {/* Main Data Grid */}
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
@@ -607,21 +623,21 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
 
       {/* Raw Data Modal */}
       <Modal isOpen={isOpen} onClose={onClose} size="6xl" scrollBehavior="inside">
-        <ModalOverlay bg="blackAlpha.800" backdropFilter="blur(10px)" />
-        <ModalContent bg="gray.900" color="white" maxH="90vh" borderRadius="xl">
-          <ModalHeader borderBottom="1px solid" borderColor="gray.800">Raw Data Inspector</ModalHeader>
+        <ModalOverlay bg="rgba(0,0,0,0.2)" backdropFilter="blur(5px)" />
+        <ModalContent bg="white" color="#1d1d1f" maxH="90vh" borderRadius="2xl" boxShadow="2xl">
+          <ModalHeader borderBottom="1px solid" borderColor="gray.100">Raw Data Inspector</ModalHeader>
           <ModalCloseButton />
           <ModalBody py={6}>
             <SimpleGrid columns={2} spacing={6}>
               <Box>
-                <Heading size="sm" mb={2} color="green.400">Processed Profile</Heading>
-                <Box bg="black" p={4} borderRadius="lg" h="500px" overflow="auto" fontFamily="monospace" fontSize="xs">
+                <Heading size="sm" mb={2} color="#0071e3">Processed Profile</Heading>
+                <Box bg="gray.50" p={4} borderRadius="lg" h="500px" overflow="auto" fontFamily="monospace" fontSize="xs" border="1px solid" borderColor="gray.100">
                   <pre>{JSON.stringify(parsedData, null, 2)}</pre>
                 </Box>
               </Box>
               <Box>
-                <Heading size="sm" mb={2} color="blue.400">Agent Details</Heading>
-                <Box bg="black" p={4} borderRadius="lg" h="500px" overflow="auto" fontFamily="monospace" fontSize="xs">
+                <Heading size="sm" mb={2} color="purple.500">Agent Details</Heading>
+                <Box bg="gray.50" p={4} borderRadius="lg" h="500px" overflow="auto" fontFamily="monospace" fontSize="xs" border="1px solid" borderColor="gray.100">
                   <pre>{JSON.stringify(agentResults, null, 2)}</pre>
                 </Box>
               </Box>

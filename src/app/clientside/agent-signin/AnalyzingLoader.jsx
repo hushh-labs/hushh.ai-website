@@ -1,166 +1,159 @@
-'use client'
-import React from 'react'
-import {
-  Box,
-  Container,
-  VStack,
-  HStack,
-  Heading,
-  Text,
-  Progress,
-  Badge,
-  useColorModeValue,
-  Flex
-} from '@chakra-ui/react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircleIcon, TimeIcon, SettingsIcon } from '@chakra-ui/icons'
+import React, { useState, useEffect } from 'react';
+import { Box, Text, VStack, Flex, Icon, Avatar, Badge } from '@chakra-ui/react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaShoppingBag, FaPlane, FaUsers, FaHeart, FaSearch } from 'react-icons/fa';
 
 const MotionBox = motion(Box);
-const MotionHStack = motion(HStack);
+const MotionText = motion(Text);
 
-export default function AnalyzingLoader({ progress = 0, currentAgent = '' }) {
-  // Five profile fetching agents (4 discovery + 1 profile creation)
-  const agents = [
-    { id: 'brand', name: 'Brand Identity Agent', description: 'Analyzing brand affinity & loyalty', status: progress > 0 ? 'completed' : 'pending' },
-    { id: 'hushh', name: 'Hushh Core Agent', description: 'Retrieving secure user intent data', status: progress > 20 ? 'completed' : progress > 0 ? 'processing' : 'pending' },
-    { id: 'public', name: 'Public Data Agent', description: 'Scanning public records & footprint', status: progress > 40 ? 'completed' : progress > 20 ? 'processing' : 'pending' },
-    { id: 'gemini', name: 'Gemini Intelligence', description: 'Analysis of public intelligence', status: progress > 60 ? 'completed' : progress > 40 ? 'processing' : 'pending' },
-    { id: 'supabase-profile-creation-agent', name: 'Supabase Profile Creation', description: 'Finalizing and securing identity', status: progress > 80 ? 'completed' : progress > 60 ? 'processing' : 'pending' },
-  ]
+// Font stack
+const fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
 
-  // Calculate current active agent index for display
-  const activeAgentIndex = agents.findIndex(a => a.status === 'processing');
-  const activeAgent = agents[activeAgentIndex] || (progress >= 100 ? { name: 'Identity Secured', description: 'Finalizing dashboard...' } : agents[0]);
+// Removed broken keyframes pulse, using framer-motion instead
+
+// Agent "Cards" that pop up
+const AgentCard = ({ icon, name, action, side = 'left', delay, top }) => {
+  const isLeft = side === 'left';
+  return (
+    <MotionBox
+      initial={{ x: isLeft ? -100 : 100, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ delay: delay, duration: 0.8, type: "spring" }}
+      position="absolute"
+      top={top} // Use fixed top position
+      left={isLeft ? { base: "2%", md: "10%" } : undefined} // Move slightly closer to edge to avoid center
+      right={!isLeft ? { base: "2%", md: "10%" } : undefined}
+      bg="white"
+      p={4}
+      borderRadius="2xl"
+      boxShadow="0 10px 40px rgba(0,0,0,0.1)"
+      maxW="280px"
+      zIndex={2}
+      backdropFilter="blur(10px)"
+      border="1px solid rgba(0,0,0,0.05)"
+    >
+      <Flex align="center" gap={3}>
+        <Box p={2} bg="gray.50" borderRadius="xl">
+          <Icon as={icon} color="#0071e3" boxSize={5} />
+        </Box>
+        <VStack align="start" spacing={0}>
+          <Text fontSize="xs" fontWeight="700" color="gray.400" textTransform="uppercase">{name}</Text>
+          <Text fontSize="sm" fontWeight="600" color="#1d1d1f" lineHeight="1.2">{action}</Text>
+        </VStack>
+      </Flex>
+    </MotionBox>
+  );
+};
+
+const AnalyzingLoader = ({ progress }) => {
+  const [agentsFound, setAgentsFound] = useState([]);
+
+  // Timeline of "Agents" appearing based on progress
+  // Fixed positions to avoid overlap: Top-Left, Top-Right, Bottom-Left, Bottom-Right
+  useEffect(() => {
+    if (progress >= 0 && !agentsFound.some(a => a.id === 'social')) {
+      setAgentsFound(prev => [...prev, { id: 'social', icon: FaUsers, name: 'Social Agent', action: 'Mapping your digital circles...', side: 'left', top: '20%' }]);
+    }
+    if (progress > 15 && !agentsFound.some(a => a.id === 'shopping')) {
+      setAgentsFound(prev => [...prev, { id: 'shopping', icon: FaShoppingBag, name: 'Shopping Ace', action: 'Finding brands you love...', side: 'right', top: '25%' }]);
+    }
+    if (progress > 30 && !agentsFound.some(a => a.id === 'travel')) {
+      setAgentsFound(prev => [...prev, { id: 'travel', icon: FaPlane, name: 'Travel Guide', action: 'Planning your next getaway...', side: 'left', top: '70%' }]);
+    }
+    if (progress > 45 && !agentsFound.some(a => a.id === 'lifestyle')) {
+      setAgentsFound(prev => [...prev, { id: 'lifestyle', icon: FaHeart, name: 'Lifestyle Guru', action: 'Understanding your daily rhythm...', side: 'right', top: '75%' }]);
+    }
+  }, [progress]);
 
   return (
-    <Container maxW="container.md" h="100vh" display="flex" alignItems="center" justifyContent="center">
-      <VStack spacing={8} w="full">
-
-        {/* Central visualizer */}
-        <Box position="relative" w="200px" h="200px" display="flex" alignItems="center" justifyContent="center">
-          {/* Pulsing rings */}
-          {[0, 1, 2].map((i) => (
-            <MotionBox
-              key={i}
-              position="absolute"
-              w="100%"
-              h="100%"
-              borderRadius="full"
-              border="2px solid"
-              borderColor="blue.500"
-              initial={{ opacity: 0.5, scale: 0.8 }}
-              animate={{
-                opacity: [0.5, 0],
-                scale: [0.8, 1.5]
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                delay: i * 0.6,
-                ease: "easeOut"
-              }}
-            />
-          ))}
-
-          {/* Center Core */}
-          <Box
+    <Box
+      minH="100vh"
+      bg="#f5f5f7" // Apple Light Gray Background
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      position="relative"
+      overflow="hidden"
+      fontFamily={fontFamily}
+    >
+      {/* Central "Persona" Builder */}
+      <Box position="relative" zIndex={1} textAlign="center">
+        <Box
+          w="200px"
+          h="200px"
+          borderRadius="full"
+          bg="white"
+          boxShadow="0 20px 60px rgba(0,0,0,0.1)"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          mb={8}
+          mx="auto"
+          position="relative"
+        >
+          {/* The "Brain" or "Core" pulsing */}
+          <MotionBox
             w="120px"
             h="120px"
             borderRadius="full"
-            bg="black"
-            border="1px solid white"
-            boxShadow="0 0 20px blue"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            zIndex={2}
-          >
-            <Text fontSize="2xl" fontWeight="bold" color="white">
-              {Math.round(progress)}%
-            </Text>
-          </Box>
+            bgGradient="linear(to-tr, #0071e3, #42a5f5)"
+            animate={{
+              scale: [0.95, 1.05, 0.95],
+              boxShadow: [
+                "0 0 0 0 rgba(0, 113, 227, 0.7)",
+                "0 0 0 20px rgba(0, 113, 227, 0)",
+                "0 0 0 0 rgba(0, 113, 227, 0)"
+              ]
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+
+          {/* Orbital Rings */}
+          <Box position="absolute" w="100%" h="100%" borderRadius="full" border="1px solid rgba(0,0,0,0.05)" />
+          <Box position="absolute" w="140%" h="140%" borderRadius="full" border="1px dotted rgba(0,0,0,0.05)" opacity={0.5} />
         </Box>
 
-        <VStack spacing={2} textAlign="center">
-          <Heading size="lg" bgGradient="linear(to-r, blue.400, purple.500)" bgClip="text">
-            {activeAgent.name}
-          </Heading>
-          <Text color="gray.400" fontSize="md">
-            {activeAgent.description}
+        <VStack spacing={2}>
+          <Text fontSize="2xl" fontWeight="700" color="#1d1d1f">
+            Building Your Intelligence Profile
+          </Text>
+          <Text fontSize="md" color="#86868b" maxW="md" mx="auto">
+            Our agents are securely connecting the dots to create your personalized Hushh ID.
           </Text>
         </VStack>
+      </Box>
 
-        {/* Progress Bar */}
-        <Box w="full" maxW="400px">
-          <Progress
-            value={progress}
-            size="xs"
-            colorScheme="blue"
-            borderRadius="full"
-            hasStripe
-            isAnimated
-            bg="gray.800"
-          />
-        </Box>
+      {/* Floating Agent Cards */}
+      <AnimatePresence>
+        {agentsFound.map((agent, i) => (
+          <AgentCard key={agent.id} {...agent} delay={0} />
+        ))}
+      </AnimatePresence>
 
-        {/* Agent Status List */}
-        <VStack spacing={3} w="full" maxW="500px">
-          <AnimatePresence>
-            {agents.map((agent, index) => (
-              <MotionHStack
-                key={agent.id}
-                w="full"
-                p={4}
-                bg="rgba(255, 255, 255, 0.03)"
-                border="1px solid"
-                borderColor={agent.status === 'processing' ? 'blue.500' : 'rgba(255,255,255,0.1)'}
-                borderRadius="xl"
-                justify="space-between"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                layout
-              >
-                <HStack spacing={4}>
-                  <Box
-                    p={2}
-                    borderRadius="lg"
-                    bg={agent.status === 'completed' ? 'green.500' : agent.status === 'processing' ? 'blue.500' : 'gray.700'}
-                    color="white"
-                  >
-                    {agent.status === 'completed' ? <CheckCircleIcon /> :
-                      agent.status === 'processing' ? <SettingsIcon className="spin" /> : <TimeIcon />}
-                  </Box>
-                  <VStack align="start" spacing={0}>
-                    <Text fontWeight="bold" fontSize="md" color={agent.status === 'pending' ? 'gray.500' : 'white'}>
-                      {agent.name}
-                    </Text>
-                    <Text fontSize="xs" color="gray.500">
-                      {agent.status === 'completed' ? 'Analysis Complete' :
-                        agent.status === 'processing' ? 'Processing Data...' : 'Waiting in Queue'}
-                    </Text>
-                  </VStack>
-                </HStack>
+      {/* Bottom Status Pill */}
+      <Box position="absolute" bottom={10} left="50%" transform="translateX(-50%)">
+        <Badge
+          bg="white"
+          px={4}
+          py={2}
+          borderRadius="full"
+          boxShadow="sm"
+          color="gray.500"
+          fontWeight="500"
+          textTransform="none"
+          fontSize="sm"
+        >
+          {Math.round(progress)}% Complete
+        </Badge>
+      </Box>
 
-                {agent.status === 'processing' && (
-                  <Badge colorScheme="blue" variant="solid" borderRadius="full" px={2}>ACTIVE</Badge>
-                )}
-              </MotionHStack>
-            ))}
-          </AnimatePresence>
-        </VStack>
-      </VStack>
+    </Box>
+  );
+};
 
-      <style jsx global>{`
-        .spin {
-            animation: spin 2s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-      `}</style>
-    </Container>
-  )
-}
-
+export default AnalyzingLoader;

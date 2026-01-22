@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { UserProfileService } from "../../../services/userProfileService";
+import { UserProfileService } from "../../../../../services/userProfileService";
 import {
     Box,
     Container,
@@ -34,7 +34,7 @@ const BentoCard = ({ title, children, colSpan = 1, bg = "white" }) => (
             border="1px solid rgba(0,0,0,0.05)"
             transition="all 0.3s ease"
             _hover={{ transform: "translateY(-4px)", boxShadow: "0 15px 30px rgba(0,0,0,0.08)" }}
-            boxShadow="0 4px 20px rgba(0, 0, 0, 0.04)"
+            boxShadow="0 4px 20px rgba(0, 0, 0, 0.04)" // Light shadow
         >
             {title && (
                 <Text
@@ -76,22 +76,22 @@ const LabelText = ({ children }) => (
 );
 
 export default function PublicProfilePage({ params }) {
-    const id = Array.isArray(params.id) ? params.id.join('/') : params.id;
+    const { username, mobile } = params;
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
 
     useEffect(() => {
         async function loadProfile() {
-            if (id) {
-                const decodedId = decodeURIComponent(id);
-                const data = await UserProfileService.getUserProfile(decodedId);
+            if (username && mobile) {
+                const hushhId = `${username}/${mobile}`;
+                const data = await UserProfileService.getUserProfile(hushhId);
                 setProfile(data);
             }
             setLoading(false);
         }
         loadProfile();
-    }, [id]);
+    }, [username, mobile]);
 
     if (loading) {
         return (
@@ -203,7 +203,7 @@ export default function PublicProfilePage({ params }) {
                         </SimpleGrid>
                     </BentoCard>
 
-                    {/* High Confidence Intent (Hero Card) */}
+                    {/* High Confidence Intent (Hero Card) - Special Gradient in Light Mode */}
                     <BentoCard colSpan={{ base: 1, md: 2 }} bg="linear-gradient(135deg, #e0f2f1 0%, #ffffff 100%)">
                         <Flex direction="column" h="100%" justify="space-between">
                             <Box>
@@ -292,7 +292,7 @@ export default function PublicProfilePage({ params }) {
                         <Text color="#86868b" fontSize="sm" mt={1}>{fmtMoney(profile.intent_72h_budget_usd)}</Text>
                     </BentoCard>
 
-                    {/* Desires */}
+                    {/* Desires - Interactive Style with Gradients */}
                     <BentoCard colSpan={{ base: 1, md: 2 }} title="Desires" bg="linear-gradient(to right, #ffffff, #f5f5f7)">
                         <Flex wrap="wrap" gap={3} mt={2}>
                             {desires.map((d, i) => (
