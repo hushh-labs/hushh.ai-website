@@ -7,12 +7,26 @@ const getViteEnv = () => {
 
 const viteEnv = getViteEnv();
 
-// Prefer runtime env vars but fall back to the provided Supabase project defaults.
-export const SUPABASE_URL =
-  process.env.NEXT_PUBLIC_SUPABASE_URL ||
-  process.env.VITE_SUPABASE_URL ||
-  viteEnv.VITE_SUPABASE_URL ||
-  "https://hybqqdphqwkuiwfnbljr.supabase.co";
+const DATA_PROJECT_REF = "hybqqdphqwkuiwfnbljr";
+const DATA_PROJECT_URL = `https://${DATA_PROJECT_REF}.supabase.co`;
+
+const resolveSupabaseUrl = () => {
+  const envUrl =
+    process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    process.env.VITE_SUPABASE_URL ||
+    viteEnv.VITE_SUPABASE_URL;
+
+  if (!envUrl) return DATA_PROJECT_URL;
+  if (envUrl.includes(DATA_PROJECT_REF)) return envUrl;
+
+  console.warn(
+    `[supabase] Unexpected project URL '${envUrl}'. Falling back to ${DATA_PROJECT_REF}.`
+  );
+  return DATA_PROJECT_URL;
+};
+
+// Prefer runtime env vars but fall back to the data project defaults.
+export const SUPABASE_URL = resolveSupabaseUrl();
 
 export const SUPABASE_ANON_KEY =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||

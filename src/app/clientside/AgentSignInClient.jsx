@@ -401,7 +401,8 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
               ...formData,
               user_id: aggregatedData.user_id || formData.user_id,
             },
-            agentResults: resultMap
+            agentResults: resultMap,
+            aggregatedData
           })
         });
 

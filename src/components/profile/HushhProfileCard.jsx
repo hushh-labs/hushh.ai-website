@@ -28,8 +28,9 @@ export default function HushhProfileCard({ userData }) {
     const hushhId = userData?.hushh_id || null;
     const displayId = hushhId || userId || 'hushh-id';
     const baseUrl = getSiteUrl();
-    const profileUrl = userId ? `${baseUrl}/hushh_id/${userId}` : '';
-    const hasProfileUrl = Boolean(userId);
+    const profileId = userId || hushhId;
+    const profileUrl = profileId ? `${baseUrl}/hushh-id/${profileId}` : '';
+    const hasProfileUrl = Boolean(profileId);
 
     const handleAddToWallet = async () => {
         if (!userId) {

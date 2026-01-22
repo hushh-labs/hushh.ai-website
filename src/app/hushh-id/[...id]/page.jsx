@@ -119,22 +119,6 @@ export default function PublicProfilePage({ params }) {
 
     return (
         <Box minH="100vh" bg="#f5f5f7" color="#1d1d1f" pb={20}>
-            {/* Nav / Home Button */}
-            <Box position="fixed" top={6} left={6} zIndex={100}>
-                <Button
-                    size="sm"
-                    variant="ghost"
-                    color="#1d1d1f"
-                    _hover={{ bg: "rgba(0,0,0,0.05)" }}
-                    onClick={() => router.push('/')}
-                    borderRadius="full"
-                    backdropFilter="blur(10px)"
-                    bg="rgba(255,255,255,0.7)"
-                >
-                    Hushh.ai
-                </Button>
-            </Box>
-
             <Container maxW="6xl" pt={{ base: 24, md: 32 }}>
 
                 {/* Header Section */}

@@ -30,11 +30,11 @@ const qrCodePage = () => {
           const user = JSON.parse(storedUser);
           const identifier = user.user_id || user.userId;
           if (identifier) {
-            setQrValue(`${baseUrl}/hushh_id/${identifier}`);
+            setQrValue(`${baseUrl}/hushh-id/${identifier}`);
           }
         } else {
           // Fallback: If not in localstorage, maybe we can't show it yet
-          setQrValue(`${baseUrl}/hushh_id/guest`);
+          setQrValue(`${baseUrl}/hushh-id/guest`);
         }
       } catch (err) {
         console.error("Error loading QR data:", err);

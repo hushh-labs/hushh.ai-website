@@ -48,6 +48,9 @@ const extractUserData = (agentResults, userData) => {
         result.data?.result?.artifacts?.[0]?.parts?.[0]?.text ||
         result.data?.result?.message?.parts?.[0]?.text ||
         result.data?.result?.response?.parts?.[0]?.text ||
+        result.data?.result?.response?.candidates?.[0]?.content?.parts?.[0]?.text ||
+        result.data?.result?.output?.[0]?.content?.[0]?.text ||
+        result.data?.result?.output ||
         result.data?.data ||
         result.data
 
@@ -57,7 +60,7 @@ const extractUserData = (agentResults, userData) => {
           const jsonMatch = cleanedData.match(/\{[\s\S]*\}/);
           const parsed = JSON.parse(jsonMatch ? jsonMatch[0] : cleanedData)
 
-          let dataToMerge = parsed.userProfile || parsed;
+          let dataToMerge = parsed.userProfile || parsed.profile || parsed.data || parsed;
 
           // ID Normalization
           const extractedId = dataToMerge.user_id || dataToMerge.userId || dataToMerge.id;
@@ -147,7 +150,7 @@ const extractUserData = (agentResults, userData) => {
           console.error(`❌ Failed to parse JSON from ${agent}:`, e)
         }
       } else if (typeof responseData === 'object' && responseData !== null) {
-        let objToMerge = responseData.userProfile || responseData;
+        let objToMerge = responseData.userProfile || responseData.profile || responseData.data || responseData;
         const extractedId = objToMerge.user_id || objToMerge.userId || objToMerge.id;
         const extractedUuid = extractUuid(extractedId);
         if (extractedUuid) allData.user_id = extractedUuid;
@@ -384,7 +387,7 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
 
       const profileFromDb = result.profile || {}
       const baseUrl = getSiteUrl()
-      setPublicLink(`${baseUrl}/hushh_id/${uuid}`)
+      setPublicLink(`${baseUrl}/hushh-id/${uuid}`)
 
       // Prioritize User Input (userData) > Parsed Agent Data > DB Data
       setCardProfile({

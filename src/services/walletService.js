@@ -22,7 +22,7 @@ export const WalletService = {
         if (!publicId) {
             throw new Error("Missing user_id for wallet pass generation.");
         }
-        const profileUrl = `${baseUrl}/hushh_id/${publicId}`;
+        const profileUrl = `${baseUrl}/hushh-id/${publicId}`;
 
         // Payload matching the "Universal Pass" request structure
         const payload = {
