@@ -12,7 +12,15 @@ const MotionBox = motion(Box);
 export default function HushhProfileCard({ userData }) {
     const toast = useToast();
     // Fallback if userData is missing specific fields
-    const fullName = userData?.fullName || userData?.full_name || 'Hushh User';
+    // Helper for Title Case (User requested "Camel Case", but Title Case is standard for Names)
+    const toTitleCase = (str) => {
+        return str.replace(/\w\S*/g, (txt) => {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
+    };
+
+    const rawName = userData?.fullName || userData?.full_name || 'Hushh User';
+    const fullName = toTitleCase(rawName);
     const role = userData?.occupation || userData?.role || 'Member';
     // Prefer UUID user_id for public profile lookup
     const rawUserId = userData?.user_id || userData?.id || null;

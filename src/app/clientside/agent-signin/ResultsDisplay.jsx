@@ -385,13 +385,16 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
       const profileFromDb = result.profile || {}
       const baseUrl = getSiteUrl()
       setPublicLink(`${baseUrl}/hushh_id/${uuid}`)
+
+      // Prioritize User Input (userData) > Parsed Agent Data > DB Data
       setCardProfile({
         ...parsedData,
         user_id: uuid,
         hushh_id: parsedData.hushh_id || result.hushhId || null,
-        email: profileFromDb.email || email || parsedData.email,
-        phone: profileFromDb.phone || phone || parsedData.phone,
-        full_name: profileFromDb.full_name || parsedData.full_name || parsedData.fullName || fullName,
+        // STRICTLY use initial user input if available
+        email: userData?.email || parsedData.email || profileFromDb.email,
+        phone: userData?.phone || userData?.phoneNumber || parsedData.phone || profileFromDb.phone,
+        full_name: userData?.fullName || userData?.full_name || parsedData.full_name || profileFromDb.full_name,
       })
     } catch (error) {
       setCardError(error.message || 'Failed to generate Hushh ID card.')
