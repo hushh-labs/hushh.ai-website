@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { UserProfileService } from "../../../../../services/userProfileService";
+import { UserProfileService } from "../../../../services/userProfileService";
 import {
     Box,
     Container,
