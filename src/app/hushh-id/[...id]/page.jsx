@@ -15,10 +15,14 @@ import {
     Icon,
     GridItem,
     Button,
-    Grid
+    Grid,
+    useToast
 } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
+import { CiShare2 } from "react-icons/ci";
 import { useRouter } from "next/navigation";
+import HushhProfileCard from "../../../components/profile/HushhProfileCard";
+import { getSiteUrl } from "../../../lib/utils";
 
 // Font stack
 const fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
@@ -70,6 +74,20 @@ const ValueText = ({ children, size = "2xl", color = "#1d1d1f", gradient }) => (
 
 const LabelText = ({ children }) => (
     <Text fontSize="sm" color="#86868b" mt={1} fontWeight="500" fontFamily={fontFamily}>
+        {children}
+    </Text>
+);
+
+const InfoLabel = ({ children }) => (
+    <Text
+        fontSize="xs"
+        color="#86868b"
+        mt={1}
+        fontWeight="600"
+        letterSpacing="wider"
+        textTransform="uppercase"
+        fontFamily={fontFamily}
+    >
         {children}
     </Text>
 );
@@ -129,11 +147,43 @@ const formatPercent = (value) => {
 };
 
 const InfoItem = ({ label, value }) => (
-    <Box>
-        <LabelText>{label}</LabelText>
-        <Text fontSize="lg" fontWeight="600" color="#1d1d1f" fontFamily={fontFamily}>
+    <Box minW={0}>
+        <InfoLabel>{label}</InfoLabel>
+        <Text
+            fontSize={{ base: "sm", md: "md" }}
+            fontWeight="600"
+            color="#1d1d1f"
+            fontFamily={fontFamily}
+            lineHeight="1.4"
+            wordBreak="break-word"
+        >
             {value}
         </Text>
+    </Box>
+);
+
+const StatCard = ({ title, children }) => (
+    <Box
+        bg="white"
+        borderRadius="2xl"
+        p={{ base: 4, md: 5 }}
+        border="1px solid rgba(0,0,0,0.05)"
+        boxShadow="0 4px 20px rgba(0, 0, 0, 0.04)"
+    >
+        {title && (
+            <Text
+                fontSize="xs"
+                fontWeight="700"
+                color="#86868b"
+                textTransform="uppercase"
+                letterSpacing="wider"
+                mb={3}
+                fontFamily={fontFamily}
+            >
+                {title}
+            </Text>
+        )}
+        {children}
     </Box>
 );
 
@@ -142,6 +192,7 @@ export default function PublicProfilePage({ params }) {
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
+    const toast = useToast();
 
     useEffect(() => {
         async function loadProfile() {
@@ -227,6 +278,58 @@ export default function PublicProfilePage({ params }) {
             ? profile.daily_social_time_minutes
             : profile.social_media_usage_time
     );
+    const profileId = getValueFrom(profile.user_id, profile.hushh_id);
+    const shareUrl = profileId === "N/A" ? "" : `${getSiteUrl()}/hushh-id/${profileId}`;
+
+    const handleShareProfile = async () => {
+        if (!shareUrl) {
+            toast({
+                title: "Profile link unavailable",
+                description: "We couldn't resolve a shareable profile link yet.",
+                status: "warning",
+                duration: 3000,
+                isClosable: true
+            });
+            return;
+        }
+
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: "Hushh Profile",
+                    text: "View my Hushh profile.",
+                    url: shareUrl
+                });
+                toast({
+                    title: "Shared successfully",
+                    status: "success",
+                    duration: 3000,
+                    isClosable: true
+                });
+                return;
+            } catch (error) {
+                // Fall through to clipboard when share is cancelled or fails.
+            }
+        }
+
+        try {
+            await navigator.clipboard.writeText(shareUrl);
+            toast({
+                title: "Link copied to clipboard",
+                status: "info",
+                duration: 3000,
+                isClosable: true
+            });
+        } catch (error) {
+            toast({
+                title: "Unable to share link",
+                description: "Copy the URL manually from the address bar.",
+                status: "error",
+                duration: 3000,
+                isClosable: true
+            });
+        }
+    };
 
     return (
         <Box minH="100vh" bg="#f5f5f7" color="#1d1d1f" pb={20}>
@@ -270,28 +373,58 @@ export default function PublicProfilePage({ params }) {
                     </VStack>
                 </Flex>
 
-                {/* Bento Grid */}
-                <Grid
-                    templateColumns={{ base: "1fr", md: "repeat(4, 1fr)" }}
-                    gap={6}
-                    autoRows="minmax(180px, auto)"
-                >
-                    <BentoCard colSpan={{ base: 1, md: 1 }} title="Confidence Score">
-                        <ValueText size="3xl">{confidenceDisplay}</ValueText>
-                        <LabelText>Based on data consistency</LabelText>
-                    </BentoCard>
+                <Flex direction={{ base: "column", lg: "row" }} gap={10} align="start">
+                    <Box w={{ base: "100%", lg: "360px" }} flexShrink={0}>
+                        <VStack align={{ base: "center", lg: "stretch" }} spacing={4}>
+                            <HushhProfileCard userData={profile} />
+                            <Button
+                                leftIcon={<Icon as={CiShare2} boxSize={5} />}
+                                onClick={handleShareProfile}
+                                bg="white"
+                                color="#1d1d1f"
+                                border="1px solid rgba(0,0,0,0.1)"
+                                borderRadius="full"
+                                px={8}
+                                _hover={{ bg: "#f2f2f2", transform: "translateY(-1px)" }}
+                            >
+                                Share Profile Link
+                            </Button>
+                        </VStack>
+                    </Box>
 
-                    <BentoCard colSpan={{ base: 1, md: 1 }} title="Data Points">
-                        <ValueText size="3xl" color="#0071e3">{dataPoints}</ValueText>
-                        <LabelText>Fields extracted and verified</LabelText>
-                    </BentoCard>
+                    <Box flex="1">
+                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, md: 6 }} mb={6}>
+                            <StatCard title="Confidence Score">
+                                <ValueText size="3xl">{confidenceDisplay}</ValueText>
+                                <LabelText>Based on data consistency</LabelText>
+                            </StatCard>
 
+                            <StatCard title="Data Points">
+                                <ValueText size="3xl" color="#0071e3">{dataPoints}</ValueText>
+                                <LabelText>Fields extracted and verified</LabelText>
+                            </StatCard>
+                        </SimpleGrid>
+
+                        {/* Bento Grid */}
+                        <Grid
+                            templateColumns={{
+                                base: "1fr",
+                                md: "repeat(2, minmax(0, 1fr))",
+                                xl: "repeat(4, minmax(0, 1fr))"
+                            }}
+                            gap={6}
+                            autoRows="minmax(180px, auto)"
+                        >
                     <BentoCard colSpan={{ base: 1, md: 2 }} title="Personal Details">
-                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-                            <InfoItem label="User ID" value={getValueFrom(profile.user_id)} />
+                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, md: 6 }}>
+                            <GridItem colSpan={{ base: 1, md: 2 }}>
+                                <InfoItem label="User ID" value={getValueFrom(profile.user_id)} />
+                            </GridItem>
                             <InfoItem label="Hushh ID" value={getValueFrom(profile.hushh_id)} />
                             <InfoItem label="Full Name" value={getValueFrom(profile.full_name)} />
-                            <InfoItem label="Email" value={getValueFrom(profile.email)} />
+                            <GridItem colSpan={{ base: 1, md: 2 }}>
+                                <InfoItem label="Email" value={getValueFrom(profile.email)} />
+                            </GridItem>
                             <InfoItem label="Phone" value={getValueFrom(profile.phone, profile.phone_number)} />
                             <InfoItem label="Age" value={getValueFrom(profile.age)} />
                             <InfoItem label="Gender" value={getValueFrom(profile.gender)} />
@@ -301,8 +434,10 @@ export default function PublicProfilePage({ params }) {
                     </BentoCard>
 
                     <BentoCard colSpan={{ base: 1, md: 2 }} title="Location Data">
-                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-                            <InfoItem label="Address" value={addressDisplay} />
+                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, md: 6 }}>
+                            <GridItem colSpan={{ base: 1, md: 2 }}>
+                                <InfoItem label="Address" value={addressDisplay} />
+                            </GridItem>
                             <InfoItem label="City" value={getValueFrom(profile.city)} />
                             <InfoItem label="State" value={getValueFrom(profile.state)} />
                             <InfoItem label="Zip" value={getValueFrom(profile.zip, profile.zip_code)} />
@@ -311,7 +446,7 @@ export default function PublicProfilePage({ params }) {
                     </BentoCard>
 
                     <BentoCard colSpan={{ base: 1, md: 2 }} title="Career & Status">
-                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, md: 6 }}>
                             <InfoItem label="Occupation" value={getValueFrom(profile.occupation)} />
                             <InfoItem label="Education" value={getValueFrom(profile.education_level)} />
                             <InfoItem label="Income Bracket" value={getValueFrom(profile.income_bracket)} />
@@ -320,7 +455,7 @@ export default function PublicProfilePage({ params }) {
                     </BentoCard>
 
                     <BentoCard colSpan={{ base: 1, md: 2 }} title="Lifestyle">
-                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, md: 6 }}>
                             <InfoItem label="Dietary Preference" value={getValueFrom(profile.diet_preference)} />
                             <InfoItem label="Favorite Cuisine" value={getValueFrom(profile.favorite_cuisine)} />
                             <InfoItem label="Fitness Routine" value={getValueFrom(profile.fitness_routine)} />
@@ -333,7 +468,7 @@ export default function PublicProfilePage({ params }) {
                     </BentoCard>
 
                     <BentoCard colSpan={{ base: 1, md: 2 }} title="Digital Life">
-                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, md: 6 }}>
                             <InfoItem label="Tech Affinity" value={getValueFrom(profile.tech_affinity)} />
                             <InfoItem label="Primary Device" value={getValueFrom(profile.primary_device)} />
                             <InfoItem label="Social Platform" value={getValueFrom(profile.favorite_social_platform)} />
@@ -343,7 +478,7 @@ export default function PublicProfilePage({ params }) {
                     </BentoCard>
 
                     <BentoCard colSpan={{ base: 1, md: 2 }} title="Interests">
-                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, md: 6 }}>
                             <InfoItem label="Travel Frequency" value={getValueFrom(profile.travel_frequency)} />
                             <InfoItem label="Gaming" value={gamingPreference} />
                             <InfoItem label="Sports" value={getValueFrom(profile.sports_interest)} />
@@ -356,25 +491,25 @@ export default function PublicProfilePage({ params }) {
                     <BentoCard colSpan={{ base: 1, md: 2 }} title="Psychographics">
                         <VStack align="start" spacing={4}>
                             <Box>
-                                <LabelText>Needs</LabelText>
+                                <InfoLabel>Needs</InfoLabel>
                                 <Text fontSize="md" fontWeight="600" color="#1d1d1f">
                                     {needs.length ? needs.join(", ") : "None identified"}
                                 </Text>
                             </Box>
                             <Box>
-                                <LabelText>Wants</LabelText>
+                                <InfoLabel>Wants</InfoLabel>
                                 <Text fontSize="md" fontWeight="600" color="#1d1d1f">
                                     {wants.length ? wants.join(", ") : "None identified"}
                                 </Text>
                             </Box>
                             <Box>
-                                <LabelText>Desires</LabelText>
+                                <InfoLabel>Desires</InfoLabel>
                                 <Text fontSize="md" fontWeight="600" color="#1d1d1f">
                                     {desires.length ? desires.join(", ") : "None identified"}
                                 </Text>
                             </Box>
                             <Box>
-                                <LabelText>Transport</LabelText>
+                                <InfoLabel>Transport</InfoLabel>
                                 <Text fontSize="md" fontWeight="600" color="#1d1d1f">
                                     {getValueFrom(profile.primary_transport)}
                                 </Text>
@@ -434,7 +569,9 @@ export default function PublicProfilePage({ params }) {
                         </Text>
                     </BentoCard>
 
-                </Grid>
+                        </Grid>
+                    </Box>
+                </Flex>
 
                 {/* Footer */}
                 <Flex mt={24} justify="center" direction="column" align="center" gap={4}>
