@@ -130,7 +130,19 @@ const extractUserData = (agentResults, userData) => {
             });
           }
 
-          Object.assign(allData, dataToMerge)
+          // PROTECT USER INPUT:
+          // We want to merge new insights (e.g., intents, brand preferences)
+          // but NOT overwrite the Core Identity fields if the user explicitly provided them.
+          const protectedFields = ['email', 'phone', 'phoneNumber', 'full_name', 'fullName', 'name'];
+
+          Object.keys(dataToMerge).forEach(key => {
+            // If the key is a protected field AND we already have a value from the original userData, skip it.
+            if (protectedFields.includes(key) && userData[key]) {
+              return;
+            }
+            // Otherwise, it's safe to merge (or add new fields)
+            allData[key] = dataToMerge[key];
+          });
         } catch (e) {
           console.error(`❌ Failed to parse JSON from ${agent}:`, e)
         }
@@ -139,7 +151,14 @@ const extractUserData = (agentResults, userData) => {
         const extractedId = objToMerge.user_id || objToMerge.userId || objToMerge.id;
         const extractedUuid = extractUuid(extractedId);
         if (extractedUuid) allData.user_id = extractedUuid;
-        Object.assign(allData, objToMerge)
+
+        const protectedFields = ['email', 'phone', 'phoneNumber', 'full_name', 'fullName', 'name'];
+        Object.keys(objToMerge).forEach(key => {
+          if (protectedFields.includes(key) && userData[key]) {
+            return;
+          }
+          allData[key] = objToMerge[key];
+        });
       }
     }
   })
