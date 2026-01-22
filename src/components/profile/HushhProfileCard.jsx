@@ -87,20 +87,30 @@ export default function HushhProfileCard({ userData }) {
                 mx="auto"
                 fontFamily="'Outfit', sans-serif"
             >
-                {/* Premium Black Card Container */}
+                {/* Premium Golden Card Container */}
                 <Box
                     position="relative"
                     borderRadius="3xl"
                     overflow="hidden"
-                    bg="black"
-                    border="1px solid rgba(255, 255, 255, 0.15)"
-                    boxShadow="0 20px 40px -10px rgba(0,0,0,0.8)"
+                    bgGradient="linear(to-br, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c)" // Luxurious Gold Gradient
+                    border="1px solid rgba(255, 255, 255, 0.4)"
+                    boxShadow="0 25px 50px -12px rgba(180, 140, 60, 0.6)" // Golden Glow
                     p={6}
-                    color="white"
+                    color="#1d1d1f" // Dark text for contrast on gold
                     pt={8}
+                    _before={{
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundImage: "radial-gradient(circle at 50% 0%, rgba(255,255,255,0.4) 0%, transparent 60%)",
+                        pointerEvents: 'none'
+                    }}
                 >
                     {/* Header: Logo */}
-                    <Box mb={8}>
+                    <Box mb={8} filter="invert(1) brightness(0.2)"> {/* Make logo dark */}
                         <Box transform="scale(0.8)" transformOrigin="left top">
                             <HushhHeaderLogo />
                         </Box>
@@ -109,27 +119,27 @@ export default function HushhProfileCard({ userData }) {
                     {/* Primary Info: Name, Email, Phone */}
                     <VStack align="stretch" spacing={4} mb={6}>
                         <Box>
-                            <Text fontSize="xs" fontWeight="bold" color="gray.500" letterSpacing="widest" mb={1}>
+                            <Text fontSize="xs" fontWeight="800" color="rgba(0,0,0,0.5)" letterSpacing="widest" mb={1}>
                                 NAME
                             </Text>
-                            <Text fontSize="2xl" fontWeight="bold" lineHeight="1.1" color="white">
+                            <Text fontSize="2xl" fontWeight="800" lineHeight="1.1" color="#1d1d1f" letterSpacing="-0.5px">
                                 {fullName}
                             </Text>
                         </Box>
                         <HStack spacing={6}>
                             <Box flex="1">
-                                <Text fontSize="xx-small" fontWeight="bold" color="gray.500" letterSpacing="widest" mb={1}>
+                                <Text fontSize="xx-small" fontWeight="800" color="rgba(0,0,0,0.5)" letterSpacing="widest" mb={1}>
                                     EMAIL
                                 </Text>
-                                <Text fontSize="xs" fontWeight="semibold" color="gray.300" isTruncated>
+                                <Text fontSize="xs" fontWeight="700" color="#333" isTruncated>
                                     {userData?.email || 'N/A'}
                                 </Text>
                             </Box>
                             <Box flex="1">
-                                <Text fontSize="xx-small" fontWeight="bold" color="gray.500" letterSpacing="widest" mb={1}>
+                                <Text fontSize="xx-small" fontWeight="800" color="rgba(0,0,0,0.5)" letterSpacing="widest" mb={1}>
                                     PHONE
                                 </Text>
-                                <Text fontSize="xs" fontWeight="semibold" color="gray.300">
+                                <Text fontSize="xs" fontWeight="700" color="#333">
                                     {userData?.phone || userData?.phoneNumber || 'N/A'}
                                 </Text>
                             </Box>
@@ -139,18 +149,18 @@ export default function HushhProfileCard({ userData }) {
                     {/* Secondary Info: ID & Role */}
                     <Flex justify="space-between" align="flex-start" mb={8}>
                         <Box>
-                            <Text fontSize="xx-small" fontWeight="bold" color="gray.500" letterSpacing="widest" mb={1}>
+                            <Text fontSize="xx-small" fontWeight="800" color="rgba(0,0,0,0.5)" letterSpacing="widest" mb={1}>
                                 HUSHH ID
                             </Text>
-                            <Text fontSize="xs" color="gray.300" fontFamily="monospace" maxW="150px" noOfLines={2}>
+                            <Text fontSize="xs" color="#333" fontFamily="monospace" fontWeight="600" maxW="150px" noOfLines={2}>
                                 {displayId}
                             </Text>
                         </Box>
                         <Box textAlign="right">
-                            <Text fontSize="xx-small" fontWeight="bold" color="gray.500" letterSpacing="widest" mb={1}>
+                            <Text fontSize="xx-small" fontWeight="800" color="rgba(0,0,0,0.5)" letterSpacing="widest" mb={1}>
                                 ROLE
                             </Text>
-                            <Text fontSize="sm" fontWeight="bold" color="white" textTransform="uppercase">
+                            <Text fontSize="sm" fontWeight="900" color="#1d1d1f" textTransform="uppercase">
                                 {role}
                             </Text>
                         </Box>
@@ -162,6 +172,7 @@ export default function HushhProfileCard({ userData }) {
                             bg="white"
                             p={3}
                             borderRadius="xl"
+                            boxShadow="md"
                         >
                             {hasProfileUrl ? (
                                 <QRCode
