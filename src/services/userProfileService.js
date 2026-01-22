@@ -16,6 +16,7 @@ export const UserProfileService = {
         try {
             const rawId = String(userId).trim();
             const normalizedId = extractUuid(rawId) || rawId;
+            const normalizedLower = rawId.toLowerCase();
             const supabase = config.supabaseClient;
             if (!supabase) return null;
 
@@ -43,7 +44,46 @@ export const UserProfileService = {
                 console.error('Error fetching user profile by hushh_id:', hushhIdError);
             }
 
-            return byHushhId || null;
+            if (byHushhId) return byHushhId;
+
+            if (normalizedLower !== rawId) {
+                const { data: byLowerHushhId, error: lowerIdError } = await supabase
+                    .from('user_profiles')
+                    .select('*')
+                    .eq('hushh_id', normalizedLower)
+                    .maybeSingle();
+
+                if (lowerIdError) {
+                    console.error('Error fetching user profile by lower hushh_id:', lowerIdError);
+                }
+
+                if (byLowerHushhId) return byLowerHushhId;
+            }
+
+            if (rawId.includes('/')) {
+                const parts = rawId.split('/');
+                const phonePart = parts[parts.length - 1] || '';
+                const digits = phonePart.replace(/\D/g, '');
+                const localDigits = digits.length > 10 ? digits.slice(-10) : digits;
+
+                if (localDigits.length >= 7) {
+                    const { data: byPhone, error: phoneError } = await supabase
+                        .from('user_profiles')
+                        .select('*')
+                        .ilike('phone', `%${localDigits}`)
+                        .order('profile_created_utc', { ascending: false })
+                        .limit(1)
+                        .maybeSingle();
+
+                    if (phoneError) {
+                        console.error('Error fetching user profile by phone digits:', phoneError);
+                    }
+
+                    if (byPhone) return byPhone;
+                }
+            }
+
+            return null;
         } catch (err) {
             console.error('Unexpected error in getUserProfile:', err);
             return null;

@@ -84,6 +84,35 @@ export function extractUuid(value) {
 }
 
 /**
+ * Build a short Hushh public ID using name and phone digits.
+ * @param {string} fullName
+ * @param {string} phone
+ * @param {string} fallbackSuffix
+ * @returns {string}
+ */
+export function buildHushhId(fullName, phone, fallbackSuffix = '') {
+  const nameInput = typeof fullName === 'string' ? fullName : '';
+  const phoneInput = typeof phone === 'string' ? phone : '';
+  const suffixInput = typeof fallbackSuffix === 'string' ? fallbackSuffix : '';
+
+  const normalizedName = nameInput
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '');
+
+  const phoneDigits = phoneInput.replace(/\D/g, '');
+  const localDigits = phoneDigits.length > 10 ? phoneDigits.slice(-10) : phoneDigits;
+  const suffix = suffixInput.replace(/[^a-z0-9]/gi, '');
+
+  if (normalizedName && localDigits) return `${normalizedName}/${localDigits}`;
+  if (normalizedName && suffix) return `${normalizedName}/${suffix}`;
+  if (normalizedName) return normalizedName;
+  if (localDigits) return localDigits;
+  return suffix || '';
+}
+
+/**
  * Resolve the site base URL, preferring the current origin in the browser.
  * @returns {string} The base URL without a trailing slash
  */

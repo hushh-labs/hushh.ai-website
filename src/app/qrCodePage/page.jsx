@@ -28,7 +28,7 @@ const qrCodePage = () => {
         const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.hushh.ai").replace(/\/$/, "");
         if (storedUser) {
           const user = JSON.parse(storedUser);
-          const identifier = user.user_id || user.userId;
+          const identifier = user.hushh_id || user.hushhId || user.user_id || user.userId;
           if (identifier) {
             setQrValue(`${baseUrl}/hushh-id/${identifier}`);
           }

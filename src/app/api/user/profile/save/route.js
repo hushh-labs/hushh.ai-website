@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import { SUPABASE_URL } from '../../../../../lib/config/supabaseEnv';
+import { buildHushhId } from '../../../../../lib/utils';
 
 const supabaseUrl = SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -129,20 +130,32 @@ export async function POST(request) {
             );
         }
 
-        // Fallback for hushh_id if still missing
-        if (!finalHushhId) {
-            const firstName = (userData.fullName || "user").split(' ')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
-            // Sanitize phone number to remove spaces and special chars for the URL
-            const cleanPhone = (userData.phoneNumber || '').replace(/\D/g, '');
+        const hasPhoneSegment = (value) => {
+            if (!value) return false;
+            const parts = String(value).split('/');
+            if (parts.length < 2) return false;
+            const phoneSegment = parts[parts.length - 1];
+            return /^\d{7,10}$/.test(phoneSegment);
+        };
 
-            if (cleanPhone && cleanPhone.length > 6) {
-                // Use name/phone format if we have a valid phone number
-                finalHushhId = `${firstName}/${cleanPhone}`;
-            } else {
-                // Fallback to suffix if phone is not available/valid
-                const suffix = finalUserId.includes('-') ? finalUserId.split('-').shift() : finalUserId.substr(-6);
-                finalHushhId = `${firstName}/${suffix}`;
-            }
+        // Fallback for hushh_id or to upgrade legacy IDs
+        const nameForHushhId = pick(
+            userData.fullName,
+            userData.full_name,
+            geminiData.full_name,
+            geminiData.fullName,
+            'user'
+        );
+        const phoneForHushhId = pick(
+            userData.phone,
+            `${userData.countryCode || ''}${userData.phoneNumber || ''}`.trim(),
+            geminiData.phone
+        );
+        const fallbackSuffix = finalUserId.includes('-') ? finalUserId.split('-').shift() : finalUserId.slice(-6);
+        const generatedHushhId = buildHushhId(nameForHushhId, phoneForHushhId, fallbackSuffix);
+
+        if (!finalHushhId || !hasPhoneSegment(finalHushhId)) {
+            finalHushhId = generatedHushhId || finalHushhId;
         }
 
         // 2. Map Flattened Needs/Wants/Desires

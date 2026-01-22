@@ -6,7 +6,7 @@ import ResultsDisplay from './agent-signin/ResultsDisplay'
 import DataSourceComparison from './agent-signin/DataSourceComparison'
 import AnalyzingLoader from './agent-signin/AnalyzingLoader'
 import ContentWrapper from '../_components/layout/ContentWrapper'
-import { extractUuid } from '../../lib/utils'
+import { buildHushhId, extractUuid } from '../../lib/utils'
 
 export default function AgentSignInClient() {
   const [currentStep, setCurrentStep] = useState('form') // 'form', 'analyzing', 'results'
@@ -132,13 +132,15 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
   // Handle form submission and call all agents
   const handleFormSubmit = useCallback(async (formData) => {
     // Generate Tentative Hushh ID for UI display until final ID resolved
-    const firstName = formData.fullName.split(' ')[0].toLowerCase();
+    const firstName = formData.fullName?.split(' ')[0]?.toLowerCase() || 'user';
     const uniqueStr = Math.random().toString(36).substring(2, 8);
+    const fullPhone = `${formData.countryCode || ''}${formData.phoneNumber || ''}`;
+    const generatedHushhId = buildHushhId(formData.fullName, fullPhone, uniqueStr);
 
     // IMPORTANT:
     // Do NOT generate or persist any Supabase-auth identity fields client-side.
     // The persistent Supabase UUID must come ONLY from the profile-creation agent/API.
-    formData.hushh_id = `${firstName}/${uniqueStr}`;
+    formData.hushh_id = generatedHushhId || `${firstName}/${uniqueStr}`;
     // Ensure we don't send a placeholder user_id anywhere.
     delete formData.user_id;
 
@@ -388,6 +390,7 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
             full_name: formData.fullName,
             email: formData.email,
             phone: `${formData.countryCode || ''} ${formData.phoneNumber || ''}`.trim(),
+            hushh_id: formData.hushh_id,
           }));
           setCurrentStep('results');
           return;
@@ -421,6 +424,7 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
             full_name: formData.fullName,
             email: formData.email,
             phone: `${formData.countryCode || ''} ${formData.phoneNumber || ''}`.trim(),
+            hushh_id: aggregatedData.hushh_id || formData.hushh_id,
           }));
         }
       } catch (saveError) {

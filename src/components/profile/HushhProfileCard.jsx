@@ -5,7 +5,7 @@ import QRCode from 'react-qr-code';
 import { FaApple } from 'react-icons/fa';
 import { WalletService } from '../../services/walletService';
 import HushhHeaderLogo from '../../app/_components/svg/hushhHeaderLogo';
-import { extractUuid, getSiteUrl } from '../../lib/utils';
+import { buildHushhId, extractUuid, getSiteUrl } from '../../lib/utils';
 
 const MotionBox = motion(Box);
 
@@ -25,18 +25,22 @@ export default function HushhProfileCard({ userData }) {
     // Prefer UUID user_id for public profile lookup
     const rawUserId = userData?.user_id || userData?.id || null;
     const userId = extractUuid(rawUserId);
-    const hushhId = userData?.hushh_id || null;
+    const rawPhone = userData?.phone || userData?.phoneNumber || '';
+    const phoneDigits = rawPhone.replace(/\D/g, '');
+    const generatedHushhId = phoneDigits ? buildHushhId(rawName, rawPhone) : '';
+    const hushhId = userData?.hushh_id || userData?.hushhId || generatedHushhId || null;
     const displayId = hushhId || userId || 'hushh-id';
     const baseUrl = getSiteUrl();
-    const profileId = userId || hushhId;
+    const profileId = hushhId || userId;
     const profileUrl = profileId ? `${baseUrl}/hushh-id/${profileId}` : '';
     const hasProfileUrl = Boolean(profileId);
+    const hasPublicId = Boolean(hushhId || userId);
 
     const handleAddToWallet = async () => {
-        if (!userId) {
+        if (!hasPublicId) {
             toast({
-                title: "Missing user_id",
-                description: "We need a confirmed UUID before generating the wallet pass.",
+                title: "Missing profile ID",
+                description: "We need a confirmed Hushh ID before generating the wallet pass.",
                 status: "warning",
                 duration: 3000,
                 isClosable: true,

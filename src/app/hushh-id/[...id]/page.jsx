@@ -22,7 +22,7 @@ import { StarIcon } from "@chakra-ui/icons";
 import { CiShare2 } from "react-icons/ci";
 import { useRouter } from "next/navigation";
 import HushhProfileCard from "../../../components/profile/HushhProfileCard";
-import { getSiteUrl } from "../../../lib/utils";
+import { buildHushhId, getSiteUrl } from "../../../lib/utils";
 
 // Font stack
 const fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
@@ -278,7 +278,11 @@ export default function PublicProfilePage({ params }) {
             ? profile.daily_social_time_minutes
             : profile.social_media_usage_time
     );
-    const profileId = getValueFrom(profile.user_id, profile.hushh_id);
+    const phoneForHushhId = getValueFrom(profile.phone, profile.phone_number);
+    const phoneDigits = String(phoneForHushhId || "").replace(/\D/g, "");
+    const generatedHushhId = phoneDigits ? buildHushhId(profile.full_name, phoneForHushhId) : "";
+    const resolvedHushhId = profile.hushh_id || generatedHushhId;
+    const profileId = getValueFrom(resolvedHushhId, profile.user_id);
     const shareUrl = profileId === "N/A" ? "" : `${getSiteUrl()}/hushh-id/${profileId}`;
 
     const handleShareProfile = async () => {
@@ -420,7 +424,7 @@ export default function PublicProfilePage({ params }) {
                             <GridItem colSpan={{ base: 1, md: 2 }}>
                                 <InfoItem label="User ID" value={getValueFrom(profile.user_id)} />
                             </GridItem>
-                            <InfoItem label="Hushh ID" value={getValueFrom(profile.hushh_id)} />
+                            <InfoItem label="Hushh ID" value={getValueFrom(resolvedHushhId)} />
                             <InfoItem label="Full Name" value={getValueFrom(profile.full_name)} />
                             <GridItem colSpan={{ base: 1, md: 2 }}>
                                 <InfoItem label="Email" value={getValueFrom(profile.email)} />

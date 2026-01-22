@@ -27,7 +27,7 @@ import {
 } from '@chakra-ui/react'
 import { FaUser, FaMapMarkerAlt, FaBriefcase, FaHeart, FaGamepad, FaPlane, FaLeaf, FaLaptop, FaDownload, FaTrash, FaCode, FaRedo } from 'react-icons/fa'
 import HushhProfileCard from '../../../components/profile/HushhProfileCard'
-import { extractUuid, getSiteUrl } from '../../../lib/utils'
+import { buildHushhId, extractUuid, getSiteUrl } from '../../../lib/utils'
 
 // Helper function to extract data from API responses
 const extractUserData = (agentResults, userData) => {
@@ -387,13 +387,15 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
 
       const profileFromDb = result.profile || {}
       const baseUrl = getSiteUrl()
-      setPublicLink(`${baseUrl}/hushh-id/${uuid}`)
+      const generatedHushhId = buildHushhId(fullName, phone)
+      const publicId = parsedData.hushh_id || result.hushhId || generatedHushhId || uuid
+      setPublicLink(`${baseUrl}/hushh-id/${publicId}`)
 
       // Prioritize User Input (userData) > Parsed Agent Data > DB Data
       setCardProfile({
         ...parsedData,
         user_id: uuid,
-        hushh_id: parsedData.hushh_id || result.hushhId || null,
+        hushh_id: parsedData.hushh_id || result.hushhId || generatedHushhId || null,
         // STRICTLY use initial user input if available
         email: userData?.email || parsedData.email || profileFromDb.email,
         phone: userData?.phone || userData?.phoneNumber || parsedData.phone || profileFromDb.phone,
