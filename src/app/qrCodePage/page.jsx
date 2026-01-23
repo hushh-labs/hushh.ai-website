@@ -12,6 +12,7 @@ import { CiShare2 } from "react-icons/ci";
 import { QRCode } from "react-qrcode-logo";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/navigation";
+import { buildHushhId } from "../../lib/utils";
 
 const qrCodePage = () => {
   const router = useRouter();
@@ -28,7 +29,11 @@ const qrCodePage = () => {
         const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.hushh.ai").replace(/\/$/, "");
         if (storedUser) {
           const user = JSON.parse(storedUser);
-          const identifier = user.hushh_id || user.hushhId || user.user_id || user.userId;
+          const generatedHushhId = buildHushhId(
+            user.full_name || user.fullName,
+            user.phone || user.phoneNumber
+          );
+          const identifier = generatedHushhId || user.hushh_id || user.hushhId;
           if (identifier) {
             setQrValue(`${baseUrl}/hushh-id/${identifier}`);
           }

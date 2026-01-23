@@ -5,7 +5,7 @@ import QRCode from 'react-qr-code';
 import { FaApple } from 'react-icons/fa';
 import { WalletService } from '../../services/walletService';
 import HushhHeaderLogo from '../../app/_components/svg/hushhHeaderLogo';
-import { buildHushhId, extractUuid, getSiteUrl } from '../../lib/utils';
+import { buildHushhId, getSiteUrl } from '../../lib/utils';
 
 const MotionBox = motion(Box);
 
@@ -22,19 +22,17 @@ export default function HushhProfileCard({ userData }) {
     const rawName = userData?.fullName || userData?.full_name || 'Hushh User';
     const fullName = toTitleCase(rawName);
     const role = userData?.occupation || userData?.role || 'Member';
-    // Prefer UUID user_id for public profile lookup
-    const rawUserId = userData?.user_id || userData?.id || null;
-    const userId = extractUuid(rawUserId);
+    // Prefer short Hushh ID for public profile lookup
     const rawPhone = userData?.phone || userData?.phoneNumber || '';
     const phoneDigits = rawPhone.replace(/\D/g, '');
     const generatedHushhId = phoneDigits ? buildHushhId(rawName, rawPhone) : '';
-    const hushhId = userData?.hushh_id || userData?.hushhId || generatedHushhId || null;
-    const displayId = hushhId || userId || 'hushh-id';
+    const hushhId = generatedHushhId || userData?.hushh_id || userData?.hushhId || null;
+    const displayId = hushhId || 'pending';
     const baseUrl = getSiteUrl();
-    const profileId = hushhId || userId;
+    const profileId = hushhId;
     const profileUrl = profileId ? `${baseUrl}/hushh-id/${profileId}` : '';
     const hasProfileUrl = Boolean(profileId);
-    const hasPublicId = Boolean(hushhId || userId);
+    const hasPublicId = Boolean(hushhId);
 
     const handleAddToWallet = async () => {
         if (!hasPublicId) {
@@ -197,7 +195,7 @@ export default function HushhProfileCard({ userData }) {
                             ) : (
                                 <Box px={4} py={6}>
                                     <Text fontSize="xs" color="gray.700" textAlign="center">
-                                        UUID not ready yet
+                                        Hushh ID not ready yet
                                     </Text>
                                 </Box>
                             )}

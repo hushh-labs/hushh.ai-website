@@ -281,8 +281,8 @@ export default function PublicProfilePage({ params }) {
     const phoneForHushhId = getValueFrom(profile.phone, profile.phone_number);
     const phoneDigits = String(phoneForHushhId || "").replace(/\D/g, "");
     const generatedHushhId = phoneDigits ? buildHushhId(profile.full_name, phoneForHushhId) : "";
-    const resolvedHushhId = profile.hushh_id || generatedHushhId;
-    const profileId = getValueFrom(resolvedHushhId, profile.user_id);
+    const resolvedHushhId = generatedHushhId || profile.hushh_id;
+    const profileId = getValueFrom(resolvedHushhId);
     const shareUrl = profileId === "N/A" ? "" : `${getSiteUrl()}/hushh-id/${profileId}`;
 
     const handleShareProfile = async () => {

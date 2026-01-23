@@ -2,7 +2,7 @@
  * Service to generate Apple Wallet Passes via Hushh Wallet API.
  * Endpoint: https://hushh-wallet.vercel.app/api/passes/universal/create
  */
-import { buildHushhId, extractUuid, getSiteUrl } from '../lib/utils';
+import { buildHushhId, getSiteUrl } from '../lib/utils';
 
 export const WalletService = {
     /**
@@ -12,13 +12,11 @@ export const WalletService = {
      */
     async generatePass(userData) {
         const fullName = userData?.full_name || userData?.fullName || "Hushh User";
-        const rawUserId = userData?.user_id || userData?.id || null;
-        const userId = extractUuid(rawUserId);
         const rawPhone = userData?.phone || userData?.phoneNumber || '';
         const phoneDigits = rawPhone.replace(/\D/g, '');
         const generatedHushhId = phoneDigits ? buildHushhId(fullName, rawPhone) : '';
-        const hushhId = userData?.hushh_id || userData?.hushhId || generatedHushhId || null;
-        const publicId = hushhId || userId;
+        const hushhId = generatedHushhId || userData?.hushh_id || userData?.hushhId || null;
+        const publicId = hushhId;
         const role = userData?.occupation || "Member";
         const baseUrl = getSiteUrl();
 

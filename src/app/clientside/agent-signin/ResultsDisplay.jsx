@@ -304,6 +304,12 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
   const toast = useToast()
 
   const parsedData = useMemo(() => extractUserData(agentResults, userData), [agentResults, userData])
+  const resolvedName = parsedData.full_name || parsedData.fullName || userData?.fullName || userData?.full_name || ''
+  const resolvedPhone = parsedData.phone || userData?.phone || (userData?.phoneNumber
+    ? `${userData.countryCode || ''} ${userData.phoneNumber || ''}`.trim()
+    : '')
+  const generatedHushhId = buildHushhId(resolvedName, resolvedPhone)
+  const displayHushhId = generatedHushhId || parsedData.hushh_id || parsedData.hushhId || 'Not available'
   const [cardProfile, setCardProfile] = useState(null)
   const [cardLoading, setCardLoading] = useState(false)
   const [cardError, setCardError] = useState('')
@@ -388,14 +394,14 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
       const profileFromDb = result.profile || {}
       const baseUrl = getSiteUrl()
       const generatedHushhId = buildHushhId(fullName, phone)
-      const publicId = parsedData.hushh_id || result.hushhId || generatedHushhId || uuid
-      setPublicLink(`${baseUrl}/hushh-id/${publicId}`)
+      const publicId = generatedHushhId || parsedData.hushh_id || result.hushhId
+      setPublicLink(publicId ? `${baseUrl}/hushh-id/${publicId}` : '')
 
       // Prioritize User Input (userData) > Parsed Agent Data > DB Data
       setCardProfile({
         ...parsedData,
         user_id: uuid,
-        hushh_id: parsedData.hushh_id || result.hushhId || generatedHushhId || null,
+        hushh_id: generatedHushhId || parsedData.hushh_id || result.hushhId || null,
         // STRICTLY use initial user input if available
         email: userData?.email || parsedData.email || profileFromDb.email,
         phone: userData?.phone || userData?.phoneNumber || parsedData.phone || profileFromDb.phone,
@@ -539,7 +545,7 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
             {/* Personal Details */}
             <DashboardCard title="Personal Details" icon={FaUser} colorScheme="pink">
               <VStack align="stretch" spacing={4}>
-                <InfoRow label="HUSHH ID" value={getField(parsedData, 'hushh_id')} />
+                <InfoRow label="HUSHH ID" value={displayHushhId} />
                 <InfoRow label="NAME" value={getField(parsedData, 'full_name', 'fullName')} />
                 <InfoRow label="EMAIL" value={getField(parsedData, 'email')} />
                 <InfoRow label="PHONE" value={getField(parsedData, 'phone', 'phoneNumber')} />
