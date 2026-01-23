@@ -263,8 +263,7 @@ export default function PublicProfilePage({ params }) {
 
     const headerMeta = [profile.occupation, profile.city].filter(isValuePresent).join(" - ");
     const addressLine = [profile.address_line1, profile.address, profile.street].find(isValuePresent);
-    const addressDetail = [addressLine, profile.state, profile.zip, profile.zip_code].filter(isValuePresent).join(", ");
-    const addressDisplay = addressDetail || "N/A";
+    const addressDisplay = addressLine || "N/A";
 
     const gamingPreference = getValueFrom(
         profile.gaming_preference,

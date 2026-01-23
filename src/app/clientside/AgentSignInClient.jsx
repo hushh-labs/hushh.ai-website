@@ -69,9 +69,123 @@ If information is unavailable, provide realistic placeholder data based on the u
             }
           });
 
-          const creationPrompt = `Create a comprehensive user profile with these verified data points:
+          const normalizedData = { ...sanitizedData };
+          normalizedData.full_name = normalizedData.full_name || normalizedData.fullName;
+          normalizedData.phone = normalizedData.phone || normalizedData.phoneNumber;
+          normalizedData.hushh_id = normalizedData.hushh_id || normalizedData.hushhId;
+          normalizedData.address_line1 =
+            normalizedData.address_line1 || normalizedData.street || normalizedData.address;
+          normalizedData.zip = normalizedData.zip || normalizedData.zip_code;
+          normalizedData.coffee_or_tea =
+            normalizedData.coffee_or_tea || normalizedData.coffee_or_tea_choice || normalizedData.coffeeOrTeaChoice;
+          normalizedData.preferred_grocery_store_type =
+            normalizedData.preferred_grocery_store_type ||
+            normalizedData.grocery_store_type ||
+            normalizedData.groceryStoreType;
+          normalizedData.daily_social_time_minutes =
+            normalizedData.daily_social_time_minutes ||
+            normalizedData.social_media_usage_time ||
+            normalizedData.socialMediaUsageTime;
+          normalizedData.gamer = normalizedData.gamer || normalizedData.gaming_preference || normalizedData.gamingPreference;
+          normalizedData.eco_friendly =
+            normalizedData.eco_friendly || normalizedData.eco_friendliness || normalizedData.ecoFriendliness;
+          normalizedData.gym_member =
+            normalizedData.gym_member || normalizedData.gym_membership || normalizedData.gymMembership;
+          normalizedData.intent_24h_budget_usd =
+            normalizedData.intent_24h_budget_usd || normalizedData.intent_24h_budget;
+          normalizedData.intent_48h_budget_usd =
+            normalizedData.intent_48h_budget_usd || normalizedData.intent_48h_budget;
+          normalizedData.intent_72h_budget_usd =
+            normalizedData.intent_72h_budget_usd || normalizedData.intent_72h_budget;
+
+          if (Array.isArray(normalizedData.needs)) {
+            normalizedData.need_1 = normalizedData.need_1 || normalizedData.needs[0];
+            normalizedData.need_2 = normalizedData.need_2 || normalizedData.needs[1];
+            normalizedData.need_3 = normalizedData.need_3 || normalizedData.needs[2];
+          }
+          if (Array.isArray(normalizedData.wants)) {
+            normalizedData.want_1 = normalizedData.want_1 || normalizedData.wants[0];
+            normalizedData.want_2 = normalizedData.want_2 || normalizedData.wants[1];
+            normalizedData.want_3 = normalizedData.want_3 || normalizedData.wants[2];
+          }
+          if (Array.isArray(normalizedData.desires)) {
+            normalizedData.desire_1 = normalizedData.desire_1 || normalizedData.desires[0];
+            normalizedData.desire_2 = normalizedData.desire_2 || normalizedData.desires[1];
+            normalizedData.desire_3 = normalizedData.desire_3 || normalizedData.desires[2];
+          }
+
+          const schemaKeys = [
+            'user_id',
+            'full_name',
+            'phone',
+            'email',
+            'address_line1',
+            'city',
+            'state',
+            'zip',
+            'age',
+            'gender',
+            'marital_status',
+            'household_size',
+            'children_count',
+            'education_level',
+            'occupation',
+            'income_bracket',
+            'home_ownership',
+            'city_tier',
+            'primary_transport',
+            'diet_preference',
+            'favorite_cuisine',
+            'coffee_or_tea',
+            'fitness_routine',
+            'gym_member',
+            'shopping_preference',
+            'preferred_grocery_store_type',
+            'fashion_style',
+            'tech_affinity',
+            'primary_device',
+            'favorite_social_platform',
+            'daily_social_time_minutes',
+            'content_preference',
+            'sports_interest',
+            'gamer',
+            'travel_frequency',
+            'eco_friendly',
+            'sleep_chronotype',
+            'need_1',
+            'need_2',
+            'need_3',
+            'want_1',
+            'want_2',
+            'want_3',
+            'desire_1',
+            'desire_2',
+            'desire_3',
+            'intent_24h_category',
+            'intent_24h_budget_usd',
+            'intent_24h_time_window',
+            'intent_24h_confidence',
+            'intent_48h_category',
+            'intent_48h_budget_usd',
+            'intent_48h_time_window',
+            'intent_48h_confidence',
+            'intent_72h_category',
+            'intent_72h_budget_usd',
+            'intent_72h_time_window',
+            'intent_72h_confidence',
+            'hushh_id',
+          ];
+
+          const supabasePayload = {};
+          schemaKeys.forEach((key) => {
+            supabasePayload[key] = normalizedData[key] ?? null;
+          });
+
+          const creationPrompt = `Create or update a user profile in Supabase table "public.user_profiles".
+Use the JSON payload below with EXACT column names (no extra keys). If any value is null/empty, infer it from the profile data (especially address_line1, city, state, zip) so no location fields are left blank.
+Zip must be numeric digits only. Do NOT create a country field. Do NOT generate a synthetic user_id if missing.
 \`\`\`json
-${JSON.stringify(sanitizedData, null, 2)}
+${JSON.stringify(supabasePayload, null, 2)}
 \`\`\`
 
 IMPORTANT: You MUST sync the "hushh_id" field to the "hushh_id" column in the database. 
@@ -237,6 +351,7 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
               if (parsed.address && typeof parsed.address === 'object') {
                 const addr = parsed.address;
                 aggregatedData.street = addr.street || addr.address_line1 || addr.address || aggregatedData.street;
+                aggregatedData.address_line1 = addr.address_line1 || addr.address || addr.street || aggregatedData.address_line1;
                 aggregatedData.city = addr.city || aggregatedData.city;
                 aggregatedData.state = addr.state || aggregatedData.state;
                 aggregatedData.zip_code = addr.zip_code || addr.zip || addr.zip_code || aggregatedData.zip_code;
@@ -299,6 +414,9 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
               }
 
               Object.assign(aggregatedData, mappedParsed);
+              aggregatedData.address_line1 =
+                aggregatedData.address_line1 || aggregatedData.street || aggregatedData.address;
+              aggregatedData.zip = aggregatedData.zip || aggregatedData.zip_code;
             }
           } catch (e) {
             console.warn(`Failed to parse data from ${agent} for aggregation`, e);

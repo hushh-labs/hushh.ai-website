@@ -561,12 +561,16 @@ export default function ResultsDisplay({ userData, agentResults, onBack }) {
             {/* Location */}
             <DashboardCard title="Location Data" icon={FaMapMarkerAlt} colorScheme="orange">
               <VStack align="stretch" spacing={3}>
-                <InfoRow label="ADDRESS" value={getField(parsedData, 'address.street', 'street', 'location', 'address')} />
-                <HStack>
-                  <InfoRow label="CITY" value={getField(parsedData, 'city', 'address.city')} flex="1" />
-                  <InfoRow label="COUNTRY" value={getField(parsedData, 'country', 'address.country')} flex="1" />
-                </HStack>
-                <InfoRow label="TIER" value={getField(parsedData, 'city_tier', 'cityTier', 'tier')} />
+                <InfoRow
+                  label="ADDRESS"
+                  value={getField(parsedData, 'address_line1', 'address.street', 'street', 'location', 'address')}
+                />
+                <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4}>
+                  <InfoRow label="CITY" value={getField(parsedData, 'city', 'address.city')} />
+                  <InfoRow label="STATE" value={getField(parsedData, 'state', 'address.state')} />
+                  <InfoRow label="ZIP" value={getField(parsedData, 'zip', 'zip_code', 'address.zip_code', 'address.zip')} />
+                  <InfoRow label="CITY TIER" value={getField(parsedData, 'city_tier', 'cityTier', 'tier')} />
+                </SimpleGrid>
               </VStack>
             </DashboardCard>
 
