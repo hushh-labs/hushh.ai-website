@@ -16,7 +16,7 @@ export default function AgentSignInClient() {
   const toast = useToast()
 
   // Call all agent APIs with user details via Next.js proxy
-  const callAgentAPI = useCallback(async (agent, userData, aggregatedData = null) => {
+  const callAgentAPI = useCallback(async (agent, userData, aggregatedData = null, attempt = 0) => {
     const sessionId = `session-${Date.now()}`
     const id = `task-${Math.random().toString(36).slice(2)}`
 
@@ -36,14 +36,14 @@ Use these EXACT keys:
 - fitness_routine, gym_membership, shopping_preference, grocery_store_type, fashion_style
 - tech_affinity, primary_device, favorite_social_platform, social_media_usage_time
 - content_preference, sports_interest, gaming_preference, travel_frequency, eco_friendliness, sleep_chronotype
-- address: { street, city, state, zip_code, country }
+- address_line1, city, state, zip
 - intent_24h: { category, budget_usd, time_window, confidence }
 - intent_48h: { category, budget_usd, time_window, confidence }
 - intent_72h: { category, budget_usd, time_window, confidence }
 - needs: [list], wants: [list], desires: [list]
 - summary: (brief AI bio)
 
-If information is unavailable, provide realistic placeholder data based on the user's name and location. DO NOT leave fields blank.`
+If information is unavailable, provide realistic placeholder data based on the user's name. DO NOT leave fields blank.`
 
       // Build the appropriate payload for profile fetching agents only
       switch (agent) {
@@ -74,8 +74,23 @@ If information is unavailable, provide realistic placeholder data based on the u
           normalizedData.phone = normalizedData.phone || normalizedData.phoneNumber;
           normalizedData.hushh_id = normalizedData.hushh_id || normalizedData.hushhId;
           normalizedData.address_line1 =
-            normalizedData.address_line1 || normalizedData.street || normalizedData.address;
-          normalizedData.zip = normalizedData.zip || normalizedData.zip_code;
+            normalizedData.address_line1 ||
+            normalizedData.addressLine1 ||
+            normalizedData.street ||
+            normalizedData.address;
+          normalizedData.city = normalizedData.city || normalizedData.town || normalizedData.locality;
+          normalizedData.state =
+            normalizedData.state ||
+            normalizedData.stateCode ||
+            normalizedData.province ||
+            normalizedData.region;
+          normalizedData.zip =
+            normalizedData.zip ||
+            normalizedData.zip_code ||
+            normalizedData.zipCode ||
+            normalizedData.postal_code ||
+            normalizedData.postalCode ||
+            normalizedData.pincode;
           normalizedData.coffee_or_tea =
             normalizedData.coffee_or_tea || normalizedData.coffee_or_tea_choice || normalizedData.coffeeOrTeaChoice;
           normalizedData.preferred_grocery_store_type =
@@ -214,14 +229,25 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
 
       const responseTime = `${Date.now() - startTime}ms`
       const result = await response.json().catch(() => ({}))
+      const upstreamStatus = result?.upstreamStatus
+      const upstreamErrorMessage = result?.data?.error?.message || result?.error || ''
+      const shouldRetry = agent === 'supabase-profile-creation-agent'
+        && attempt < 1
+        && (response.status >= 500 || (upstreamStatus && upstreamStatus >= 500) || upstreamErrorMessage.includes('Did not observe'))
 
-      if (!response.ok) {
+      if ((!response.ok || (upstreamStatus && upstreamStatus >= 400)) && shouldRetry) {
+        await new Promise(resolve => setTimeout(resolve, 1200))
+        return callAgentAPI(agent, userData, aggregatedData, attempt + 1)
+      }
+
+      if (!response.ok || (upstreamStatus && upstreamStatus >= 400)) {
         return {
           success: false,
           data: result,
-          error: result.error || `Request failed with status ${response.status}`,
+          error: upstreamErrorMessage || `Request failed with status ${response.status}`,
           responseTime,
           upstreamUrl: result.upstreamUrl, // Show actual agent URL
+          upstreamStatus,
         }
       }
 
@@ -230,7 +256,7 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
         data: result.data || result,
         responseTime,
         upstreamUrl: result.upstreamUrl, // Show actual agent URL
-        upstreamStatus: result.upstreamStatus,
+        upstreamStatus,
       }
     } catch (error) {
       console.error(`Error calling ${agent} agent:`, error)
@@ -252,8 +278,8 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
     const generatedHushhId = buildHushhId(formData.fullName, fullPhone, uniqueStr);
 
     // IMPORTANT:
-    // Do NOT generate or persist any Supabase-auth identity fields client-side.
-    // The persistent Supabase UUID must come ONLY from the profile-creation agent/API.
+    // Do NOT generate Supabase auth user IDs client-side.
+    // For the user_profiles primary key we resolve an existing UUID or generate one later.
     formData.hushh_id = generatedHushhId || `${firstName}/${uniqueStr}`;
     // Ensure we don't send a placeholder user_id anywhere.
     delete formData.user_id;
@@ -343,6 +369,10 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
                 if (key === 'ecoFriendliness' || key === 'eco_friendly') targetKey = 'eco_friendliness';
                 if (key === 'sleepChronotype') targetKey = 'sleep_chronotype';
                 if (key === 'primary_transport' || key === 'transport') targetKey = 'primary_transport';
+                if (key === 'addressLine1' || key === 'address1' || key === 'street_address') targetKey = 'address_line1';
+                if (key === 'zipCode' || key === 'postal_code' || key === 'postalCode' || key === 'pincode' || key === 'zip_code') targetKey = 'zip';
+                if (key === 'stateCode' || key === 'province' || key === 'region') targetKey = 'state';
+                if (key === 'town' || key === 'locality') targetKey = 'city';
 
                 mappedParsed[targetKey] = parsed[key];
               });
@@ -350,11 +380,23 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
               // 2. Handle nested address normalization
               if (parsed.address && typeof parsed.address === 'object') {
                 const addr = parsed.address;
-                aggregatedData.street = addr.street || addr.address_line1 || addr.address || aggregatedData.street;
-                aggregatedData.address_line1 = addr.address_line1 || addr.address || addr.street || aggregatedData.address_line1;
-                aggregatedData.city = addr.city || aggregatedData.city;
-                aggregatedData.state = addr.state || aggregatedData.state;
-                aggregatedData.zip_code = addr.zip_code || addr.zip || addr.zip_code || aggregatedData.zip_code;
+                aggregatedData.street = addr.street || addr.address_line1 || addr.addressLine1 || addr.address || aggregatedData.street;
+                aggregatedData.address_line1 =
+                  addr.address_line1 ||
+                  addr.addressLine1 ||
+                  addr.address ||
+                  addr.street ||
+                  aggregatedData.address_line1;
+                aggregatedData.city = addr.city || addr.town || addr.locality || aggregatedData.city;
+                aggregatedData.state = addr.state || addr.stateCode || addr.province || addr.region || aggregatedData.state;
+                aggregatedData.zip_code =
+                  addr.zip_code ||
+                  addr.zipCode ||
+                  addr.postal_code ||
+                  addr.postalCode ||
+                  addr.pincode ||
+                  addr.zip ||
+                  aggregatedData.zip_code;
                 aggregatedData.country = addr.country || aggregatedData.country;
               }
 
@@ -416,13 +458,70 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
               Object.assign(aggregatedData, mappedParsed);
               aggregatedData.address_line1 =
                 aggregatedData.address_line1 || aggregatedData.street || aggregatedData.address;
-              aggregatedData.zip = aggregatedData.zip || aggregatedData.zip_code;
+              aggregatedData.city = aggregatedData.city || aggregatedData.town || aggregatedData.locality;
+              aggregatedData.state =
+                aggregatedData.state ||
+                aggregatedData.stateCode ||
+                aggregatedData.province ||
+                aggregatedData.region;
+              aggregatedData.zip =
+                aggregatedData.zip ||
+                aggregatedData.zip_code ||
+                aggregatedData.zipCode ||
+                aggregatedData.postal_code ||
+                aggregatedData.postalCode ||
+                aggregatedData.pincode;
             }
           } catch (e) {
             console.warn(`Failed to parse data from ${agent} for aggregation`, e);
           }
         }
       }
+
+      const generateUuid = () => {
+        if (typeof crypto !== 'undefined') {
+          if (crypto.randomUUID) return crypto.randomUUID();
+          if (crypto.getRandomValues) {
+            const bytes = new Uint8Array(16);
+            crypto.getRandomValues(bytes);
+            bytes[6] = (bytes[6] & 0x0f) | 0x40;
+            bytes[8] = (bytes[8] & 0x3f) | 0x80;
+            const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, '0'));
+            return `${hex.slice(0, 4).join('')}-${hex.slice(4, 6).join('')}-${hex.slice(6, 8).join('')}-${hex.slice(8, 10).join('')}-${hex.slice(10, 16).join('')}`;
+          }
+        }
+        return `user-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+      };
+
+      if (!aggregatedData.user_id) {
+        try {
+          const lookupRes = await fetch('/api/user/profile/lookup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: formData.email,
+              phone: `${formData.countryCode || ''} ${formData.phoneNumber || ''}`.trim(),
+              full_name: formData.fullName,
+            }),
+          });
+
+          if (lookupRes.ok) {
+            const lookupResult = await lookupRes.json();
+            const lookupUuid = extractUuid(lookupResult?.userId);
+            if (lookupUuid) {
+              aggregatedData.user_id = lookupUuid;
+              aggregatedData.hushh_id = aggregatedData.hushh_id || lookupResult?.hushhId;
+            }
+          }
+        } catch (lookupError) {
+          console.warn('Profile lookup before creation failed:', lookupError);
+        }
+      }
+
+      if (!aggregatedData.user_id) {
+        aggregatedData.user_id = generateUuid();
+      }
+      formData.user_id = aggregatedData.user_id;
 
       // Phase 2: Profile Creation Agent (Supabase Profile)
       // The AGENT inserts the data into Supabase. We just need to give it the data.
@@ -488,6 +587,31 @@ Ensure all intent, lifestyle, and psychographic fields are persisted correctly. 
           duration: 5000,
           isClosable: true,
         })
+      }
+
+      if (!profileResult.success && !aggregatedData.user_id) {
+        try {
+          const lookupRes = await fetch('/api/user/profile/lookup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: formData.email,
+              phone: `${formData.countryCode || ''} ${formData.phoneNumber || ''}`.trim(),
+              full_name: formData.fullName,
+            }),
+          })
+
+          if (lookupRes.ok) {
+            const lookupResult = await lookupRes.json()
+            const lookupUuid = extractUuid(lookupResult?.userId)
+            if (lookupUuid) {
+              aggregatedData.user_id = lookupUuid
+              aggregatedData.hushh_id = aggregatedData.hushh_id || lookupResult?.hushhId
+            }
+          }
+        } catch (lookupError) {
+          console.warn('Profile lookup fallback failed:', lookupError)
+        }
       }
 
       toast({
