@@ -1,10 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Text, VStack, Flex, Icon, Avatar, Badge } from '@chakra-ui/react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Box, Text, VStack, Flex, Icon, Badge, useBreakpointValue } from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaShoppingBag, FaPlane, FaUsers, FaHeart, FaSearch } from 'react-icons/fa';
+import {
+  FaShoppingBag,
+  FaPlane,
+  FaUsers,
+  FaHeart,
+  FaSearch,
+  FaMapMarkerAlt,
+  FaFingerprint,
+  FaLaptop,
+  FaShieldAlt,
+  FaDatabase,
+  FaLink,
+  FaBolt
+} from 'react-icons/fa';
 
 const MotionBox = motion(Box);
-const MotionText = motion(Text);
 
 // Font stack
 const fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
@@ -12,23 +24,22 @@ const fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helve
 // Removed broken keyframes pulse, using framer-motion instead
 
 // Agent "Cards" that pop up
-const AgentCard = ({ icon, name, action, side = 'left', delay, top }) => {
+const AgentCard = ({ icon, name, action, side = 'left' }) => {
   const isLeft = side === 'left';
   return (
     <MotionBox
-      initial={{ x: isLeft ? -100 : 100, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ delay: delay, duration: 0.8, type: "spring" }}
-      position="absolute"
-      top={top} // Use fixed top position
-      left={isLeft ? { base: "2%", md: "10%" } : undefined} // Move slightly closer to edge to avoid center
-      right={!isLeft ? { base: "2%", md: "10%" } : undefined}
+      layout
+      initial={{ x: isLeft ? -40 : 40, opacity: 0, scale: 0.96 }}
+      animate={{ x: 0, opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, y: -10, scale: 0.94 }}
+      transition={{ duration: 0.45, type: "spring" }}
+      position="relative"
       bg="white"
-      p={4}
+      p={{ base: 3, md: 4 }}
       borderRadius="2xl"
       boxShadow="0 10px 40px rgba(0,0,0,0.1)"
-      maxW="280px"
+      w="100%"
+      maxW={{ base: "100%", md: "260px" }}
       zIndex={2}
       backdropFilter="blur(10px)"
       border="1px solid rgba(0,0,0,0.05)"
@@ -39,32 +50,53 @@ const AgentCard = ({ icon, name, action, side = 'left', delay, top }) => {
         </Box>
         <VStack align="start" spacing={0}>
           <Text fontSize="xs" fontWeight="700" color="gray.400" textTransform="uppercase">{name}</Text>
-          <Text fontSize="sm" fontWeight="600" color="#1d1d1f" lineHeight="1.2">{action}</Text>
+          <Text fontSize="sm" fontWeight="600" color="#1d1d1f" lineHeight="1.3">{action}</Text>
         </VStack>
       </Flex>
     </MotionBox>
   );
 };
 
+const AGENT_TIMELINE = [
+  { id: 'identity', icon: FaFingerprint, name: 'Identity Resolver', action: 'Linking verified identity signals...', side: 'left' },
+  { id: 'location', icon: FaMapMarkerAlt, name: 'Location Enricher', action: 'Deriving city, state & zip details...', side: 'right' },
+  { id: 'social', icon: FaUsers, name: 'Social Graph', action: 'Mapping your digital circles...', side: 'left' },
+  { id: 'shopping', icon: FaShoppingBag, name: 'Shopping Signals', action: 'Finding brands you love...', side: 'right' },
+  { id: 'travel', icon: FaPlane, name: 'Travel Pattern', action: 'Analyzing travel frequency...', side: 'left' },
+  { id: 'lifestyle', icon: FaHeart, name: 'Lifestyle Sync', action: 'Understanding your daily rhythm...', side: 'right' },
+  { id: 'tech', icon: FaLaptop, name: 'Device Insights', action: 'Assessing your primary devices...', side: 'left' },
+  { id: 'content', icon: FaSearch, name: 'Content Signals', action: 'Learning content preferences...', side: 'right' },
+  { id: 'intent', icon: FaBolt, name: 'Intent Forecaster', action: 'Projecting 24/48/72h intent...', side: 'left' },
+  { id: 'trust', icon: FaShieldAlt, name: 'Trust Scorer', action: 'Calculating confidence score...', side: 'right' },
+  { id: 'supabase', icon: FaDatabase, name: 'Supabase Sync', action: 'Writing profile to secure store...', side: 'left' },
+  { id: 'link', icon: FaLink, name: 'Public Link Builder', action: 'Assembling your Hushh ID link...', side: 'right' }
+];
+
 const AnalyzingLoader = ({ progress }) => {
   const [agentsFound, setAgentsFound] = useState([]);
+  const nextIndexRef = useRef(0);
+  const isMobile = useBreakpointValue({ base: true, md: false });
+  const maxVisible = useBreakpointValue({ base: 6, md: 8, lg: 10 }) || 6;
 
-  // Timeline of "Agents" appearing based on progress
-  // Fixed positions to avoid overlap: Top-Left, Top-Right, Bottom-Left, Bottom-Right
   useEffect(() => {
-    if (progress >= 0 && !agentsFound.some(a => a.id === 'social')) {
-      setAgentsFound(prev => [...prev, { id: 'social', icon: FaUsers, name: 'Social Agent', action: 'Mapping your digital circles...', side: 'left', top: '20%' }]);
-    }
-    if (progress > 15 && !agentsFound.some(a => a.id === 'shopping')) {
-      setAgentsFound(prev => [...prev, { id: 'shopping', icon: FaShoppingBag, name: 'Shopping Ace', action: 'Finding brands you love...', side: 'right', top: '25%' }]);
-    }
-    if (progress > 30 && !agentsFound.some(a => a.id === 'travel')) {
-      setAgentsFound(prev => [...prev, { id: 'travel', icon: FaPlane, name: 'Travel Guide', action: 'Planning your next getaway...', side: 'left', top: '70%' }]);
-    }
-    if (progress > 45 && !agentsFound.some(a => a.id === 'lifestyle')) {
-      setAgentsFound(prev => [...prev, { id: 'lifestyle', icon: FaHeart, name: 'Lifestyle Guru', action: 'Understanding your daily rhythm...', side: 'right', top: '75%' }]);
-    }
-  }, [progress]);
+    nextIndexRef.current = 0;
+    setAgentsFound([]);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAgentsFound((prev) => {
+        const idx = nextIndexRef.current % AGENT_TIMELINE.length;
+        const baseAgent = AGENT_TIMELINE[idx];
+        const agent = { ...baseAgent, uid: `${baseAgent.id}-${nextIndexRef.current}` };
+        nextIndexRef.current += 1;
+        const trimmed = [...prev, agent].slice(-maxVisible);
+        return trimmed;
+      });
+    }, 1100);
+
+    return () => clearInterval(interval);
+  }, [maxVisible]);
 
   return (
     <Box
@@ -129,11 +161,56 @@ const AnalyzingLoader = ({ progress }) => {
       </Box>
 
       {/* Floating Agent Cards */}
-      <AnimatePresence>
-        {agentsFound.map((agent, i) => (
-          <AgentCard key={agent.id} {...agent} delay={0} />
-        ))}
-      </AnimatePresence>
+      {isMobile ? (
+        <VStack
+          position="absolute"
+          left="50%"
+          transform="translateX(-50%)"
+          bottom="80px"
+          w="90%"
+          maxW="360px"
+          spacing={3}
+        >
+          <AnimatePresence initial={false}>
+            {agentsFound.map((agent) => (
+              <AgentCard key={agent.uid} {...agent} />
+            ))}
+          </AnimatePresence>
+        </VStack>
+      ) : (
+        <>
+          <VStack
+            position="absolute"
+            top="12%"
+            bottom="16%"
+            left={{ base: "4%", md: "8%" }}
+            w="260px"
+            spacing={4}
+            justify="space-between"
+          >
+            <AnimatePresence initial={false}>
+              {agentsFound.filter((agent) => agent.side === 'left').map((agent) => (
+                <AgentCard key={agent.uid} {...agent} />
+              ))}
+            </AnimatePresence>
+          </VStack>
+          <VStack
+            position="absolute"
+            top="12%"
+            bottom="16%"
+            right={{ base: "4%", md: "8%" }}
+            w="260px"
+            spacing={4}
+            justify="space-between"
+          >
+            <AnimatePresence initial={false}>
+              {agentsFound.filter((agent) => agent.side === 'right').map((agent) => (
+                <AgentCard key={agent.uid} {...agent} />
+              ))}
+            </AnimatePresence>
+          </VStack>
+        </>
+      )}
 
       {/* Bottom Status Pill */}
       <Box position="absolute" bottom={10} left="50%" transform="translateX(-50%)">
