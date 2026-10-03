@@ -232,8 +232,11 @@ const LoginPageContent = () => {
                 color: "#171b29"
               }}
               transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
-              mb={10}
+              mb={{ base: 10, lg: 0 }}
               alignSelf={{ base: "center", lg: "flex-start" }}
+              position={{ base: "relative", lg: "absolute" }}
+              top={{ lg: "0" }}
+              left={{ lg: "16" }}
               p={0}>
               
               <ArrowBackIcon color="#5f5f5f" />
